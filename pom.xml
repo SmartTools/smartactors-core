@@ -38,6 +38,7 @@
         <module>IObjectSimpleImplementation</module>
         <module>ITask</module>
         <module>IDatabaseTask</module>
+        <module>DataBaseStorage</module>
     </modules>
 
     <properties>
