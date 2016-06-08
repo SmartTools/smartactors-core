@@ -61,6 +61,7 @@
         <module>IFeatureManager</module>
         <module>FeatureManager</module>
         <module>IPool</module>
+        <module>DBCreateCollectionWithKeyTask</module>
     </modules>
 
     <properties>
