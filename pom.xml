@@ -38,6 +38,9 @@
         <module>IObjectSimpleImplementation</module>
         <module>ITask</module>
         <module>IDatabaseTask</module>
+        <module>DataBaseStorage</module>
+        <module>SqlCommons</module>
+        <module>DBCreateCollectionTask</module>
         <module>examples</module>
         <module>BootstrapItem</module>
         <module>IBootstrapItem</module>

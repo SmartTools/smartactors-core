@@ -9,7 +9,7 @@ import info.smart_tools.smartactors.core.itask.ITask;
  * Database oriented task
  * @see ITask
  */
-public interface IDatabaseTask extends ITask{
+public interface IDatabaseTask extends ITask {
 
     /**
      * Prepares database query
