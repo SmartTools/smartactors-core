@@ -26,22 +26,42 @@ public class DBCreateCollectionWithKeyTask implements IDatabaseTask {
         this.targetTask = targetTask;
     }
 
+    /**
+     * Prepare input object for saving in collection
+     * @param query query object
+     *              <pre>
+     *                  {
+     *                      "collectionName" : "<target collection name>",
+ *                          "key" : "<name for key>"
+     *                  }
+     *              </pre>
+     * @throws TaskPrepareException
+     */
     @Override
     public void prepare(IObject query) throws TaskPrepareException {
         try {
-            CreateCollectionWithKeyMessage message = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), CreateCollectionWithKeyMessage.class.toString()), query);
+            CreateCollectionWithKeyMessage messageWithKey = IOC.resolve(
+                    IOC.resolve(
+                            IOC.getKeyForKeyStorage(), CreateCollectionWithKeyMessage.class.toString()
+                    ),
+                    query
+            );
 
-            CreateCollectionTargetMessage targetMessage = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), CreateCollectionTargetMessage.class.toString()));
+            CreateCollectionTargetMessage messageForTargetTask = IOC.resolve(
+                    IOC.resolve(
+                            IOC.getKeyForKeyStorage(), CreateCollectionTargetMessage.class.toString()
+                    )
+            );
 
-            targetMessage.setCollectionName(message.getCollectionName());
+            messageForTargetTask.setCollectionName(messageWithKey.getCollectionName());
 
             Map<String, String> indexes = new HashMap<>();
 
-            indexes.put(message.getKey(), Schema.KEY_INDEX_TYPE);
+            indexes.put(messageWithKey.getKey(), Schema.KEY_INDEX_TYPE);
 
-            targetMessage.setIndexes(indexes);
+            messageForTargetTask.setIndexes(indexes);
 
-            IObject resultQuery = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.toString()), targetMessage);
+            IObject resultQuery = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.toString()), messageForTargetTask);
 
             targetTask.prepare(resultQuery);
         } catch (ResolutionException e) {
