@@ -62,6 +62,8 @@
         <module>FeatureManager</module>
         <module>IPool</module>
         <module>DBCreateCollectionWithKeyTask</module>
+        <module>Pool</module>
+        <module>PoolGuard</module>
     </modules>
 
     <properties>
