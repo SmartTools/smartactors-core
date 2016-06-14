@@ -63,6 +63,7 @@
         <module>IPool</module>
         <module>Pool</module>
         <module>PoolGuard</module>
+        <module>DBInsertWithKeyTask</module>
     </modules>
 
     <properties>
