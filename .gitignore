@@ -5,6 +5,9 @@
 
 # Package Files #
 *.jar
+!PluginLoaderFormJar/src/test/resources/*.jar
+
+
 *.war
 *.ear
 
@@ -18,3 +21,7 @@ hs_err_pid*
 #Maven
 targer/
 **/target/
+
+#Logs
+
+**/*.log
