@@ -46,7 +46,7 @@ public class DBInsertWIthKeyTask implements IDatabaseTask {
      * @param query query object
      *              <pre>
      *              {
-     *                  "document"
+     *                  "document" : %as value must be target object with key%
      *              }
      *              </pre>
      * @throws TaskPrepareException
@@ -67,7 +67,9 @@ public class DBInsertWIthKeyTask implements IDatabaseTask {
 
             document.setValue(idKeyFieldName, null);//cause we think that target task will not save object we that will have field [CollectionName]ID
 
-            targetTask.prepare(document);
+            objectForAdd = document;
+
+            targetTask.prepare(objectForAdd);
         } catch (ReadValueException | ChangeValueException e) {
             throw new TaskPrepareException(e);
         }
@@ -77,7 +79,12 @@ public class DBInsertWIthKeyTask implements IDatabaseTask {
     @Override
     public void execute() throws TaskExecutionException {
         try {
-            Boolean isActiveOldState = (Boolean) objectForAdd.getValue(isActiveFieldName);
+            Boolean isActiveOldState;
+            try {
+                isActiveOldState = (Boolean) objectForAdd.getValue(isActiveFieldName);
+            } catch (ReadValueException e) {
+                isActiveOldState = false;
+            }
             objectForAdd.setValue(isActiveFieldName, true);
 
             try {
@@ -87,7 +94,7 @@ public class DBInsertWIthKeyTask implements IDatabaseTask {
                 throw new TaskExecutionException(e);
             }
 
-        } catch (ReadValueException | ChangeValueException e) {
+        } catch (ChangeValueException e) {
             throw new TaskExecutionException(e);
         }
     }
