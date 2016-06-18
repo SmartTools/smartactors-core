@@ -16,13 +16,13 @@ import java.util.Date;
 public class DBInsertWIthKeyTask implements IDatabaseTask {
 
     private IDatabaseTask targetTask;
-    private String collectionName;
 
     private String documentKey = "document";
     private String startDateTimeKey = "startDateTime";
     private String isActiveKey = "isActive";
 
     private FieldName keyFieldName;
+    private FieldName idKeyFieldName;
     private FieldName documentKeyFieldName;
     private FieldName startDateTimeFieldName;
     private FieldName isActiveFieldName;
@@ -32,8 +32,10 @@ public class DBInsertWIthKeyTask implements IDatabaseTask {
 
     public DBInsertWIthKeyTask(IDatabaseTask targetTask, String collectionName, String key) throws ResolutionException {
         this.targetTask = targetTask;
-        this.collectionName = collectionName;
+        String idKey = collectionName + "ID";//TODO: it is normall?
+
         keyFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), FieldName.class.toString()), key);
+        idKeyFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), FieldName.class.toString()), idKey);
         documentKeyFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), FieldName.class.toString()), documentKey);
         startDateTimeFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), FieldName.class.toString()), startDateTimeKey);
         isActiveFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), FieldName.class.toString()), isActiveKey);
@@ -62,6 +64,8 @@ public class DBInsertWIthKeyTask implements IDatabaseTask {
                 DateFormat dateFormat = DateFormat.getDateTimeInstance();
                 document.setValue(startDateTimeFieldName, dateFormat.format(new Date()));
             }
+
+            document.setValue(idKeyFieldName, null);//cause we think that target task will not save object we that will have field [CollectionName]ID
 
             targetTask.prepare(document);
         } catch (ReadValueException | ChangeValueException e) {
