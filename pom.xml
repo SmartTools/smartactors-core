@@ -65,6 +65,7 @@
         <module>IFeatureManager</module>
         <module>FeatureManager</module>
         <module>IPool</module>
+        <module>DBCreateCollectionWithKeyTask</module>
         <module>Pool</module>
         <module>PoolGuard</module>
         <module>PostgresConnection</module>
