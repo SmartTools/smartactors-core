@@ -3,10 +3,8 @@ package info.smart_tools.smartactors.core.sql_commons;
 
 import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter;
+import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
-
-//TODO commented by AKutalev, reason: now IObject doesn't contain iterator
-//import info.smart_tools.smartactors.core.iobject.IObjectIterator;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -61,24 +59,22 @@ public class Conditions {
                     writer.write(delimiter);
                 }
             } else if (IObject.class.isAssignableFrom(queryParameter.getClass())) {
-//TODO commented by AKutalev, reason: now IObject doesn't contain iterator
-//                IObjectIterator paramIterator = ((IObject)queryParameter).iterator();
-//
-//                if(!paramIterator.next()) {
-//                    writeDefaultEmptyCondition(query);
-//                    return;
-//                }
+                Iterator<Map.Entry<IFieldName, Object>> paramIterator = ((IObject)queryParameter).iterator();
+
+                if(!paramIterator.hasNext()) {
+                    writeDefaultEmptyCondition(query);
+                    return;
+                }
 
                 writer.write(prefix);
 
                 do {
-//TODO commented by AKutalev, reason: now IObject doesn't contain iterator
-//                    String key = paramIterator.getName().toString();
-//                    resolver.resolve(key).write(query, resolver, contextFieldPath, paramIterator.getValue(), setters);
-//
-//                    if(!paramIterator.next()) {
-//                        break;
-//                    }
+                    String key = ((Map.Entry<IFieldName, Object>)paramIterator).getKey().toString();
+                    resolver.resolve(key).write(query, resolver, contextFieldPath, ((Map.Entry<IFieldName, Object>) paramIterator).getValue(), setters);
+
+                    if(!paramIterator.hasNext()) {
+                        break;
+                    }
 
                     writer.write(delimiter);
                 } while (true);
