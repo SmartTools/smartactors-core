@@ -7,7 +7,10 @@ import info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderEx
 import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
 import org.junit.Test;
 
+import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -24,7 +27,7 @@ public class PluginLoaderTest {
         Checker checker = new Checker();
         ExpansibleURLClassLoader cl = new ExpansibleURLClassLoader(new URL[]{});
         IPluginLoaderVisitor<String> visitor = mock(IPluginLoaderVisitor.class);
-        IPluginLoader pl = new PluginLoader(
+        IPluginLoader<Collection<File>> pl = new PluginLoader(
                 cl,
                 (t) -> {
                     try {
@@ -38,8 +41,8 @@ public class PluginLoaderTest {
         if (null == url) {
             fail();
         }
-        String jarPath = url.getPath();
-        pl.loadPlugin(jarPath);
+        Collection<File> files = new ArrayList<File>(){{add(new File(url.getPath()));}};
+        pl.loadPlugin(files);
         assertTrue(checker.wasCalled);
     }
 
@@ -62,13 +65,13 @@ public class PluginLoaderTest {
             throws Exception {
         ExpansibleURLClassLoader cl = new ExpansibleURLClassLoader(new URL[]{});
         IPluginLoaderVisitor<String> visitor = mock(IPluginLoaderVisitor.class);
-        IPluginLoader pl = new PluginLoader(
+        IPluginLoader<Collection<File>> pl = new PluginLoader(
                 cl,
                 (t) -> {
                     throw new RuntimeException("Could not create instance of IPlugin");
                 },
                 visitor);
-        pl.loadPlugin("");
+        pl.loadPlugin(null);
         fail();
     }
 
@@ -78,7 +81,7 @@ public class PluginLoaderTest {
         Checker checker = new Checker();
         ExpansibleURLClassLoader cl = new ExpansibleURLClassLoader(new URL[]{});
         IPluginLoaderVisitor<String> visitor = mock(IPluginLoaderVisitor.class);
-        IPluginLoader pl = new PluginLoader(
+        IPluginLoader<Collection<File>> pl = new PluginLoader(
                 cl,
                 (t) -> {
                     try {
@@ -92,8 +95,8 @@ public class PluginLoaderTest {
         if (null == url) {
             fail();
         }
-        String jarPath = url.getPath();
-        pl.loadPlugin(jarPath);
+        Collection<File> files = new ArrayList<File>(){{add(new File(url.getPath()));}};
+        pl.loadPlugin(files);
         assertTrue(checker.wasCalled);
         fail();
     }
@@ -104,7 +107,7 @@ public class PluginLoaderTest {
         Checker checker = new Checker();
         ExpansibleURLClassLoader cl = new ExpansibleURLClassLoader(new URL[]{});
         IPluginLoaderVisitor<String> visitor = mock(IPluginLoaderVisitor.class);
-        IPluginLoader<String> pl = new PluginLoader(
+        IPluginLoader<Collection<File>> pl = new PluginLoader(
                 cl,
                 (t) -> {
                     try {
@@ -118,8 +121,8 @@ public class PluginLoaderTest {
         if (null == url) {
             fail();
         }
-        String jarPath = url.getPath();
-        pl.loadPlugin(jarPath);
+        Collection<File> files = new ArrayList<File>(){{add(new File(url.getPath()));}};
+        pl.loadPlugin(files);
         assertTrue(checker.wasCalled);
         fail();
     }

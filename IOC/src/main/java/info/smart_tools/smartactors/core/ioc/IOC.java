@@ -53,10 +53,9 @@ public final class IOC {
 
     /**
      * Return specific instance of {@link IKey} for resolve dependencies from key storage
-     * @param <T> type of returned value of inserted key
      * @return instance of {@link IKey}
      */
-    public static <T> IKey<IKey<T>> getKeyForKeyStorage() {
+    public static IKey getKeyForKeyStorage() {
         return container.getKeyForKeyStorage();
     }
 
@@ -68,9 +67,9 @@ public final class IOC {
      * @return instance of class with classId identifier
      * @throws ResolutionException if resolution is impossible because of any errors
      */
-    public static <T> T resolve(final IKey<T> key, final Object ... args)
+    public static <T> T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
-        return container.resolve(key, args);
+        return (T) container.resolve(key, args);
     }
 
     /**

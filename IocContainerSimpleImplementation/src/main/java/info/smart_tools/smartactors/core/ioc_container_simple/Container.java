@@ -35,7 +35,7 @@ public class Container implements IContainer {
      * @return instance of {@link IKey}
      */
     @Override
-    public IKey<IKey> getKeyForKeyStorage() {
+    public IKey getKeyForKeyStorage() {
         return null;
     }
 
@@ -48,7 +48,7 @@ public class Container implements IContainer {
      * @throws ResolutionException if resolution is impossible because of any errors
      */
     @Override
-    public <T> T resolve(final IKey<T> key, final Object ... args)
+    public <T> T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         try {
             IResolveDependencyStrategy strategy = storage.get(key);

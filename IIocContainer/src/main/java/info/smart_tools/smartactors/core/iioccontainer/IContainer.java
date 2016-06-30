@@ -20,10 +20,9 @@ public interface IContainer {
 
     /**
      * Return specific instance of {@link IKey} for resolve dependencies from key storage
-     * @param <T> type of returned value of inserted key
      * @return instance of {@link IKey}
      */
-    <T> IKey<IKey<T>> getKeyForKeyStorage();
+    IKey getKeyForKeyStorage();
 
     /**
      * Resolve dependency by given given {@link IKey} instance and args
@@ -33,7 +32,7 @@ public interface IContainer {
      * @return instance of class with classId identifier
      * @throws ResolutionException if resolution is impossible because of any errors
      */
-    <T> T resolve(final IKey<T> key, final Object... args)
+    <T> T resolve(final IKey key, final Object... args)
             throws ResolutionException;
 
     /**

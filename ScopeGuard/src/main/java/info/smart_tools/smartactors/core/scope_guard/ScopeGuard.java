@@ -16,12 +16,12 @@ public class ScopeGuard implements IScopeGuard {
     private IScope previousScope;
 
     /**
-     * Locally save and substitute current instance of {@link IScope} by
+     * Locally saves and substitutes current instance of {@link IScope} by
      * other
      * @param key unique identifier for find {@link IScope}
      * @throws  ScopeGuardException if any errors occurred
      */
-    public void guard(final Object key)
+    public ScopeGuard(final Object key)
             throws ScopeGuardException {
         try {
             previousScope = ScopeProvider.getCurrentScope();
@@ -32,7 +32,7 @@ public class ScopeGuard implements IScopeGuard {
     }
 
     /**
-     * Set locally saved {@link IScope} as current
+     * Sets locally saved {@link IScope} as current
      * @throws ScopeGuardException if any errors occurred
      */
     public void close() throws ScopeGuardException {

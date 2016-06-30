@@ -6,9 +6,17 @@
 
     <groupId>info.smart_tools.smartactors</groupId>
     <artifactId>core</artifactId>
+    <version>0.2.0-SNAPSHOT</version>
+
     <url>${project.artifactId}/</url>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <core.version>0.2.0-SNAPSHOT</core.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <modules>
         <module>IObject</module>
         <module>IOC</module>
@@ -45,7 +53,17 @@
         <module>ITaskDispatcher</module>
         <module>TaskDispatcher</module>
         <module>ITask</module>
+        <module>DataBaseStorage</module>
+        <module>SqlCommons</module>
+        <!-- database tasks modules -->
         <module>IDatabaseTask</module>
+        <module>DBCreateCollectionTask</module>
+        <module>DBUpsertTask</module>
+        <module>DBFindByIdTask</module>
+        <module>DatabaseDeleteTask</module>
+        <module>DatabaseSearchTask</module>
+        <module>DBInsertTask</module>
+        <!-- /database tasks modules -->
         <module>examples</module>
         <module>BootstrapItem</module>
         <module>IBootstrapItem</module>
@@ -68,13 +86,23 @@
         <module>IFilesystemTracker</module>
         <module>IFeatureManager</module>
         <module>FeatureManager</module>
+        <module>DSObject</module>
+        <module>IWrapperGenerator</module>
+        <module>WrapperGenerator</module>
+        <module>ServerWithIObject</module>
+        <module>IClassGenerator</module>
+        <module>ClassGeneratorJavaCompileAPI</module>
+        <module>IMultiActionStrategy</module>
         <module>IPool</module>
+        <module>Pool</module>
+        <module>PoolGuard</module>
+        <module>PluginCompileQuery</module>
+        <module>PostgresConnection</module>
+        <module>PluginPostgresConnectionPool</module>
+        <module>IStorageConnection</module>
+        <module>RecursiveStrategyContainer</module>
+        <module>CachedCollection</module>
     </modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
 
     <build>
         <plugins>
@@ -91,6 +119,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.5.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-module-markdown</artifactId>
+                        <version>1.7</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -110,6 +145,43 @@
                 <configuration>
                     <argLine>${argLine}</argLine>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <useLastCommittedRevision>true</useLastCommittedRevision>
+                    <shortRevisionLength>7</shortRevisionLength>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Version>${core.version}-${buildNumber}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.2</version>
             </plugin>
         </plugins>
     </build>
@@ -224,6 +296,15 @@
             <id>${project.artifactId}-site</id>
             <url>http://smarttools.github.io/smartactors-core/</url>
         </site>
+        <repository>
+            <id>archiva.smartactors-core</id>
+            <name>Smart Actors Core Repository</name>
+            <url>https://archiva.smart-tools.info/repository/smartactors-core/</url>
+        </repository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:SmartTools/smartactors-core.git</connection>
+    </scm>
 
 </project>

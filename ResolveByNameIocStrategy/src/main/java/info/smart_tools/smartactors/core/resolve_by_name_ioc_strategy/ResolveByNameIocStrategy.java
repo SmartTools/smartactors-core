@@ -41,7 +41,7 @@ public class ResolveByNameIocStrategy implements IResolveDependencyStrategy {
         try {
             IKey result = storage.get((String) args[0]);
             if (null == result) {
-                result = new Key(String.class, (String) args[0]);
+                result = new Key((String) args[0]);
                 storage.put((String) args[0], result);
             }
             return (T) result;

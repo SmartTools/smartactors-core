@@ -4,7 +4,7 @@ import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteExceptio
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 
 /**
- * Interface IAction
+ * Interface IAction.
  * @param <T> type of acting object
  */
 public interface IAction<T> {

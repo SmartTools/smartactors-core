@@ -47,7 +47,7 @@ public class StrategyContainer implements IStrategyContainer {
     /**
      * Remove existing dependency of {@link IResolveDependencyStrategy} by unique object identifier
      * @param key unique object identifier
-     * @throws StrategyContainerException  if any error occurred
+     * @throws StrategyContainerException if any error occurred
      */
     public void remove(final Object key)
             throws StrategyContainerException {

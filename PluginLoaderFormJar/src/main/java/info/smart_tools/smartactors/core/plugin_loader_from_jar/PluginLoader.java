@@ -7,9 +7,11 @@ import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
 import info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderException;
 import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -23,7 +25,7 @@ import java.util.jar.JarFile;
  * given parameters.
  * </pre>
  */
-public class PluginLoader implements IPluginLoader<String> {
+public class PluginLoader implements IPluginLoader<Collection<File>> {
 
     private static final String CLASS_EXTENSION = ".class";
 
@@ -58,36 +60,47 @@ public class PluginLoader implements IPluginLoader<String> {
     }
 
     @Override
-    public void loadPlugin(final String pathToJar)
+    public void loadPlugin(final Collection<File> files)
             throws PluginLoaderException {
-        JarFile jarFile = null;
         try {
-            jarFile = new JarFile(pathToJar);
-            Enumeration<JarEntry> iterator = jarFile.entries();
-            URL url = new URL("jar:file:" + pathToJar + "!/");
-            this.classLoader.addUrl(url);
-
-            while (iterator.hasMoreElements()) {
-                JarEntry je = iterator.nextElement();
-                if (je.isDirectory() || !je.getName().endsWith(CLASS_EXTENSION)) {
-                    continue;
-                }
-                String className = je.getName().substring(0, je.getName().length() - CLASS_EXTENSION.length());
-                className = className.replace('/', '.');
-                Class clazz = classLoader.loadClass(className);
-                if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {
-                    creator.execute(clazz);
-                }
+            for (File file : files) {
+                URL url = new URL("jar:file:" + file.getAbsolutePath() + "!/");
+                this.classLoader.addUrl(url);
             }
         } catch (Throwable e) {
-            visitor.pluginLoadingFail(pathToJar, e);
-            throw new PluginLoaderException("Plugin loading failed.", e);
-        } finally {
-            if (null != jarFile) {
-                try {
-                    jarFile.close();
-                } catch (IOException e) {
-                    throw new PluginLoaderException("Error on close instance of JarFile .", e);
+            throw new PluginLoaderException("Malformed file name.", e);
+        }
+
+        JarFile jarFile = null;
+        String pathToJar = null;
+        for (File file : files) {
+            try {
+                pathToJar = file.getAbsolutePath();
+                jarFile = new JarFile(pathToJar);
+                Enumeration<JarEntry> iterator = jarFile.entries();
+                while (iterator.hasMoreElements()) {
+                    JarEntry je = iterator.nextElement();
+                    if (je.isDirectory() || !je.getName().endsWith(CLASS_EXTENSION)) {
+                        continue;
+                    }
+                    String className = je.getName().substring(0, je.getName().length() - CLASS_EXTENSION.length());
+                    className = className.replace('/', '.');
+                    Class clazz = classLoader.loadClass(className);
+                    if (Arrays.asList(clazz.getInterfaces()).contains(IPlugin.class)) {
+                        creator.execute(clazz);
+                    }
+                }
+            } catch (Throwable e) {
+                visitor.pluginLoadingFail(pathToJar, e);
+                throw new PluginLoaderException("Plugin loading failed.", e);
+            } finally {
+                if (null != jarFile) {
+                    try {
+                        jarFile.close();
+                    } catch (IOException e) {
+                        //TODO: replace throw by other logic
+                        throw new PluginLoaderException("Error on close instance of JarFile .", e);
+                    }
                 }
             }
         }

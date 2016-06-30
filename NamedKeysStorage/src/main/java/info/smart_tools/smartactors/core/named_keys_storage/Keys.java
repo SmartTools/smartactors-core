@@ -17,13 +17,12 @@ public final class Keys {
 
     /**
      * Get stored or add new instance of {@link IKey} by given name
-     * @param <T> type of stored object by instance of {@link IKey}
      * @param keyName name of instance of {@link IKey}
      * @throws ResolutionException if dependency resolution has been failed
      * @return instance of {@link IKey}
      */
-    public static <T> IKey<T> getOrAdd(final String keyName)
+    public static IKey getOrAdd(final String keyName)
             throws ResolutionException {
-        return (IKey<T>) IOC.resolve(IOC.getKeyForKeyStorage(), keyName);
+        return (IKey) IOC.resolve(IOC.getKeyForKeyStorage(), keyName);
     }
 }

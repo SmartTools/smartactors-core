@@ -31,7 +31,7 @@ public class PluginTestJar implements IPlugin {
             throws PluginException {
         try {
             IBootstrapItem<String> item = new BootstrapItem("test");
-            item.process(()-> {
+            item.process(() -> {
                 System.out.print("Test plugin loaded.");
             });
             bootstrap.add(item);

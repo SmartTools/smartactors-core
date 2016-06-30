@@ -19,6 +19,9 @@
     <body>
         <menu ref="parent" inherit="top"/>
         <menu ref="reports" inherit="top"/>
+        <menu name="Documentation" inherit="top">
+            <item name="Tutorials" href="tutorials" />
+        </menu>
         <menu ref="modules"/>
 
         <links>

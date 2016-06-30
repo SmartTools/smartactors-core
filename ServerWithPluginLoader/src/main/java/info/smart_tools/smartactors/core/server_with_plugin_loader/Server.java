@@ -22,6 +22,7 @@ import info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementat
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 
 /**
  * Server with PluginLoader
@@ -38,7 +39,7 @@ public class Server implements IServer {
             IPluginCreator creator = new PluginCreator();
             IPluginLoaderVisitor<String> visitor = new PluginLoaderVisitor<>();
             ExpansibleURLClassLoader urlClassLoader = new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());
-            IPluginLoader<String> pluginLoader = new PluginLoader(
+            IPluginLoader<Collection<File>> pluginLoader = new PluginLoader(
                     urlClassLoader,
                     (t) -> {
                         try {
@@ -51,7 +52,6 @@ public class Server implements IServer {
                     visitor
             );
 
-
             // FS listener creation
             // TODO: Get from configuration
             File coreJarsDir = new File("libs");
@@ -62,23 +62,22 @@ public class Server implements IServer {
                     ListenerTask::new);
 
             jarFilesTracker.start(coreJarsDir);
+            jarFilesTracker.addErrorHandler((e) -> {
+                System.out.println("Server initialization failed!");
+                throw new RuntimeException(e);
+            });
 
             // FeatureManager & Feature creation
             IFeatureManager featureManager = new FeatureManager(jarFilesTracker);
 
+
             IFeature coreFeature = featureManager.newFeature("smartactors.core");
             coreFeature.whenPresent(files -> {
-                for (File file : files) {
-                    try {
-                        pluginLoader.loadPlugin(file.getAbsolutePath());
-                    } catch (Throwable e) {
-                        throw new RuntimeException("Plugin loading failed.");
-                    }
-                }
                 try {
+                    pluginLoader.loadPlugin(files);
                     bootstrap.start();
                 } catch (Throwable e) {
-                    throw new RuntimeException("Could not execute plugin process");
+                    throw new RuntimeException("Plugin loading failed.", e);
                 }
             });
 
@@ -95,8 +94,6 @@ public class Server implements IServer {
         } catch (Throwable e) {
             throw new ServerInitializeException("Server initialization failed.", e);
         }
-
-
     }
 
     @Override

@@ -32,10 +32,10 @@ public class KeyTest {
                 y = new Key("abc");
                 z = new Key("abc");
                 notx = new Key("a");
-                xInt = new Key<Integer>(Integer.class, "abc");
-                yInt = new Key<Integer>(Integer.class, "abc");
-                zInt = new Key<Integer>(Integer.class, "abc");
-                notxInt = new Key<Integer>(Integer.class, "a");
+                xInt = new Key( "abc");
+                yInt = new Key("abc");
+                zInt = new Key("abc");
+                notxInt = new Key("a");
             } catch(Exception e) {
 
             }
@@ -132,7 +132,7 @@ public class KeyTest {
 
     @Test
     public void checkMapResolution() {
-        Map<IKey<Integer>, Integer> map = new HashMap<IKey<Integer>, Integer>();
+        Map<IKey, Integer> map = new HashMap<IKey, Integer>();
         Integer a = 1;
         Integer b = 2;
         map.put(Fixture.xInt, a);
@@ -144,7 +144,7 @@ public class KeyTest {
 
     @Test
     public void checkMapResolutionWithSameKeys() {
-        Map<IKey<Integer>, Integer> map = new HashMap<IKey<Integer>, Integer>();
+        Map<IKey, Integer> map = new HashMap<IKey, Integer>();
         Integer a = 1;
         Integer b = 2;
         map.put(Fixture.xInt, a);

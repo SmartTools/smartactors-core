@@ -24,7 +24,7 @@ public class KeysTest {
             throws Exception {
         IStrategyContainer strategyContainer = mock(IStrategyContainer.class);
         IResolveDependencyStrategy strategy = mock(IResolveDependencyStrategy.class);
-        IKey<Integer> key = mock(IKey.class);
+        IKey key = mock(IKey.class);
         ScopeProvider.subscribeOnCreationNewScope(
                 scope -> {
                     try {
@@ -39,7 +39,7 @@ public class KeysTest {
         ScopeProvider.setCurrentScope(scope);
         when(strategyContainer.resolve(any())).thenReturn(strategy);
         when(strategy.resolve("test")).thenReturn(key);
-        IKey<Integer> result = Keys.getOrAdd("test");
+        IKey result = Keys.getOrAdd("test");
         assertNotNull(result);
         assertEquals(result, key);
     }

@@ -9,15 +9,12 @@ import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgum
  * <pre>
  * This implementation has follow specific features:
  * - string unique identifier;
- * - two constructors (&lt;T&gt;, String) and (String);
  * - overridden equals and hashCode method based on string property;
  * </pre>
- * @param <T> class type
  */
-public class Key<T> implements IKey<T> {
+public class Key implements IKey {
 
     private String identifier;
-    private Class<T> clazz;
 
     /**
      * Constructor with string unique identifier
@@ -32,40 +29,24 @@ public class Key<T> implements IKey<T> {
         this.identifier = identifier;
     }
 
-    /**
-     * Constructor with string unique identifier and class type
-     * @param clazz class type
-     * @param identifier string unique identifier
-     * @throws InvalidArgumentException if any errors occurred
-     */
-    public Key(final Class<T> clazz, final String identifier)
-            throws InvalidArgumentException {
-        this(identifier);
-        this.clazz = clazz;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        Key key = (Key) o;
 
-        Key<?> key = (Key<?>) o;
+        return !(identifier != null ? !identifier.equals(key.identifier) : key.identifier != null);
 
-        if (identifier != null ? !identifier.equals(key.identifier) : key.identifier != null) {
-            return false;
-        }
-        return !(clazz != null ? !clazz.equals(key.clazz) : key.clazz != null);
     }
 
     @Override
     public int hashCode() {
-        int result = identifier != null ? identifier.hashCode() : 0;
-        result = 31 * result + (clazz != null ? clazz.hashCode() : 0);
-        return result;
+
+        return identifier != null ? identifier.hashCode() : 0;
     }
 
     @Override

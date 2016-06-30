@@ -5,7 +5,6 @@ import info.smart_tools.smartactors.core.iioccontainer.exception.DeletionExcepti
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
-import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.istrategy_container.IStrategyContainer;
 import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
@@ -23,16 +22,15 @@ public class Container implements IContainer {
     /** Key for getting instance of {@link IStrategyContainer} from current scope */
     private IKey strategyContainerKey;
     /** */
-    private IKey<IKey<?>> keyForKeyStorage;
+    private IKey keyForKeyStorage;
 
     /**
      * Default constructor
-     * @throws InvalidArgumentException if any errors occurred
      */
     public Container() {
         try {
             strategyContainerKey = new Key(java.util.UUID.randomUUID().toString());
-            keyForKeyStorage = new Key<>(java.util.UUID.randomUUID().toString());
+            keyForKeyStorage = new Key(java.util.UUID.randomUUID().toString());
         } catch (Exception e) {
             throw new RuntimeException("Initialization of IOC container has been failed.");
         }
@@ -52,7 +50,7 @@ public class Container implements IContainer {
      * @return instance of {@link IKey}
      */
     @Override
-    public IKey<IKey<?>> getKeyForKeyStorage() {
+    public IKey getKeyForKeyStorage() {
         return this.keyForKeyStorage;
     }
 
@@ -65,14 +63,14 @@ public class Container implements IContainer {
      * @throws ResolutionException if resolution is impossible because of any errors
      */
     @Override
-    public <T> T resolve(final IKey<T> key, final Object ... args)
+    public <T> T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         try {
             IStrategyContainer strategyContainer = (IStrategyContainer) ScopeProvider.getCurrentScope().getValue(strategyContainerKey);
             IResolveDependencyStrategy strategy = strategyContainer.resolve(key);
             return (T) strategy.resolve(args);
         } catch (Throwable e) {
-            throw new ResolutionException("Resolution of dependency failed.");
+            throw new ResolutionException("Resolution of dependency failed.", e);
         }
     }
 

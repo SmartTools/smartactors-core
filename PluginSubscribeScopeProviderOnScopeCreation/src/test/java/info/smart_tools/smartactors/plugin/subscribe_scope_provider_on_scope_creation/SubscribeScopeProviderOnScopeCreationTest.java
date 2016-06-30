@@ -10,6 +10,7 @@ import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.core.iscope.IScope;
 import info.smart_tools.smartactors.core.istrategy_container.IStrategyContainer;
 import info.smart_tools.smartactors.core.scope_provider.ScopeProvider;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -31,6 +32,13 @@ import static org.mockito.Mockito.reset;
  * Tests for {@link SubscribeScopeProviderOnScopeCreation}
  */
 public class SubscribeScopeProviderOnScopeCreationTest {
+
+    @Before
+    public void init()
+            throws Exception {
+        ScopeProvider.clearListOfSubscribers();
+    }
+
 
     @Test
     public void checkPluginCreation()
