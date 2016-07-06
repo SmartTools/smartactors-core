@@ -32,7 +32,6 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
 
     /**
      * Prepares database query
-     *
      * @param query query object
      * @throws TaskPrepareException if error occurs in process of query preparing
      */

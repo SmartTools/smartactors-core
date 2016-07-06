@@ -66,7 +66,7 @@ public interface IWrapper {
     void setIObject(IObject iObject)
             throws ChangeValueException;
 
-    Map<String, IInnerWrapper> getStringIInnerMap()
+    IInnerWrapper getInnerMapByName()
             throws ReadValueException;
 
     void setStringIInnerMap(Map<String, IInnerWrapper> map)

@@ -7,8 +7,6 @@ import info.smart_tools.smartactors.core.db_task.search.wrappers.ISearchQuery;
 import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
-//TODO commented by AKutalev, reason: now IObject doesn't contain iterator
-//import info.smart_tools.smartactors.core.iobject.IObjectIterator;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.sql_commons.JDBCCompiledQuery;
@@ -58,10 +56,9 @@ public class PSQLSearchTaskTest {
         when(connection.compileQuery(anyObject())).thenReturn(compiledQuery);
 
         IObject criteria = mock(IObject.class);
-//TODO commented by AKutalev, reason: now IObject doesn't contain iterator
-//        IObjectIterator iterator = mock(IObjectIterator.class);
-//        when(iterator.next()).thenReturn(false);
-//        when(criteria.iterator()).thenReturn(iterator);
+        Iterator iterator = mock(Iterator.class);
+        when(iterator.hasNext()).thenReturn(false);
+        when(criteria.iterator()).thenReturn(iterator);
 
         when(queryMessage.getCriteria()).thenReturn(criteria);
         when(queryMessage.getPageNumber()).thenReturn(1);

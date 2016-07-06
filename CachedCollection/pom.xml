@@ -27,6 +27,11 @@
             <artifactId>core.named_keys_storage</artifactId>
             <version>${core.version}</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>info.smart_tools.smartactors</groupId>-->
+            <!--<artifactId>core.db_search_task</artifactId>-->
+            <!--<version>${core.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>core.create_new_instance_strategy</artifactId>

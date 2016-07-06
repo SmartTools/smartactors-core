@@ -21,6 +21,11 @@
             <artifactId>core.iwrapper_generator</artifactId>
             <version>${core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.iobject_wrapper</artifactId>
+            <version>${core.version}</version>
+        </dependency>
 
         <!-- Service locator -->
         <dependency>
@@ -43,11 +48,6 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>core.create_new_instance_strategy</artifactId>
-            <version>${core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>core.ds_object</artifactId>
             <version>${core.version}</version>
         </dependency>
 
@@ -73,6 +73,12 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>core.resolve_by_name_ioc_with_lambda_strategy</artifactId>
+            <version>${core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.ds_object</artifactId>
             <version>${core.version}</version>
             <scope>test</scope>
         </dependency>

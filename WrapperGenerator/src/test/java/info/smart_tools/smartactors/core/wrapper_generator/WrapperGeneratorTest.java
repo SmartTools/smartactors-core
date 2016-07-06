@@ -4,7 +4,9 @@ package info.smart_tools.smartactors.core.wrapper_generator;
 import info.smart_tools.smartactors.core.ds_object.DSObject;
 import info.smart_tools.smartactors.core.ds_object.FieldName;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject_wrapper.IObjectWrapper;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.iscope.IScope;
@@ -21,13 +23,14 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -57,6 +60,28 @@ public class WrapperGeneratorTest {
                             }
                         })
         );
+        IOC.register(
+                Keys.getOrAdd(IFieldName.class.getCanonicalName()),
+                new ResolveByNameIocStrategy(
+                        (a) -> {
+                            try {
+                                return new FieldName((String) a[0]);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+        );
+        IOC.register(
+                Keys.getOrAdd(IObject.class.getCanonicalName()),
+                new ResolveByNameIocStrategy(
+                        (a) -> {
+                            try {
+                                return new DSObject();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+        );
 
         IResolveDependencyStrategy toListOfInt = mock(IResolveDependencyStrategy.class);
         IOC.register(Keys.getOrAdd("ToListOfInt"), toListOfInt);
@@ -76,197 +101,258 @@ public class WrapperGeneratorTest {
         IResolveDependencyStrategy toMapOfStringIInnerWrapper = mock(IResolveDependencyStrategy.class);
         IOC.register(Keys.getOrAdd("ToMapOfStringIInnerWrapper"), toMapOfStringIInnerWrapper);
         when(toMapOfStringIInnerWrapper.resolve(any())).thenReturn(new HashMap<String, IInnerWrapper>(){{put("abc", innerWrapper);}});
+
+        IResolveDependencyStrategy getInnerWrapperFromMapByName = mock(IResolveDependencyStrategy.class);
+        IOC.register(Keys.getOrAdd("ToInnerWrapperFromMapByName"), getInnerWrapperFromMapByName);
+        when(getInnerWrapperFromMapByName.resolve(any(), eq("abc"))).thenReturn(innerWrapper);
+
+        fillBinding();
     }
 
-    private IObject getBinding()
+    private void fillBinding()
             throws Exception {
-        IObject binding = new DSObject();
+        IObject binding = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()), "binding");
         IObject bindingForIWrapper = new DSObject();
         IObject bindingForIInnerWrapper = new DSObject();
         IObject bindingForIIncorrectWrapperWithoutReadValueException = new DSObject();
         IObject bindingForIIncorrectWrapperWithoutChangeValueException = new DSObject();
 
+        // Binding for IIncorrectWrapperWithoutReadValueException methods
         IObject getValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"Value\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/Value\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
 
+        // Binding for IIncorrectWrapperWithoutChangeValueException methods
         IObject setValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"Value\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/Value\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
 
+        // Binding for IInnerWrapper methods
         IObject getDoubleValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"DoubleValue\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/DoubleValue\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setDoubleValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"DoubleValue\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/DoubleValue\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
 
+        // Binding for IWrapper methods
         IObject getIntValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"IntValue\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/IntValue\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setIntValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"IntValue\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/IntValue\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getStringValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"StringValue\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/StringValue\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setStringValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"StringValue\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/StringValue\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getTestClassValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"TestClassValue\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/TestClassValue\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setTestClassValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"TestClassValue\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/TestClassValue\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getListOfInt = new DSObject("{\n" +
-                "\t\"ValueName\":    \"ListOfInt\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"ToListOfInt\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"ToListOfInt\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/ListOfInt\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setListOfInt = new DSObject("{\n" +
-                "\t\"ValueName\":    \"ListOfInt\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/ListOfInt\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getListOfString = new DSObject("{\n" +
-                "\t\"ValueName\":    \"ListOfString\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"ToListOfString\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"ToListOfString\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/ListOfString\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setListOfString = new DSObject("{\n" +
-                "\t\"ValueName\":    \"ListOfString\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/ListOfString\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getListOfTestClasses = new DSObject("{\n" +
-                "\t\"ValueName\":    \"ListOfTestClasses\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"ToListOfTestClasses\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"ToListOfTestClasses\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/ListOfTestClasses\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setListOfTestClasses = new DSObject("{\n" +
-                "\t\"ValueName\":    \"ListOfTestClasses\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/ListOfTestClasses\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getBoolValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"BoolValue\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/BoolValue\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setBoolValue = new DSObject("{\n" +
-                "\t\"ValueName\":    \"BoolValue\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/BoolValue\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getWrappedIObject = new DSObject("{\n" +
-                "\t\"ValueName\":    \"WrappedIObject\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": true\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/WrappedIObject\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setWrappedIObject = new DSObject("{\n" +
-                "\t\"ValueName\":    \"WrappedIObject\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": true\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/WrappedIObject\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject getIObject = new DSObject("{\n" +
-                "\t\"ValueName\":    \"IObject\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"message\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/IObject\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
         IObject setIObject = new DSObject("{\n" +
-                "\t\"ValueName\":    \"IObject\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"response\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"response/IObject\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
-        IObject getStringIInnerMap = new DSObject("{\n" +
-                "\t\"ValueName\":    \"StringIInnerMap\",\n" +
-                "\t\"MethodType\":   \"get\",\n" +
-                "\t\"Resource\":     \"context\",\n" +
-                "\t\"UseStrategy\":  \"ToMapOfStringIInnerWrapper\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+        IObject getInnerMapByName = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"ToMapOfStringIInnerWrapper\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"context/subcontext/StringIInnerMap\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"context/subcontext/MapOfStringIInnerWrapper\"\n" +
+                "\t}, {\n" +
+                "\t\t\"name\": \"ToInnerWrapperFromMapByName\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"context/subcontext/MapOfStringIInnerWrapper\",\n" +
+                "\t\t\t\"context/subcontext/StringValue\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}]\n" +
                 "}");
         IObject setStringIInnerMap = new DSObject("{\n" +
-                "\t\"ValueName\":    \"StringIInnerMap\",\n" +
-                "\t\"MethodType\":   \"set\",\n" +
-                "\t\"Resource\":     \"context\",\n" +
-                "\t\"UseStrategy\":  \"\",\n" +
-                "\t\"CheckWrapper\": false\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\"in\"],\n" +
+                "\t\t\"target\": \"context/subcontext/StringIInnerMap\"\n" +
+                "\t}\n" +
+                "\t]\n" +
                 "}");
 
         bindingForIIncorrectWrapperWithoutReadValueException.setValue(new FieldName("getValue"), getValue);
-        bindingForIIncorrectWrapperWithoutReadValueException.setValue(new FieldName("initMethodParameters"), new String[]{"message"});
 
         bindingForIIncorrectWrapperWithoutChangeValueException.setValue(new FieldName("setValue"), setValue);
-        bindingForIIncorrectWrapperWithoutChangeValueException.setValue(new FieldName("initMethodParameters"), new String[]{"message"});
 
         bindingForIInnerWrapper.setValue(new FieldName("getDoubleValue"), getDoubleValue);
         bindingForIInnerWrapper.setValue(new FieldName("setDoubleValue"), setDoubleValue);
-        bindingForIInnerWrapper.setValue(new FieldName("initMethodParameters"), new String[]{"message", "response"});
 
         bindingForIWrapper.setValue(new FieldName("getIntValue"), getIntValue);
         bindingForIWrapper.setValue(new FieldName("setIntValue"), setIntValue);
@@ -286,38 +372,40 @@ public class WrapperGeneratorTest {
         bindingForIWrapper.setValue(new FieldName("setWrappedIObject"), setWrappedIObject);
         bindingForIWrapper.setValue(new FieldName("getIObject"), getIObject);
         bindingForIWrapper.setValue(new FieldName("setIObject"), setIObject);
-        bindingForIWrapper.setValue(new FieldName("getStringIInnerMap"), getStringIInnerMap);
+        bindingForIWrapper.setValue(new FieldName("getInnerMapByName"), getInnerMapByName);
         bindingForIWrapper.setValue(new FieldName("setStringIInnerMap"), setStringIInnerMap);
-        bindingForIWrapper.setValue(new FieldName("initMethodParameters"), new String[]{"message", "context", "response"});
 
         binding.setValue(new FieldName(
-                IIncorrectWrapperWithoutReadValueException.class.toString()),
+                IIncorrectWrapperWithoutReadValueException.class.getCanonicalName()),
                 bindingForIIncorrectWrapperWithoutReadValueException
         );
         binding.setValue(new FieldName(
-                        IIncorrectWrapperWithoutChangeValueException.class.toString()),
+                        IIncorrectWrapperWithoutChangeValueException.class.getCanonicalName()),
                 bindingForIIncorrectWrapperWithoutChangeValueException
         );
 
-        binding.setValue(new FieldName(IWrapper.class.toString()), bindingForIWrapper);
-        binding.setValue(new FieldName(IInnerWrapper.class.toString()), bindingForIInnerWrapper);
-
-        return binding;
+        binding.setValue(new FieldName(IWrapper.class.getCanonicalName()), bindingForIWrapper);
+        binding.setValue(new FieldName(IInnerWrapper.class.getCanonicalName()), bindingForIInnerWrapper);
     }
 
     @Test
     public void checkCreationAndUsageWrapperByInterface()
             throws Exception {
         IWrapperGenerator wg = new WrapperGenerator(null);
-        IObject binding = getBinding();
 
-        IWrapper inst = wg.generate(IWrapper.class, binding);
+        IWrapper inst = wg.generate(IWrapper.class);
 
         assertNotNull(inst);
 
+        IObject env = mock(IObject.class);
         IObject message = mock(IObject.class);
         IObject context = mock(IObject.class);
+        IObject subContext = mock(IObject.class);
         IObject response = mock(IObject.class);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        when(env.getValue(new FieldName("context"))).thenReturn(context);
+        when(env.getValue(new FieldName("response"))).thenReturn(response);
+        when(context.getValue(new FieldName("subcontext"))).thenReturn(subContext);
 
         when(message.getValue(new FieldName("IntValue"))).thenReturn(1);
         when(message.getValue(new FieldName("StringValue"))).thenReturn("abc");
@@ -334,9 +422,11 @@ public class WrapperGeneratorTest {
         when(message.getValue(new FieldName("WrappedIObject"))).thenReturn(innerWrapper);
         IObject iObject = mock(IObject.class);
         when(message.getValue(new FieldName("IObject"))).thenReturn(iObject);
-        when(context.getValue(new FieldName("StringIInnerMap"))).thenReturn(new HashMap<String, IInnerWrapper>(){{put("abc", innerWrapper);}});
+        when(subContext.getValue(new FieldName("StringIInnerMap"))).thenReturn(new HashMap<String, IInnerWrapper>(){{put("abc", innerWrapper);}});
+        when(subContext.getValue(new FieldName("MapOfStringIInnerWrapper"))).thenReturn(new HashMap<String, IInnerWrapper>(){{put("abc", innerWrapper);}});
+        when(subContext.getValue(new FieldName("StringValue"))).thenReturn("abc");
 
-        ((IObjectWrapper)inst).init(message, context, response);
+        ((IObjectWrapper)inst).init(env);
 
         int intResult = inst.getIntValue();
         String stringResult = inst.getStringValue();
@@ -347,8 +437,11 @@ public class WrapperGeneratorTest {
         boolean boolResult = inst.getBoolValue();
         IInnerWrapper innerWrapperResult = inst.getWrappedIObject();
         IObject iObjectResult = inst.getIObject();
-        Map<String, IInnerWrapper> mapResult = inst.getStringIInnerMap();
-        IObject[] iObjects = ((IObjectWrapper) inst).getIObjects();
+        //Map<String, IInnerWrapper> mapResult = inst.getStringIInnerMap();
+        IInnerWrapper resultOfChainStrategy = inst.getInnerMapByName();
+        IObject resultMessage = ((IObjectWrapper) inst).getEnvironmentIObject(new FieldName("message"));
+        IObject resultContext = ((IObjectWrapper) inst).getEnvironmentIObject(new FieldName("context"));
+        IObject resultResponse = ((IObjectWrapper) inst).getEnvironmentIObject(new FieldName("response"));
 
         assertEquals(intResult, 1);
         assertEquals(stringResult, "abc");
@@ -359,10 +452,13 @@ public class WrapperGeneratorTest {
         assertEquals(boolResult, true);
         assertEquals(innerWrapperResult, innerWrapper);
         assertEquals(iObjectResult, iObject);
-        assertNotNull(mapResult.get("abc"));
-        assertSame(iObjects[0], message);
-        assertSame(iObjects[1], context);
-        assertSame(iObjects[2], response);
+
+        assertNotNull(resultOfChainStrategy);
+        assertTrue(IInnerWrapper.class.isAssignableFrom(resultOfChainStrategy.getClass()));
+
+        assertSame(resultMessage, message);
+        assertSame(resultContext, context);
+        assertSame(resultResponse, response);
 
         inst.setIntValue(2);
         inst.setStringValue("cba");
@@ -390,30 +486,28 @@ public class WrapperGeneratorTest {
         verify(response, times(1)).setValue(new FieldName("BoolValue"), false);
         verify(response, times(1)).setValue(new FieldName("WrappedIObject"), innerWrapperForSetter);
         verify(response, times(1)).setValue(new FieldName("IObject"), iObjectForSetter);
-        verify(context, times(1)).setValue(new FieldName("StringIInnerMap"), new HashMap<String, IInnerWrapper>(){{put("cba", innerWrapperForSetter);}});
+        verify(subContext, times(1)).setValue(new FieldName("StringIInnerMap"), new HashMap<String, IInnerWrapper>(){{put("cba", innerWrapperForSetter);}});
     }
 
     @Test (expected = WrapperGeneratorException.class)
     public void checkOnIncorrectInterfaceWithoutReadValueException()
             throws Exception {
         IWrapperGenerator wg = new WrapperGenerator(null);
-        IObject binding = getBinding();
-        wg.generate(IIncorrectWrapperWithoutReadValueException.class, binding);
+        wg.generate(IIncorrectWrapperWithoutReadValueException.class);
     }
 
     @Test (expected = WrapperGeneratorException.class)
     public void checkOnIncorrectInterfaceWithoutChangeValueException()
             throws Exception {
         IWrapperGenerator wg = new WrapperGenerator(null);
-        IObject binding = getBinding();
-        wg.generate(IIncorrectWrapperWithoutChangeValueException.class, binding);
+        wg.generate(IIncorrectWrapperWithoutChangeValueException.class);
     }
 
     @Test (expected = InvalidArgumentException.class)
     public void checkInvalidArgumentExceptionOnTargetInterfaceNull()
             throws Exception {
         IWrapperGenerator wg = new WrapperGenerator(null);
-        wg.generate(null, null);
+        wg.generate(null);
         fail();
     }
 
@@ -421,24 +515,7 @@ public class WrapperGeneratorTest {
     public void checkInvalidArgumentExceptionOnNotInterface()
             throws Exception {
         IWrapperGenerator wg = new WrapperGenerator(null);
-        wg.generate(TestClass.class, null);
-        fail();
-    }
-
-    @Test (expected = InvalidArgumentException.class)
-    public void checkInvalidArgumentExceptionOnBindingNull()
-            throws Exception {
-        IWrapperGenerator wg = new WrapperGenerator(null);
-        wg.generate(IWrapper.class, null);
-        fail();
-    }
-
-    @Test (expected = WrapperGeneratorException.class)
-    public void checkWrapperGeneratorExceptionOnWrongBinding()
-            throws Exception {
-        IWrapperGenerator wg = new WrapperGenerator(null);
-        IObject binding = mock(IObject.class);
-        wg.generate(IWrapper.class, binding);
+        wg.generate(TestClass.class);
         fail();
     }
 }

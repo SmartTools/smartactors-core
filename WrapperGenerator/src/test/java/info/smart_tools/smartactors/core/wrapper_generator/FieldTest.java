@@ -1,8 +1,11 @@
 package info.smart_tools.smartactors.core.wrapper_generator;
 
+import info.smart_tools.smartactors.core.ds_object.DSObject;
 import info.smart_tools.smartactors.core.ds_object.FieldName;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.core.iscope.IScope;
@@ -39,13 +42,23 @@ public class FieldTest {
         IScope scope = ScopeProvider.getScope(keyOfMainScope);
         scope.setValue(IOC.getIocKey(), new StrategyContainer());
         ScopeProvider.setCurrentScope(scope);
-
         IOC.register(
                 IOC.getKeyForKeyStorage(),
                 new ResolveByNameIocStrategy(
                         (a) -> {
                             try {
                                 return new Key((String) a[0]);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+        );
+        IOC.register(
+                Keys.getOrAdd(FieldName.class.getCanonicalName()),
+                new ResolveByNameIocStrategy(
+                        (a) -> {
+                            try {
+                                return new FieldName((String) a[0]);
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
@@ -63,123 +76,183 @@ public class FieldTest {
     @Test
     public void checkFieldCreation()
             throws Exception {
-        Field field = new Field<>(new FieldName("test"));
+        Field field = new Field<>("binding");
         assertNotNull(field);
     }
 
     @Test (expected = InvalidArgumentException.class)
-    public void checkFirstMethodFromOnWrongArgument()
+    public void checkOutMethodOnWrongArgument()
             throws Exception {
-        Field<Integer> field = new Field<>(new FieldName("intValue"));
-        field.from(null, Integer.class);
+        Field<Integer> field = new Field<>("binding");
+        field.out(null);
         fail();
     }
 
     @Test
-    public void checkFirstMethodFromNullValue()
+    public void checkOutMethodNullValue()
             throws Exception {
-        IObject iObject = mock(IObject.class);
-        Field<Integer> field = new Field<>(new FieldName("intValue"));
-        Integer result = field.from(iObject, Integer.class);
+        IObject env = mock(IObject.class);
+        IObject message = mock(IObject.class);
+        IObject binding = mock(IObject.class);
+        IObject rules = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/Value\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t],\n" +
+                "\t\"isWrapper\": false\n" +
+                "}");
+        when(env.getValue(new FieldName("binding"))).thenReturn(binding);
+        when(binding.getValue(new FieldName("Binding"))).thenReturn(rules);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        Field<Integer> field = new Field<>("binding/Binding");
+        Integer result = field.out(env);
         assertNull(result);
     }
 
-    @Test
-    public void checkFirstMethodFromSameClass()
+    @Test (expected = ReadValueException.class)
+    public void checkOutMethodOnWrongBinding()
             throws Exception {
-        IObject iObject = mock(IObject.class);
-        when(iObject.getValue(new FieldName("intValue"))).thenReturn(1);
-        Field<Integer> field = new Field<>(new FieldName("intValue"));
-        Integer result = field.from(iObject, Integer.class);
-        assertEquals((long)result, 1L);
-    }
-
-    @Test
-    public void checkFirstMethodFromImplementedClass()
-            throws Exception {
-        IObject iObject = mock(IObject.class);
-        IObject innerIObject = mock(IObject.class);
-        when(iObject.getValue(new FieldName("IObjectValue"))).thenReturn(innerIObject);
-        Field<IObject> field = new Field<>(new FieldName("IObjectValue"));
-        IObject result = field.from(iObject, IObject.class);
-        assertSame(result, innerIObject);
-    }
-
-    @Test
-    public void checkFirstMethodFromWithIOC()
-            throws Exception {
-        IObject iObject = mock(IObject.class);
-        when(iObject.getValue(new FieldName("intValue"))).thenReturn(1);
-        Field<Integer> field = new Field<>(new FieldName("intValue"));
-        Integer result = field.from(iObject, int.class);
-        assertSame(result, 1);
-    }
-
-    @Test (expected = InvalidArgumentException.class)
-    public void checkFirstMethodFromWithIOCResolutionException()
-            throws Exception {
-        IObject iObject = mock(IObject.class);
-        when(iObject.getValue(new FieldName("boolValue"))).thenReturn(true);
-        Field<Boolean> field = new Field<>(new FieldName("boolValue"));
-        Boolean result = field.from(iObject, boolean.class);
-        fail();
-    }
-
-    @Test (expected = InvalidArgumentException.class)
-    public void checkSecondMethodFromOnWrongArgument()
-            throws Exception {
-        Field<Integer> field = new Field<>(new FieldName("intValue"));
-        field.from(null, "");
+        IObject env = mock(IObject.class);
+        IObject message = mock(IObject.class);
+        IObject binding = mock(IObject.class);
+        IObject rules = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/Value\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}\n" +
+                "\t],\n" +
+                "\t\"isWrapper\": false\n" +
+                "}");
+        when(env.getValue(new FieldName("binding"))).thenReturn(binding);
+        when(binding.getValue(new FieldName("Binding"))).thenReturn(rules);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        Field<Integer> field = new Field<>("wrong/Wrong");
+        field.out(env);
         fail();
     }
 
     @Test
-    public void checkSecondMethodFromNullValue()
+    public void checkOutMethodOnNestedIObjectAndMultipleRules()
             throws Exception {
-        IObject iObject = mock(IObject.class);
-        Field<Integer> field = new Field<>(new FieldName("intValue"));
-        Integer result = field.from(iObject, "");
-        assertNull(result);
-    }
-
-    @Test
-    public void checkSecondMethodFromWithIOC()
-            throws Exception {
-        IObject iObject = mock(IObject.class);
-        when(iObject.getValue(new FieldName("booleanValue"))).thenReturn(true);
-        Field<Boolean> field = new Field<>(new FieldName("booleanValue"));
-        boolean result = field.from(iObject, "ToBoolean");
-        assertTrue(result);
-    }
-
-    @Test (expected = InvalidArgumentException.class)
-    public void checkSecondMethodFromWithIOCResolutionException()
-            throws Exception {
-        IObject iObject = mock(IObject.class);
-        when(iObject.getValue(new FieldName("boolValue"))).thenReturn(true);
-        Field<Boolean> field = new Field<>(new FieldName("boolValue"));
-        Boolean result = field.from(iObject, "Unregistered");
-        fail();
-    }
-
-    @Test
-    public void checkInjection()
-            throws Exception {
-        IObject iObject = mock(IObject.class);
         Integer value = 1;
-        doNothing().when(iObject).setValue(new FieldName("Value"), value);
-        Field<Integer> field = new Field<>(new FieldName("Value"));
-        field.inject(iObject, value);
-        verify(iObject, times(1)).setValue(new FieldName("Value"), value);
+        IObject env = mock(IObject.class);
+        IObject message = mock(IObject.class);
+        IObject subMessage = mock(IObject.class);
+        IObject binding = mock(IObject.class);
+        IObject rules = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/Value\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"message/submessage/Value\"\n" +
+                "\t}, {\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/submessage/Value\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}],\n" +
+                "\t\"isWrapper\": false\n" +
+                "}");
+        when(env.getValue(new FieldName("binding"))).thenReturn(binding);
+        when(binding.getValue(new FieldName("Binding"))).thenReturn(rules);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        when(message.getValue(new FieldName("submessage"))).thenReturn(subMessage);
+        when(message.getValue(new FieldName("Value"))).thenReturn(value);
+        when(subMessage.getValue(new FieldName("Value"))).thenReturn(value);
+        Field<Integer> field = new Field<>("binding/Binding");
+        Integer result = field.out(env);
+        assertEquals(result, value);
+    }
+
+    @Test (expected = ClassCastException.class)
+    public void checkOutMethodOnWrongTypeCast()
+            throws Exception {
+        IObject env = mock(IObject.class);
+        IObject message = mock(IObject.class);
+        IObject binding = mock(IObject.class);
+        IObject rules = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"message/Value\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"out\"\n" +
+                "\t}" +
+                "\t],\n" +
+                "\t\"isWrapper\": false\n" +
+                "}");
+        when(env.getValue(new FieldName("binding"))).thenReturn(binding);
+        when(binding.getValue(new FieldName("Binding"))).thenReturn(rules);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        when(message.getValue(new FieldName("Value"))).thenReturn(true);
+        Field<Integer> field = new Field<>("binding/Binding");
+        Integer a = field.out(env);
+        fail();
+    }
+
+    @Test (expected = InvalidArgumentException.class)
+    public void checkInMethodOnWrongArgument()
+            throws Exception {
+        Field<Integer> field = new Field<>("binding");
+        field.in(null, 1);
+        fail();
+    }
+
+    @Test (expected = ChangeValueException.class)
+    public void checkInMethodOnWrongBinding()
+            throws Exception {
+        IObject env = mock(IObject.class);
+        IObject message = mock(IObject.class);
+        IObject binding = mock(IObject.class);
+        IObject rules = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"in\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"message/wrong.path/Value\"\n" +
+                "\t}\n" +
+                "\t],\n" +
+                "\t\"isWrapper\": false\n" +
+                "}");
+        when(env.getValue(new FieldName("binding"))).thenReturn(binding);
+        when(binding.getValue(new FieldName("Binding"))).thenReturn(rules);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        Field<Integer> field = new Field<>("binding/Binding");
+        field.in(env, 1);
+        fail();
     }
 
     @Test
-    public void checkDeletion()
+    public void checkInMethodOnCorrectData()
             throws Exception {
-        IObject iObject = mock(IObject.class);
-        doNothing().when(iObject).deleteField(new FieldName("Value"));
-        Field<Integer> field = new Field<>(new FieldName("Value"));
-        field.delete(iObject);
-        verify(iObject, times(1)).deleteField(new FieldName("Value"));
+        IObject env = mock(IObject.class);
+        IObject message = mock(IObject.class);
+        IObject binding = mock(IObject.class);
+        IObject rules = new DSObject("{\n" +
+                "\t\"rules\": [{\n" +
+                "\t\t\"name\": \"\",\n" +
+                "\t\t\"args\": [\n" +
+                "\t\t\t\"in\"\n" +
+                "\t\t],\n" +
+                "\t\t\"target\": \"message/Value\"\n" +
+                "\t}\n" +
+                "\t],\n" +
+                "\t\"isWrapper\": false\n" +
+                "}");
+        when(env.getValue(new FieldName("binding"))).thenReturn(binding);
+        when(binding.getValue(new FieldName("Binding"))).thenReturn(rules);
+        when(env.getValue(new FieldName("message"))).thenReturn(message);
+        Field<Integer> field = new Field<>("binding/Binding");
+        field.in(env, 1);
     }
 }
