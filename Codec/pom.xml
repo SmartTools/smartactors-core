@@ -9,30 +9,26 @@
         <groupId>info.smart_tools.smartactors</groupId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
-
-    <artifactId>core.create_new_instance_strategy</artifactId>
+    <artifactId>core.security.encoding.codecs</artifactId>
 
     <dependencies>
-
-        <!-- Core Interfaces -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>core.iresolve_dependency_strategy</artifactId>
+            <artifactId>core.security.encoding</artifactId>
             <version>${core.version}</version>
         </dependency>
 
-        <!-- Core exception -->
+        <!-- http://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
         <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>core.invalid_argument_exception</artifactId>
-            <version>${core.version}</version>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.1</version>
         </dependency>
-
-        <!-- Third-party libraries -->
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
         <dependency>
-            <groupId>org.mdkt.compiler</groupId>
-            <artifactId>InMemoryJavaCompiler</artifactId>
-            <version>1.2</version>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
         </dependency>
 
         <!-- Tests -->
@@ -43,5 +39,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>
