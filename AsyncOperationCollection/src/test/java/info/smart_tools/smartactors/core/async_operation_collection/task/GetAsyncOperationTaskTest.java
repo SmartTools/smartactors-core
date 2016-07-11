@@ -9,6 +9,7 @@ import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareExc
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -16,148 +17,202 @@ import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.string_ioc_key.Key;
+import info.smart_tools.smartactors.core.wrapper_generator.Field;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.time.LocalDateTime;
-
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({IOC.class, Keys.class})
+@PrepareForTest({IOC.class, Keys.class, GetAsyncOperationTask.class})
 public class GetAsyncOperationTaskTest {
     private GetAsyncOperationTask testTask;
     private IDatabaseTask targetTask;
 
+    private Field<Integer> pageNumberField;
+    private Field<Integer> pageSizeField;
+    private Field<IObject> queryField;
+    private Field<String> eqField;
+    private Field<String> tokenField;
+
     @Before
-    public void prepare () throws ResolutionException, ReadValueException, ChangeValueException, InvalidArgumentException {
+    public void prepare () throws Exception {
         mockStatic(IOC.class);
         mockStatic(Keys.class);
 
         targetTask = mock(IDatabaseTask.class);
+
+
+        pageNumberField = mock(Field.class);
+        pageSizeField = mock(Field.class);
+        queryField = mock(Field.class);
+        eqField = mock(Field.class);
+        tokenField = mock(Field.class);
+
+        Key fieldNameKey = mock(Key.class);
+        when(Keys.getOrAdd(IFieldName.class.toString())).thenReturn(fieldNameKey);
+
+        String pageNumberBindingPath = "pageNumber";
+        when(IOC.resolve(fieldNameKey, "pageNumber")).thenReturn(pageNumberBindingPath);
+        whenNew(Field.class).withArguments(pageNumberBindingPath).thenReturn(pageNumberField);
+
+        String pageSizeBindingPath = "pageSize";
+        when(IOC.resolve(fieldNameKey, "pageSize")).thenReturn(pageSizeBindingPath);
+        whenNew(Field.class).withArguments(pageSizeBindingPath).thenReturn(pageSizeField);
+
+        String queryBindingPath = "query";
+        when(IOC.resolve(fieldNameKey, "query")).thenReturn(queryBindingPath);
+        whenNew(Field.class).withArguments(queryBindingPath).thenReturn(queryField);
+
+        String eqBindingPath = "eq";
+        when(IOC.resolve(fieldNameKey, "$eq")).thenReturn(eqBindingPath);
+        whenNew(Field.class).withArguments(eqBindingPath).thenReturn(eqField);
+
+        String tokenBindingPath = "token";
+        when(IOC.resolve(fieldNameKey, "token")).thenReturn(tokenBindingPath);
+        whenNew(Field.class).withArguments(tokenBindingPath).thenReturn(tokenField);
+
+
         testTask = new GetAsyncOperationTask(targetTask);
+
+        verifyStatic(times(5));
+        Keys.getOrAdd(IFieldName.class.toString());
+
+        verifyStatic();
+        IOC.resolve(fieldNameKey, "pageNumber");
+        verifyNew(Field.class).withArguments(pageNumberBindingPath);
+
+        verifyStatic();
+        IOC.resolve(fieldNameKey, "pageSize");
+        verifyNew(Field.class).withArguments(pageSizeBindingPath);
+
+        verifyStatic();
+        IOC.resolve(fieldNameKey, "query");
+        verifyNew(Field.class).withArguments(queryBindingPath);
+
+        verifyStatic();
+        IOC.resolve(fieldNameKey, "$eq");
+        verifyNew(Field.class).withArguments(eqBindingPath);
+
+        verifyStatic();
+        IOC.resolve(fieldNameKey, "token");
+        verifyNew(Field.class).withArguments(tokenBindingPath);
     }
 
     @Test
-    public void MustCorrectPrepareQuery() throws ResolutionException, TaskPrepareException, ReadValueException, ChangeValueException {
+    public void MustCorrectPrepareQuery() throws ReadValueException, InvalidArgumentException, ResolutionException, TaskPrepareException, ChangeValueException {
 
         IObject testQuery = mock(IObject.class);
 
-        GetAsyncOperationQuery query = mock(GetAsyncOperationQuery.class);
-        Key getAsyncOperationQueryKey = mock(Key.class);
-        when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
-        when(IOC.resolve(getAsyncOperationQueryKey, testQuery)).thenReturn(query);
-
-        AsyncOperationTaskQuery taskQuery = mock(AsyncOperationTaskQuery.class);
-        Key asyncOperationTaskQueryKey = mock(Key.class);
-        when(Keys.getOrAdd(AsyncOperationTaskQuery.class.toString())).thenReturn(asyncOperationTaskQueryKey);
-        when(IOC.resolve(asyncOperationTaskQueryKey)).thenReturn(taskQuery);
-
-        EQMessage eqMessage = mock(EQMessage.class);
-        Key eqKey = mock(Key.class);
-        when(Keys.getOrAdd(EQMessage.class.toString())).thenReturn(eqKey);
-        when(IOC.resolve(eqKey)).thenReturn(eqMessage);
+        IObject futureCriteriaObject = mock(IObject.class);
+        Key ioBjectKey = mock(Key.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(ioBjectKey);
+        when(IOC.resolve(ioBjectKey)).thenReturn(futureCriteriaObject);
 
         String token = "tiptoken";
 
-        when(query.getToken()).thenReturn(token);
+        when(tokenField.out(testQuery)).thenReturn(token);
 
         testTask.prepare(testQuery);
 
-        verify(query).getToken();
+        verifyStatic();
+        Keys.getOrAdd(IObject.class.toString());
+        verifyStatic();
+        IOC.resolve(ioBjectKey);
 
-        verify(eqMessage).setEq(token);
-        verify(taskQuery).setToken(eqMessage);
+        verify(tokenField).out(testQuery);
+        verify(eqField).in(futureCriteriaObject, token);
 
-        verify(query).setPageNumber(1);
-        verify(query).setPageSize(1);
-        verify(query).setQuery(taskQuery);
+        verify(pageNumberField).in(testQuery, 1);
+        verify(pageSizeField).in(testQuery, 1);
+        verify(queryField).in(testQuery, futureCriteriaObject);
 
         verify(targetTask).prepare(testQuery);
     }
 
     @Test(expected = TaskPrepareException.class)
-    public void MustInCorrectPrepareQueryWhenKeysGetOrAddThrowException() throws ResolutionException, TaskPrepareException, ReadValueException, ChangeValueException {
+    public void MustInCorrectPrepareQueryWhenKeysGetOrAddThrowException() throws ResolutionException, TaskPrepareException {
 
         IObject testQuery = mock(IObject.class);
 
-        when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenThrow(new ResolutionException(""));
+        when(Keys.getOrAdd(IObject.class.toString())).thenThrow(new ResolutionException(""));
 
         testTask.prepare(testQuery);
     }
 
     @Test(expected = TaskPrepareException.class)
-    public void MustInCorrectPrepareQueryWhenIOCResolveThrowException() throws ResolutionException, TaskPrepareException, ReadValueException, ChangeValueException {
+    public void MustInCorrectPrepareQueryWhenIOCResolveThrowException() throws ResolutionException, TaskPrepareException {
 
         IObject testQuery = mock(IObject.class);
 
-        Key getAsyncOperationQueryKey = mock(Key.class);
-        when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
-        when(IOC.resolve(getAsyncOperationQueryKey, testQuery)).thenThrow(new ResolutionException(""));
+        Key ioBjectKey = mock(Key.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(ioBjectKey);
+        when(IOC.resolve(ioBjectKey)).thenThrow(new ResolutionException(""));
 
         testTask.prepare(testQuery);
     }
 
     @Test
-    public void MustInCorrectPrepareQueryWhenGetTokenThrowException() throws ResolutionException, TaskPrepareException, ReadValueException, ChangeValueException {
+    public void MustInCorrectPrepareQueryWhenGetTokenThrowException() throws ResolutionException, ReadValueException, InvalidArgumentException {
 
         IObject testQuery = mock(IObject.class);
 
-        GetAsyncOperationQuery query = mock(GetAsyncOperationQuery.class);
-        Key getAsyncOperationQueryKey = mock(Key.class);
-        when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
-        when(IOC.resolve(getAsyncOperationQueryKey, testQuery)).thenReturn(query);
+        IObject futureCriteriaObject = mock(IObject.class);
+        Key ioBjectKey = mock(Key.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(ioBjectKey);
+        when(IOC.resolve(ioBjectKey)).thenReturn(futureCriteriaObject);
 
-        EQMessage eqMessage = mock(EQMessage.class);
-        Key eqKey = mock(Key.class);
-        when(Keys.getOrAdd(EQMessage.class.toString())).thenReturn(eqKey);
-        when(IOC.resolve(eqKey)).thenReturn(eqMessage);
-
-        when(query.getToken()).thenThrow(new ReadValueException());
+        when(tokenField.out(testQuery)).thenThrow(new ReadValueException());
 
         try {
             testTask.prepare(testQuery);
         } catch (TaskPrepareException e) {
-            verify(query).getToken();
+
+            verifyStatic();
+            Keys.getOrAdd(IObject.class.toString());
+            verifyStatic();
+            IOC.resolve(ioBjectKey);
+
+            verify(tokenField).out(testQuery);
             return;
         }
         assertTrue("Must throw exception", false);
     }
 
     @Test
-    public void MustInCorrectPrepareQueryWhenSetEqThrowException() throws ResolutionException, TaskPrepareException, ReadValueException, ChangeValueException {
+    public void MustInCorrectPrepareQueryWhenSetEqThrowException() throws ResolutionException, ReadValueException, InvalidArgumentException, ChangeValueException {
 
         IObject testQuery = mock(IObject.class);
 
-        GetAsyncOperationQuery query = mock(GetAsyncOperationQuery.class);
-        Key getAsyncOperationQueryKey = mock(Key.class);
-        when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
-        when(IOC.resolve(getAsyncOperationQueryKey, testQuery)).thenReturn(query);
-
-        EQMessage eqMessage = mock(EQMessage.class);
-        Key eqKey = mock(Key.class);
-        when(Keys.getOrAdd(EQMessage.class.toString())).thenReturn(eqKey);
-        when(IOC.resolve(eqKey)).thenReturn(eqMessage);
+        IObject futureCriteriaObject = mock(IObject.class);
+        Key ioBjectKey = mock(Key.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(ioBjectKey);
+        when(IOC.resolve(ioBjectKey)).thenReturn(futureCriteriaObject);
 
         String token = "tiptoken";
 
-        when(query.getToken()).thenReturn(token);
+        when(tokenField.out(testQuery)).thenReturn(token);
 
-        doThrow(new ChangeValueException()).when(eqMessage).setEq(token);
+        doThrow(new ChangeValueException()).when(eqField).in(futureCriteriaObject, token);
 
         try {
             testTask.prepare(testQuery);
         } catch (TaskPrepareException e) {
-            verify(query).getToken();
-            verify(eqMessage).setEq(token);
+
+            verifyStatic();
+            Keys.getOrAdd(IObject.class.toString());
+            verifyStatic();
+            IOC.resolve(ioBjectKey);
+
+            verify(tokenField).out(testQuery);
+            verify(eqField).in(futureCriteriaObject, token);
             return;
         }
         assertTrue("Must throw exception", false);
