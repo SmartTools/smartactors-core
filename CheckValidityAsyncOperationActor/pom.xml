@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>core.actors.check_validity_async_operation</artifactId>
-
+    <artifactId>actor.check_validity_async_operation</artifactId>
 
     <dependencies>
         <dependency>
