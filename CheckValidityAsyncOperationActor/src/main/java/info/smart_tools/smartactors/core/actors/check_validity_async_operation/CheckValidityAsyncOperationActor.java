@@ -25,7 +25,7 @@ public class CheckValidityAsyncOperationActor {
     /**
      * Check validity asynchronous operation, if invalid - throw exception
      * @param message input message
-     * @throws InvalidAsyncOperationIdException
+     * @throws InvalidAsyncOperationIdException Calling when any error
      */
     public void check(final CheckValidityMessage message) throws InvalidAsyncOperationIdException {
         try {
