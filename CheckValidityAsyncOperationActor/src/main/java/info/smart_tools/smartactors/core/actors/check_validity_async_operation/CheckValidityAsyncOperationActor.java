@@ -31,10 +31,10 @@ public class CheckValidityAsyncOperationActor {
         try {
             List<String> validIds = message.getIdentifiers();
             if (validIds == null || validIds.isEmpty()) {
-                throw new ReadValueException("List of valid id is empty");
+                throw new InvalidAsyncOperationIdException("List of valid id is empty");
             }
             if (!validIds.contains(message.getAsyncOperationId())) {
-                throw new InvalidAsyncOperationIdException("List with all identifiers not contains Id from client.");
+                throw new InvalidAsyncOperationIdException("List of asynch operations does not contain operation with received token");
             }
         } catch (ReadValueException | ChangeValueException e) {
             throw new InvalidAsyncOperationIdException(e);
