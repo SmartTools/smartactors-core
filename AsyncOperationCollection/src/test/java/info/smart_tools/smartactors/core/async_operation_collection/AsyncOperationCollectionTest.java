@@ -3,11 +3,10 @@ package info.smart_tools.smartactors.core.async_operation_collection;
 import info.smart_tools.smartactors.core.async_operation_collection.exception.GetAsyncOperationException;
 import info.smart_tools.smartactors.core.async_operation_collection.task.GetAsyncOperationTask;
 import info.smart_tools.smartactors.core.async_operation_collection.wrapper.get_item.GetAsyncOperationQuery;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
@@ -34,15 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyNew;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({IOC.class, Keys.class, CollectionName.class, AsyncOperationCollection.class})
@@ -99,10 +94,10 @@ public class AsyncOperationCollectionTest {
         IObject wrapped = mock(IObject.class);
         when(getAsyncOperationQuery.wrapped()).thenReturn(wrapped);
 
-        StorageConnection connection = mock(StorageConnection.class);
+        IStorageConnection connection = mock(IStorageConnection.class);
         when(poolGuard.getObject()).thenReturn(connection);
         Key connectionKey = mock(Key.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(connectionKey);
+        when(Keys.getOrAdd(IStorageConnection.class.toString())).thenReturn(connectionKey);
         when(IOC.resolve(connectionKey, connection)).thenReturn(connection);
 
         List<IObject> results = new ArrayList<>();
@@ -162,10 +157,10 @@ public class AsyncOperationCollectionTest {
         IObject wrapped = mock(IObject.class);
         when(getAsyncOperationQuery.wrapped()).thenReturn(wrapped);
 
-        StorageConnection connection = mock(StorageConnection.class);
+        IStorageConnection connection = mock(IStorageConnection.class);
         when(poolGuard.getObject()).thenReturn(connection);
         Key connectionKey = mock(Key.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(connectionKey);
+        when(Keys.getOrAdd(IStorageConnection.class.toString())).thenReturn(connectionKey);
         when(IOC.resolve(connectionKey, connection)).thenReturn(connection);
 
         List<IObject> results = new ArrayList<>();
@@ -295,55 +290,6 @@ public class AsyncOperationCollectionTest {
     }
 
     @Test
-    public void MustInCorrectGetAsyncOperationWhenFirstGetItemNotNullAndGetItemsTaskThrowSetConnectionException() throws
-            Exception {
-
-        String token = "token";
-
-        PoolGuard poolGuard = mock(PoolGuard.class);
-        whenNew(PoolGuard.class).withArguments(pool).thenReturn(poolGuard);
-
-        GetAsyncOperationTask getAsyncOperationTask = mock(GetAsyncOperationTask.class);
-        Key getAsyncOperationTaskKey = mock(Key.class);
-        when(Keys.getOrAdd(GetAsyncOperationTask.class.toString())).thenReturn(getAsyncOperationTaskKey);
-        when(IOC.resolve(getAsyncOperationTaskKey)).thenReturn(getAsyncOperationTask);
-
-        GetAsyncOperationQuery getAsyncOperationQuery = mock(GetAsyncOperationQuery.class);
-        Key getAsyncOperationQueryKey = mock(Key.class);
-        when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
-        when(IOC.resolve(getAsyncOperationQueryKey)).thenReturn(getAsyncOperationQuery);
-
-        StorageConnection connection = mock(StorageConnection.class);
-        when(poolGuard.getObject()).thenReturn(connection);
-        Key connectionKey = mock(Key.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(connectionKey);
-        when(IOC.resolve(connectionKey, connection)).thenReturn(connection);
-
-        doThrow(new TaskSetConnectionException("")).when(getAsyncOperationTask).setConnection(connection);
-
-        try {
-            testCollection.getAsyncOperation(token);
-        } catch (GetAsyncOperationException e) {
-
-            verifyNew(PoolGuard.class).withArguments(pool);
-
-            verifyStatic();
-            Keys.getOrAdd(GetAsyncOperationTask.class.toString());
-            verifyStatic();
-            IOC.resolve(getAsyncOperationTaskKey);
-
-            verify(getAsyncOperationQuery).setCollectionName(collectionName);
-            verify(getAsyncOperationQuery).setToken(token);
-            verify(poolGuard).getObject();
-            verify(getAsyncOperationTask).setConnection(connection);
-
-            verify(poolGuard).close();
-            return;
-        }
-        assertTrue("Must throw exception, but was not", false);
-    }
-
-    @Test
     public void MustInCorrectGetAsyncOperationWhenFirstGetItemNotNullAndQueryThrowReadValueException() throws
             Exception {
 
@@ -362,10 +308,10 @@ public class AsyncOperationCollectionTest {
         when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
         when(IOC.resolve(getAsyncOperationQueryKey)).thenReturn(getAsyncOperationQuery);
 
-        StorageConnection connection = mock(StorageConnection.class);
+        IStorageConnection connection = mock(IStorageConnection.class);
         when(poolGuard.getObject()).thenReturn(connection);
         Key connectionKey = mock(Key.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(connectionKey);
+        when(Keys.getOrAdd(IStorageConnection.class.toString())).thenReturn(connectionKey);
         when(IOC.resolve(connectionKey, connection)).thenReturn(connection);
 
         when(getAsyncOperationQuery.wrapped()).thenThrow(new ReadValueException());
@@ -412,10 +358,10 @@ public class AsyncOperationCollectionTest {
         when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
         when(IOC.resolve(getAsyncOperationQueryKey)).thenReturn(getAsyncOperationQuery);
 
-        StorageConnection connection = mock(StorageConnection.class);
+        IStorageConnection connection = mock(IStorageConnection.class);
         when(poolGuard.getObject()).thenReturn(connection);
         Key connectionKey = mock(Key.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(connectionKey);
+        when(Keys.getOrAdd(IStorageConnection.class.toString())).thenReturn(connectionKey);
         when(IOC.resolve(connectionKey, connection)).thenReturn(connection);
 
         IObject wrapped = mock(IObject.class);
@@ -466,10 +412,10 @@ public class AsyncOperationCollectionTest {
         when(Keys.getOrAdd(GetAsyncOperationQuery.class.toString())).thenReturn(getAsyncOperationQueryKey);
         when(IOC.resolve(getAsyncOperationQueryKey)).thenReturn(getAsyncOperationQuery);
 
-        StorageConnection connection = mock(StorageConnection.class);
+        IStorageConnection connection = mock(IStorageConnection.class);
         when(poolGuard.getObject()).thenReturn(connection);
         Key connectionKey = mock(Key.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(connectionKey);
+        when(Keys.getOrAdd(IStorageConnection.class.toString())).thenReturn(connectionKey);
         when(IOC.resolve(connectionKey, connection)).thenReturn(connection);
 
         IObject wrapped = mock(IObject.class);

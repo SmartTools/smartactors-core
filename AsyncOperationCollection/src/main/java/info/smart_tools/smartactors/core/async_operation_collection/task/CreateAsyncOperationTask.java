@@ -1,10 +1,9 @@
 package info.smart_tools.smartactors.core.async_operation_collection.task;
 
 import info.smart_tools.smartactors.core.async_operation_collection.exception.CreateAsyncOperationException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -19,7 +18,7 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
  * DB task for creating operations in db
  */
 public class CreateAsyncOperationTask implements IDatabaseTask {
-
+    private IStorageConnection connection;
     private IDatabaseTask task;
 
     private IField asyncDataField;
@@ -76,8 +75,14 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     }
 
     @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
+    public void setConnection(final IStorageConnection connection) {
+        this.connection = connection;
         this.task.setConnection(connection);
+    }
+
+    @Override
+    public IStorageConnection getConnection() {
+        return connection;
     }
 
     @Override

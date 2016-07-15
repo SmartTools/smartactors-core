@@ -1,10 +1,10 @@
 package info.smart_tools.smartactors.core.cached_collection.task;
 
 import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
@@ -23,9 +23,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({IOC.class, Keys.class})
@@ -72,7 +70,7 @@ public class DeleteFromCachedCollectionTaskTest {
     @Test
     public void ShouldSetConnectionToNestedTask() throws TaskSetConnectionException {
 
-        StorageConnection connection = mock(StorageConnection.class);
+        IStorageConnection connection = mock(IStorageConnection.class);
         task.setConnection(connection);
         verify(upsertTask).setConnection(eq(connection));
     }

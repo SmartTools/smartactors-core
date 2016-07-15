@@ -1,10 +1,9 @@
 package info.smart_tools.smartactors.core.cached_collection.task;
 
 import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -22,7 +21,7 @@ import java.time.format.DateTimeFormatter;
  * Makes add or update operation for cached collection
  */
 public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
-
+    private IStorageConnection connection;
     private IDatabaseTask upsertTask;
 
     private IField startDateTimeField;
@@ -69,8 +68,14 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
     }
 
     @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
+    public void setConnection(final IStorageConnection connection) {
+        this.connection = connection;
         upsertTask.setConnection(connection);
+    }
+
+    @Override
+    public IStorageConnection getConnection() {
+        return connection;
     }
 
     /**

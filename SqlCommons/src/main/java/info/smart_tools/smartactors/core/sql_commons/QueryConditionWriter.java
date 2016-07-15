@@ -1,7 +1,6 @@
 package info.smart_tools.smartactors.core.sql_commons;
 
 import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter;
 
 import java.util.List;
 
@@ -10,6 +9,6 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface QueryConditionWriter {
-    void write(QueryStatement query, QueryConditionWriterResolver resolver, FieldPath contextFieldPath,
-               Object queryParameter, List<SQLQueryParameterSetter> setters) throws QueryBuildException;
+    void write(QueryStatement query, QueryConditionResolver resolver, FieldPath contextFieldPath,
+               Object queryParameter, List<IDeclaredParam> parametersOrder) throws QueryBuildException;
 }

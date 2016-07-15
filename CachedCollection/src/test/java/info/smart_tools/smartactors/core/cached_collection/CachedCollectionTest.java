@@ -6,11 +6,11 @@ import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCache
 import info.smart_tools.smartactors.core.cached_collection.task.DeleteFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
@@ -37,22 +37,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.doThrow;
 import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
+import static org.powermock.api.mockito.PowerMockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({IOC.class, Keys.class, CachedCollection.class})
 public class CachedCollectionTest {
 
     private ICachedCollection collection;
-    private StorageConnection connection;
+    private IStorageConnection connection;
     private CollectionName collectionName;
 
     private IField collectionNameField;
@@ -98,7 +94,7 @@ public class CachedCollectionTest {
         when(IOC.resolve(mockKeyField, keyName)).thenReturn(specificKeyNameField);
 
         IPool connectionPool = mock(IPool.class);
-        connection = mock(StorageConnection.class);
+        connection = mock(IStorageConnection.class);
         collectionName = mock(CollectionName.class);
         when(connectionPool.take()).thenReturn(connection);
         when(connectionPoolField.in(config)).thenReturn(connectionPool);
@@ -106,7 +102,7 @@ public class CachedCollectionTest {
         collection = new CachedCollection(config);
 
         IKey keyConnection = mock(IKey.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(keyConnection);
+        when(Keys.getOrAdd(IStorageConnection.class.toString())).thenReturn(keyConnection);
         when(IOC.resolve(keyConnection, connection)).thenReturn(connection);
     }
 

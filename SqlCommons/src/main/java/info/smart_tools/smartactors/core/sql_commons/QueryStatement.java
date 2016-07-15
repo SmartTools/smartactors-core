@@ -1,7 +1,7 @@
 package info.smart_tools.smartactors.core.sql_commons;
 
-import info.smart_tools.smartactors.core.db_storage.interfaces.PreparedQuery;
-import info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameterSetter;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IPreparedQuery;
+import info.smart_tools.smartactors.core.db_storage.interfaces.ISQLQueryParameterSetter;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -10,10 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- *  Stores a text of SQL statement and list of {@link SQLQueryParameterSetter}'s which should be used on
+ *  Stores a text of SQL statement and list of {@link ISQLQueryParameterSetter}'s which should be used on
  *  {@link PreparedStatement} created using this text.
  */
-public class QueryStatement implements PreparedQuery {
+public class QueryStatement implements IPreparedQuery {
     StringWriter bodyWriter;
 
     public QueryStatement() {
@@ -28,7 +28,7 @@ public class QueryStatement implements PreparedQuery {
     }
 
     /**
-     *  Creates {@link PreparedStatement} ad applies all {@link SQLQueryParameterSetter}'s on it.
+     *  Creates {@link PreparedStatement} ad applies all {@link ISQLQueryParameterSetter}'s on it.
      *
      *  @param connection database connection to use for statement creation.
      *  @return created statement.

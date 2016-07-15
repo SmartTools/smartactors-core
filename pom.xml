@@ -52,16 +52,11 @@
         <module>ITaskDispatcher</module>
         <module>TaskDispatcher</module>
         <module>ITask</module>
+        <!-- database tasks modules -->
         <module>DataBaseStorage</module>
         <module>SqlCommons</module>
-        <!-- database tasks modules -->
         <module>IDatabaseTask</module>
-        <module>DBCreateCollectionTask</module>
-        <module>DBUpsertTask</module>
-        <module>DBFindByIdTask</module>
-        <module>DatabaseDeleteTask</module>
-        <module>DatabaseSearchTask</module>
-        <module>DBInsertTask</module>
+        <module>DBTasks</module>
         <!-- /database tasks modules -->
         <module>examples</module>
         <module>BootstrapItem</module>
@@ -101,10 +96,8 @@
         <module>MessageProcessingSequence</module>
         <module>MessageProcessingInterfaces</module>
         <module>ExceptionHandlingReceivers</module>
-        <module>PluginCompileQuery</module>
         <module>PostgresConnection</module>
         <module>PluginPostgresConnectionPool</module>
-        <module>IStorageConnection</module>
         <module>RecursiveStrategyContainer</module>
         <module>CachedCollection</module>
         <module>CloseAsyncOperationActor</module>

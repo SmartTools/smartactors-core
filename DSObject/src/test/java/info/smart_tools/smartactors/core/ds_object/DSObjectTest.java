@@ -13,10 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -172,4 +169,41 @@ public class DSObjectTest {
         assertEquals(resultValue.get(1), "foo");
     }
 
+    @Test
+    public void checkHashCode() throws Exception {
+        IObject fObject = new DSObject();
+        IObject sObject = new DSObject();
+        IObject thObject = new DSObject();
+        IObject fthObject = new DSObject();
+        IObject fveObject = new DSObject();
+        IObject sxObject = new DSObject();
+        IObject senObject = new DSObject();
+        IObject eObject = new DSObject();
+
+        IFieldName aFN = new FieldName("a");
+        IFieldName bFN = new FieldName("b");
+        IFieldName cFN = new FieldName("c");
+
+        fObject.setValue(aFN, 1);
+        fObject.setValue(bFN, fthObject);
+        fthObject.setValue(cFN, 2);
+
+        sObject.setValue(aFN, 1);
+        sObject.setValue(bFN, fveObject);
+        fveObject.setValue(cFN, 2);
+
+        thObject.setValue(aFN, 1);
+        thObject.setValue(bFN, sxObject);
+        sxObject.setValue(cFN, 3);
+
+        senObject.setValue(aFN, 1);
+        senObject.setValue(cFN, eObject);
+        eObject.setValue(cFN, 2);
+
+        assertEquals(fObject.hashCode(), fObject.hashCode());
+        assertEquals(fObject.hashCode(), sObject.hashCode());
+        assertNotEquals(fObject.hashCode(), thObject.hashCode());
+        assertNotEquals(fObject.hashCode(), senObject.hashCode());
+        assertNotEquals(thObject.hashCode(), senObject.hashCode());
+    }
 }

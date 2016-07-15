@@ -10,11 +10,10 @@ import info.smart_tools.smartactors.core.async_operation_collection.wrapper.dele
 import info.smart_tools.smartactors.core.async_operation_collection.wrapper.get_item.GetAsyncOperationQuery;
 import info.smart_tools.smartactors.core.async_operation_collection.wrapper.update.UpdateAsyncOperationQuery;
 import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
@@ -80,7 +79,7 @@ public class AsyncOperationCollection implements IAsyncOperationCollection {
             GetAsyncOperationQuery getItemQuery = IOC.resolve(Keys.getOrAdd(GetAsyncOperationQuery.class.toString()));
             getItemQuery.setCollectionName(collectionName);
             getItemQuery.setToken(token);
-            getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+            getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(IStorageConnection.class.toString()), poolGuard.getObject()));
             getItemTask.prepare(getItemQuery.wrapped());
             getItemTask.execute();
             List<IObject> searchResult = getItemQuery.getSearchResult();
@@ -97,9 +96,7 @@ public class AsyncOperationCollection implements IAsyncOperationCollection {
             throw new GetAsyncOperationException("Can't get connection from pool.", e);
         } catch (ReadValueException | ChangeValueException e) {
             throw new GetAsyncOperationException("Can't read asynchronous operation.", e);
-        } catch (TaskSetConnectionException e) {
-            throw new GetAsyncOperationException("Can't set connection to read task.", e);
-        } catch (TaskPrepareException e) {
+        }  catch (TaskPrepareException e) {
             throw new GetAsyncOperationException("Error during preparing read task.", e);
         } catch (TaskExecutionException e) {
             throw new GetAsyncOperationException("Error during execution read task.", e);
@@ -127,7 +124,7 @@ public class AsyncOperationCollection implements IAsyncOperationCollection {
             query.setAsyncData(data);
             query.setExpiredTime(expiredTime);
             query.setToken(token);
-            task.setConnection((StorageConnection) poolGuard.getObject());
+            task.setConnection((IStorageConnection) poolGuard.getObject());
             task.prepare(query.getIObject());
             task.execute();
         } catch (Exception e) {
@@ -154,15 +151,13 @@ public class AsyncOperationCollection implements IAsyncOperationCollection {
             upsertQuery.setCollectionName(collectionName);
             upsertQuery.setUpdateItem(asyncOperation);
 
-            updateTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+            updateTask.setConnection(IOC.resolve(Keys.getOrAdd(IStorageConnection.class.toString()), poolGuard.getObject()));
             updateTask.prepare(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), upsertQuery));
             updateTask.execute();
         } catch (TaskExecutionException e) {
             throw new CompleteAsyncOperationException("Error during execution complete.", e);
         } catch (PoolGuardException e) {
             throw new CompleteAsyncOperationException("Can't get connection from pool.", e);
-        } catch (TaskSetConnectionException e) {
-            throw new CompleteAsyncOperationException("Can't set connection to update task.", e);
         } catch (TaskPrepareException e) {
             throw new CompleteAsyncOperationException("Error during preparing update task.", e);
         } catch (InvalidArgumentException | RegistrationException e) {
@@ -196,15 +191,13 @@ public class AsyncOperationCollection implements IAsyncOperationCollection {
             IObject deleteItem = getAsyncOperation(token);
             deleteQuery.setDocumentIds(Collections.singletonList(idField.in(deleteItem)));
 
-            deleteTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+            deleteTask.setConnection(IOC.resolve(Keys.getOrAdd(IStorageConnection.class.toString()), poolGuard.getObject()));
             deleteTask.prepare(IOC.resolve(Keys.getOrAdd(IObject.class.toString()), deleteQuery));
             deleteTask.execute();
         } catch (TaskExecutionException e) {
             throw new DeleteAsyncOperationException("Error during execution complete.", e);
         } catch (PoolGuardException e) {
             throw new DeleteAsyncOperationException("Can't get connection from pool.", e);
-        } catch (TaskSetConnectionException e) {
-            throw new DeleteAsyncOperationException("Can't set connection to update task.", e);
         } catch (TaskPrepareException e) {
             throw new DeleteAsyncOperationException("Error during preparing update task.", e);
         } catch (InvalidArgumentException | RegistrationException e) {

@@ -1,17 +1,14 @@
 package info.smart_tools.smartactors.core.async_operation_collection.task;
 
-import info.smart_tools.smartactors.core.async_operation_collection.exception.DeleteAsyncOperationException;
 import info.smart_tools.smartactors.core.async_operation_collection.exception.UpdateAsyncOperationException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
@@ -20,7 +17,7 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
  * Task for mark async operation as done
  */
 public class UpdateAsyncOperationTask implements IDatabaseTask {
-
+    private IStorageConnection connection;
     private IDatabaseTask upsertTask;
 
     private IField doneFlagField;
@@ -52,8 +49,14 @@ public class UpdateAsyncOperationTask implements IDatabaseTask {
     }
 
     @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
+    public void setConnection(final IStorageConnection connection) {
+        this.connection = connection;
         upsertTask.setConnection(connection);
+    }
+
+    @Override
+    public IStorageConnection getConnection() {
+        return connection;
     }
 
     @Override
