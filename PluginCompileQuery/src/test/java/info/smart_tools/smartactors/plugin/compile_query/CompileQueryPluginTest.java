@@ -35,7 +35,7 @@ public class CompileQueryPluginTest {
         IKey key1 = mock(IKey.class);
         IKey keyQuery = mock(IKey.class);
         when(IOC.getKeyForKeyStorage()).thenReturn(key1);
-        when(IOC.resolve(eq(key1), eq(CompiledQuery.class.toString()))).thenReturn(keyQuery);
+        when(IOC.resolve(eq(key1), eq(CompiledQuery.class.getCanonicalName()))).thenReturn(keyQuery);
 
         bootstrap = mock(IBootstrap.class);
         plugin = new CompileQueryPlugin(bootstrap);

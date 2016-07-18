@@ -46,7 +46,7 @@ public class CompileQueryPlugin implements IPlugin {
                     .after("IOC")
                     .process(() -> {
                 try {
-                    IKey compiledQueryKey = Keys.getOrAdd(CompiledQuery.class.toString());
+                    IKey compiledQueryKey = Keys.getOrAdd(CompiledQuery.class.getCanonicalName());
                     IOC.register(compiledQueryKey, new CreateNewInstanceStrategy(
                         (args) -> {
                             StorageConnection connection = (StorageConnection) args[0];

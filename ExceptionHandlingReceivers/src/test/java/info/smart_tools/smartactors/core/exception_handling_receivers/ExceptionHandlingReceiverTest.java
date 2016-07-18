@@ -42,7 +42,7 @@ public class ExceptionHandlingReceiverTest {
     public void setUp() throws Exception {
         mockStatic(IOC.class);
         when(IOC.getKeyForKeyStorage()).thenReturn(keyForKeyStore);
-        when(IOC.resolve(same(keyForKeyStore), eq(IFieldName.class.toString()))).thenReturn(keyForFieldName);
+        when(IOC.resolve(same(keyForKeyStore), eq(IFieldName.class.getCanonicalName()))).thenReturn(keyForFieldName);
 
         when(IOC.resolve(same(keyForFieldName), eq("causeLevel"))).thenReturn(causeLevelFieldName);
         when(IOC.resolve(same(keyForFieldName), eq("causeStep"))).thenReturn(causeStepFieldName);

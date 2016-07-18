@@ -27,7 +27,7 @@ public class CheckUserIsNewActor {
     public CheckUserIsNewActor(final ActorParams params) throws InvalidArgumentException {
         try {
             collection = IOC.resolve(
-                    Keys.getOrAdd(ICachedCollection.class.toString()),
+                    Keys.getOrAdd(ICachedCollection.class.getCanonicalName()),
                     params.getCollectionName(),
                     params.getCollectionKey());
         } catch (ReadValueException e) {

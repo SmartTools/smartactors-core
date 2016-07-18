@@ -56,7 +56,7 @@ public class GetFormActorPluginTest {
     public void ShouldCorrectLoadPlugin() throws Exception {
 
         IKey actorKey = mock(IKey.class);
-        when(Keys.getOrAdd(GetFormActor.class.toString())).thenReturn(actorKey);
+        when(Keys.getOrAdd(GetFormActor.class.getCanonicalName())).thenReturn(actorKey);
 
         BootstrapItem bootstrapItem = mock(BootstrapItem.class);
         whenNew(BootstrapItem.class).withArguments("GetFormActorPlugin").thenReturn(bootstrapItem);

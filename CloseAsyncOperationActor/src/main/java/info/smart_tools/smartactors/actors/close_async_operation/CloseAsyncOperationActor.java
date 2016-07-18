@@ -24,7 +24,7 @@ public class CloseAsyncOperationActor {
      */
     CloseAsyncOperationActor(final ActorParams params) throws InvalidArgumentException {
         try {
-            collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.toString()), params.getCollectionName());
+            collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName()), params.getCollectionName());
         } catch (ReadValueException e) {
             throw new InvalidArgumentException("Can't read collection name from message", e);
         } catch (ResolutionException e) {

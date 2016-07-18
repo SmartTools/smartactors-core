@@ -112,9 +112,9 @@ public class DBGetByIdTaskTest {
         IKey keyMessage = mock(IKey.class);
         IKey keyFieldPath = mock(IKey.class);
         when(IOC.getKeyForKeyStorage()).thenReturn(key1);
-        when(IOC.resolve(eq(key1), eq(QueryStatement.class.toString()))).thenReturn(keyQuery);
-        when(IOC.resolve(eq(key1), eq(SearchByIdQuery.class.toString()))).thenReturn(keyMessage);
-        when(IOC.resolve(eq(key1), eq(FieldPath.class.toString()))).thenReturn(keyFieldPath);
+        when(IOC.resolve(eq(key1), eq(QueryStatement.class.getCanonicalName()))).thenReturn(keyQuery);
+        when(IOC.resolve(eq(key1), eq(SearchByIdQuery.class.getCanonicalName()))).thenReturn(keyMessage);
+        when(IOC.resolve(eq(key1), eq(FieldPath.class.getCanonicalName()))).thenReturn(keyFieldPath);
 
 
         FieldPath fieldPath = mock(FieldPath.class);

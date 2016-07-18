@@ -74,7 +74,7 @@ public class DBCreateCollectionTaskTest {
         task.prepare(createCollectionMessage);
 
         PowerMockito.verifyStatic();
-        IOC.resolve(any(IKey.class), eq(connection), eq(DBCreateCollectionTask.class.toString()), any(QueryStatementFactory.class));
+        IOC.resolve(any(IKey.class), eq(connection), eq(DBCreateCollectionTask.class.getCanonicalName()), any(QueryStatementFactory.class));
     }
 
     @Test
@@ -112,9 +112,9 @@ public class DBCreateCollectionTaskTest {
         IKey keyMessage = mock(IKey.class);
         IKey keyFieldPath = mock(IKey.class);
         when(IOC.getKeyForKeyStorage()).thenReturn(key1);
-        when(IOC.resolve(eq(key1), eq(QueryStatement.class.toString()))).thenReturn(keyQuery);
-        when(IOC.resolve(eq(key1), eq(CreateCollectionQuery.class.toString()))).thenReturn(keyMessage);
-        when(IOC.resolve(eq(key1), eq(FieldPath.class.toString()))).thenReturn(keyFieldPath);
+        when(IOC.resolve(eq(key1), eq(QueryStatement.class.getCanonicalName()))).thenReturn(keyQuery);
+        when(IOC.resolve(eq(key1), eq(CreateCollectionQuery.class.getCanonicalName()))).thenReturn(keyMessage);
+        when(IOC.resolve(eq(key1), eq(FieldPath.class.getCanonicalName()))).thenReturn(keyFieldPath);
 
 
         FieldPath fieldPath = mock(FieldPath.class);

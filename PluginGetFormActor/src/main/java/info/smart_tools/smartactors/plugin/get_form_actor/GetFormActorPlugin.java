@@ -38,7 +38,7 @@ public class GetFormActorPlugin implements IPlugin {
                 //.after("IOC")
                 .process(() -> {
                     try {
-                        IKey actorKey = Keys.getOrAdd(GetFormActor.class.toString());
+                        IKey actorKey = Keys.getOrAdd(GetFormActor.class.getCanonicalName());
                         IOC.register(actorKey, new CreateNewInstanceStrategy(
                                 (args) -> {
                                     try {

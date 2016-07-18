@@ -58,8 +58,8 @@ public class GeneralSQLOrderWriterTest {
         IKey fieldPathKey = mock(IKey.class);
         IKey strKey = mock(IKey.class);
 
-        when(Keys.getOrAdd(PSQLFieldPath.class.toString())).thenReturn(fieldPathKey);
-        when(Keys.getOrAdd(String.class.toString())).thenReturn(strKey);
+        when(Keys.getOrAdd(PSQLFieldPath.class.getCanonicalName())).thenReturn(fieldPathKey);
+        when(Keys.getOrAdd(String.class.getCanonicalName())).thenReturn(strKey);
 
         when(IOC.resolve(eq(fieldPathKey), anyString())).thenReturn(fieldPath).thenReturn(sortDirection);
 
@@ -72,9 +72,9 @@ public class GeneralSQLOrderWriterTest {
         verify(orderItem, times(2)).getValue(anyObject());
         verify(fieldPath, times(1)).getSQLRepresentation();
         verifyStatic(times(1));
-        Keys.getOrAdd(PSQLFieldPath.class.toString());
+        Keys.getOrAdd(PSQLFieldPath.class.getCanonicalName());
         verifyStatic(times(1));
-        Keys.getOrAdd(String.class.toString());
+        Keys.getOrAdd(String.class.getCanonicalName());
         verifyStatic(times(1));
         IOC.resolve(eq(fieldPathKey), anyObject());
         verifyStatic(times(1));

@@ -52,7 +52,7 @@ public class CreateAsyncOperationTaskTest {
         documentField = mock(IField.class);
 
         Key fieldKey = mock(Key.class);
-        when(Keys.getOrAdd(IField.class.toString())).thenReturn(fieldKey);
+        when(Keys.getOrAdd(IField.class.getCanonicalName())).thenReturn(fieldKey);
 
         when(IOC.resolve(fieldKey, "asyncData")).thenReturn(asyncDataField);
 
@@ -67,7 +67,7 @@ public class CreateAsyncOperationTaskTest {
         testTask = new CreateAsyncOperationTask(targetTask);
 
         verifyStatic(times(5));
-        Keys.getOrAdd(IField.class.toString());
+        Keys.getOrAdd(IField.class.getCanonicalName());
 
         verifyStatic();
         IOC.resolve(fieldKey, "asyncData");
@@ -91,7 +91,7 @@ public class CreateAsyncOperationTaskTest {
         IObject documentIObject = mock(IObject.class);
 
         Key iobjectKey = mock(Key.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(iobjectKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
         when(IOC.resolve(iobjectKey)).thenReturn(documentIObject);
 
         IObject asyncData = mock(IObject.class);
@@ -105,7 +105,7 @@ public class CreateAsyncOperationTaskTest {
         testTask.prepare(query);
 
         verifyStatic();
-        Keys.getOrAdd(IObject.class.toString());
+        Keys.getOrAdd(IObject.class.getCanonicalName());
         verifyStatic();
         IOC.resolve(iobjectKey);
 
@@ -145,13 +145,13 @@ public class CreateAsyncOperationTaskTest {
     public void MustInCorrectPrepareQueryWhenKeysThrowException() throws ResolutionException {
         IObject query = mock(IObject.class);
 
-        when(Keys.getOrAdd(IObject.class.toString())).thenThrow(new ResolutionException(""));
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenThrow(new ResolutionException(""));
 
         try {
             testTask.prepare(query);
         } catch (TaskPrepareException e) {
             verifyStatic();
-            Keys.getOrAdd(IObject.class.toString());
+            Keys.getOrAdd(IObject.class.getCanonicalName());
             return;
         }
         assertTrue("Must throw exception", false);
@@ -162,7 +162,7 @@ public class CreateAsyncOperationTaskTest {
         IObject query = mock(IObject.class);
 
         Key iobjectKey = mock(Key.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(iobjectKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
         when(IOC.resolve(iobjectKey)).thenThrow(new ResolutionException(""));
 
         try {
@@ -170,7 +170,7 @@ public class CreateAsyncOperationTaskTest {
         } catch (TaskPrepareException e){
 
             verifyStatic();
-            Keys.getOrAdd(IObject.class.toString());
+            Keys.getOrAdd(IObject.class.getCanonicalName());
             verifyStatic();
             IOC.resolve(iobjectKey);
 
@@ -185,7 +185,7 @@ public class CreateAsyncOperationTaskTest {
         IObject documentIObject = mock(IObject.class);
 
         Key iobjectKey = mock(Key.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(iobjectKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
         when(IOC.resolve(iobjectKey)).thenReturn(documentIObject);
 
         when(asyncDataField.in(query)).thenThrow(new ReadValueException());
@@ -195,7 +195,7 @@ public class CreateAsyncOperationTaskTest {
         } catch (TaskPrepareException e) {
 
             verifyStatic();
-            Keys.getOrAdd(IObject.class.toString());
+            Keys.getOrAdd(IObject.class.getCanonicalName());
             verifyStatic();
             IOC.resolve(iobjectKey);
 
@@ -211,7 +211,7 @@ public class CreateAsyncOperationTaskTest {
         IObject documentIObject = mock(IObject.class);
 
         Key iobjectKey = mock(Key.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(iobjectKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
         when(IOC.resolve(iobjectKey)).thenReturn(documentIObject);
 
         IObject asyncData = mock(IObject.class);
@@ -225,7 +225,7 @@ public class CreateAsyncOperationTaskTest {
         } catch (TaskPrepareException e) {
 
             verifyStatic();
-            Keys.getOrAdd(IObject.class.toString());
+            Keys.getOrAdd(IObject.class.getCanonicalName());
             verifyStatic();
             IOC.resolve(iobjectKey);
 
@@ -242,7 +242,7 @@ public class CreateAsyncOperationTaskTest {
         IObject documentIObject = mock(IObject.class);
 
         Key iobjectKey = mock(Key.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(iobjectKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
         when(IOC.resolve(iobjectKey)).thenReturn(documentIObject);
 
         IObject asyncData = mock(IObject.class);
@@ -259,7 +259,7 @@ public class CreateAsyncOperationTaskTest {
             testTask.prepare(query);
         } catch (TaskPrepareException e) {
             verifyStatic();
-            Keys.getOrAdd(IObject.class.toString());
+            Keys.getOrAdd(IObject.class.getCanonicalName());
             verifyStatic();
             IOC.resolve(iobjectKey);
 

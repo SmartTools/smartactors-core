@@ -83,7 +83,7 @@ public class CachedCollectionTest {
         IField connectionPoolField = mock(IField.class);
 
         IKey mockKeyField = mock(IKey.class);
-        when(Keys.getOrAdd(IField.class.toString())).thenReturn(mockKeyField);
+        when(Keys.getOrAdd(IField.class.getCanonicalName())).thenReturn(mockKeyField);
         when(IOC.resolve(mockKeyField, "collectionName")).thenReturn(collectionNameField);
         when(IOC.resolve(mockKeyField, "connectionPool")).thenReturn(connectionPoolField);
         when(IOC.resolve(mockKeyField, "keyName")).thenReturn(keyNameField);
@@ -106,7 +106,7 @@ public class CachedCollectionTest {
         collection = new CachedCollection(config);
 
         IKey keyConnection = mock(IKey.class);
-        when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(keyConnection);
+        when(Keys.getOrAdd(StorageConnection.class.getCanonicalName())).thenReturn(keyConnection);
         when(IOC.resolve(keyConnection, connection)).thenReturn(connection);
     }
 
@@ -118,12 +118,12 @@ public class CachedCollectionTest {
         IObject query = mock(IObject.class);
         IObject deleteQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(deleteQuery);
 
         IDatabaseTask deleteTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString())).thenReturn(keyTask);
+        when(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(deleteTask);
 
         when(specificKeyNameField.in(query)).thenReturn("key");
@@ -151,7 +151,7 @@ public class CachedCollectionTest {
 
         IObject deleteQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(deleteQuery);
         when(specificKeyNameField.in(query)).thenReturn("key");
 
@@ -159,9 +159,9 @@ public class CachedCollectionTest {
         DeleteFromCachedCollectionTask deleteTask = mock(DeleteFromCachedCollectionTask.class);
         IKey keyIDBTask = mock(IKey.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(IDatabaseTask.class.toString())).thenReturn(keyIDBTask);
-        when(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString())).thenReturn(keyTask);
-        when(IOC.resolve(keyIDBTask, DeleteFromCachedCollectionTask.class.toString())).thenReturn(nestedTask);
+        when(Keys.getOrAdd(IDatabaseTask.class.getCanonicalName())).thenReturn(keyIDBTask);
+        when(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
+        when(IOC.resolve(keyIDBTask, DeleteFromCachedCollectionTask.class.getCanonicalName())).thenReturn(nestedTask);
         whenNew(DeleteFromCachedCollectionTask.class).withArguments(nestedTask).thenReturn(deleteTask);
 
         collection.delete(query);
@@ -182,13 +182,13 @@ public class CachedCollectionTest {
 
         IObject upsertQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(upsertQuery);
         when(specificKeyNameField.in(query)).thenReturn("key");
 
         IDatabaseTask upsertTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString())).thenReturn(keyTask);
+        when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(upsertTask);
 
         collection.upsert(query);
@@ -209,13 +209,13 @@ public class CachedCollectionTest {
 
         IObject upsertQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(upsertQuery);
         when(specificKeyNameField.in(query)).thenReturn("key");
 
         IDatabaseTask upsertTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString())).thenReturn(keyTask);
+        when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(upsertTask);
         doThrow(new TaskExecutionException("")).when(upsertTask).execute();
 
@@ -249,7 +249,7 @@ public class CachedCollectionTest {
 
         IObject upsertQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(upsertQuery);
         when(specificKeyNameField.in(query)).thenReturn("key");
 
@@ -257,9 +257,9 @@ public class CachedCollectionTest {
         UpsertIntoCachedCollectionTask upsertTask = mock(UpsertIntoCachedCollectionTask.class);
         IKey keyIDBTask = mock(IKey.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(IDatabaseTask.class.toString())).thenReturn(keyIDBTask);
-        when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString())).thenReturn(keyTask);
-        when(IOC.resolve(keyIDBTask, UpsertIntoCachedCollectionTask.class.toString())).thenReturn(nestedTask);
+        when(Keys.getOrAdd(IDatabaseTask.class.getCanonicalName())).thenReturn(keyIDBTask);
+        when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
+        when(IOC.resolve(keyIDBTask, UpsertIntoCachedCollectionTask.class.getCanonicalName())).thenReturn(nestedTask);
         whenNew(UpsertIntoCachedCollectionTask.class).withArguments(nestedTask).thenReturn(upsertTask);
 
         collection.upsert(query);
@@ -281,14 +281,14 @@ public class CachedCollectionTest {
 
         IObject readQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(readQuery);
 
         IObject searchResult = mock(IObject.class);
 
         IDatabaseTask readTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString())).thenReturn(keyTask);
+        when(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(readTask);
 
         when(searchResultField.in(readQuery)).thenReturn(Collections.singletonList(searchResult));
@@ -312,16 +312,16 @@ public class CachedCollectionTest {
 
         IObject readQuery = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(readQuery);
 
         IDatabaseTask nestedTask = mock(IDatabaseTask.class);
         GetObjectFromCachedCollectionTask readTask = mock(GetObjectFromCachedCollectionTask.class);
         IKey keyIDBTask = mock(IKey.class);
         IKey keyTask = mock(IKey.class);
-        when(Keys.getOrAdd(IDatabaseTask.class.toString())).thenReturn(keyIDBTask);
-        when(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString())).thenReturn(keyTask);
-        when(IOC.resolve(keyIDBTask, GetObjectFromCachedCollectionTask.class.toString())).thenReturn(nestedTask);
+        when(Keys.getOrAdd(IDatabaseTask.class.getCanonicalName())).thenReturn(keyIDBTask);
+        when(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.getCanonicalName())).thenReturn(keyTask);
+        when(IOC.resolve(keyIDBTask, GetObjectFromCachedCollectionTask.class.getCanonicalName())).thenReturn(nestedTask);
         whenNew(GetObjectFromCachedCollectionTask.class).withArguments(nestedTask).thenReturn(readTask);
 
         when(searchResultField.in(readQuery)).thenReturn(Collections.EMPTY_LIST);

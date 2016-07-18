@@ -40,7 +40,7 @@ public class CloseAsyncOperationActorTest {
         when(actorParams.getCollectionName()).thenReturn(collectionName);
 
         IKey collectionKey = mock(IKey.class);
-        when(Keys.getOrAdd(IAsyncOperationCollection.class.toString())).thenReturn(collectionKey);
+        when(Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName())).thenReturn(collectionKey);
 
         targetCollection = mock(IAsyncOperationCollection.class);
         when(IOC.resolve(collectionKey, collectionName)).thenReturn(targetCollection);
@@ -48,7 +48,7 @@ public class CloseAsyncOperationActorTest {
         testActor = new CloseAsyncOperationActor(actorParams);
 
         verifyStatic();
-        Keys.getOrAdd(IAsyncOperationCollection.class.toString());
+        Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName());
 
         verify(actorParams).getCollectionName();
 

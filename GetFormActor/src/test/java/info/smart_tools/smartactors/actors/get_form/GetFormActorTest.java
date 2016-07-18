@@ -46,15 +46,15 @@ public class GetFormActorTest {
         IField field = mock(IField.class);
 
         IKey collectionKey = mock(IKey.class);
-        when(Keys.getOrAdd(CachedCollection.class.toString())).thenReturn(collectionKey);
+        when(Keys.getOrAdd(CachedCollection.class.getCanonicalName())).thenReturn(collectionKey);
         when(IOC.resolve(eq(collectionKey), anyObject(), anyObject())).thenReturn(collection);
 
         IKey strategyKey = mock(IKey.class);
-        when(Keys.getOrAdd(IFormsStrategy.class.toString())).thenReturn(strategyKey);
+        when(Keys.getOrAdd(IFormsStrategy.class.getCanonicalName())).thenReturn(strategyKey);
         when(IOC.resolve(eq(strategyKey), anyObject())).thenReturn(strategy);
 
         IKey fieldKey = mock(IKey.class);
-        when(Keys.getOrAdd(IField.class.toString())).thenReturn(fieldKey);
+        when(Keys.getOrAdd(IField.class.getCanonicalName())).thenReturn(fieldKey);
         when(IOC.resolve(eq(fieldKey), anyObject())).thenReturn(field);
 
         when(collection.getItems(key)).thenReturn(objects);
@@ -75,11 +75,11 @@ public class GetFormActorTest {
         String key = "123";
 
         IKey collectionKey = mock(IKey.class);
-        when(Keys.getOrAdd(CachedCollection.class.toString())).thenReturn(collectionKey);
+        when(Keys.getOrAdd(CachedCollection.class.getCanonicalName())).thenReturn(collectionKey);
         when(IOC.resolve(eq(collectionKey), anyObject(), anyObject())).thenReturn(collection);
 
         IKey strategyKey = mock(IKey.class);
-        when(Keys.getOrAdd(IFormsStrategy.class.toString())).thenReturn(strategyKey);
+        when(Keys.getOrAdd(IFormsStrategy.class.getCanonicalName())).thenReturn(strategyKey);
         when(IOC.resolve(eq(strategyKey), anyObject())).thenReturn(strategy);
 
         when(collection.getItems(key)).thenThrow(Exception.class);

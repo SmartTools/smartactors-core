@@ -44,7 +44,7 @@ public class Server implements IServer {
             throws ServerExecutionException {
         try {
             /** Get wrapper generator by IOC.resolve */
-            IWrapperGenerator wg = IOC.resolve(Keys.getOrAdd(IWrapperGenerator.class.toString()));
+            IWrapperGenerator wg = IOC.resolve(Keys.getOrAdd(IWrapperGenerator.class.getCanonicalName()));
 
             /** Get message, context, response */
             IObject message = getMessage();
@@ -133,7 +133,7 @@ public class Server implements IServer {
     private void registerWrapperGenerator()
             throws Exception {
         IWrapperGenerator wg = new WrapperGenerator(null);
-        IOC.register(Keys.getOrAdd(IWrapperGenerator.class.toString()), new SingletonStrategy(wg));
+        IOC.register(Keys.getOrAdd(IWrapperGenerator.class.getCanonicalName()), new SingletonStrategy(wg));
     }
 
     private void registerConverterStrategies()

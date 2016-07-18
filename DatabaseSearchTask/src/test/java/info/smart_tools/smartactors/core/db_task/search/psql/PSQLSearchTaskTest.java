@@ -70,7 +70,7 @@ public class PSQLSearchTaskTest {
         when(queryMessage.getPageSize()).thenReturn(2);
 
         wrapperKey = mock(IKey.class);
-        when(Keys.getOrAdd(ISearchQuery.class.toString())).thenReturn(wrapperKey);
+        when(Keys.getOrAdd(ISearchQuery.class.getCanonicalName())).thenReturn(wrapperKey);
         when(IOC.resolve(eq(wrapperKey), eq(message))).thenReturn(queryMessage);
 
         bufferedQuery = mock(IBufferedQuery.class);
@@ -78,7 +78,7 @@ public class PSQLSearchTaskTest {
         when(bufferedQuery.getParametersSetters()).thenReturn(new ArrayList<>());
 
         bufferedQueryKey = mock(IKey.class);
-        when(Keys.getOrAdd(IBufferedQuery.class.toString())).thenReturn(bufferedQueryKey);
+        when(Keys.getOrAdd(IBufferedQuery.class.getCanonicalName())).thenReturn(bufferedQueryKey);
         when(IOC.resolve(eq(bufferedQueryKey), eq(compiledQuery), anyObject())).thenReturn(bufferedQuery);
 
         // For execute.
@@ -116,8 +116,8 @@ public class PSQLSearchTaskTest {
 
         IKey iObjectKey = mock(IKey.class);
         IKey fieldNameKey = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(iObjectKey);
-        when(Keys.getOrAdd(IFieldName.class.toString())).thenReturn(fieldNameKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iObjectKey);
+        when(Keys.getOrAdd(IFieldName.class.getCanonicalName())).thenReturn(fieldNameKey);
 
         IObject searchResultObj = mock(IObject.class);
         when(IOC.resolve(eq(iObjectKey), eq(json))).thenReturn(searchResultObj);

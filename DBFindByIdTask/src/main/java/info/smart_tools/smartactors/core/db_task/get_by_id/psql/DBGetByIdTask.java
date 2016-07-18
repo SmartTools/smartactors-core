@@ -45,7 +45,7 @@ public class DBGetByIdTask implements IDatabaseTask {
                 QueryStatement preparedQuery = new QueryStatement();
                 Writer writer = preparedQuery.getBodyWriter();
                 try {
-                    message = IOC.resolve(Keys.getOrAdd(SearchByIdQuery.class.toString()), object);
+                    message = IOC.resolve(Keys.getOrAdd(SearchByIdQuery.class.getCanonicalName()), object);
                     CollectionName collectionName = CollectionName.fromString(message.getCollectionName());
                     writer.write(String.format("SELECT * FROM %s WHERE ", collectionName.toString()));
                     writer.write(String.format("token = \'%s\'", message.getId()));
@@ -57,7 +57,7 @@ public class DBGetByIdTask implements IDatabaseTask {
                 return preparedQuery;
             };
 
-            this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection, factory);
+            this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.getCanonicalName()), connection, factory);
         } catch (ResolutionException e) {
             throw new TaskPrepareException("Error while writing collection creation statement.", e);
         }

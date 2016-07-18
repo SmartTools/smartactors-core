@@ -37,7 +37,7 @@ public class DBInsertTask implements IDatabaseTask {
 
         //TODO:: replace by InsertMessage iobject wrapper
         try {
-            UpsertMessage upsertMessage = IOC.resolve(Keys.getOrAdd(UpsertMessage.class.toString()), query);
+            UpsertMessage upsertMessage = IOC.resolve(Keys.getOrAdd(UpsertMessage.class.getCanonicalName()), query);
             String collectionName = upsertMessage.getCollectionName();
             Writer writer = queryStatement.getBodyWriter();
             writer.write(String.format(

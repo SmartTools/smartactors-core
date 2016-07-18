@@ -49,10 +49,10 @@ public class CreateAsyncOperationActorTest {
         mockStatic(IOC.class);
         mockStatic(Keys.class);
 
-        when(Keys.getOrAdd(IAsyncOperationCollection.class.toString())).thenReturn(collectionKey);
+        when(Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName())).thenReturn(collectionKey);
         when(IOC.resolve(collectionKey)).thenReturn(collection);
 
-        when(Keys.getOrAdd(AuthOperationData.class.toString())).thenReturn(dataKey);
+        when(Keys.getOrAdd(AuthOperationData.class.getCanonicalName())).thenReturn(dataKey);
         when(IOC.resolve(dataKey)).thenReturn(data);
 
         actor = new CreateAsyncOperationActor(mock(IObject.class));
@@ -71,7 +71,7 @@ public class CreateAsyncOperationActorTest {
 
         IObject asyncDataObj = mock(IObject.class);
         IKey dataKey = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(dataKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(dataKey);
         when(IOC.resolve(dataKey, data)).thenReturn(asyncDataObj);
 
         actor.create(message);
@@ -88,7 +88,7 @@ public class CreateAsyncOperationActorTest {
 
         IObject asyncDataObj = mock(IObject.class);
         IKey dataKey = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(dataKey);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(dataKey);
         when(IOC.resolve(dataKey, data)).thenReturn(asyncDataObj);
         doThrow(new CreateAsyncOperationException("exception")).when(collection).createAsyncOperation(any(), any(), any());
 

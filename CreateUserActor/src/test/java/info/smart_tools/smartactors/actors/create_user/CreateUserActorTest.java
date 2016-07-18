@@ -47,7 +47,7 @@ public class CreateUserActorTest {
         when(params.getCollectionName()).thenReturn(collectionName);
         when(params.getCollectionKey()).thenReturn(collectionKeyName);
 
-        when(Keys.getOrAdd(ICachedCollection.class.toString())).thenReturn(cachedCollectionKey);
+        when(Keys.getOrAdd(ICachedCollection.class.getCanonicalName())).thenReturn(cachedCollectionKey);
         when(IOC.resolve(
                 cachedCollectionKey,
                 collectionName,

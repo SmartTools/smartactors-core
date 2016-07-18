@@ -63,7 +63,7 @@ public class MessageProcessingSequenceTest {
 
         fieldNameKey = mock(IKey.class);
         PowerMockito.when(IOC.getKeyForKeyStorage()).thenReturn(mock(IKey.class));
-        PowerMockito.when(IOC.resolve(same(IOC.getKeyForKeyStorage()), eq(IFieldName.class.toString()))).thenReturn((IKey) fieldNameKey);
+        PowerMockito.when(IOC.resolve(same(IOC.getKeyForKeyStorage()), eq(IFieldName.class.getCanonicalName()))).thenReturn((IKey) fieldNameKey);
         PowerMockito.when(IOC.resolve(same(fieldNameKey), eq("causeLevel"))).thenReturn(mock(IFieldName.class));
         PowerMockito.when(IOC.resolve(same(fieldNameKey), eq("causeStep"))).thenReturn(mock(IFieldName.class));
         PowerMockito.when(IOC.resolve(same(fieldNameKey), eq("catchLevel"))).thenReturn(mock(IFieldName.class));

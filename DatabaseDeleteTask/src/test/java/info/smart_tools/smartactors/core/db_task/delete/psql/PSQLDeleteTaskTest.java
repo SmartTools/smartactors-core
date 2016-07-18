@@ -59,10 +59,10 @@ public class PSQLDeleteTaskTest {
 
         IKey wrapperKey = mock(IKey.class);
         IKey queryKey = mock(IKey.class);
-        when(Keys.getOrAdd(DeletionQuery.class.toString())).thenReturn(wrapperKey);
-        when(Keys.getOrAdd(CompiledQuery.class.toString())).thenReturn(queryKey);
+        when(Keys.getOrAdd(DeletionQuery.class.getCanonicalName())).thenReturn(wrapperKey);
+        when(Keys.getOrAdd(CompiledQuery.class.getCanonicalName())).thenReturn(queryKey);
         when(IOC.resolve(eq(wrapperKey), anyObject())).thenReturn(queryMessage);
-        when(IOC.resolve(eq(queryKey), eq(connection), eq(PSQLDeleteTask.class.toString()), anyObject()))
+        when(IOC.resolve(eq(queryKey), eq(connection), eq(PSQLDeleteTask.class.getCanonicalName()), anyObject()))
                 .thenReturn(compiledQuery);
 
         IObject deletionQuery = mock(IObject.class);
@@ -115,7 +115,7 @@ public class PSQLDeleteTaskTest {
         when(message.countDocumentIds()).thenReturn(0);
 
         IKey wrapperKey = mock(IKey.class);
-        when(Keys.getOrAdd(DeletionQuery.class.toString())).thenReturn(wrapperKey);
+        when(Keys.getOrAdd(DeletionQuery.class.getCanonicalName())).thenReturn(wrapperKey);
         when(IOC.resolve(eq(wrapperKey), anyObject())).thenReturn(message);
 
         IObject deletionQuery = mock(IObject.class);

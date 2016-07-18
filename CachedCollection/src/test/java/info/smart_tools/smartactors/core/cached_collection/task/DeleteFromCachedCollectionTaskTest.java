@@ -43,7 +43,7 @@ public class DeleteFromCachedCollectionTaskTest {
 
         isActiveField = mock(IField.class);
         IKey keyField = mock(IKey.class);
-        when(Keys.getOrAdd(IField.class.toString())).thenReturn(keyField);
+        when(Keys.getOrAdd(IField.class.getCanonicalName())).thenReturn(keyField);
         when(IOC.resolve(keyField, "document/isActive")).thenReturn(isActiveField);
         upsertTask = mock(IDatabaseTask.class);
         task = new DeleteFromCachedCollectionTask(upsertTask);

@@ -43,13 +43,13 @@ public class CheckUserByEmaiActorTest {
         when(params.getCollectionKey()).thenReturn(collectionKeyName);
 
         IKey iCachedCollectionKey = mock(IKey.class);
-        when(Keys.getOrAdd(ICachedCollection.class.toString())).thenReturn(iCachedCollectionKey);
+        when(Keys.getOrAdd(ICachedCollection.class.getCanonicalName())).thenReturn(iCachedCollectionKey);
         when(IOC.resolve(iCachedCollectionKey, collectionName, collectionKeyName)).thenReturn(collection);
 
         actor = new CheckUserByEmailActor(params);
 
         verifyStatic();
-        Keys.getOrAdd(ICachedCollection.class.toString());
+        Keys.getOrAdd(ICachedCollection.class.getCanonicalName());
 
         verify(params).getCollectionName();
         verify(params).getCollectionKey();
