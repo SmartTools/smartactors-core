@@ -1,6 +1,6 @@
 package info.smart_tools.smartactors.core.iobject_simple_implementation;
 
-import info.smart_tools.smartactors.core.iobject.IFieldName;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;

@@ -26,7 +26,7 @@ public class PoolGuard implements IPoolGuard {
 
 
     /**
-     * Get the free item from pool
+     * @return free item from pool
      */
     public Object getObject() {
         return currentObject;

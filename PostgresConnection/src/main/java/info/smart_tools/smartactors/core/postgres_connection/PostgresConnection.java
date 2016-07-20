@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.core.postgres_connection;
 
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.istorage_connection.ICompiledQuery;
 import info.smart_tools.smartactors.core.istorage_connection.IPreparedQuery;
 import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
@@ -34,7 +35,7 @@ public class PostgresConnection implements IStorageConnection {
     /**
      * Constructor by sql connection and options
      * @param options is options for connection
-     * @throws StorageException
+     * @throws StorageException Throw when object can't get connection for JDBC, or validation query down
      */
     public PostgresConnection(final ConnectionOptions options)
             throws StorageException {
@@ -57,7 +58,7 @@ public class PostgresConnection implements IStorageConnection {
 
                 connection.setAutoCommit(false);
                 this.connection = connection;
-            } catch (SQLException e) {
+            } catch (SQLException | ReadValueException e) {
                 throw new StorageException("Could not get JDBC connection.", e);
             }
         } catch (StorageException e) {
@@ -75,7 +76,7 @@ public class PostgresConnection implements IStorageConnection {
      *
      * @param preparedQuery the instance of IPreparedQuery
      * @return CompiledQuery
-     * @throws StorageException
+     * @throws StorageException Throw whe query can't be compiled for one of reason
      */
     public ICompiledQuery compileQuery(final IPreparedQuery preparedQuery)
             throws StorageException {
@@ -84,7 +85,7 @@ public class PostgresConnection implements IStorageConnection {
         } catch (SQLException e) {
             throw new StorageException(
                     String.format("Error compiling query statement \"%s\": ",
-                            ((QueryStatement) preparedQuery).bodyWriter.toString()), e);
+                            ((QueryStatement) preparedQuery).getBodyWriter().toString()), e);
         }
     }
 
@@ -92,7 +93,7 @@ public class PostgresConnection implements IStorageConnection {
      * Check if the connection is valid.
      *
      * @return {@code true} if the connection is valid
-     * @throws StorageException
+     * @throws StorageException Throw whe query can't be compiled
      */
     public boolean validate()
             throws StorageException {
@@ -124,7 +125,7 @@ public class PostgresConnection implements IStorageConnection {
     /**
      * Close the connection
      *
-     * @throws StorageException
+     * @throws StorageException Throw when connection can't be closed
      */
     public void close()
             throws StorageException {
@@ -138,7 +139,7 @@ public class PostgresConnection implements IStorageConnection {
     /**
      * Commit the current transaction.
      *
-     * @throws StorageException
+     * @throws StorageException Throw when connection have internal errors
      */
     public void commit()
             throws StorageException {
@@ -152,7 +153,7 @@ public class PostgresConnection implements IStorageConnection {
     /**
      * Rollback the current  transaction.
      *
-     * @throws StorageException
+     * @throws StorageException Throw when rollback is damaged or changes in database can't be applied with rollback operation
      */
     public void rollback()
             throws StorageException {

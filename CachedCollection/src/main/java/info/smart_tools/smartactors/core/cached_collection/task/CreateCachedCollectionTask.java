@@ -1,11 +1,13 @@
 package info.smart_tools.smartactors.core.cached_collection.task;
 
-import info.smart_tools.smartactors.core.cached_collection.wrapper.CreateCachedCollectionQuery;
+import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -24,38 +26,46 @@ public class CreateCachedCollectionTask implements IDatabaseTask {
     private static final String ORDERED_INDEX = "ordered";
     private static final String DATE_TIME_INDEX = "datetime";
 
+    private IField keyNameField;
+    private IField indexesField;
+
     private IDatabaseTask createCollectionTask;
 
     /**
      * Constructor
      * @param createCollectionTask nested task for creating collection
+     * @throws CreateCachedCollectionTaskException for create task error
      */
-    public CreateCachedCollectionTask(final IDatabaseTask createCollectionTask) {
+    public CreateCachedCollectionTask(final IDatabaseTask createCollectionTask) throws CreateCachedCollectionTaskException {
         this.createCollectionTask = createCollectionTask;
+        try {
+            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyName");
+            this.indexesField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "indexes");
+        } catch (ResolutionException e) {
+            throw new CreateCachedCollectionTaskException("Can't create CreateCachedCollectionTask.", e);
+        }
     }
 
     /**
      * Prepares database query
-     *
      * @param query query object
+     *              {
+     *              "keyName": "name for key of this collection"
+     *              }
      * @throws TaskPrepareException if error occurs in process of query preparing
      */
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-            CreateCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(CreateCachedCollectionQuery.class.toString()), query);
             Map<String, String> indexes = new HashMap<>();
-            indexes.put(message.getKey(), ORDERED_INDEX);
-            //TODO:: Should it be ordered?
+            indexes.put(keyNameField.in(query), ORDERED_INDEX);
             indexes.put("isActive", ORDERED_INDEX);
             indexes.put("startDateTime", DATE_TIME_INDEX);
-            message.setIndexes(indexes);
+            indexesField.out(query, indexes);
 
-            createCollectionTask.prepare(message.wrapped());
-        } catch (ResolutionException e) {
-            throw new TaskPrepareException("Can't create message from query", e);
-        } catch (ReadValueException | ChangeValueException e) {
+            createCollectionTask.prepare(query);
+        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {
             throw new TaskPrepareException("Can't prepare query for create cached collection", e);
         }
     }

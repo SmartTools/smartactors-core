@@ -97,7 +97,15 @@ class InMemoryCodeCompiler {
 
                 URL[] urls = ucl.getURLs();
                 for (URL url : urls) {
-                    buf.append(separator).append(url.getFile());
+                    String jarPathName = url.getFile();
+                    if (jarPathName.startsWith("file:")) {
+                        jarPathName = jarPathName.substring(
+                                jarPathName.indexOf("file:") + "file:".length(), jarPathName.indexOf("!/")
+                        );
+                    }
+                    buf.append(separator).append(
+                            jarPathName
+                    );
                 }
             } catch (Exception e) {
                 // do nothing

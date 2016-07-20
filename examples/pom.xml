@@ -84,16 +84,30 @@
             <version>${core.version}</version>
         </dependency>
         <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.feature_manager</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.filesystem_tracker</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.named_keys_storage</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>core.named_keys_storage</artifactId>
-            <version>${core.version}</version>
-            <scope>test</scope>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>

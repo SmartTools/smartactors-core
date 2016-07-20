@@ -5,11 +5,10 @@ import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteExceptio
 import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManagementException;
 import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.core.ipath.IPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-
-import java.io.File;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -92,13 +91,13 @@ public class FeatureTest {
             throws Exception {
         IAction actionMock1 = mock(IAction.class), actionMock2 = mock(IAction.class), actionMock3 = mock(IAction.class);
         ActionExecuteException exceptionMock1 = mock(ActionExecuteException.class), exceptionMock2 = mock(ActionExecuteException.class);
-        File fileMock1 = mock(File.class), fileMock2 = mock(File.class), fileMock3 = mock(File.class);
+        IPath fileMock1 = mock(IPath.class), fileMock2 = mock(IPath.class), fileMock3 = mock(IPath.class);
 
         doThrow(exceptionMock1).when(actionMock1).execute(any());
         doThrow(exceptionMock2).when(actionMock2).execute(any());
-        when(fileMock1.getName()).thenReturn("bug-feature-1.jar");
-        when(fileMock2.getName()).thenReturn("bug-feature-2.jar");
-        when(fileMock3.getName()).thenReturn("nice-feature.txt");
+        when(fileMock1.getPath()).thenReturn("dir/bug-feature-1.jar");
+        when(fileMock2.getPath()).thenReturn("dir/bug-feature-2.jar");
+        when(fileMock3.getPath()).thenReturn("dir/nice-feature.txt");
 
         Feature feature = new Feature("bug", filesystemTrackerMock);
 
@@ -136,10 +135,10 @@ public class FeatureTest {
     @Test
     public void Should_executeActionImmediately_When_filesAreAlreadyPresent()
             throws Exception {
-        File fileMock = mock(File.class);
+        IPath fileMock = mock(IPath.class);
         IAction actionMock = mock(IAction.class);
 
-        when(fileMock.getName()).thenReturn("bug-feature.jar");
+        when(fileMock.getPath()).thenReturn("dir/bug-feature.jar");
 
         Feature feature = new Feature("bug", filesystemTrackerMock);
 
@@ -158,11 +157,11 @@ public class FeatureTest {
     @Test
     public void Should_wrapException_When_filesAreAlreadyPresent_And_ImmediatelyExecutedActionThrows()
             throws Exception {
-        File fileMock = mock(File.class);
+        IPath fileMock = mock(IPath.class);
         IAction actionMock = mock(IAction.class);
         ActionExecuteException exceptionMock = mock(ActionExecuteException.class);
 
-        when(fileMock.getName()).thenReturn("bug-feature.jar");
+        when(fileMock.getPath()).thenReturn("dir/bug-feature.jar");
         doThrow(exceptionMock).when(actionMock).execute(any());
 
         Feature feature = new Feature("bug", filesystemTrackerMock);

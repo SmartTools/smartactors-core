@@ -5,9 +5,9 @@ import info.smart_tools.smartactors.core.db_storage.interfaces.SQLQueryParameter
 import info.smart_tools.smartactors.core.db_task.search.psql.PSQLFieldPath;
 import info.smart_tools.smartactors.core.db_task.search.utils.ISearchQueryWriter;
 import info.smart_tools.smartactors.core.db_task.search.wrappers.ISearchQuery;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;

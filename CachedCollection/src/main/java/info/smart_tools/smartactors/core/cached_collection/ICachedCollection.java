@@ -9,6 +9,10 @@ import java.util.List;
 
 /**
  * Stores objects in memory by some key and may operate with these objects into DB
+ * Current collection contains documents with next fields:
+ * "<key>": "keyValue" (value of <key> should be defined as a parameter of collection)
+ * "startDateTime": "date and time of the beginning of activity of the document"
+ * "isActive" "true\false flag of activity of the document"
  */
 public interface ICachedCollection {
 
@@ -22,14 +26,14 @@ public interface ICachedCollection {
 
     /**
      * Deletes object from memory and set active flag to false for object into DB
-     * @param query deletion query
+     * @param query document for delete
      * @throws DeleteCacheItemException Throw when collection can't delete objects with @query
      */
     void delete(IObject query) throws DeleteCacheItemException;
 
     /**
      * Add or update object in memory and DB
-     * @param query upsert query
+     * @param query document for upsert
      * @throws UpsertCacheItemException Throw when collection can't update/insert objects in query
      */
     void upsert(IObject query) throws UpsertCacheItemException;

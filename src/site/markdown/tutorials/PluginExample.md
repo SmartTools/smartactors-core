@@ -9,7 +9,7 @@ The Server loads and initializes such JARs.
 
 Loading and initializing are two separate steps of the process.
 
-At the first step a part of the server, the [`PluginLoader`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html) scans the JAR file for implementations of [`IPlugin`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iplugin/IPlugin.html).
+At the first step a part of the server, the [`PluginLoader`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_loader_from_jar/PluginLoader.html) scans the JAR files for implementations of [`IPlugin`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/iplugin/IPlugin.html).
 It uses [`PluginCreator`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/plugin_creator/PluginCreator.html) to instantiate the Plugin by passing the instance of `IBootstrap` to it's constructor.
 The `load()` method of each Plugin is called here.
 
@@ -24,7 +24,7 @@ This is the second step of the initialization.
 
 Let create a sample plugin.
 
-    public class MyPlugin implements IPlugin {
+    public class SamplePlugin implements IPlugin {
 
 ### Bootstrap reference    
     
@@ -34,7 +34,7 @@ It must contain a reference to `Bootstrap` provided during initialization proces
     
 The `Bootstrap` must be injected into the plugin's constructor.
 
-    public MyPlugin(final IBootstrap<IBootstrapItem<String>> bootstrap) {
+    public SamplePlugin(final IBootstrap<IBootstrapItem<String>> bootstrap) {
         this.bootstrap = bootstrap;
     }
 
@@ -47,7 +47,7 @@ You have to define the `load()` method.
     
 In the method at the first you should declare the `BootstrapItem` provided by your plugin.
 
-    IBootstrapItem<String> item = new BootstrapItem("MyPlugin");
+    IBootstrapItem<String> item = new BootstrapItem("SamplePlugin");
     
 Here you declare that your item must be initialized after initialization of 'IOC' item.
  
@@ -60,12 +60,18 @@ For example, let register some new strategy in IOC.
 
     item.process(() -> {
         try {
-            IKey<MyClass>key = IOC.resolve(IOC.getKeyForKeyStorage(), "new MyClass");
-            IOC.register(key, new CreateNewInstanceStrategy(
-                    (args) -> new MyClass((String) args[0])));
+            IKey key = Keys.getOrAdd("new SampleClass");
+            IOC.register(
+                    key,
+                    // it's the initialization action of our plugin
+                    new CreateNewInstanceStrategy(
+                            (args) -> new SampleClass((String) args[0])
+                    )
+            );
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        System.out.println("SamplePlugin initialized");
     });
 
 ### Registering the callback    
@@ -94,7 +100,7 @@ Also it uses `PluginCreator` to find and call the correct constructor of `IPlugi
     
 A `IPluginLoaderVisitor` is necessary to track plugins loading process.
 
-    IPluginLoaderVisitor<String> visitor = new MyPluginVisitor();
+    IPluginLoaderVisitor<String> visitor = new SamplePluginVisitor();
 
 ### ClassLoader    
     
@@ -108,7 +114,7 @@ Because the plugin jars can be located in different directories and can be added
 Then the `PluginLoader` is created.
 It's second constructor parameter is the code to load each plugin.
 
-    IPluginLoader<String> pluginLoader = new PluginLoader(
+    IPluginLoader<Collection<IPath>> pluginLoader = new PluginLoader(
             urlClassLoader,
             (t) -> {
                 try {
@@ -123,9 +129,12 @@ It's second constructor parameter is the code to load each plugin.
 
 ### Loading    
     
-The server scans the jar file for `IPlugin` instances.
+The server scans the collection of jar files for `IPlugin` instances.
 
-    pluginLoader.loadPlugin("examples.jar");
+    Collection<IPath> fileCollection = new ArrayList<>();
+    fileCollection.add(new Path("libs/SamplePlugin.jar"));
+    fileCollection.add(new Path("libs/IocPlugin.jar"));
+    pluginLoader.loadPlugin(fileCollection);
 
 ### Initialization    
     
@@ -135,12 +144,12 @@ And then calls the initialization code of `BootstrapItem`s in the sequence accor
 
 ## Initialization order    
     
-In this example, when we have two plugins: 'MyPlugin' following _after_ 'IOC' — the loading and initialization sequence is like this:
+In this example, when we have two plugins: 'SamplePlugin' following _after_ 'IOC' — the loading and initialization sequence is like this:
  
-1. `IOCPlugin.load()`, registers bootstrap item
-2. `MyPlugin.load()`, registers bootstrap item
+1. `SamplePlugin.load()`, registers bootstrap item
+2. `IOCPlugin.load()`, registers bootstrap item
 3. initialization code of bootstrap item of 'IOC' plugin
-4. initialization code of bootstrap item of 'MyPlugin' because it asked to be after 'IOC'
+4. initialization code of bootstrap item of 'SamplePlugin' because it asked to be after 'IOC'
 
 Note the order of first two steps is not defined, while the order of execution of bootstrap items is defined by their dependencies.
 

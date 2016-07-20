@@ -8,6 +8,7 @@ import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ifeature_manager.IFeature;
 import info.smart_tools.smartactors.core.ifeature_manager.IFeatureManager;
 import info.smart_tools.smartactors.core.ifilesystem_tracker.IFilesystemTracker;
+import info.smart_tools.smartactors.core.ipath.IPath;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
 import info.smart_tools.smartactors.core.iplugin_creator.IPluginCreator;
 import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
@@ -15,13 +16,15 @@ import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVis
 import info.smart_tools.smartactors.core.iserver.IServer;
 import info.smart_tools.smartactors.core.iserver.exception.ServerExecutionException;
 import info.smart_tools.smartactors.core.iserver.exception.ServerInitializeException;
+import info.smart_tools.smartactors.core.path.Path;
 import info.smart_tools.smartactors.core.plugin_creator.PluginCreator;
 import info.smart_tools.smartactors.core.plugin_loader_from_jar.ExpansibleURLClassLoader;
 import info.smart_tools.smartactors.core.plugin_loader_from_jar.PluginLoader;
 import info.smart_tools.smartactors.core.plugin_loader_visitor_empty_implementation.PluginLoaderVisitor;
 
-import java.io.File;
 import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.Collection;
 
 /**
@@ -39,7 +42,7 @@ public class Server implements IServer {
             IPluginCreator creator = new PluginCreator();
             IPluginLoaderVisitor<String> visitor = new PluginLoaderVisitor<>();
             ExpansibleURLClassLoader urlClassLoader = new ExpansibleURLClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());
-            IPluginLoader<Collection<File>> pluginLoader = new PluginLoader(
+            IPluginLoader<Collection<IPath>> pluginLoader = new PluginLoader(
                     urlClassLoader,
                     (t) -> {
                         try {
@@ -54,11 +57,11 @@ public class Server implements IServer {
 
             // FS listener creation
             // TODO: Get from configuration
-            File coreJarsDir = new File("libs");
-            coreJarsDir.mkdirs();
+            IPath coreJarsDir = new Path("libs");
+            Files.createDirectories(FileSystems.getDefault().getPath(coreJarsDir.getPath()));
 
             IFilesystemTracker jarFilesTracker = new FilesystemTracker(
-                    (dir, name) -> name.endsWith(".jar"),
+                    (path) -> path.getPath().endsWith(".jar"),
                     ListenerTask::new);
 
             jarFilesTracker.start(coreJarsDir);
