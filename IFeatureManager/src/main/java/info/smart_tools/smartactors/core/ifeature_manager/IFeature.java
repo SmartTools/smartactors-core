@@ -2,8 +2,8 @@ package info.smart_tools.smartactors.core.ifeature_manager;
 
 import info.smart_tools.smartactors.core.iaction.IAction;
 import info.smart_tools.smartactors.core.ifeature_manager.exception.FeatureManagementException;
+import info.smart_tools.smartactors.core.ipath.IPath;
 
-import java.io.File;
 import java.util.Collection;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Collection;
 public interface IFeature {
     /**
      * Add a file name to list of names of files required for this feature.
-     *
+     * The file name should not contain any preceding path.
      * @param fileName    name of the file
      * @throws FeatureManagementException if {@link #listen()} already has been called on this {@link IFeature}.
      */
@@ -26,7 +26,7 @@ public interface IFeature {
      *                  #requireFile(String)} when all those files are present.
      * @throws FeatureManagementException if any error occurs.
      */
-    void whenPresent(IAction<Collection<File>> action) throws FeatureManagementException;
+    void whenPresent(IAction<Collection<IPath>> action) throws FeatureManagementException;
 
     /**
      * Start look for required files (exist or appearing later).

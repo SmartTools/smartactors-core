@@ -23,6 +23,11 @@
             <artifactId>core.ifilesystem_tracker</artifactId>
             <version>${core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.path</artifactId>
+            <version>${core.version}</version>
+        </dependency>
         <!-- Tests -->
         <dependency>
             <groupId>junit</groupId>

@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import info.smart_tools.smartactors.core.field_name.FieldName;
+import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-import info.smart_tools.smartactors.core.iobject.IFieldName;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.DeleteValueException;
@@ -122,7 +123,10 @@ public class DSObject implements IObject {
         return new DSObjectIterator();
     }
 
-    private class DSObjectIterator implements Iterator<Map.Entry<IFieldName, Object>> {
+    /**
+     * Iterator over {@code body}
+     */
+    private final class DSObjectIterator implements Iterator<Map.Entry<IFieldName, Object>> {
 
         private Iterator<Map.Entry<IFieldName, Object>> iterator;
 
@@ -139,5 +143,5 @@ public class DSObject implements IObject {
         public Map.Entry<IFieldName, Object> next() {
             return this.iterator.next();
         }
-    }
+    } 
 }

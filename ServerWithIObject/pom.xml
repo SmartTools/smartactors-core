@@ -64,6 +64,11 @@
             <artifactId>core.create_new_instance_strategy</artifactId>
             <version>${core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.field_name</artifactId>
+            <version>${core.version}</version>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>

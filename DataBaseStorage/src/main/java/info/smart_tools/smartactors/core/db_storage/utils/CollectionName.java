@@ -17,6 +17,9 @@ public class CollectionName {
         this.name = name;
     }
 
+    /**
+     * @return Name of CollectionName object
+     */
     public String toString() {
         return this.name;
     }

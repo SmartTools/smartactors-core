@@ -1,22 +1,18 @@
 package info.smart_tools.smartactors.core.cached_collection;
 
+import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
 import info.smart_tools.smartactors.core.cached_collection.exception.DeleteCacheItemException;
 import info.smart_tools.smartactors.core.cached_collection.exception.GetCacheItemException;
 import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCacheItemException;
 import info.smart_tools.smartactors.core.cached_collection.task.DeleteFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.CachedCollectionConfig;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.GetObjectFromCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteFromCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteItem;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertIntoCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertItem;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -36,33 +32,71 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 /**
- * Implementation of cached collection
- * {@link ICachedCollection}
+ * Implementation of cached collection {@link ICachedCollection}
+ * Resolves IDatabaseTasks for each type of operations, constructs queries for task's prepare() method,
+ * sets connection from pool to task and executes it.
  */
 public class CachedCollection implements ICachedCollection {
 
+    private IField collectionNameField;
+    private IField keyNameField;
+    private IField keyValueField;
+    private IField specificKeyNameField;
+    private IField documentField;
+    private IField idField;
+    private IField isActiveField;
+    private IField searchResultField;
+
     private IPool connectionPool;
     private CollectionName collectionName;
+    private String keyName;
     private ConcurrentMap<String, List<IObject>> map;
 
     /**
      * Constructor which initializes database tasks for db operations and connection pool for them.
-     * @param config wrapper for configuration object with tasks and pool.
+     * @param config configuration object with collection settings and pool. Contains
+     * {
+     *               "сollectionName": "name of database collection",
+     *               "connectionPool": "pool with connection objects needed for database tasks",
+     *               "keyName": "name of field which stores key value into document"
+     * }
      * @throws InvalidArgumentException Except when actor can't be created with @config
      */
-    public CachedCollection(final CachedCollectionConfig config) throws InvalidArgumentException {
+    public CachedCollection(final IObject config) throws InvalidArgumentException {
         try {
-            this.collectionName = config.getCollectionName();
-            this.connectionPool = config.getConnectionPool();
             this.map = new ConcurrentHashMap<>();
-        } catch (ReadValueException e) {
+            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "collectionName");
+            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "connectionPool");
+            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyName");
+            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyValue");
+            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document");
+            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "id");
+            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "isActive");
+            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "searchResult");
+            this.collectionName = collectionNameField.in(config);
+            this.connectionPool = connectionPoolField.in(config);
+            this.keyName = keyNameField.in(config);
+            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), keyName);
+        } catch (ResolutionException | ReadValueException e) {
             throw new InvalidArgumentException("Can't create cached collection.", e);
         }
     }
 
+    /**
+     * Looks for value by key inside cache, if cache doesn't return any result, collection
+     * resolves search task and constructs query for it. Query contains:
+     * {
+     *     "collectionName": "current collection name",
+     *     "keyName": "name of field which stores key value into document",
+     *     "keyValue": "cache key value for search"
+     * }
+     * Found object from DB would be saved into cache
+     * @param key for cache. Cache should store needed value by this string.
+     * @return list with found objects
+     * @throws GetCacheItemException if any errors occurred
+     */
     @Override
     public List<IObject> getItems(final String key) throws GetCacheItemException {
 
@@ -83,20 +117,21 @@ public class CachedCollection implements ICachedCollection {
                         getItemTask = new GetObjectFromCachedCollectionTask(nestedTask);
                         IOC.register(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()), new SingletonStrategy(getItemTask));
                     }
-                    GetObjectFromCachedCollectionQuery getItemQuery = IOC.resolve(
-                        Keys.getOrAdd(GetObjectFromCachedCollectionQuery.class.toString())
-                    );
-                    getItemQuery.setCollectionName(collectionName);
-                    getItemQuery.setKey(key);
+                    IObject getItemQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+                    collectionNameField.out(getItemQuery, collectionName);
+                    keyNameField.out(getItemQuery, keyName);
+                    keyValueField.out(getItemQuery, key);
                     getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
-                    getItemTask.prepare(getItemQuery.wrapped());
+                    getItemTask.prepare(getItemQuery);
                     getItemTask.execute();
-                    items = getItemQuery.getSearchResult().collect(Collectors.toList());
+                    items = searchResultField.in(getItemQuery);
                     map.put(key, items);
                 } catch (PoolGuardException e) {
                     throw new GetCacheItemException("Can't get connection from pool.", e);
                 } catch (InvalidArgumentException | RegistrationException e) {
                     throw new GetCacheItemException("Can't register strategy for getItem task.", e);
+                } catch (CreateCachedCollectionTaskException e) {
+                    throw new GetCacheItemException("Can't create getItem task.", e);
                 }
             }
 
@@ -109,15 +144,24 @@ public class CachedCollection implements ICachedCollection {
             throw new GetCacheItemException("Error during execution read task.", e);
         } catch (ResolutionException e) {
             throw new GetCacheItemException("Can't resolve cached object.", e);
-        } catch (ReadValueException | ChangeValueException e) {
+        } catch (ChangeValueException | ReadValueException e) {
             throw new GetCacheItemException("Can't read cached object.", e);
         }
     }
 
+    /**
+     * Deletes object from cache and set active flag to false for object into DB.
+     * Query object for task contains:
+     * {
+     *     "collectionName": "current collection name",
+     *     "document": {iobject from message parameter}
+     * }
+     * @param message document for delete
+     * @throws DeleteCacheItemException
+     */
     @Override
     public void delete(final IObject message) throws DeleteCacheItemException {
         try {
-            DeleteItem deleteItem;
             try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {
                 IDatabaseTask deleteTask = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()));
                 if (deleteTask == null) {
@@ -130,13 +174,12 @@ public class CachedCollection implements ICachedCollection {
                     deleteTask = new DeleteFromCachedCollectionTask(nestedTask);
                     IOC.register(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()), new SingletonStrategy(deleteTask));
                 }
-                deleteItem = IOC.resolve(Keys.getOrAdd(DeleteItem.class.toString()), message);
-                DeleteFromCachedCollectionQuery deleteQuery = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionQuery.class.toString()));
-                deleteQuery.setCollectionName(collectionName);
-                deleteQuery.setDeleteItem(deleteItem);
+                IObject deleteQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+                collectionNameField.out(deleteQuery, collectionName);
+                documentField.out(deleteQuery, message);
                 StorageConnection connection = IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject());
                 deleteTask.setConnection(connection);
-                deleteTask.prepare(deleteQuery.wrapped());
+                deleteTask.prepare(deleteQuery);
                 deleteTask.execute();
             } catch (PoolGuardException e) {
                 throw new DeleteCacheItemException("Can't get connection from pool.", e);
@@ -148,15 +191,15 @@ public class CachedCollection implements ICachedCollection {
                 throw new DeleteCacheItemException("Error during execution delete task.", e);
             } catch (InvalidArgumentException | RegistrationException e) {
                 throw new DeleteCacheItemException("Can't register strategy for delete task.", e);
+            } catch (CreateCachedCollectionTaskException e) {
+                throw new DeleteCacheItemException("Can't create delete task.", e);
             }
 
-            String key = deleteItem.getKey();
+            String key = specificKeyNameField.in(message);
             List<IObject> items = map.get(key);
             if (items != null) {
-                DeleteItem item;
                 for (IObject obj : items) {
-                    item = IOC.resolve(Keys.getOrAdd(DeleteItem.class.toString()), obj);
-                    if (item.getId().equals(deleteItem.getId())) {
+                    if (idField.in(obj).equals(idField.in(message))) {
                         items.remove(obj);
                         break;
                     }
@@ -164,16 +207,25 @@ public class CachedCollection implements ICachedCollection {
             }
         }  catch (ResolutionException e) {
             throw new DeleteCacheItemException("Can't resolve cached object.", e);
-        } catch (ReadValueException | ChangeValueException e) {
+        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {
             throw new DeleteCacheItemException("Can't delete cached object.", e);
         }
     }
 
+    /**
+     * Adds or updates object into cache and into DB.
+     * Query object for task contains:
+     * {
+     *     "collectionName": "current collection name",
+     *     "document": {iobject from message parameter}
+     * }
+     * @param message document for upsert
+     * @throws UpsertCacheItemException
+     */
     @Override
     public void upsert(final IObject message) throws UpsertCacheItemException {
 
         try {
-            UpsertItem upsertItem;
             try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {
                 IDatabaseTask upsertTask = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()));
                 if (upsertTask == null) {
@@ -186,19 +238,18 @@ public class CachedCollection implements ICachedCollection {
                     upsertTask = new UpsertIntoCachedCollectionTask(nestedTask);
                     IOC.register(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()), new SingletonStrategy(upsertTask));
                 }
-                upsertItem = IOC.resolve(Keys.getOrAdd(UpsertItem.class.toString()), message);
-                Boolean isActive = upsertItem.isActive();
-                upsertItem.setIsActive(true);
-                UpsertIntoCachedCollectionQuery upsertQuery = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString()));
-                upsertQuery.setCollectionName(collectionName);
-                upsertQuery.setUpsertItem(upsertItem);
+                IObject upsertQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+                Boolean isActive = isActiveField.in(message);
+                isActiveField.out(message, true);
+                collectionNameField.out(upsertQuery, collectionName);
+                documentField.out(upsertQuery, message);
 
                 upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
-                upsertTask.prepare(upsertQuery.wrapped());
+                upsertTask.prepare(upsertQuery);
                 try {
                     upsertTask.execute();
                 } catch (TaskExecutionException e) {
-                    upsertItem.setIsActive(isActive);
+                    isActiveField.out(message, isActive);
                     throw new UpsertCacheItemException("Error during execution upsert task.", e);
                 }
             } catch (PoolGuardException e) {
@@ -209,23 +260,23 @@ public class CachedCollection implements ICachedCollection {
                 throw new UpsertCacheItemException("Error during preparing upsert task.", e);
             } catch (InvalidArgumentException | RegistrationException e) {
                 throw new UpsertCacheItemException("Can't register strategy for upsert task.", e);
+            }  catch (CreateCachedCollectionTaskException e) {
+                throw new UpsertCacheItemException("Can't create upsert task.", e);
             }
-            String key = upsertItem.getKey();
+            String key = specificKeyNameField.in(message);
             List<IObject> items = map.get(key);
             if (items != null && !items.isEmpty()) {
-                UpsertItem item;
                 for (IObject obj : items) {
-                    item = IOC.resolve(Keys.getOrAdd(UpsertItem.class.toString()), obj);
-                    if (item.getId().equals(upsertItem.getId())) {
+                    if (idField.in(obj).equals(idField.in(message))) {
                         items.remove(obj);
-                        items.add(upsertItem.wrapped());
+                        items.add(message);
                         break;
                     }
                 }
             } else {
-                map.put(key, Collections.singletonList(upsertItem.wrapped()));
+                map.put(key, Collections.singletonList(message));
             }
-        } catch (ReadValueException | ChangeValueException e) {
+        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {
             throw new UpsertCacheItemException("Can't add or update cached object.", e);
         } catch (ResolutionException e) {
             throw new UpsertCacheItemException("Can't resolve cached object.", e);

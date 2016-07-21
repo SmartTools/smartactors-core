@@ -13,6 +13,11 @@ final class QueryKey {
         this.connectionId = connectionId;
     }
 
+    /**
+     * @param taskName name of task
+     * @param connectionId string of connection id
+     * @return result query key
+     */
     static QueryKey create(final String taskName, final String connectionId) {
         return new QueryKey(taskName, connectionId);
     }

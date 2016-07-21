@@ -23,6 +23,11 @@
             <artifactId>core.invalid_argument_exception</artifactId>
             <version>${core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.ipath</artifactId>
+            <version>${core.version}</version>
+        </dependency>
         <!-- Tests -->
         <dependency>
             <groupId>junit</groupId>

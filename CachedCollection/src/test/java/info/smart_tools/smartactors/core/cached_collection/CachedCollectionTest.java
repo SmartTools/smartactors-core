@@ -6,17 +6,12 @@ import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCache
 import info.smart_tools.smartactors.core.cached_collection.task.DeleteFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.CachedCollectionConfig;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.GetObjectFromCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteFromCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteItem;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertIntoCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertItem;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -35,8 +30,8 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -60,59 +55,86 @@ public class CachedCollectionTest {
     private StorageConnection connection;
     private CollectionName collectionName;
 
+    private IField collectionNameField;
+    private IField keyNameField;
+    private IField keyValueField;
+    private IField specificKeyNameField;
+    private IField documentField;
+    private IField idField;
+    private IField isActiveField;
+    private IField searchResultField;
+
     @Before
     public void setUp() throws ReadValueException, ChangeValueException, InvalidArgumentException, PoolTakeException, ResolutionException {
 
         mockStatic(IOC.class);
         mockStatic(Keys.class);
 
+        IObject config = mock(IObject.class);
+
+        collectionNameField = mock(IField.class);
+        keyNameField = mock(IField.class);
+        keyValueField = mock(IField.class);
+        specificKeyNameField = mock(IField.class);
+        documentField = mock(IField.class);
+        idField = mock(IField.class);
+        searchResultField = mock(IField.class);
+        isActiveField = mock(IField.class);
+        IField connectionPoolField = mock(IField.class);
+
+        IKey mockKeyField = mock(IKey.class);
+        when(Keys.getOrAdd(IField.class.toString())).thenReturn(mockKeyField);
+        when(IOC.resolve(mockKeyField, "collectionName")).thenReturn(collectionNameField);
+        when(IOC.resolve(mockKeyField, "connectionPool")).thenReturn(connectionPoolField);
+        when(IOC.resolve(mockKeyField, "keyName")).thenReturn(keyNameField);
+        when(IOC.resolve(mockKeyField, "searchResult")).thenReturn(searchResultField);
+        when(IOC.resolve(mockKeyField, "keyValue")).thenReturn(keyValueField);
+        when(IOC.resolve(mockKeyField, "document")).thenReturn(documentField);
+        when(IOC.resolve(mockKeyField, "id")).thenReturn(idField);
+        when(IOC.resolve(mockKeyField, "isActive")).thenReturn(isActiveField);
+
+        String keyName = "customKeyName";
+        when(keyNameField.in(config)).thenReturn(keyName);
+        when(IOC.resolve(mockKeyField, keyName)).thenReturn(specificKeyNameField);
+
         IPool connectionPool = mock(IPool.class);
         connection = mock(StorageConnection.class);
         collectionName = mock(CollectionName.class);
         when(connectionPool.take()).thenReturn(connection);
-        CachedCollectionConfig config = mock(CachedCollectionConfig.class);
-        when(config.getConnectionPool()).thenReturn(connectionPool);
-        when(config.getCollectionName()).thenReturn(collectionName);
+        when(connectionPoolField.in(config)).thenReturn(connectionPool);
+        when(collectionNameField.in(config)).thenReturn(collectionName);
         collection = new CachedCollection(config);
 
         IKey keyConnection = mock(IKey.class);
         when(Keys.getOrAdd(StorageConnection.class.toString())).thenReturn(keyConnection);
         when(IOC.resolve(keyConnection, connection)).thenReturn(connection);
-
     }
 
     @Test
     public void ShouldDeleteObject()
         throws DeleteCacheItemException, ResolutionException, TaskSetConnectionException, IllegalAccessException, ReadValueException,
-                ChangeValueException, TaskPrepareException, TaskExecutionException {
+        ChangeValueException, TaskPrepareException, TaskExecutionException, InvalidArgumentException {
 
         IObject query = mock(IObject.class);
-        DeleteFromCachedCollectionQuery message = mock(DeleteFromCachedCollectionQuery.class);
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-        DeleteItem deleteItem = mock(DeleteItem.class);
-        when(deleteItem.getKey()).thenReturn("key");
-        when(deleteItem.getId()).thenReturn("id");
-        when(message.getDeleteItem()).thenReturn(deleteItem);
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(DeleteFromCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
+        IObject deleteQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(deleteQuery);
 
         IDatabaseTask deleteTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
         when(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(deleteTask);
 
-        IKey keyItem = mock(IKey.class);
-        when(Keys.getOrAdd(DeleteItem.class.toString())).thenReturn(keyItem);
-        when(IOC.resolve(keyItem, query)).thenReturn(deleteItem);
+        when(specificKeyNameField.in(query)).thenReturn("key");
 
         collection.delete(query);
 
         verify(deleteTask).setConnection(eq(connection));
-        verify(deleteTask).prepare(eq(wrapped));
+        verify(deleteTask).prepare(eq(deleteQuery));
         verify(deleteTask).execute();
-        verify(deleteItem).getKey();
+        verify(collectionNameField).out(eq(deleteQuery), eq(collectionName));
+        verify(documentField).out(eq(deleteQuery), eq(query));
     }
 
     @Test(expected = DeleteCacheItemException.class)
@@ -127,16 +149,11 @@ public class CachedCollectionTest {
 
         IObject query = mock(IObject.class);
 
-        DeleteFromCachedCollectionQuery message = mock(DeleteFromCachedCollectionQuery.class);
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-        DeleteItem deleteItem = mock(DeleteItem.class);
-        when(deleteItem.getKey()).thenReturn("key");
-        when(deleteItem.getId()).thenReturn("id");
-        when(message.getDeleteItem()).thenReturn(deleteItem);
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(DeleteFromCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
+        IObject deleteQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(deleteQuery);
+        when(specificKeyNameField.in(query)).thenReturn("key");
 
         IDatabaseTask nestedTask = mock(IDatabaseTask.class);
         DeleteFromCachedCollectionTask deleteTask = mock(DeleteFromCachedCollectionTask.class);
@@ -147,78 +164,54 @@ public class CachedCollectionTest {
         when(IOC.resolve(keyIDBTask, DeleteFromCachedCollectionTask.class.toString())).thenReturn(nestedTask);
         whenNew(DeleteFromCachedCollectionTask.class).withArguments(nestedTask).thenReturn(deleteTask);
 
-        IKey keyItem = mock(IKey.class);
-        when(Keys.getOrAdd(DeleteItem.class.toString())).thenReturn(keyItem);
-        when(IOC.resolve(keyItem, query)).thenReturn(deleteItem);
-
         collection.delete(query);
 
         verifyStatic();
         IOC.register(eq(keyTask), any(SingletonStrategy.class));
 
-
         verify(deleteTask).setConnection(eq(connection));
-        verify(deleteTask).prepare(eq(wrapped));
+        verify(deleteTask).prepare(eq(deleteQuery));
         verify(deleteTask).execute();
-        verify(deleteItem).getKey();
+        verify(specificKeyNameField).in(eq(query));
     }
 
     @Test
-    public void ShouldUpsertObject()
-        throws ResolutionException, TaskSetConnectionException, IllegalAccessException, ReadValueException,
-        ChangeValueException, TaskPrepareException, TaskExecutionException, UpsertCacheItemException {
+    public void ShouldUpsertObject() throws Exception {
 
         IObject query = mock(IObject.class);
 
-        UpsertIntoCachedCollectionQuery message = mock(UpsertIntoCachedCollectionQuery.class);
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-        UpsertItem upsertItem = mock(UpsertItem.class);
-        when(upsertItem.getKey()).thenReturn("key");
-        when(upsertItem.getId()).thenReturn("id");
-        when(message.getUpsertItem()).thenReturn(upsertItem);
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
+        IObject upsertQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(upsertQuery);
+        when(specificKeyNameField.in(query)).thenReturn("key");
 
         IDatabaseTask upsertTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
         when(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(upsertTask);
 
-        IKey keyItem = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertItem.class.toString())).thenReturn(keyItem);
-        when(IOC.resolve(keyItem, query)).thenReturn(upsertItem);
-
         collection.upsert(query);
 
-        verify(message).setCollectionName(eq(collectionName));
-        verify(message).setUpsertItem(eq(upsertItem));
         verify(upsertTask).setConnection(eq(connection));
-        verify(upsertTask).prepare(eq(wrapped));
+        verify(upsertTask).prepare(eq(upsertQuery));
         verify(upsertTask).execute();
-        verify(upsertItem).getKey();
-        verify(upsertItem).setIsActive(true);
+        verify(specificKeyNameField).in(eq(query));
+        verify(isActiveField).out(eq(query), eq(true));
+        verify(collectionNameField).out(eq(upsertQuery), eq(collectionName));
+        verify(documentField).out(eq(upsertQuery), eq(query));
     }
 
     @Test(expected = UpsertCacheItemException.class)
-    public void ShouldSetPreviousActiveValue_When_ExecuteExceptionIsThrown()
-        throws ResolutionException, TaskSetConnectionException, IllegalAccessException, ReadValueException,
-        ChangeValueException, TaskPrepareException, TaskExecutionException, UpsertCacheItemException {
+    public void ShouldSetPreviousActiveValue_When_ExecuteExceptionIsThrown() throws Exception {
 
         IObject query = mock(IObject.class);
 
-        UpsertIntoCachedCollectionQuery message = mock(UpsertIntoCachedCollectionQuery.class);
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-        UpsertItem upsertItem = mock(UpsertItem.class);
-        when(upsertItem.getKey()).thenReturn("key");
-        when(upsertItem.getId()).thenReturn("id");
-        when(upsertItem.isActive()).thenReturn(false);
-        when(message.getUpsertItem()).thenReturn(upsertItem);
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
+        IObject upsertQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(upsertQuery);
+        when(specificKeyNameField.in(query)).thenReturn("key");
 
         IDatabaseTask upsertTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
@@ -226,25 +219,20 @@ public class CachedCollectionTest {
         when(IOC.resolve(keyTask)).thenReturn(upsertTask);
         doThrow(new TaskExecutionException("")).when(upsertTask).execute();
 
-        IKey keyItem = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertItem.class.toString())).thenReturn(keyItem);
-        when(IOC.resolve(keyItem, query)).thenReturn(upsertItem);
-
         try {
             collection.upsert(query);
         } catch (UpsertCacheItemException e) {
-            verify(message).setCollectionName(eq(collectionName));
-            verify(message).setUpsertItem(eq(upsertItem));
             verify(upsertTask).setConnection(eq(connection));
-            verify(upsertTask).prepare(eq(wrapped));
+            verify(upsertTask).prepare(upsertQuery);
             verify(upsertTask).execute();
-            verify(upsertItem, never()).getKey();
-            verify(upsertItem, times(1)).setIsActive(true);
-            verify(upsertItem, times(1)).setIsActive(false);
+            verify(specificKeyNameField, never()).in(eq(query));
+            verify(isActiveField, times(1)).out(eq(query), eq(true));
+            verify(isActiveField, times(1)).out(eq(query), eq(true));
+            verify(collectionNameField).out(eq(upsertQuery), eq(collectionName));
+            verify(documentField).out(eq(upsertQuery), eq(query));
             throw e;
         }
         fail();
-
     }
 
     @Test(expected = UpsertCacheItemException.class)
@@ -259,16 +247,11 @@ public class CachedCollectionTest {
 
         IObject query = mock(IObject.class);
 
-        UpsertIntoCachedCollectionQuery message = mock(UpsertIntoCachedCollectionQuery.class);
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-        UpsertItem upsertItem = mock(UpsertItem.class);
-        when(upsertItem.getKey()).thenReturn("key");
-        when(upsertItem.getId()).thenReturn("id");
-        when(message.getUpsertItem()).thenReturn(upsertItem);
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
+        IObject upsertQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(upsertQuery);
+        when(specificKeyNameField.in(query)).thenReturn("key");
 
         IDatabaseTask nestedTask = mock(IDatabaseTask.class);
         UpsertIntoCachedCollectionTask upsertTask = mock(UpsertIntoCachedCollectionTask.class);
@@ -279,50 +262,41 @@ public class CachedCollectionTest {
         when(IOC.resolve(keyIDBTask, UpsertIntoCachedCollectionTask.class.toString())).thenReturn(nestedTask);
         whenNew(UpsertIntoCachedCollectionTask.class).withArguments(nestedTask).thenReturn(upsertTask);
 
-        IKey keyItem = mock(IKey.class);
-        when(Keys.getOrAdd(UpsertItem.class.toString())).thenReturn(keyItem);
-        when(IOC.resolve(keyItem, query)).thenReturn(upsertItem);
-
         collection.upsert(query);
 
         verifyStatic();
         IOC.register(eq(keyTask), any(SingletonStrategy.class));
 
-        verify(message).setCollectionName(eq(collectionName));
-        verify(message).setUpsertItem(eq(upsertItem));
         verify(upsertTask).setConnection(eq(connection));
-        verify(upsertTask).prepare(eq(wrapped));
+        verify(upsertTask).prepare(eq(upsertQuery));
         verify(upsertTask).execute();
-        verify(upsertItem).getKey();
-        verify(upsertItem).setIsActive(true);
+        verify(specificKeyNameField).in(eq(query));
+        verify(isActiveField).out(eq(query), eq(true));
+        verify(collectionNameField).out(eq(upsertQuery), eq(collectionName));
+        verify(documentField).out(eq(upsertQuery), eq(query));
     }
 
     @Test
-    public void ShouldReadObject()
-        throws ResolutionException, TaskSetConnectionException, IllegalAccessException, ReadValueException,
-        ChangeValueException, TaskPrepareException, TaskExecutionException, GetCacheItemException {
+    public void ShouldReadObject() throws Exception {
 
-        GetObjectFromCachedCollectionQuery message = mock(GetObjectFromCachedCollectionQuery.class);
+        IObject readQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(readQuery);
 
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-
-        when(message.getKey()).thenReturn("key");
         IObject searchResult = mock(IObject.class);
-        when(message.getSearchResult()).thenReturn(Stream.of(searchResult));
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(GetObjectFromCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
 
         IDatabaseTask readTask = mock(IDatabaseTask.class);
         IKey keyTask = mock(IKey.class);
         when(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString())).thenReturn(keyTask);
         when(IOC.resolve(keyTask)).thenReturn(readTask);
 
+        when(searchResultField.in(readQuery)).thenReturn(Collections.singletonList(searchResult));
+
         List<IObject> items = collection.getItems("key");
 
         verify(readTask).setConnection(eq(connection));
-        verify(readTask).prepare(eq(wrapped));
+        verify(readTask).prepare(eq(readQuery));
         verify(readTask).execute();
         assertEquals(items.get(0), searchResult);
     }
@@ -336,17 +310,10 @@ public class CachedCollectionTest {
     @Test
     public void ShouldRegisterStrategyForGetItem_When_TaskFacadeIsNull() throws Exception {
 
-        GetObjectFromCachedCollectionQuery message = mock(GetObjectFromCachedCollectionQuery.class);
-
-        IObject wrapped = mock(IObject.class);
-        when(message.wrapped()).thenReturn(wrapped);
-
-        when(message.getKey()).thenReturn("key");
-        IObject searchResult = mock(IObject.class);
-        when(message.getSearchResult()).thenReturn(Stream.of(searchResult));
-        IKey keyMessage = mock(IKey.class);
-        when(Keys.getOrAdd(GetObjectFromCachedCollectionQuery.class.toString())).thenReturn(keyMessage);
-        when(IOC.resolve(keyMessage)).thenReturn(message);
+        IObject readQuery = mock(IObject.class);
+        IKey keyIObject = mock(IKey.class);
+        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(IOC.resolve(keyIObject)).thenReturn(readQuery);
 
         IDatabaseTask nestedTask = mock(IDatabaseTask.class);
         GetObjectFromCachedCollectionTask readTask = mock(GetObjectFromCachedCollectionTask.class);
@@ -357,13 +324,15 @@ public class CachedCollectionTest {
         when(IOC.resolve(keyIDBTask, GetObjectFromCachedCollectionTask.class.toString())).thenReturn(nestedTask);
         whenNew(GetObjectFromCachedCollectionTask.class).withArguments(nestedTask).thenReturn(readTask);
 
+        when(searchResultField.in(readQuery)).thenReturn(Collections.EMPTY_LIST);
+
         collection.getItems("key");
 
         verifyStatic();
         IOC.register(eq(keyTask), any(SingletonStrategy.class));
 
         verify(readTask).setConnection(eq(connection));
-        verify(readTask).prepare(eq(wrapped));
+        verify(readTask).prepare(readQuery);
         verify(readTask).execute();
     }
 }

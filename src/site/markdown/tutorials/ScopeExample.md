@@ -18,7 +18,7 @@ Because the data is internal, it's better to use a random [GUID](https://en.wiki
 
 ### Why you need scopes        
         
-Service locators provide the globally available API, so the scopes give ability to separate the data of service locators in different contexts. For example, you can define totally independent scope for testing environment, so your tests will take the IoC data totally independent on the IoC of the main application.
+Service locators provide the globally available API, and the scopes give ability to separate the data of service locators in different contexts. For example, you can define totally independent scope for testing environment, so your tests will take the IoC data totally independent on the IoC of the main application.
 
 The service locator should always take it's data from the _current scope_. But the current scope can be defined and changed externally.
   
@@ -108,30 +108,30 @@ So the system code can always run in system scope whatever scope it's called fro
 
 Let's create the simple IoC which takes care about scopes. The IoC will be simple, it just always returns the objects put into it by the key.
 
-    IKey key = new Key<MyClass>("my");
-    MyClass main = new MyClass("main");
-    MyIOC.register(key, main);
-    assertEquals(main, MyIOC.resolve(key));
+    IKey key = new Key("sample");
+    SampleClass main = new SampleClass("main");
+    SimpleIOC.register(key, main);
+    assertEquals(main, SimpleIOC.resolve(key));
     
 The IoC must return the parent scope object from the child scope.
 
     ScopeProvider.setCurrentScope(workerScope);
-    assertEquals(main, MyIOC.resolve(key));
+    assertEquals(main, SimpleIOC.resolve(key));
     
 But it should allow to override the object.
 
-    MyClass worker = new MyClass("worker");
-    MyIOC.register(key, worker);
-    assertEquals(worker, MyIOC.resolve(key));
+    SampleClass worker = new SampleClass("worker");
+    SimpleIOC.register(key, worker);
+    assertEquals(worker, SimpleIOC.resolve(key));
     
 Also it should return to the main scope object when the scope is switched back.
 
     ScopeProvider.setCurrentScope(systemScope);
-    assertEquals(main, MyIOC.resolve(key));
+    assertEquals(main, SimpleIOC.resolve(key));
     
 ### IoC storage
 
-IoC must have a storage, and keep this storage in the scope.
+IoC must have a storage, and keep this storage in the scope. The storage is a separate class.
 
 The storage can be based on a simple [Map](http://docs.oracle.com/javase/8/docs/api/java/util/Map.html).
 
@@ -145,7 +145,7 @@ So, to save the value, just put it to the map.
     
 However, the storage must do a recursive search: if the key is not found in the current scope, ask the parent scope.
 
-    private final MyRecursiveContainer<K, V> parent;
+    private final RecursiveContainer<K, V> parent;
     
     public V get(final K key) {
         V result = null;
@@ -158,7 +158,7 @@ However, the storage must do a recursive search: if the key is not found in the 
 
 The parent container is provided in the constructor.
 
-    public MyRecursiveContainer(final MyRecursiveContainer<K, V> parent) {
+    public RecursiveContainer(final RecursiveContainer<K, V> parent) {
         this.parent = parent;
     }
     
@@ -168,14 +168,14 @@ Our IoC needs a key to save the storage in the scope.
 
     STORAGE_KEY = new Key(java.util.UUID.randomUUID().toString());
     
-And it needs a code which guarantees the storage is correctly created in any new scope appeared in the system. Before adding a new storage to the scope we should ask the new scope for the parent storage to correctly link them.
+And it needs a code which guarantees the storage is correctly created in any new scope appeared in the system. Before adding a new storage to the scope we should ask the new scope for the parent storage (from the parent scope) to correctly link them.
  
     ScopeProvider.subscribeOnCreationNewScope(
             scope -> {
                 try {
-                    MyRecursiveContainer<IKey, Object> parentStorage = null;
+                    RecursiveContainer<IKey, Object> parentStorage = null;
                     try {
-                        parentStorage = (MyRecursiveContainer<IKey, Object>) scope.getValue(STORAGE_KEY);
+                        parentStorage = (RecursiveContainer<IKey, Object>) scope.getValue(STORAGE_KEY);
                     } catch (ScopeException e) {
                         // parent storage does not exists, create a new with null parent
                     }
@@ -188,31 +188,31 @@ And it needs a code which guarantees the storage is correctly created in any new
     
 Then to register an object in IoC we just take the storage from the current scope and put a value into it.
 
-    public static void register(final IKey key, final Object value) throws MyIOCException {
+    public static void register(final IKey key, final Object value) throws SimpleIOCException {
         try {
-            MyRecursiveContainer<IKey, Object> storage = (MyRecursiveContainer<IKey, Object>)
+            RecursiveContainer<IKey, Object> storage = (RecursiveContainer<IKey, Object>)
                     ScopeProvider.getCurrentScope().getValue(STORAGE_KEY);
             storage.put(key, value);
         } catch (Throwable e) {
-            throw new MyIOCException(e);
+            throw new SimpleIOCException(e);
         }
     }
     
 To resolve the key we take the storage from the current scope again and get the value. The recursive search is done by the storage.
 
-    public static <T> T resolve(final IKey<T> key) throws MyIOCException {
+    public static <T> T resolve(final IKey<T> key) throws SimpleIOCException {
         try {
-            MyRecursiveContainer<IKey, Object> storage = (MyRecursiveContainer<IKey, Object>)
+            RecursiveContainer<IKey, Object> storage = (RecursiveContainer<IKey, Object>)
                     ScopeProvider.getCurrentScope().getValue(STORAGE_KEY);
             return (T) storage.get(key);
         } catch (Throwable e) {
-            throw new MyIOCException(e);
+            throw new SimpleIOCException(e);
         }
     }
     
 ### IoC objects
 
-So, the scopes key-value storages with hierarchical structure which allows to search values from child to parent.
+So, the scopes are key-value storages with hierarchical structure which allows to search values from child to parent.
  
 But IoC internally is also the key-value storage which holds objects or strategies to resolve objects. And this storage should also be hierarchical with ability to search values from child to parent. The hierarchy of IoC storage follows the hierarchy of scopes.
 
@@ -224,5 +224,5 @@ So, the IoC as a service locator just takes the storage from the current scope a
 
 The sources of this tutorial:
 
-* [MyIOC implementation](http://smarttools.github.io/smartactors-core/xref/info/smart_tools/smartactors/core/examples/scope/package-frame.html)
+* [SimpleIOC implementation](http://smarttools.github.io/smartactors-core/xref/info/smart_tools/smartactors/core/examples/scope/package-frame.html)
 * [Tests](http://smarttools.github.io/smartactors-core/core.examples/xref-test/info/smart_tools/smartactors/core/examples/ScopeExample.html)

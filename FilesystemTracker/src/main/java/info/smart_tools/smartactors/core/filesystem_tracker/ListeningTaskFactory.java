@@ -1,8 +1,8 @@
 package info.smart_tools.smartactors.core.filesystem_tracker;
 
 import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.ipath.IPath;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -19,5 +19,5 @@ public interface ListeningTaskFactory {
      * @throws IOException if I/O error occurs during creation of a {@code Runnable}
      * @see ListeningTaskFactory
      */
-    Runnable createRunnable(File directory, IAction<File> handler) throws IOException;
+    Runnable createRunnable(IPath directory, IAction<IPath> handler) throws IOException;
 }

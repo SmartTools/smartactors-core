@@ -1,15 +1,15 @@
 package info.smart_tools.smartactors.core.cached_collection.task;
 
-import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteFromCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.delete.DeleteItem;
+import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
@@ -21,29 +21,41 @@ public class DeleteFromCachedCollectionTask implements IDatabaseTask {
 
     private IDatabaseTask updateTask;
 
+    private IField isActiveField;
+
     /**
      * @param updateTask Target update task
+     * @throws CreateCachedCollectionTaskException for create task error
      */
-    public DeleteFromCachedCollectionTask(final IDatabaseTask updateTask) {
+    public DeleteFromCachedCollectionTask(final IDatabaseTask updateTask) throws CreateCachedCollectionTaskException {
         this.updateTask = updateTask;
+        try {
+            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document/isActive");
+        } catch (ResolutionException e) {
+            throw new CreateCachedCollectionTaskException("Can't create GetObjectFromCachedCollectionTask.", e);
+        }
     }
 
     /**
      * Prepares database query
      * @param query query object
+     *              <pre>
+     *              {
+     *                  "document" : {CACHED ITEM},
+     *                  "collectionName" : "COLLECTION_NAME"
+     *              }
+     *              </pre>
+     * The same query would be passed to the nested task's prepare method,
+     * but isActive field in document would be set to false.
      * @throws TaskPrepareException if error occurs in process of query preparing
      */
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-            DeleteFromCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionQuery.class.toString()), query);
-            DeleteItem deleteItem = message.getDeleteItem();
-            deleteItem.setIsActive(false);
-            updateTask.prepare(message.wrapped());
-        } catch (ResolutionException e) {
-            throw new TaskPrepareException("Can't resolve message during prepare delete from cached collection", e);
-        } catch (ReadValueException | ChangeValueException e) {
+            isActiveField.out(query, false);
+            updateTask.prepare(query);
+        } catch (InvalidArgumentException | ChangeValueException e) {
             throw new TaskPrepareException("Can't prepare query for delete from cached collection", e);
         }
 

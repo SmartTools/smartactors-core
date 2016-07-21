@@ -1,0 +1,56 @@
+{
+  "info.smart_tools.smartactors.core.wrapper_generator.IIncorrectWrapperWithoutReadValueException": {
+    "in_getValue": "message/Value"
+  },
+  "info.smart_tools.smartactors.core.wrapper_generator.IIncorrectWrapperWithoutChangeValueException": {
+    "out_getValue": "response/Value"
+  },
+  "info.smart_tools.smartactors.core.wrapper_generator.IInnerWrapper": {
+    "in_getDoubleValue": "message/DoubleValue",
+    "out_setDoubleValue": "response/DoubleValue"
+  },
+  "info.smart_tools.smartactors.core.wrapper_generator.IWrapper": {
+    "in_getIntValue": "message/IntValue",
+    "out_setIntValue": "response/IntValue",
+    "in_getTestClassValue": "message/TestClassValue",
+    "out_setTestClassValue": "response/TestClassValue",
+    "out_getListOfTestClasses": "response/ListOfTestClasses",
+    "out_WrappedIObject": "response/WrappedIObject",
+    "in_WrappedIObject": [{
+      "name": "ConvertToWrapper",
+      "args": ["message/IObject", "info.smart_tools.smartactors.core.wrapper_generator.IInnerWrapper"]
+    }],
+    "in_getListOfTestClasses": [{
+      "args": ["message/TestClass"]
+    }, {
+      "name": "addToList",
+      "args": ["context/ListOfTestClasses", "local/value"]
+    }, {
+      "args": ["message/OtherTestClass"]
+    }, {
+      "name": "addToList",
+      "args": ["context/ListOfTestClasses", "local/value"]
+    }, {
+      "args": ["context/ListOfTestClasses"]
+    }],
+    "out_transform": [
+      [{
+        "name": "ConvertToString",
+        "args": ["local/value"]
+      }, {
+        "name": "joinStrings",
+        "args": ["local/value", "const/CONST"]
+      }, {
+        "name": "target",
+        "args": ["response/ModifiedString1", "local/value"]
+      }],
+      [{
+        "name": "ConvertToString",
+        "args": ["local/value"]
+      }, {
+        "name": "target",
+        "args": ["response/ModifiedString2", "local/value"]
+      }]
+    ]
+  }
+}

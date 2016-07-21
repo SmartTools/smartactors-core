@@ -11,7 +11,7 @@ public interface IStorageConnection {
      *
      * @param preparedQuery the query prepared for compiling
      * @return the query ready to be executed
-     * @throws StorageException
+     * @throws StorageException Throw whe query can't be compiled for one of reason
      */
     ICompiledQuery compileQuery(IPreparedQuery preparedQuery) throws StorageException;
 
@@ -19,28 +19,28 @@ public interface IStorageConnection {
      * Check if the connection is valid.
      *
      * @return {@code true} if the connection is valid
-     * @throws StorageException
+     * @throws StorageException Throw whe query can't be compiled for one of reason
      */
     boolean validate() throws StorageException;
 
     /**
      * Close the connection
      *
-     * @throws StorageException
+     * @throws StorageException Throw when connection can't be closed
      */
     void close() throws StorageException;
 
     /**
      * Commit the current transaction.
      *
-     * @throws StorageException
+     * @throws StorageException Throw when connection have internal errors
      */
     void commit() throws StorageException;
 
     /**
      * Rollback the current  transaction.
      *
-     * @throws StorageException
+     * @throws StorageException Throw when rollback is damaged or changes in database can't be applied with rollback operation
      */
     void rollback() throws StorageException;
 }

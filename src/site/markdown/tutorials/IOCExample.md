@@ -16,21 +16,17 @@ There are a couple of predefined strategies.
 First of all, you need a key to register your strategy and resolve objects.
 The simplest way is to use the `new` operator.
 
-    IKey<MyClass> myNewKey = new Key<>("myKey");
+    IKey newKey = new Key("sample");
     
-If your strategy requires more type validation of the resolving objects, you can pass the `Class` to the key.
-
-    IKey<MyClass> myTypedKey = new Key<>(MyClass.class, "myKey");
-        
 However, the recommended way to get the key is to resolve it with IOC.
 
-    IKey<MyClass> myResolveKey = IOC.resolve(IOC.getKeyForKeyStorage(), "myKey");
+    IKey resolveKey = IOC.resolve(IOC.getKeyForKeyStorage(), "sample");
 
 `IOC.getKeyForKeyStorage()` produces the key to get the key.
     
 This magic is hidden in `Keys` class, so it's necessary just to call `Keys.getOrAdd()`.
 
-    IKey<MyClass> myKey = Keys.getOrAdd("myKey");
+    IKey key = Keys.getOrAdd("sample");
     
 ## Initialization
 
@@ -43,7 +39,13 @@ So this initialization code is required (usually it's already called by the serv
     ScopeProvider.setCurrentScope(scope);
     scope.setValue(IOC.getIocKey(), new StrategyContainer());
     IOC.register(IOC.getKeyForKeyStorage(), new ResolveByNameIocStrategy(
-            (a) -> new Key((String) a[0]))
+            (a) -> {
+                try {
+                    return new Key((String) a[0]);
+                } catch (InvalidArgumentException e) {
+                    throw new RuntimeException(e);
+                }
+            })
     );
 
 The [`ResolveByNameIocStrategy`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/resolve_by_name_ioc_with_lambda_strategy/ResolveByNameIocStrategy.html) it responsive to create Keys by the name as it was demonstrated above.
@@ -53,31 +55,31 @@ The [`ResolveByNameIocStrategy`](http://smarttools.github.io/smartactors-core/ap
 When you have a key, you can register the resolving strategy.
 For example, [`SingletonStrategy`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/singleton_strategy/SingletonStrategy.html):
 
-    IKey<MyClass> key = Keys.getOrAdd("singleton");
-    MyClass myObject = new MyClass("singleton");
-    IOC.register(key, new SingletonStrategy(myObject));
+    IKey key = Keys.getOrAdd("singleton");
+    SampleClass sampleObject = new SampleClass("singleton");
+    IOC.register(key, new SingletonStrategy(sampleObject));
     
 This strategy always returns the same object instance, given to it's constructor.
 
-    MyClass resolveObject1 = IOC.resolve(key);
-    MyClass resolveObject2 = IOC.resolve(key);
+    SampleClass resolveObject1 = IOC.resolve(key);
+    SampleClass resolveObject2 = IOC.resolve(key);
     
 Both these variables point to the same object.
 
 ## New instance strategy
 
 The [`CreateNewInstanceStrategy`](http://smarttools.github.io/smartactors-core/apidocs/info/smart_tools/smartactors/core/create_new_instance_strategy/CreateNewInstanceStrategy.html) creates a new object for each call to `resolve()`.
-You should define a [lambda expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html) to create your objects and pass it to the strategy constructor.
+You should define a [lambda expression](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html) to create your objects and pass it to the strategy constructor.
  
-    IKey<MyClass> key = Keys.getOrAdd("new");
+    IKey key = Keys.getOrAdd("new");
     IOC.register(key, new CreateNewInstanceStrategy(
-            (args) -> new MyClass((String) args[0])));
+            (args) -> new SampleClass((String) args[0])));
             
 Then you can resolve instances of your class.
 
-    MyClass resolveObject1 = IOC.resolve(key, "id1");
-    MyClass resolveObject2 = IOC.resolve(key, "id1");
-    MyClass resolveObject3 = IOC.resolve(key, "id3");
+    SampleClass resolveObject1 = IOC.resolve(key, "id1");
+    SampleClass resolveObject2 = IOC.resolve(key, "id1");
+    SampleClass resolveObject3 = IOC.resolve(key, "id3");
     
 All returned objects are different objects. 
 However, these objects can be equal (but not the same) if you pass the same parameters to the `resolve()` method (string id in this example).

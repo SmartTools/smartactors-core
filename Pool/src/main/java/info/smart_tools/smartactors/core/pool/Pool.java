@@ -41,6 +41,7 @@ public class Pool implements IPool {
     /**
      * Get a value by the key from the scope.
      * @throws PoolTakeException if error was occurred
+     * @return Object from pool
      */
     public Object take() throws PoolTakeException {
         if (freeItemsCounter.getAndDecrement() <= 0) {

@@ -1,13 +1,13 @@
 package info.smart_tools.smartactors.core.plugin_loader_from_jar;
 
 import info.smart_tools.smartactors.core.iaction.IAction;
+import info.smart_tools.smartactors.core.ipath.IPath;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iplugin.IPlugin;
 import info.smart_tools.smartactors.core.iplugin_loader.IPluginLoader;
 import info.smart_tools.smartactors.core.iplugin_loader.exception.PluginLoaderException;
 import info.smart_tools.smartactors.core.iplugin_loader_visitor.IPluginLoaderVisitor;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import java.util.jar.JarFile;
  * given parameters.
  * </pre>
  */
-public class PluginLoader implements IPluginLoader<Collection<File>> {
+public class PluginLoader implements IPluginLoader<Collection<IPath>> {
 
     private static final String CLASS_EXTENSION = ".class";
 
@@ -60,11 +60,11 @@ public class PluginLoader implements IPluginLoader<Collection<File>> {
     }
 
     @Override
-    public void loadPlugin(final Collection<File> files)
+    public void loadPlugin(final Collection<IPath> files)
             throws PluginLoaderException {
         try {
-            for (File file : files) {
-                URL url = new URL("jar:file:" + file.getAbsolutePath() + "!/");
+            for (IPath file : files) {
+                URL url = new URL("jar:file:" + file.getPath() + "!/");
                 this.classLoader.addUrl(url);
             }
         } catch (Throwable e) {
@@ -73,9 +73,9 @@ public class PluginLoader implements IPluginLoader<Collection<File>> {
 
         JarFile jarFile = null;
         String pathToJar = null;
-        for (File file : files) {
+        for (IPath file : files) {
             try {
-                pathToJar = file.getAbsolutePath();
+                pathToJar = file.getPath();
                 jarFile = new JarFile(pathToJar);
                 Enumeration<JarEntry> iterator = jarFile.entries();
                 while (iterator.hasMoreElements()) {

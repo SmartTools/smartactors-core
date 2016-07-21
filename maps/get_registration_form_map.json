@@ -1,0 +1,40 @@
+{
+  "get_registration_form_map": [
+    {
+      "actor": "createSessionActor",
+      "handler": "getSession"
+    },
+    {
+      "actor": "authenticationActor",
+      "handler": "authenticateSession",
+      "wrapper": {
+        "in_getRequestUserAgent": {
+          "rules": [
+            {
+              "name": "getHeaderFromRequest",
+              "args": [
+                "context/User-Agent"
+              ]
+            }
+          ]
+        },
+        "in_getSessionUserAgent": "message/session/authInfo/userAgent"
+      }
+    },
+    {
+      "actor": "asyncOpsActor",
+      "handler": "createOperation",
+      "wrapper": {
+        "in_getIObject": "message"
+      }
+    },
+    {
+      "actor": "getFormActor",
+      "handler": "getForm",
+      "wrapper": {
+        "in_getFormKey": "message/formKey",
+        "out_setForm": "response/form"
+      }
+    }
+  ]
+}

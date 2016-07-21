@@ -1,12 +1,13 @@
 package info.smart_tools.smartactors.core.cached_collection.task;
 
-import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertIntoCachedCollectionQuery;
-import info.smart_tools.smartactors.core.cached_collection.wrapper.upsert.UpsertItem;
+import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
@@ -15,6 +16,7 @@ import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Makes add or update operation for cached collection
@@ -23,32 +25,45 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
 
     private IDatabaseTask upsertTask;
 
+    private IField startDateTimeField;
+    //TODO:: this format should be setted for whole project?
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     /**
      * @param upsertTask Target update task
+     * @throws CreateCachedCollectionTaskException for create task error
      */
-    public UpsertIntoCachedCollectionTask(final IDatabaseTask upsertTask) {
+    public UpsertIntoCachedCollectionTask(final IDatabaseTask upsertTask) throws CreateCachedCollectionTaskException {
         this.upsertTask = upsertTask;
+        try {
+            this.startDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document/startDateTime");
+        } catch (ResolutionException e) {
+            throw new CreateCachedCollectionTaskException("Can't create UpsertIntoCachedCollectionTask.", e);
+        }
     }
 
     /**
      * Prepares database query
-     *
      * @param query query object
+     *              <pre>
+     *              {
+     *                  "document" : {CACHED ITEM},
+     *                  "collectionName" : "COLLECTION_NAME"
+     *              }
+     *              </pre>
+     * The same query would be passed to the nested task's prepare method,
+     * but startDateTime field in document would be set to the current time.
      * @throws TaskPrepareException if error occurs in process of query preparing
      */
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
 
         try {
-            UpsertIntoCachedCollectionQuery message = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionQuery.class.toString()), query);
-            UpsertItem upsertItem = message.getUpsertItem();
-            if (upsertItem.getStartDateTime() == null) {
-                upsertItem.setStartDateTime(LocalDateTime.now());
+            if (startDateTimeField.in(query) == null) {
+                startDateTimeField.out(query, LocalDateTime.now().format(FORMATTER));
             }
-            upsertTask.prepare(message.wrapped());
-        } catch (ResolutionException e) {
-            throw new TaskPrepareException("Can't resolve objects during prepare upsert into cached collection", e);
-        } catch (ReadValueException | ChangeValueException e) {
+            upsertTask.prepare(query);
+        } catch (InvalidArgumentException | ReadValueException | ChangeValueException e) {
             throw new TaskPrepareException("Can't prepare query for upsert into cached collection", e);
         }
     }
