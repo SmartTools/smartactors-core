@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Wrapper for collection name string
  */
-public class CollectionName {
+public class CollectionName implements ICollectionName {
 
     private static final Pattern VALIDATION_PATTERN = Pattern.compile("[a-zA-Z_][0-9a-zA-Z_]*");
 
@@ -20,6 +20,7 @@ public class CollectionName {
     /**
      * @return Name of CollectionName object
      */
+    @Override
     public String toString() {
         return this.name;
     }

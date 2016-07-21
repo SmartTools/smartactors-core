@@ -1,9 +1,9 @@
 package info.smart_tools.smartactors.core.sql_commons;
 
 import info.smart_tools.smartactors.core.db_storage.exceptions.StorageException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery;
-import info.smart_tools.smartactors.core.db_storage.interfaces.PreparedQuery;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.interfaces.ICompiledQuery;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IPreparedQuery;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,9 +11,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Implementation of {@link StorageConnection} wrapping the {@link Connection}.
+ * Implementation of {@link IStorageConnection} wrapping the {@link Connection}.
  */
-public class JDBCConnection implements StorageConnection {
+public class JDBCConnection implements IStorageConnection {
     protected Connection connection;
     protected JDBCConnectionOptions options;
 
@@ -26,22 +26,23 @@ public class JDBCConnection implements StorageConnection {
     }
 
     @Override
-    public CompiledQuery compileQuery(final PreparedQuery preparedQuery) throws StorageException {
+    public ICompiledQuery compileQuery(final IPreparedQuery preparedQuery) throws StorageException {
         try {
             return new JDBCCompiledQuery(((QueryStatement) preparedQuery).compile(connection));
         } catch (SQLException e) {
             throw new StorageException(
                     String.format("Error compiling query statement \"%s\": ",
-                            ((QueryStatement) preparedQuery).bodyWriter.toString()),
+                            ((QueryStatement)preparedQuery).bodyWriter.toString()),
                     e);
+        } catch (NullPointerException e) {
+            throw new StorageException("Incoming prepared query is null!", e);
         }
     }
 
     @Override
     public boolean validate() throws StorageException {
         try {
-            return !connection.isClosed() &&
-                    this.connection.isValid(Optional.ofNullable(options.getValidationTimeout()).orElse(0));
+            return !connection.isClosed() && this.connection.isValid(Optional.ofNullable(options.getValidationTimeout()).orElse(0));
         } catch (SQLException e) {
             throw new StorageException("Error validating connection: ", e);
         }

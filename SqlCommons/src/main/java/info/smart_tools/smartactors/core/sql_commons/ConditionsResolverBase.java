@@ -5,7 +5,7 @@ import info.smart_tools.smartactors.core.db_storage.exceptions.QueryBuildExcepti
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ConditionsResolverBase implements QueryConditionWriterResolver {
+public abstract class ConditionsResolverBase implements QueryConditionResolver {
     private Map<String, QueryConditionWriter> operatorWriters = new HashMap<>();
     protected String defaultCompositionOperator = "$and";
 
@@ -33,12 +33,12 @@ public abstract class ConditionsResolverBase implements QueryConditionWriterReso
         throws QueryBuildException {
         final FieldPath path = this.resolveFieldName(fieldName);
 
-        return (query, resolver, contextFieldName, queryParameter, setters) -> {
+        return (query, resolver, contextFieldName, queryParameter, parametersOrder) -> {
             if (contextFieldName != null) {
                 throw new QueryBuildException("Field names not allowed inside of field context.");
             }
 
-            this.resolve(null).write(query, resolver, path, queryParameter, setters);
+            this.resolve(null).write(query, resolver, path, queryParameter, parametersOrder);
         };
     }
 

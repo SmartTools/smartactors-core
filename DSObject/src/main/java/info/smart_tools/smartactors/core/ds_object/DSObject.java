@@ -68,6 +68,7 @@ public class DSObject implements IObject {
     public DSObject(final String body)
             throws InvalidArgumentException {
         try {
+            //TODO: refactor using FieldName -> IFieldName
             this.body = OBJECT_MAPPER.reader(new TypeReference<Map<FieldName, Object>>() { }).readValue(body);
         } catch (Throwable e) {
             throw new InvalidArgumentException(e);
@@ -123,10 +124,7 @@ public class DSObject implements IObject {
         return new DSObjectIterator();
     }
 
-    /**
-     * Iterator over {@code body}
-     */
-    private final class DSObjectIterator implements Iterator<Map.Entry<IFieldName, Object>> {
+    private class DSObjectIterator implements Iterator<Map.Entry<IFieldName, Object>> {
 
         private Iterator<Map.Entry<IFieldName, Object>> iterator;
 
@@ -143,5 +141,10 @@ public class DSObject implements IObject {
         public Map.Entry<IFieldName, Object> next() {
             return this.iterator.next();
         }
-    } 
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * body.hashCode();
+    }
 }

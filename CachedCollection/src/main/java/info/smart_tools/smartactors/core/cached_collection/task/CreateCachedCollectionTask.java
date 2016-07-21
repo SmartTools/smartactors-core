@@ -1,10 +1,9 @@
 package info.smart_tools.smartactors.core.cached_collection.task;
 
 import info.smart_tools.smartactors.core.cached_collection.exception.CreateCachedCollectionTaskException;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -22,6 +21,7 @@ import java.util.Map;
  * Creates cached collection with defined collection name and key field
  */
 public class CreateCachedCollectionTask implements IDatabaseTask {
+    private IStorageConnection connection;
 
     private static final String ORDERED_INDEX = "ordered";
     private static final String DATE_TIME_INDEX = "datetime";
@@ -71,8 +71,14 @@ public class CreateCachedCollectionTask implements IDatabaseTask {
     }
 
     @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
+    public void setConnection(final IStorageConnection connection) {
+        this.connection = connection;
         createCollectionTask.setConnection(connection);
+    }
+
+    @Override
+    public IStorageConnection getConnection() {
+        return connection;
     }
 
     /**

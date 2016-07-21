@@ -1,9 +1,8 @@
 package info.smart_tools.smartactors.core.async_operation_collection.task;
 
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
 
@@ -11,7 +10,7 @@ import info.smart_tools.smartactors.core.itask.exception.TaskExecutionException;
  * Task-facade for delete task for async operations collection
  */
 public class DeleteAsyncOperationTask implements IDatabaseTask {
-
+    private IStorageConnection connection;
     private IDatabaseTask deleteTask;
 
     /**
@@ -28,8 +27,14 @@ public class DeleteAsyncOperationTask implements IDatabaseTask {
     }
 
     @Override
-    public void setConnection(final StorageConnection connection) throws TaskSetConnectionException {
+    public void setConnection(final IStorageConnection connection) {
+        this.connection = connection;
         deleteTask.setConnection(connection);
+    }
+
+    @Override
+    public IStorageConnection getConnection() {
+        return connection;
     }
 
     @Override

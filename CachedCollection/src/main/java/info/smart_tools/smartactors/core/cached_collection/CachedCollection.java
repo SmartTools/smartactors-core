@@ -7,11 +7,10 @@ import info.smart_tools.smartactors.core.cached_collection.exception.UpsertCache
 import info.smart_tools.smartactors.core.cached_collection.task.DeleteFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.GetObjectFromCachedCollectionTask;
 import info.smart_tools.smartactors.core.cached_collection.task.UpsertIntoCachedCollectionTask;
-import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
+import info.smart_tools.smartactors.core.db_storage.interfaces.IStorageConnection;
 import info.smart_tools.smartactors.core.db_storage.utils.CollectionName;
-import info.smart_tools.smartactors.core.idatabase_task.IDatabaseTask;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.core.idatabase_task.exception.TaskSetConnectionException;
+import info.smart_tools.smartactors.core.db_tasks.IDatabaseTask;
+import info.smart_tools.smartactors.core.db_tasks.exception.TaskPrepareException;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
@@ -121,7 +120,7 @@ public class CachedCollection implements ICachedCollection {
                     collectionNameField.out(getItemQuery, collectionName);
                     keyNameField.out(getItemQuery, keyName);
                     keyValueField.out(getItemQuery, key);
-                    getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+                    getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(IStorageConnection.class.toString()), poolGuard.getObject()));
                     getItemTask.prepare(getItemQuery);
                     getItemTask.execute();
                     items = searchResultField.in(getItemQuery);
@@ -136,8 +135,6 @@ public class CachedCollection implements ICachedCollection {
             }
 
             return items;
-        } catch (TaskSetConnectionException e) {
-            throw new GetCacheItemException("Can't set connection to read task.", e);
         } catch (TaskPrepareException e) {
             throw new GetCacheItemException("Error during preparing read task.", e);
         } catch (TaskExecutionException e) {
@@ -177,14 +174,12 @@ public class CachedCollection implements ICachedCollection {
                 IObject deleteQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
                 collectionNameField.out(deleteQuery, collectionName);
                 documentField.out(deleteQuery, message);
-                StorageConnection connection = IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject());
+                IStorageConnection connection = IOC.resolve(Keys.getOrAdd(IStorageConnection.class.toString()), poolGuard.getObject());
                 deleteTask.setConnection(connection);
                 deleteTask.prepare(deleteQuery);
                 deleteTask.execute();
             } catch (PoolGuardException e) {
                 throw new DeleteCacheItemException("Can't get connection from pool.", e);
-            } catch (TaskSetConnectionException e) {
-                throw new DeleteCacheItemException("Can't set connection to delete task.", e);
             } catch (TaskPrepareException e) {
                 throw new DeleteCacheItemException("Error during preparing delete task.", e);
             } catch (TaskExecutionException e) {
@@ -244,7 +239,7 @@ public class CachedCollection implements ICachedCollection {
                 collectionNameField.out(upsertQuery, collectionName);
                 documentField.out(upsertQuery, message);
 
-                upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+                upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(IStorageConnection.class.toString()), poolGuard.getObject()));
                 upsertTask.prepare(upsertQuery);
                 try {
                     upsertTask.execute();
@@ -254,8 +249,6 @@ public class CachedCollection implements ICachedCollection {
                 }
             } catch (PoolGuardException e) {
                 throw new UpsertCacheItemException("Can't get connection from pool.", e);
-            } catch (TaskSetConnectionException e) {
-                throw new UpsertCacheItemException("Can't set connection to upsert task.", e);
             } catch (TaskPrepareException e) {
                 throw new UpsertCacheItemException("Error during preparing upsert task.", e);
             } catch (InvalidArgumentException | RegistrationException e) {
