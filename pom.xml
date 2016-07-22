@@ -140,6 +140,7 @@
         <module>PluginGetAsyncOperation</module>
         <module>PluginIObjectSimpleImpl</module>
         <module>ResolveByTypeStrategy</module>
+        <module>ResolveStandardTypesStrategies</module>
     </modules>
 
     <build>
