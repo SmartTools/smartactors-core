@@ -1,6 +1,5 @@
 package info.smart_tools.smartactors.core.exception_handling_receivers;
 
-import info.smart_tools.smartactors.core.iaction.IAction;
 import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
@@ -8,6 +7,7 @@ import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.iresource_source.exceptions.OutOfResourceException;
 import info.smart_tools.smartactors.core.message_processing.IMessageProcessor;
+import info.smart_tools.smartactors.core.message_processing.exceptions.AsynchronousOperationException;
 import info.smart_tools.smartactors.core.message_processing.exceptions.MessageReceiveException;
 
 /**
@@ -26,7 +26,7 @@ public class RetryingToTakeResourceExceptionHandler extends ExceptionHandlingRec
     }
 
     @Override
-    public void receive(final IMessageProcessor processor, final IObject arguments, final IAction<Throwable> onEnd)
+    public void receive(final IMessageProcessor processor)
             throws MessageReceiveException {
         try {
             IObject context = processor.getContext();
@@ -34,14 +34,16 @@ public class RetryingToTakeResourceExceptionHandler extends ExceptionHandlingRec
 
             processor.getSequence().goTo(getCauseLevel(context), getCauseStep(context));
 
+            processor.pauseProcess();
+
             exception.getSource().onAvailable(() -> {
                 try {
-                    onEnd.execute(null);
-                } catch (InvalidArgumentException e) {
+                    processor.continueProcess(null);
+                } catch (AsynchronousOperationException e) {
                     throw new ActionExecuteException(e);
                 }
             });
-        } catch (ReadValueException | InvalidArgumentException e) {
+        } catch (ReadValueException | InvalidArgumentException | AsynchronousOperationException e) {
             throw new MessageReceiveException(e);
         }
     }

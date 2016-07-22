@@ -253,4 +253,13 @@ public class WDSObjectFieldTest {
         fail();
     }
 
+    @Test (expected = ReadValueException.class)
+    public void checkNotImplementedInMethodException()
+            throws Exception {
+        IObject rule = mock(IObject.class);
+        when(rule.getValue(new FieldName("name"))).thenReturn("wds_getter_strategy");
+        IField field = new WDSObjectField(new ArrayList<IObject>(){{add(rule);}});
+        field.in(null, Object.class);
+        fail();
+    }
 }

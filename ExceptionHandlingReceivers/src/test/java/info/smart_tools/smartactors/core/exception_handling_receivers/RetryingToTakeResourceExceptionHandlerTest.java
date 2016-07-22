@@ -9,6 +9,7 @@ import info.smart_tools.smartactors.core.iresource_source.IResourceSource;
 import info.smart_tools.smartactors.core.iresource_source.exceptions.OutOfResourceException;
 import info.smart_tools.smartactors.core.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
+import info.smart_tools.smartactors.core.message_processing.exceptions.AsynchronousOperationException;
 import info.smart_tools.smartactors.core.message_processing.exceptions.MessageReceiveException;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class RetryingToTakeResourceExceptionHandlerTest extends ExceptionHandlin
     @Test
     public void Should_enqueueACallbackToResourceSource()
             throws Exception {
-        InvalidArgumentException invalidArgumentException = mock(InvalidArgumentException.class);
+        AsynchronousOperationException asynchronousOperationException = mock(AsynchronousOperationException.class);
 
         when(messageProcessorMock.getSequence()).thenReturn(sequenceMock);
 
@@ -55,25 +56,22 @@ public class RetryingToTakeResourceExceptionHandlerTest extends ExceptionHandlin
 
         IMessageReceiver receiver = new RetryingToTakeResourceExceptionHandler();
 
-        receiver.receive(messageProcessorMock, mock(IObject.class), callbackMock);
+        receiver.receive(messageProcessorMock);
 
         verify(sequenceMock).goTo(eq(135), eq(123));
         verify(resourceSourceMock).onAvailable(callbackCaptor.capture());
 
-        verifyNoMoreInteractions(callbackMock);
-        reset(callbackMock);
-
         callbackCaptor.getValue().execute();
-        verify(callbackMock).execute(null);
+        verify(messageProcessorMock).continueProcess(null);
 
-        reset(callbackMock);
-        doThrow(invalidArgumentException).when(callbackMock).execute(null);
+        reset(messageProcessorMock);
+        doThrow(asynchronousOperationException).when(messageProcessorMock).continueProcess(null);
 
         try {
             callbackCaptor.getValue().execute();
             fail();
         } catch (ActionExecuteException e) {
-            assertSame(invalidArgumentException, e.getCause());
+            assertSame(asynchronousOperationException, e.getCause());
         }
     }
 
@@ -86,7 +84,7 @@ public class RetryingToTakeResourceExceptionHandlerTest extends ExceptionHandlin
         IMessageReceiver receiver = new RetryingToTakeResourceExceptionHandler();
 
         try {
-            receiver.receive(messageProcessorMock, mock(IObject.class), callbackMock);
+            receiver.receive(messageProcessorMock);
             fail();
         } catch (MessageReceiveException e) {
             assertSame(readValueException, e.getCause());

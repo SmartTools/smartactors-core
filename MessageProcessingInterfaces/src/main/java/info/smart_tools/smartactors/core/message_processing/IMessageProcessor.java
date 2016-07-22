@@ -3,6 +3,8 @@ package info.smart_tools.smartactors.core.message_processing;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.message_processing.exceptions.AsynchronousOperationException;
 
 /**
  * Interface for a object responding for processing of a single message.
@@ -40,6 +42,26 @@ public interface IMessageProcessor {
     IMessageProcessingSequence getSequence();
 
     /**
+     * Returns the message environment object. The environment object should contain at least the following fields:
+     * - "message" - the message itself (as instance of {@link IObject})
+     * - "context" - the {@link IObject} containing non-serializable objects related to processing of the message
+     * - "response" - the {@link IObject} containing fields that will be sent as a response to the processed message
+     * - "sequence" - the {@link IMessageProcessingSequence} instance associated with the message
+     * - "arguments" - the arguments {@link IObject} passed from {@link IReceiverChain}
+     *
+     * @return the environment object
+     */
+    IObject getEnvironment();
+
+    /**
+     * Set a global configuration object to use for processing of next message.
+     *
+     * @param config    the configuration object
+     * @throws InvalidArgumentException if {@code config} is {@code null}
+     */
+    void setConfig(IObject config) throws InvalidArgumentException;
+
+    /**
      * Start processing new message using this instance of {@link IMessageProcessor}.
      *
      * @param message    the message to process
@@ -47,7 +69,28 @@ public interface IMessageProcessor {
      * @throws InvalidArgumentException if message is {@code null}
      * @throws InvalidArgumentException if context is {@code null}
      * @throws ResolutionException if fails to resolve any dependency
+     * @throws ChangeValueException if modification of internal environment object fails
      */
     void process(IObject message, IObject context)
-            throws InvalidArgumentException, ResolutionException;
+            throws InvalidArgumentException, ResolutionException, ChangeValueException;
+
+    /**
+     * Notify this message processor that currently called message receiver started a asynchronous operation and the
+     * processor should not call any following receivers until it is completed.
+     *
+     * @throws AsynchronousOperationException if called outside of {@link IMessageReceiver#receive} call after completion
+     *                                             of all asynchronous operations
+     */
+    void pauseProcess() throws AsynchronousOperationException;
+
+    /**
+     * Notify this message processor that a asynchronous operation (on start of which the message processor was notified
+     * by call of {@link #pauseProcess()}) is completed.
+     *
+     * @param e    the exception occurred during asynchronous operation or {@code null} if operation completed successful
+     * @throws AsynchronousOperationException if all asynchronous operations are already completed i.e. number of
+     *                                             calls to #continueProcess is greater than number of calls to {@link
+     *                                             #pauseProcess()} since start of execution of last receiver
+     */
+    void continueProcess(Throwable e) throws AsynchronousOperationException;
 }

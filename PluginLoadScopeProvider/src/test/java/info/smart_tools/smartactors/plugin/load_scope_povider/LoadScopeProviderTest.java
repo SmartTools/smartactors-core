@@ -1,7 +1,6 @@
 package info.smart_tools.smartactors.plugin.load_scope_povider;
 
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
-import info.smart_tools.smartactors.core.iaction.IAction;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;

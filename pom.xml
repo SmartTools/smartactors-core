@@ -55,6 +55,11 @@
         <module>ITask</module>
         <module>DataBaseStorage</module>
         <module>SqlCommons</module>
+        <module>IAsyncService</module>
+        <module>EndpointHandler</module>
+        <module>NettyServer</module>
+        <module>TcpServer</module>
+        <module>HttpServer</module>
         <!-- database tasks modules -->
         <module>IDatabaseTask</module>
         <module>DBCreateCollectionTask</module>
@@ -125,18 +130,53 @@
         <module>ToWrapperConverterStrategy</module>
         <module>IObjectWrapper</module>
         <module>CreateUserActor</module>
+        <module>HttpEndpoint</module>
+        <module>IMessageMapper</module>
+        <module>IDeserializeStrategy</module>
+        <module>EndpointChannelInboundHandler</module>
+        <module>NettyClient</module>
+        <module>IClient</module>
+        <module>HttpClient</module>
+        <module>CompletableNettyFuture</module>
+        <module>DeserializeStrategyPostJson</module>
+        <module>IField</module>
+        <module>Field</module>
+        <module>IEnvironmentHandler</module>
+        <module>EnvironmentHandler</module>
+        <module>WDSObject</module>
+        <module>FieldName</module>
+        <module>IFieldName</module>
+        <module>MessageToBytesMapper</module>
+        <module>IResponseSender</module>
+        <module>HttpResponseSender</module>
+        <module>ResponseSenderActor</module>
+        <module>IResponse</module>
+        <module>IResponseContentStrategy</module>
+        <module>Response</module>
+        <module>ResponseContentJsonStrategy</module>
+        <module>IResponseStatusExtractor</module>
+        <module>IChannelHandler</module>
+        <module>ICookiesSetter</module>
+        <module>IHeadersExtractor</module>
+        <module>ChannelHandlerNetty</module>
         <module>PluginGetFormActor</module>
         <module>GetCookieFromRequestRule</module>
         <module>GetHeaderFromRequestRule</module>
         <module>CheckUserIsNewActor</module>
         <module>ApplyFunctionToArgumentsStrategy</module>
-        <module>WDSObject</module>
-        <module>FieldName</module>
-        <module>IFieldName</module>
+        <module>ReceiverGenerator</module>
+        <module>ActorReceiver</module>
+        <module>HandlerRoutingReceiver</module>
+        <module>IReceiverGenerator</module>
+        <module>PluginReceiverGenerator</module>
         <module>PluginIFieldName</module>
-        <module>IField</module>
         <module>IPath</module>
         <module>Path</module>
+        <module>HttpRequestHandler</module>
+        <module>CookiesSetter</module>
+        <module>HttpHeadersSetter</module>
+        <module>ResponseStatusExtractor</module>
+        <module>PluginHttpEndpoint</module>
         <module>PluginGetAsyncOperation</module>
         <module>PluginIObjectSimpleImpl</module>
         <module>ResolveByTypeStrategy</module>

@@ -63,7 +63,7 @@ public class ImmutableReceiverChainResolutionStrategy implements IResolveDepende
             IChainStorage chainStorage = (IChainStorage) args[2];
             IRouter router = (IRouter) args[3];
 
-            IKey fieldNameKey = IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.toString());
+            IKey fieldNameKey = IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName());
             IKey receiverIdKey = IOC.resolve(IOC.getKeyForKeyStorage(), "receiver_id_from_iobject");
             IKey chainIdKey = IOC.resolve(IOC.getKeyForKeyStorage(), "chain_id");
             IFieldName stepsFieldName = IOC.resolve(fieldNameKey, "steps");

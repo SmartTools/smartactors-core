@@ -26,11 +26,6 @@
             <artifactId>core.iobject_wrapper</artifactId>
             <version>${core.version}</version>
         </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>core.ifield</artifactId>
-            <version>${core.version}</version>
-        </dependency>
 
         <!-- Service locator -->
         <dependency>
@@ -58,6 +53,11 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>core.field_name</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.field</artifactId>
             <version>${core.version}</version>
         </dependency>
 

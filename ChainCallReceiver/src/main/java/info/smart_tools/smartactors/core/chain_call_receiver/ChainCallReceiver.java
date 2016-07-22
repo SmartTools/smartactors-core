@@ -43,15 +43,13 @@ public class ChainCallReceiver implements IMessageReceiver {
     }
 
     @Override
-    public void receive(final IMessageProcessor processor, final IObject arguments, final IAction<Throwable> onEnd)
+    public void receive(final IMessageProcessor processor)
             throws MessageReceiveException {
         try {
             Object chainId = chainChoiceStrategy.chooseChain(processor);
             IReceiverChain chain = chainStorage.resolve(chainId);
             processor.getSequence().callChain(chain);
-            onEnd.execute(null);
-        } catch (ChainChoiceException | ChainNotFoundException | NestedChainStackOverflowException |
-                 ActionExecuteException | InvalidArgumentException e) {
+        } catch (ChainChoiceException | ChainNotFoundException | NestedChainStackOverflowException e) {
             throw new MessageReceiveException("Could not call nested chain.", e);
         }
     }
