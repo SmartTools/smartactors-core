@@ -1,7 +1,5 @@
 package info.smart_tools.smartactors.core.exception_handling_receivers;
 
-import info.smart_tools.smartactors.core.iaction.IAction;
-import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
@@ -24,15 +22,13 @@ public class SkipReceiverExceptionHandler extends ExceptionHandlingReceiver {
     }
 
     @Override
-    public void receive(final IMessageProcessor processor, final IObject arguments, final IAction<Throwable> onEnd)
+    public void receive(final IMessageProcessor processor)
             throws MessageReceiveException {
         IObject context = processor.getContext();
 
         try {
             processor.getSequence().goTo(getCauseLevel(context), getCauseStep(context) + 1);
-
-            onEnd.execute(null);
-        } catch (ReadValueException | InvalidArgumentException | ActionExecuteException e) {
+        } catch (ReadValueException | InvalidArgumentException e) {
             throw new MessageReceiveException("Exception occurred while skipping a receiver thrown exception", e);
         }
     }

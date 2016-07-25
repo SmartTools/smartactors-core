@@ -3,7 +3,7 @@
     {
       "actor": "createSessionActor",
       "handler": "resolve",
-      "info.smart_tools.smartactors.actors.create_session.wrapper.CreateSessionMessage": {
+      "wrapper": {
         "in_getSessionId": "message/sessionId",
         "out_setSession": "message/session"
       }
@@ -11,7 +11,7 @@
     {
       "actor": "authenticationActor",
       "handler": "authenticateSession",
-      "info.smart_tools.smartactors.actors.authentication.wrapper.AuthenticationMessage": {
+      "wrapper": {
         "in_getRequestUserAgent": [
           {
             "name": "getUserAgentFromRequestRule",
@@ -27,7 +27,7 @@
     {
       "actor": "checkValidityAsyncOperationActor",
       "handler": "check",
-      "info.smart_tools.smartactors.core.actors.check_validity_async_operation.wrapper.CheckValidityMessage": {
+      "wrapper": {
         "in_getAsyncOperationId": "message/token",
         "in_getIdentifiers": "message/session/async_operation_tokens"
       }
@@ -35,7 +35,7 @@
     {
       "actor": "userAuthByLoginActor",
       "handler": "authenticateUser",
-      "info.smart_tools.smartactors.actors.authentication.users.wrappers.IUserAuthByLoginMessage": {
+      "wrapper": {
         "in_getLogin": "message/login",
         "in_getPassword": "message/password",
         "out_setAuthStatus": "response/auth_status",
@@ -45,7 +45,7 @@
     {
       "actor": "getAsyncOperationActor",
       "handler": "getAsyncOperation",
-      "info.smart_tools.smartactors.actor.get_async_operation.wrapper.GetAsyncOperationMessage": {
+      "wrapper": {
         "in_getToken": "message/token",
         "out_setAsyncOperation": "message/async_operation"
       }
@@ -53,7 +53,7 @@
     {
       "actor": "closeAsyncOperationActor",
       "handler": "completeAsyncOp",
-      "info.smart_tools.smartactors.actors.close_async_operation.wrapper.CloseAsyncOpMessage": {
+      "wrapper": {
         "in_getToken": "message/token",
         "in_getOperation": "message/async_operation",
         "in_getOperationTokens": "message/session/async_operation_tokens"

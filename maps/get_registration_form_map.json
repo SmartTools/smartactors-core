@@ -1,0 +1,42 @@
+{
+  "get_registration_form_map": [
+    {
+      "actor": "createSessionActor",
+      "handler": "getSession"
+    },
+    {
+      "actor": "authenticationActor",
+      "handler": "authenticateSession",
+      "wrapper": {
+        "in_getRequestUserAgent": {
+          "rules": [
+            {
+              "name": "getHeaderFromRequest",
+              "args": [
+                "context/User-Agent"
+              ]
+            }
+          ]
+        },
+        "in_getSessionUserAgent": "message/session/authInfo/userAgent"
+      }
+    },
+    {
+      "actor": "getFormActor",
+      "handler": "getForm",
+      "wrapper": {
+        "in_getFormKey": "message/formKey",
+        "out_setForm": "response/form"
+      }
+    },
+    {
+      "actor": "asyncOpsActor",
+      "handler": "createOperation",
+      "wrapper": {
+        "in_getSessionId": "message/sessionId",
+        "in_getExpiredTime": "const/4",
+        "out_setAsyncOperationToken": "response/token"
+      }
+    }
+  ]
+}

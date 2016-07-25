@@ -1,6 +1,5 @@
 package info.smart_tools.smartactors.core.exception_handling_receivers;
 
-import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
@@ -31,11 +30,9 @@ public class SkipReceiverExceptionHandlerTest extends ExceptionHandlingReceiverT
 
         IMessageReceiver receiver = new SkipReceiverExceptionHandler();
 
-        receiver.receive(messageProcessorMock, mock(IObject.class), callbackMock);
+        receiver.receive(messageProcessorMock);
 
         verify(sequenceMock).goTo(eq(137), eq(124));
-
-        verify(callbackMock).execute(null);
     }
 
     @Test
@@ -52,7 +49,7 @@ public class SkipReceiverExceptionHandlerTest extends ExceptionHandlingReceiverT
         IMessageReceiver receiver = new SkipReceiverExceptionHandler();
 
         try {
-            receiver.receive(messageProcessorMock, mock(IObject.class), callbackMock);
+            receiver.receive(messageProcessorMock);
             fail();
         } catch (MessageReceiveException e) {
             assertSame(exception, e.getCause());

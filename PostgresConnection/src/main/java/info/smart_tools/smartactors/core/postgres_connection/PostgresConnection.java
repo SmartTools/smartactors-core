@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.core.postgres_connection;
 
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.istorage_connection.ICompiledQuery;
 import info.smart_tools.smartactors.core.istorage_connection.IPreparedQuery;
 import info.smart_tools.smartactors.core.istorage_connection.IStorageConnection;
@@ -57,7 +58,7 @@ public class PostgresConnection implements IStorageConnection {
 
                 connection.setAutoCommit(false);
                 this.connection = connection;
-            } catch (SQLException e) {
+            } catch (SQLException | ReadValueException e) {
                 throw new StorageException("Could not get JDBC connection.", e);
             }
         } catch (StorageException e) {

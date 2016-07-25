@@ -103,11 +103,18 @@
         <module>MessageProcessingInterfaces</module>
         <module>ExceptionHandlingReceivers</module>
         <module>PluginCompileQuery</module>
+        <module>PluginCachedCollection</module>
         <module>PostgresConnection</module>
         <module>PluginPostgresConnectionPool</module>
+        <module>PluginIField</module>
         <module>IStorageConnection</module>
         <module>RecursiveStrategyContainer</module>
         <module>CachedCollection</module>
+        <module>IRouter</module>
+        <module>IChainStorage</module>
+        <module>MapRouter</module>
+        <module>ChainStorage</module>
+        <module>ChainCallReceiver</module>
         <module>CloseAsyncOperationActor</module>
         <module>GetFormActor</module>
         <module>AuthenticationActor</module>
@@ -126,9 +133,21 @@
         <module>WDSObject</module>
         <module>FieldName</module>
         <module>IFieldName</module>
+        <module>ReceiverGenerator</module>
+        <module>ActorReceiver</module>
+        <module>HandlerRoutingReceiver</module>
+        <module>IReceiverGenerator</module>
+        <module>PluginReceiverGenerator</module>
+        <module>PluginIFieldName</module>
         <module>IField</module>
         <module>IPath</module>
-	<module>Path</module>
+        <module>Path</module>
+        <module>Field</module>
+        <module>PluginGetAsyncOperation</module>
+        <module>PluginIObjectSimpleImpl</module>
+        <module>ResolveByTypeStrategy</module>
+        <module>PluginWrapperGenerator</module>
+        <module>PluginFieldName</module>
     </modules>
 
     <build>

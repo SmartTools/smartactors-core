@@ -22,6 +22,26 @@
             <artifactId>core.invalid_argument_exception</artifactId>
             <version>0.2.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.iresolve_dependency_strategy</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.ioc</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.ichain_storage</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.irouter</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- Tests -->
         <dependency>

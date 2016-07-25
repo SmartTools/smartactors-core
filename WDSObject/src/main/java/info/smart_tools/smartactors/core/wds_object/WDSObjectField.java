@@ -72,7 +72,7 @@ public class WDSObjectField implements IField {
 
     @Override
     public <T> T in(final IObject env)
-            throws ReadValueException, InvalidArgumentException, ClassCastException {
+            throws ReadValueException, InvalidArgumentException {
         if (null == env) {
             throw new InvalidArgumentException("Environment should not be null.");
         }
@@ -97,6 +97,12 @@ public class WDSObjectField implements IField {
         }
 
         return (T) value;
+    }
+
+    @Override
+    public <T> T in(final IObject env, final Class type)
+            throws ReadValueException, InvalidArgumentException {
+        throw new ReadValueException("Method not implemented.");
     }
 
     @Override
