@@ -62,7 +62,7 @@ public class PSQLDeleteTask extends DBDeleteTask {
     public void prepare(@Nonnull final IObject message) throws TaskPrepareException {
         CollectionName collectionName;
         try {
-            DeletionQuery queryMessage = IOC.resolve(Keys.getOrAdd(DeletionQuery.class.toString()), message);
+            DeletionQuery queryMessage = IOC.resolve(Keys.getOrAdd(DeletionQuery.class.getCanonicalName()), message);
 
             if (queryMessage.countDocumentIds() == 0) {
                 throw new TaskPrepareException("List of id's to delete should not be empty.");
@@ -70,9 +70,10 @@ public class PSQLDeleteTask extends DBDeleteTask {
 
             collectionName = CollectionName.fromString(queryMessage.getCollectionName());
             CompiledQuery compiledQuery = IOC.resolve(
-                    Keys.getOrAdd(CompiledQuery.class.toString()),
+                    Keys.getOrAdd(CompiledQuery.class.getCanonicalName()),
                     connection,
-                    PSQLDeleteTask.class.toString(),
+                    //TODO: please, check this (was toString())
+                    PSQLDeleteTask.class.getCanonicalName(),
                     getQueryStatementFactory(collectionName));
 
             this.query = formatQuery(compiledQuery, queryMessage);

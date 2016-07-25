@@ -30,7 +30,7 @@ public class DeleteFromCachedCollectionTask implements IDatabaseTask {
     public DeleteFromCachedCollectionTask(final IDatabaseTask updateTask) throws CreateCachedCollectionTaskException {
         this.updateTask = updateTask;
         try {
-            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document/isActive");
+            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "document/isActive");
         } catch (ResolutionException e) {
             throw new CreateCachedCollectionTaskException("Can't create GetObjectFromCachedCollectionTask.", e);
         }

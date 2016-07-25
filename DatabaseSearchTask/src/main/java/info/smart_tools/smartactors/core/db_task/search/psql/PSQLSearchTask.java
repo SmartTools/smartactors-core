@@ -88,7 +88,7 @@ public class PSQLSearchTask extends DBSearchTask {
     @Override
     public void prepare(@Nonnull final IObject prepareMessage) throws TaskPrepareException {
         try {
-            ISearchQuery queryMessage = IOC.resolve(Keys.getOrAdd(ISearchQuery.class.toString()), prepareMessage);
+            ISearchQuery queryMessage = IOC.resolve(Keys.getOrAdd(ISearchQuery.class.getCanonicalName()), prepareMessage);
             IBufferedQuery searchQuery = queryMessage
                     .getBufferedQuery()
                     .orElse(createSearchQuery(queryMessage));
@@ -123,7 +123,7 @@ public class PSQLSearchTask extends DBSearchTask {
             throws TaskPrepareException, StorageException, ResolutionException {
         List<SQLQueryParameterSetter> setters = new ArrayList<>();
         CompiledQuery compiledQuery = connection.compileQuery(createQueryStatement(queryMessage, setters));
-        return IOC.resolve(Keys.getOrAdd(IBufferedQuery.class.toString()), compiledQuery, setters);
+        return IOC.resolve(Keys.getOrAdd(IBufferedQuery.class.getCanonicalName()), compiledQuery, setters);
     }
 
     private QueryStatement createQueryStatement(

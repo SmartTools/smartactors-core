@@ -83,11 +83,11 @@ public class DBInsertTaskTest {
                 )
         );
 
-        IKey keyDBInsertTask = Keys.getOrAdd(DBInsertTask.class.toString());
-        IKey keyInsertMessage = Keys.getOrAdd(InsertMessage.class.toString());
-        IKey keyQueryStatement = Keys.getOrAdd(QueryStatement.class.toString());
-        IKey keyFieldName = Keys.getOrAdd(IFieldName.class.toString());
-        IKey keyCompiledQuery = Keys.getOrAdd(CompiledQuery.class.toString());
+        IKey keyDBInsertTask = Keys.getOrAdd(DBInsertTask.class.getCanonicalName());
+        IKey keyInsertMessage = Keys.getOrAdd(InsertMessage.class.getCanonicalName());
+        IKey keyQueryStatement = Keys.getOrAdd(QueryStatement.class.getCanonicalName());
+        IKey keyFieldName = Keys.getOrAdd(IFieldName.class.getCanonicalName());
+        IKey keyCompiledQuery = Keys.getOrAdd(CompiledQuery.class.getCanonicalName());
         IOC.register(
                 keyDBInsertTask,
                 new SingletonStrategy(mock(DBInsertTask.class))
@@ -134,7 +134,7 @@ public class DBInsertTaskTest {
 
     @Test(expected = TaskPrepareException.class)
     public void ShouldThrowTaskPrepareException_When_IdIsNull() throws Exception {
-        IKey keyString = Keys.getOrAdd(String.class.toString());
+        IKey keyString = Keys.getOrAdd(String.class.getCanonicalName());
         IOC.register(
                 keyString,
                 new CreateNewInstanceStrategy(

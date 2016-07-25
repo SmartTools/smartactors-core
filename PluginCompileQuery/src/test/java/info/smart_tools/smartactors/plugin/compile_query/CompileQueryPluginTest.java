@@ -6,12 +6,10 @@ import info.smart_tools.smartactors.core.db_storage.interfaces.CompiledQuery;
 import info.smart_tools.smartactors.core.db_storage.interfaces.StorageConnection;
 import info.smart_tools.smartactors.core.iaction.IPoorAction;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
-import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
 import info.smart_tools.smartactors.core.ioc.IOC;
-import info.smart_tools.smartactors.core.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.sql_commons.QueryStatement;
 import info.smart_tools.smartactors.core.sql_commons.QueryStatementFactory;
@@ -30,7 +28,12 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.api.mockito.PowerMockito.doThrow;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyNew;
+import static org.powermock.api.mockito.PowerMockito.verifyStatic;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @PrepareForTest({IOC.class, Keys.class, QueryKey.class, CompileQueryPlugin.class})
 @RunWith(PowerMockRunner.class)
@@ -49,7 +52,7 @@ public class CompileQueryPluginTest {
         IKey key1 = mock(IKey.class);
         IKey keyQuery = mock(IKey.class);
         when(IOC.getKeyForKeyStorage()).thenReturn(key1);
-        when(IOC.resolve(eq(key1), eq(CompiledQuery.class.toString()))).thenReturn(keyQuery);
+        when(IOC.resolve(eq(key1), eq(CompiledQuery.class.getCanonicalName()))).thenReturn(keyQuery);
 
         bootstrap = mock(IBootstrap.class);
         plugin = new CompileQueryPlugin(bootstrap);
@@ -59,7 +62,7 @@ public class CompileQueryPluginTest {
     public void MustCorrectLoadPlugin() throws Exception {
 
         IKey compiledQueryKey = mock(IKey.class);
-        when(Keys.getOrAdd(CompiledQuery.class.toString())).thenReturn(compiledQueryKey);
+        when(Keys.getOrAdd(CompiledQuery.class.getCanonicalName())).thenReturn(compiledQueryKey);
 
         HashMap<QueryKey, CompiledQuery> queryMap = mock(HashMap.class);
         whenNew(HashMap.class).withNoArguments().thenReturn(queryMap);
@@ -117,7 +120,7 @@ public class CompileQueryPluginTest {
     public void MustInCorrectLoadPluginWhenKeysThrowException() throws Exception {
 
         IKey compiledQueryKey = mock(IKey.class);
-        when(Keys.getOrAdd(CompiledQuery.class.toString())).thenReturn(compiledQueryKey);
+        when(Keys.getOrAdd(CompiledQuery.class.getCanonicalName())).thenReturn(compiledQueryKey);
 
         HashMap<QueryKey, CompiledQuery> queryMap = mock(HashMap.class);
         whenNew(HashMap.class).withNoArguments().thenReturn(queryMap);
@@ -175,7 +178,7 @@ public class CompileQueryPluginTest {
     public void MustInCorrectExecuteInIPoorActionWhenThrowRegistrationException() throws Exception {
 
         IKey cachedCollectionKey = mock(IKey.class);
-        when(Keys.getOrAdd(CompiledQuery.class.toString())).thenReturn(cachedCollectionKey);
+        when(Keys.getOrAdd(CompiledQuery.class.getCanonicalName())).thenReturn(cachedCollectionKey);
 
         BootstrapItem bootstrapItem = mock(BootstrapItem.class);
         whenNew(BootstrapItem.class).withArguments("CompileQueryPlugin").thenReturn(bootstrapItem);
@@ -200,7 +203,7 @@ public class CompileQueryPluginTest {
         } catch (RuntimeException e) {
 
             verifyStatic();
-            Keys.getOrAdd(CompiledQuery.class.toString());
+            Keys.getOrAdd(CompiledQuery.class.getCanonicalName());
 
             verifyStatic();
             IOC.register(eq(cachedCollectionKey), any());

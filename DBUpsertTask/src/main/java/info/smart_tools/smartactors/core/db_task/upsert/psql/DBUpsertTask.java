@@ -61,7 +61,7 @@ public class DBUpsertTask implements IDatabaseTask {
 
         executionMap = new HashMap<>();
         try {
-            this.dbInsertTask = IOC.resolve(Keys.getOrAdd(DBInsertTask.class.toString()));
+            this.dbInsertTask = IOC.resolve(Keys.getOrAdd(DBInsertTask.class.getCanonicalName()));
         } catch (ResolutionException e) {
             //TODO:: throw smth like TaskCreateException("Error while resolving insert task.", e); when standard exception would be added
         }
@@ -99,7 +99,7 @@ public class DBUpsertTask implements IDatabaseTask {
     public void prepare(final IObject upsertObject) throws TaskPrepareException {
 
         try {
-            UpsertMessage upsertMessage = IOC.resolve(Keys.getOrAdd(UpsertMessage.class.toString()), upsertObject);
+            UpsertMessage upsertMessage = IOC.resolve(Keys.getOrAdd(UpsertMessage.class.getCanonicalName()), upsertObject);
             this.collectionName = upsertMessage.getCollectionName();
         } catch (ResolutionException e) {
             throw new TaskPrepareException("Error while resolving upsert message.", e);
@@ -107,14 +107,14 @@ public class DBUpsertTask implements IDatabaseTask {
             throw new TaskPrepareException("Error while get collection name.", e);
         }
         try {
-            this.idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.toString()), collectionName + "Id");
+            this.idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), collectionName + "Id");
         } catch (ResolutionException e) {
             throw new TaskPrepareException("Can't create idFieldName.", e);
         }
 
         this.rawUpsertQuery = upsertObject;
         try {
-            String id = IOC.resolve(Keys.getOrAdd(String.class.toString()), upsertObject.getValue(idFieldName));
+            String id = IOC.resolve(Keys.getOrAdd(String.class.getCanonicalName()), upsertObject.getValue(idFieldName));
             if (id != null) {
                 this.mode = UPDATE_MODE;
                 QueryStatementFactory factory = () -> {
@@ -137,7 +137,7 @@ public class DBUpsertTask implements IDatabaseTask {
                     return updateQueryStatement;
                 };
                 this.compiledQuery = IOC.resolve(
-                        Keys.getOrAdd(CompiledQuery.class.toString()),
+                        Keys.getOrAdd(CompiledQuery.class.getCanonicalName()),
                         connection,
                         DBUpsertTask.class.toString().concat("update"),
                         factory
@@ -175,7 +175,7 @@ public class DBUpsertTask implements IDatabaseTask {
                     return insertQueryStatement;
                 };
                 this.compiledQuery = IOC.resolve(
-                        Keys.getOrAdd(CompiledQuery.class.toString()),
+                        Keys.getOrAdd(CompiledQuery.class.getCanonicalName()),
                         connection,
                         DBUpsertTask.class.toString().concat("insert"),
                         factory

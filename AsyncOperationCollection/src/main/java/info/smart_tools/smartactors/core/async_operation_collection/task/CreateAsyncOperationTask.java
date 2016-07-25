@@ -36,11 +36,11 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
         this.task = task;
 
         try {
-            asyncDataField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "asyncData");
-            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "done");
-            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "token");
-            expiredTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "expiredTime");
-            documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document");
+            asyncDataField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "asyncData");
+            doneFlagField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "done");
+            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "token");
+            expiredTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "expiredTime");
+            documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "document");
         } catch (ResolutionException e) {
             throw new CreateAsyncOperationException("Can't resolve one of fields", e);
         }
@@ -60,7 +60,7 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
 
-            IObject document = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+            IObject document = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
 
             asyncDataField.out(document, asyncDataField.in(query));
             doneFlagField.out(document, false);

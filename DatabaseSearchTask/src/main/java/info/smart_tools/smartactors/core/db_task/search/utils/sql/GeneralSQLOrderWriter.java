@@ -30,9 +30,9 @@ public class GeneralSQLOrderWriter implements ISearchQueryWriter {
     static {
         try {
             ORDER_FIELD_ORDER_BY_ITEM_FN =
-                    IOC.resolve(Keys.getOrAdd(IFieldName.class.toString()), "field");
+                    IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "field");
             ORDER_DIRECTION_ORDER_BY_ITEM_FN =
-                    IOC.resolve(Keys.getOrAdd(IFieldName.class.toString()), "order");
+                    IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "order");
         } catch (ResolutionException e) {
             throw new RuntimeException("Static block initialize error: " + e.getMessage(), e);
         }
@@ -79,11 +79,11 @@ public class GeneralSQLOrderWriter implements ISearchQueryWriter {
                 IObject orderItem = queryMessage.getOrderBy(i);
 
                 FieldPath fieldPath = IOC.resolve(
-                        Keys.getOrAdd(PSQLFieldPath.class.toString()),
+                        Keys.getOrAdd(PSQLFieldPath.class.getCanonicalName()),
                         orderItem.getValue(ORDER_FIELD_ORDER_BY_ITEM_FN));
 
                 String sortDirection = IOC.resolve(
-                        Keys.getOrAdd(String.class.toString()),
+                        Keys.getOrAdd(String.class.getCanonicalName()),
                         orderItem.getValue(ORDER_DIRECTION_ORDER_BY_ITEM_FN));
 
                 sortDirection = ("DESC".equalsIgnoreCase(String.valueOf(sortDirection))) ? "DESC" : "ASC";

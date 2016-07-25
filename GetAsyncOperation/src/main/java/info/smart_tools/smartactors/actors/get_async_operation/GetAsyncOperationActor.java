@@ -34,7 +34,7 @@ public class GetAsyncOperationActor {
     public void getOperation(final GetAsyncOperationMessage message) throws GetAsyncOperationActorException {
 
         try {
-            IAsyncOperationCollection collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.toString()));
+            IAsyncOperationCollection collection = IOC.resolve(Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName()));
             String token = message.getToken();
             IObject asyncOperation = collection.getAsyncOperation(token);
             if (asyncOperation == null) {

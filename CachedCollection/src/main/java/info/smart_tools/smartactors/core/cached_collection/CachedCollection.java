@@ -67,18 +67,18 @@ public class CachedCollection implements ICachedCollection {
     public CachedCollection(final IObject config) throws InvalidArgumentException {
         try {
             this.map = new ConcurrentHashMap<>();
-            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "collectionName");
-            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "connectionPool");
-            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyName");
-            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyValue");
-            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document");
-            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "id");
-            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "isActive");
-            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "searchResult");
+            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "collectionName");
+            IField connectionPoolField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "connectionPool");
+            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "keyName");
+            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "keyValue");
+            this.documentField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "document");
+            this.idField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "id");
+            this.isActiveField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "isActive");
+            this.searchResultField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "searchResult");
             this.collectionName = collectionNameField.in(config);
             this.connectionPool = connectionPoolField.in(config);
             this.keyName = keyNameField.in(config);
-            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), keyName);
+            this.specificKeyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), keyName);
         } catch (ResolutionException | ReadValueException e) {
             throw new InvalidArgumentException("Can't create cached collection.", e);
         }
@@ -104,24 +104,24 @@ public class CachedCollection implements ICachedCollection {
             List<IObject> items = map.get(key);
             if (items == null || items.isEmpty()) {
                 try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {
-                    IDatabaseTask getItemTask = IOC.resolve(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()));
+                    IDatabaseTask getItemTask = IOC.resolve(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.getCanonicalName()));
                     if (getItemTask == null) {
                         //NOTE:: we should have strategy for creating nested tasks for task-facade with smth like map
                         //with name of task-facade as a key
                         IDatabaseTask nestedTask = IOC.resolve(
-                            Keys.getOrAdd(IDatabaseTask.class.toString()), GetObjectFromCachedCollectionTask.class.toString()
+                            Keys.getOrAdd(IDatabaseTask.class.getCanonicalName()), GetObjectFromCachedCollectionTask.class.getCanonicalName()
                         );
                         if (nestedTask == null) {
                             throw new GetCacheItemException("Can't create nested task for getItem task.");
                         }
                         getItemTask = new GetObjectFromCachedCollectionTask(nestedTask);
-                        IOC.register(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.toString()), new SingletonStrategy(getItemTask));
+                        IOC.register(Keys.getOrAdd(GetObjectFromCachedCollectionTask.class.getCanonicalName()), new SingletonStrategy(getItemTask));
                     }
-                    IObject getItemQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+                    IObject getItemQuery = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
                     collectionNameField.out(getItemQuery, collectionName);
                     keyNameField.out(getItemQuery, keyName);
                     keyValueField.out(getItemQuery, key);
-                    getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+                    getItemTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.getCanonicalName()), poolGuard.getObject()));
                     getItemTask.prepare(getItemQuery);
                     getItemTask.execute();
                     items = searchResultField.in(getItemQuery);
@@ -163,21 +163,21 @@ public class CachedCollection implements ICachedCollection {
     public void delete(final IObject message) throws DeleteCacheItemException {
         try {
             try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {
-                IDatabaseTask deleteTask = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()));
+                IDatabaseTask deleteTask = IOC.resolve(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.getCanonicalName()));
                 if (deleteTask == null) {
                     IDatabaseTask nestedTask = IOC.resolve(
-                        Keys.getOrAdd(IDatabaseTask.class.toString()), DeleteFromCachedCollectionTask.class.toString()
+                        Keys.getOrAdd(IDatabaseTask.class.getCanonicalName()), DeleteFromCachedCollectionTask.class.getCanonicalName()
                     );
                     if (nestedTask == null) {
                         throw new DeleteCacheItemException("Can't create nested task for delete task.");
                     }
                     deleteTask = new DeleteFromCachedCollectionTask(nestedTask);
-                    IOC.register(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.toString()), new SingletonStrategy(deleteTask));
+                    IOC.register(Keys.getOrAdd(DeleteFromCachedCollectionTask.class.getCanonicalName()), new SingletonStrategy(deleteTask));
                 }
-                IObject deleteQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+                IObject deleteQuery = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
                 collectionNameField.out(deleteQuery, collectionName);
                 documentField.out(deleteQuery, message);
-                StorageConnection connection = IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject());
+                StorageConnection connection = IOC.resolve(Keys.getOrAdd(StorageConnection.class.getCanonicalName()), poolGuard.getObject());
                 deleteTask.setConnection(connection);
                 deleteTask.prepare(deleteQuery);
                 deleteTask.execute();
@@ -227,24 +227,24 @@ public class CachedCollection implements ICachedCollection {
 
         try {
             try (IPoolGuard poolGuard = new PoolGuard(connectionPool)) {
-                IDatabaseTask upsertTask = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()));
+                IDatabaseTask upsertTask = IOC.resolve(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.getCanonicalName()));
                 if (upsertTask == null) {
                     IDatabaseTask nestedTask = IOC.resolve(
-                        Keys.getOrAdd(IDatabaseTask.class.toString()), UpsertIntoCachedCollectionTask.class.toString()
+                        Keys.getOrAdd(IDatabaseTask.class.getCanonicalName()), UpsertIntoCachedCollectionTask.class.getCanonicalName()
                     );
                     if (nestedTask == null) {
                         throw new UpsertCacheItemException("Can't create nested task for upsert task.");
                     }
                     upsertTask = new UpsertIntoCachedCollectionTask(nestedTask);
-                    IOC.register(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.toString()), new SingletonStrategy(upsertTask));
+                    IOC.register(Keys.getOrAdd(UpsertIntoCachedCollectionTask.class.getCanonicalName()), new SingletonStrategy(upsertTask));
                 }
-                IObject upsertQuery = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+                IObject upsertQuery = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
                 Boolean isActive = isActiveField.in(message);
                 isActiveField.out(message, true);
                 collectionNameField.out(upsertQuery, collectionName);
                 documentField.out(upsertQuery, message);
 
-                upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.toString()), poolGuard.getObject()));
+                upsertTask.setConnection(IOC.resolve(Keys.getOrAdd(StorageConnection.class.getCanonicalName()), poolGuard.getObject()));
                 upsertTask.prepare(upsertQuery);
                 try {
                     upsertTask.execute();

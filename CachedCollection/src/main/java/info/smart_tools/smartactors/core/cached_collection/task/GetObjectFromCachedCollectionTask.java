@@ -41,13 +41,13 @@ public class GetObjectFromCachedCollectionTask implements IDatabaseTask {
     public GetObjectFromCachedCollectionTask(final IDatabaseTask getItemTask) throws CreateCachedCollectionTaskException {
         this.getItemTask = getItemTask;
         try {
-            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "collectionName");
-            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyName");
-            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "keyValue");
-            this.pageSizeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "pageSize");
-            this.pageNumberField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "pageNumber");
-            this.criteriaEqualsIsActiveField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "criteria/isActive/$eq");
-            this.criteriaDateToStartDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "criteria/startDateTime/$date-to");
+            this.collectionNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "collectionName");
+            this.keyNameField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "keyName");
+            this.keyValueField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "keyValue");
+            this.pageSizeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "pageSize");
+            this.pageNumberField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "pageNumber");
+            this.criteriaEqualsIsActiveField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "criteria/isActive/$eq");
+            this.criteriaDateToStartDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "criteria/startDateTime/$date-to");
         } catch (ResolutionException e) {
             throw new CreateCachedCollectionTaskException("Can't create GetObjectFromCachedCollectionTask.", e);
         }
@@ -82,7 +82,7 @@ public class GetObjectFromCachedCollectionTask implements IDatabaseTask {
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-            IObject queryForNestedTask = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+            IObject queryForNestedTask = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
             collectionNameField.out(queryForNestedTask, collectionNameField.in(query));
             //TODO:: remove hardcode size
             pageSizeField.out(queryForNestedTask, 100);
@@ -92,7 +92,7 @@ public class GetObjectFromCachedCollectionTask implements IDatabaseTask {
             criteriaDateToStartDateTimeField.out(queryForNestedTask, LocalDateTime.now().format(FORMATTER));
             String keyName = keyNameField.in(query);
             String keyValue = keyValueField.in(query);
-            IField criteriaEqualsKeyField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), keyName + "/$eq/" + keyValue);
+            IField criteriaEqualsKeyField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), keyName + "/$eq/" + keyValue);
             criteriaEqualsKeyField.in(queryForNestedTask);
             getItemTask.prepare(queryForNestedTask);
         } catch (ResolutionException e) {

@@ -26,8 +26,8 @@ public class GetFormActor {
      */
     public GetFormActor(final IObject params) throws GetFormActorException {
         try {
-            IField field = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "collectionName");
-            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.toString()), field.in(params), KEY_NAME);
+            IField field = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "collectionName");
+            collection = IOC.resolve(Keys.getOrAdd(CachedCollection.class.getCanonicalName()), field.in(params), KEY_NAME);
         } catch (Exception e) {
             throw new GetFormActorException("Can't create GetFormActor", e);
         }
@@ -41,7 +41,7 @@ public class GetFormActor {
     public void getForm(final GetFormMessage message) throws  GetFormActorException {
         try {
             List<IObject> forms = collection.getItems(message.getFormKey());
-            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.toString()), message.getFormKey());
+            IFormsStrategy strategy = IOC.resolve(Keys.getOrAdd(IFormsStrategy.class.getCanonicalName()), message.getFormKey());
             message.setForm(strategy.getForm(forms));
         } catch (Exception e) {
             throw new GetFormActorException("Failed to get form from collection", e);

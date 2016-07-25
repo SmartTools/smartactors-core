@@ -60,7 +60,7 @@ public class GetObjectFromCachedCollectionTaskTest {
         criteriaDateToStartDateTimeField = mock(IField.class);
 
 
-        when(Keys.getOrAdd(IField.class.toString())).thenReturn(mockKeyField);
+        when(Keys.getOrAdd(IField.class.getCanonicalName())).thenReturn(mockKeyField);
         when(IOC.resolve(mockKeyField, "collectionName")).thenReturn(collectionNameField);
         when(IOC.resolve(mockKeyField, "keyName")).thenReturn(keyNameField);
         when(IOC.resolve(mockKeyField, "keyValue")).thenReturn(keyValueField);
@@ -82,7 +82,7 @@ public class GetObjectFromCachedCollectionTaskTest {
 
         IObject queryForNestedTask = mock(IObject.class);
         IKey keyIObject = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.toString())).thenReturn(keyIObject);
+        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(keyIObject);
         when(IOC.resolve(keyIObject)).thenReturn(queryForNestedTask);
 
         IField criteriaEqualsKeyField = mock(IField.class);

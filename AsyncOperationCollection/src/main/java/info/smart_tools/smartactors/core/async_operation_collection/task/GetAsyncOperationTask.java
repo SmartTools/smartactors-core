@@ -37,11 +37,11 @@ public class GetAsyncOperationTask implements IDatabaseTask {
         this.getItemTask = getItemTask;
 
         try {
-            pageNumberField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "pageNumber");
-            pageSizeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "pageSize");
-            queryField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "query");
-            eqField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "$eq");
-            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "token");
+            pageNumberField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "pageNumber");
+            pageSizeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "pageSize");
+            queryField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "query");
+            eqField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "$eq");
+            tokenField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "token");
         } catch (ResolutionException e) {
             throw new GetAsyncOperationException("Can't resolve one of fields", e);
         }
@@ -59,7 +59,7 @@ public class GetAsyncOperationTask implements IDatabaseTask {
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
 
-            IObject criteriaIObject = IOC.resolve(Keys.getOrAdd(IObject.class.toString()));
+            IObject criteriaIObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
 
             eqField.out(criteriaIObject, tokenField.in(query));
 

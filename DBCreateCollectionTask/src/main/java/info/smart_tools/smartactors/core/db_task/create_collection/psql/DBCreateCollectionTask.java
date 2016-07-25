@@ -54,7 +54,7 @@ public class DBCreateCollectionTask implements IDatabaseTask {
                 Writer writer = preparedQuery.getBodyWriter();
                 try {
                     CreateCollectionQuery message = IOC.resolve(
-                            Keys.getOrAdd(CreateCollectionQuery.class.toString()),
+                            Keys.getOrAdd(CreateCollectionQuery.class.getCanonicalName()),
                             createCollectionMessage
                     );
                     CollectionName collectionName = CollectionName.fromString(message.getCollectionName());
@@ -67,7 +67,7 @@ public class DBCreateCollectionTask implements IDatabaseTask {
                         message.getIndexes().put("id", "id");
                     }
                     for (Map.Entry<String, String> entry : message.getIndexes().entrySet()) {
-                        FieldPath field = IOC.resolve(Keys.getOrAdd(FieldPath.class.toString()), entry.getKey());
+                        FieldPath field = IOC.resolve(Keys.getOrAdd(FieldPath.class.getCanonicalName()), entry.getKey());
                         String indexType = entry.getValue();
                         String tpl = indexCreationTemplates.get(indexType);
 
@@ -91,9 +91,11 @@ public class DBCreateCollectionTask implements IDatabaseTask {
             };
 
             this.compiledQuery = IOC.resolve(
-                    Keys.getOrAdd(CompiledQuery.class.toString()),
+                    Keys.getOrAdd(CompiledQuery.class.getCanonicalName()),
                     connection,
-                    DBCreateCollectionTask.class.toString(), factory
+                    //TODO: please, check this (was toString())
+                    DBCreateCollectionTask.class.getCanonicalName(),
+                    factory
             );
         } catch (ResolutionException e) {
             throw new TaskPrepareException("Error while writing collection creation statement.", e);

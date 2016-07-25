@@ -41,7 +41,7 @@ public class GetAsyncOperationActorTest {
         mockStatic(IOC.class);
         mockStatic(Keys.class);
 
-        when(Keys.getOrAdd(IAsyncOperationCollection.class.toString())).thenReturn(collectionKey);
+        when(Keys.getOrAdd(IAsyncOperationCollection.class.getCanonicalName())).thenReturn(collectionKey);
         when(IOC.resolve(collectionKey)).thenReturn(collection);
 
         message = mock(GetAsyncOperationMessage.class);

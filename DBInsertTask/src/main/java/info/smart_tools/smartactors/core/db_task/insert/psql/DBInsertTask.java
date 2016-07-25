@@ -53,13 +53,13 @@ public class DBInsertTask implements IDatabaseTask {
         try {
             InsertMessage message = IOC.resolve(Keys.getOrAdd(InsertMessage.class.getName()), insertQuery);
             this.collectionName = message.getCollectionName();
-            this.idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.toString()), collectionName + "Id");
+            this.idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), collectionName + "Id");
 
-            String id = IOC.resolve(Keys.getOrAdd(String.class.toString()), insertQuery.getValue(idFieldName));
+            String id = IOC.resolve(Keys.getOrAdd(String.class.getCanonicalName()), insertQuery.getValue(idFieldName));
 
             if (id == null) {
                 QueryStatementFactory factory = getQueryStatementFactory();
-                this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection,
+                this.compiledQuery = IOC.resolve(Keys.getOrAdd(CompiledQuery.class.getCanonicalName()), connection,
                                                                     DBInsertTask.class.toString(), factory);
 
                 List<SQLQueryParameterSetter> parameterSetters = new ArrayList<>();

@@ -36,7 +36,7 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
     public UpsertIntoCachedCollectionTask(final IDatabaseTask upsertTask) throws CreateCachedCollectionTaskException {
         this.upsertTask = upsertTask;
         try {
-            this.startDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.toString()), "document/startDateTime");
+            this.startDateTimeField = IOC.resolve(Keys.getOrAdd(IField.class.getCanonicalName()), "document/startDateTime");
         } catch (ResolutionException e) {
             throw new CreateCachedCollectionTaskException("Can't create UpsertIntoCachedCollectionTask.", e);
         }

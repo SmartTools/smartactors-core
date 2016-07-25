@@ -41,7 +41,7 @@ public class UpsertIntoCachedCollectionTaskTest {
 
         startDateTimeField = mock(IField.class);
         IKey keyField = mock(IKey.class);
-        when(Keys.getOrAdd(IField.class.toString())).thenReturn(keyField);
+        when(Keys.getOrAdd(IField.class.getCanonicalName())).thenReturn(keyField);
         when(IOC.resolve(keyField, "document/startDateTime")).thenReturn(startDateTimeField);
 
         upsertTask = mock(IDatabaseTask.class);

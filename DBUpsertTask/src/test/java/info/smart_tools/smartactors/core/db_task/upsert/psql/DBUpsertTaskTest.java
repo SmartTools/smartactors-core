@@ -93,11 +93,11 @@ public class DBUpsertTaskTest {
                     }
                 })
         );
-        IKey keyDBInsertTask = Keys.getOrAdd(DBInsertTask.class.toString());
-        IKey keyUpsertMessage= Keys.getOrAdd(UpsertMessage.class.toString());
-        IKey keyQueryStatement = Keys.getOrAdd(QueryStatement.class.toString());
-        IKey keyFieldName = Keys.getOrAdd(IFieldName.class.toString());
-        IKey keyCompiledQuery = Keys.getOrAdd(CompiledQuery.class.toString());
+        IKey keyDBInsertTask = Keys.getOrAdd(DBInsertTask.class.getCanonicalName());
+        IKey keyUpsertMessage= Keys.getOrAdd(UpsertMessage.class.getCanonicalName());
+        IKey keyQueryStatement = Keys.getOrAdd(QueryStatement.class.getCanonicalName());
+        IKey keyFieldName = Keys.getOrAdd(IFieldName.class.getCanonicalName());
+        IKey keyCompiledQuery = Keys.getOrAdd(CompiledQuery.class.getCanonicalName());
         IOC.register(
             keyDBInsertTask,
             new SingletonStrategy(mock(DBInsertTask.class))
@@ -143,7 +143,7 @@ public class DBUpsertTaskTest {
     public void ShouldPrepareInsertQuery_When_IdIsNull()
         throws Exception {
 
-        IKey keyString = Keys.getOrAdd(String.class.toString());
+        IKey keyString = Keys.getOrAdd(String.class.getCanonicalName());
         IOC.register(
             keyString,
             new CreateNewInstanceStrategy(
@@ -161,14 +161,14 @@ public class DBUpsertTaskTest {
 
         verify(dbInsertTask).setConnection(connection);
         verifyStatic();
-        IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection, DBUpsertTask.class.toString().concat("insert"), null);
+        IOC.resolve(Keys.getOrAdd(CompiledQuery.class.getCanonicalName()), connection, DBUpsertTask.class.toString().concat("insert"), null);
     }
 
     @Test
     public void ShouldPrepareUpdateQuery_When_IdIsGiven()
         throws Exception {
 
-        IKey keyString = Keys.getOrAdd(String.class.toString());
+        IKey keyString = Keys.getOrAdd(String.class.getCanonicalName());
         IOC.register(
             keyString,
             new CreateNewInstanceStrategy(String::valueOf));
@@ -181,7 +181,7 @@ public class DBUpsertTaskTest {
         task.prepare(upsertMessage);
 
         verifyStatic();
-        IOC.resolve(Keys.getOrAdd(CompiledQuery.class.toString()), connection, DBUpsertTask.class.toString().concat("update"), null);
+        IOC.resolve(Keys.getOrAdd(CompiledQuery.class.getCanonicalName()), connection, DBUpsertTask.class.toString().concat("update"), null);
     }
 
     @Test
