@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>core.create_new_instance_strategy</artifactId>
+            <artifactId>strategy.apply_function_to_arguments</artifactId>
             <version>${core.version}</version>
         </dependency>
 

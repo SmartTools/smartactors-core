@@ -103,11 +103,14 @@
         <module>MessageProcessingInterfaces</module>
         <module>ExceptionHandlingReceivers</module>
         <module>PluginCompileQuery</module>
+        <module>PluginCollectionName</module>
         <module>PluginCachedCollection</module>
         <module>PostgresConnection</module>
         <module>PluginPostgresConnectionPool</module>
+        <module>PluginIField</module>
         <module>IStorageConnection</module>
         <module>RecursiveStrategyContainer</module>
+        <module>CreateSession</module>
         <module>CachedCollection</module>
         <module>IRouter</module>
         <module>IChainStorage</module>
@@ -124,18 +127,43 @@
         <module>ToWrapperConverterStrategy</module>
         <module>IObjectWrapper</module>
         <module>CreateUserActor</module>
+        <module>PluginCreateSession</module>
         <module>PluginGetFormActor</module>
         <module>GetCookieFromRequestRule</module>
         <module>GetHeaderFromRequestRule</module>
         <module>CheckUserIsNewActor</module>
         <module>ApplyFunctionToArgumentsStrategy</module>
+        <module>IField</module>
+        <module>PluginCreateAsyncOperationActor</module>
         <module>WDSObject</module>
         <module>FieldName</module>
+        <module>ValidateFormDataActor</module>
         <module>IFieldName</module>
+        <module>PluginCheckUserByEmailActor</module>
+        <module>PluginGetHeaderRule</module>
+        <module>ReceiverGenerator</module>
+        <module>ActorReceiver</module>
+        <module>HandlerRoutingReceiver</module>
+        <module>IReceiverGenerator</module>
+        <module>PluginReceiverGenerator</module>
         <module>PluginIFieldName</module>
-        <module>IField</module>
+        <module>PluginCheckUserIsNewActor</module>
+        <module>PluginAuthenticationActor</module>
         <module>IPath</module>
         <module>Path</module>
+        <module>CheckValidityAsyncOperationActor</module>
+        <module>PluginGetCookieFromRequestRule</module>
+        <module>Field</module>
+        <module>PluginGetAsyncOperation</module>
+        <module>PluginIObjectSimpleImpl</module>
+        <module>ResolveIObjectStrategies</module>
+        <module>PluginResolveIObjectStrategies</module>
+        <module>ResolveByTypeStrategy</module>
+        <module>ResolveStandardTypesStrategies</module>
+        <module>PluginResolveStandardTypesStrategies</module>
+        <module>PluginWrapperGenerator</module>
+        <module>PluginFieldName</module>
+        <module>PluginCheckValidityAsyncOperationActor</module>
         <module>CheckValidityAsyncOperationActor</module>
     </modules>
 
@@ -179,6 +207,7 @@
                 <version>2.19.1</version>
                 <configuration>
                     <argLine>${argLine}</argLine>
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
         </plugins>

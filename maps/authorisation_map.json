@@ -11,7 +11,7 @@
     {
       "actor": "authenticationActor",
       "handler": "authenticateSession",
-      "info.smart_tools.smartactors.actors.authentication.wrapper.AuthenticationMessage": {
+      "wrapper": {
         "in_getRequestUserAgent": [
           {
             "name": "getUserAgentFromRequestRule",
@@ -27,7 +27,7 @@
     {
       "actor": "getFormActor",
       "handler": "getForm",
-      "info.smart_tools.smartactors.actors.get_form.wrapper.GetFormMessage": {
+      "wrapper": {
           "in_getFormKey": "message/formKey",
           "out_setForm": "response/form"
       }
@@ -35,9 +35,9 @@
     {
       "actor": "asyncOpsActor",
       "handler": "createOperation",
-      "info.smart_tools.smartactors.actor.create_async_operation.wrapper.CreateAsyncOperationMessage": {
+      "wrapper": {
         "in_getSessionId": "message/sessionId",
-        "in_getExpiredTime": "message/expiredTime",
+        "in_getExpiredTime": "const/4",
         "out_setAsyncOperationToken": "response/token"
       }
     }

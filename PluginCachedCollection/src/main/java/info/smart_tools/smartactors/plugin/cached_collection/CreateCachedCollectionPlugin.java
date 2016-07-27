@@ -47,7 +47,7 @@ public class CreateCachedCollectionPlugin implements IPlugin {
 
             item
                 .after("IOC")
-                .after("FieldPlugin")
+                .after("IFieldPlugin")
                 .process(() -> {
                     try {
                         IKey cachedCollectionKey = Keys.getOrAdd(ICachedCollection.class.toString());

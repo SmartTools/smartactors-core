@@ -1,12 +1,9 @@
 package info.smart_tools.smartactors.core.chain_call_receiver;
 
 import info.smart_tools.smartactors.core.chain_call_receiver.exceptions.ChainChoiceException;
-import info.smart_tools.smartactors.core.iaction.IAction;
-import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ichain_storage.IChainStorage;
 import info.smart_tools.smartactors.core.ichain_storage.exceptions.ChainNotFoundException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
-import info.smart_tools.smartactors.core.iobject.IObject;
 import info.smart_tools.smartactors.core.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.core.message_processing.IMessageReceiver;
 import info.smart_tools.smartactors.core.message_processing.IReceiverChain;
@@ -43,15 +40,13 @@ public class ChainCallReceiver implements IMessageReceiver {
     }
 
     @Override
-    public void receive(final IMessageProcessor processor, final IObject arguments, final IAction<Throwable> onEnd)
+    public void receive(final IMessageProcessor processor)
             throws MessageReceiveException {
         try {
             Object chainId = chainChoiceStrategy.chooseChain(processor);
             IReceiverChain chain = chainStorage.resolve(chainId);
             processor.getSequence().callChain(chain);
-            onEnd.execute(null);
-        } catch (ChainChoiceException | ChainNotFoundException | NestedChainStackOverflowException |
-                 ActionExecuteException | InvalidArgumentException e) {
+        } catch (ChainChoiceException | ChainNotFoundException | NestedChainStackOverflowException e) {
             throw new MessageReceiveException("Could not call nested chain.", e);
         }
     }

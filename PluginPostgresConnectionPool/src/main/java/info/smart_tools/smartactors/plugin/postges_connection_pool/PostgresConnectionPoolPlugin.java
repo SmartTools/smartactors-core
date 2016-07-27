@@ -1,7 +1,6 @@
 package info.smart_tools.smartactors.plugin.postges_connection_pool;
 
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
-import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.iioccontainer.exception.RegistrationException;
@@ -17,6 +16,7 @@ import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.pool.Pool;
 import info.smart_tools.smartactors.core.postgres_connection.PostgresConnection;
 import info.smart_tools.smartactors.core.postgres_connection.wrapper.ConnectionOptions;
+import info.smart_tools.smartactors.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 
 /**
  * Plugin.
@@ -50,7 +50,7 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
                 .process(() -> {
                     try {
                         IKey postgresConnectionPoolKey = Keys.getOrAdd("PostgresConnectionPool");
-                        IOC.register(postgresConnectionPoolKey, new CreateNewInstanceStrategy(
+                        IOC.register(postgresConnectionPoolKey, new ApplyFunctionToArgumentsStrategy(
                             (args) -> {
                                 ConnectionOptions connectionOptions = (ConnectionOptions) args[0];
                                 if (connectionOptions == null) {

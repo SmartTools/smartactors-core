@@ -27,7 +27,7 @@ public class UpsertIntoCachedCollectionTask implements IDatabaseTask {
 
     private IField startDateTimeField;
     //TODO:: this format should be setted for whole project?
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
 
     /**
      * @param upsertTask Target update task

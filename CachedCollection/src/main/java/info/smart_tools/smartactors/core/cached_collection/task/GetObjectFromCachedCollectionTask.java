@@ -32,7 +32,7 @@ public class GetObjectFromCachedCollectionTask implements IDatabaseTask {
     private IField criteriaEqualsIsActiveField;
     private IField criteriaDateToStartDateTimeField;
     //TODO:: this format should be setted for whole project?
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
 
     /**
      * @param getItemTask Target task for getting items

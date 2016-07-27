@@ -1,7 +1,10 @@
 package info.smart_tools.smartactors.core.class_generator_java_compile_api;
 
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -40,14 +43,12 @@ class InMemoryCodeCompiler {
      * compiled class
      * @param className full name of future class
      * @param sourceCodeInText code source
-     * @param additionalClassPaths additional class paths
      * @return compiled class
      * @throws Exception if any errors occurred
      */
     Class<?> compile(
             final String className,
-            final String sourceCodeInText,
-            final String additionalClassPaths
+            final String sourceCodeInText
     )
             throws Exception {
         try {
@@ -56,7 +57,7 @@ class InMemoryCodeCompiler {
         try {
             List<String> optionList = new ArrayList<>();
             if (null != this.classLoader) {
-                optionList.addAll(Arrays.asList("-classpath", getClassPath(this.classLoader, additionalClassPaths)));
+                optionList.addAll(Arrays.asList("-classpath", getClassPath(this.classLoader)));
             }
             SourceCode sourceCode = new SourceCode(className, sourceCodeInText);
             CompiledCode compiledCode = new CompiledCode(className);
@@ -64,16 +65,25 @@ class InMemoryCodeCompiler {
             ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(
                     javac.getStandardFileManager(null, null, null), compiledCode, this.classLoader
             );
-
+            DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
             CompilationTask task = javac.getTask(
                     null,
                     fileManager,
-                    null,
+                    diagnostics,
                     optionList,
                     null,
                     compilationUnits
             );
-            task.call();
+            if (!task.call()) {
+                StringBuilder s = new StringBuilder();
+                for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
+                    s
+                            .append("\n")
+                            .append(diagnostic);
+                }
+                throw new Exception("Failed to compile " + className + s.toString());
+
+            }
             return this.classLoader.loadClass(className);
         } catch (Throwable e) {
             throw new Exception(e);
@@ -83,10 +93,9 @@ class InMemoryCodeCompiler {
     /**
      * Return all class paths as instance of {@link String} form given instance of {@link ClassLoader}
      * @param classLoader instance of {@link ClassLoader}
-     * @param additionalClassPaths additional class paths
      * @return all class paths
      */
-    private static String getClassPath(final ClassLoader classLoader, final String additionalClassPaths) {
+    private static String getClassPath(final ClassLoader classLoader) {
         ClassLoader cl = classLoader;
         StringBuilder buf = new StringBuilder();
         buf.append(".");
@@ -112,9 +121,6 @@ class InMemoryCodeCompiler {
                 // because this try-catch check cast ClassLoader to URLClassLoader
             }
             cl = cl.getParent();
-        }
-        if (null != additionalClassPaths && !additionalClassPaths.isEmpty()) {
-            buf.append(separator).append(additionalClassPaths);
         }
 
         return buf.toString();

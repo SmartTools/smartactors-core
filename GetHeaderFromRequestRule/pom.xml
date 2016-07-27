@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>transformation_rule.getHeader_from_request</artifactId>
+    <artifactId>transformation_rule.get_header_from_request</artifactId>
 
     <dependencies>
         <dependency>

@@ -3,7 +3,6 @@ package info.smart_tools.smartactors.core.actors.check_validity_async_operation;
 import info.smart_tools.smartactors.core.actors.check_validity_async_operation.exception.InvalidAsyncOperationIdException;
 import info.smart_tools.smartactors.core.actors.check_validity_async_operation.wrapper.CheckValidityMessage;
 import info.smart_tools.smartactors.core.iobject.IObject;
-import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class CheckValidityAsyncOperationActor {
      * Constructor for CheckValidityAsyncOperationActor
      * @param config contains any params
      */
-    public CheckValidityAsyncOperationActor(final IObject config){
+    public CheckValidityAsyncOperationActor(final IObject config) {
     }
 
     /**
@@ -36,7 +35,7 @@ public class CheckValidityAsyncOperationActor {
             if (!validIds.contains(message.getAsyncOperationId())) {
                 throw new InvalidAsyncOperationIdException("List of asynch operations does not contain operation with received token");
             }
-        } catch (ReadValueException | ChangeValueException e) {
+        } catch (ReadValueException e) {
             throw new InvalidAsyncOperationIdException(e);
         }
 

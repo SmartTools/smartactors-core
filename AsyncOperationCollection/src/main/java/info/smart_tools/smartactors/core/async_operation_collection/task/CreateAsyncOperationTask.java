@@ -30,7 +30,7 @@ public class CreateAsyncOperationTask implements IDatabaseTask {
     /**
      * Constructor
      * @param task the insert DB task
-     * @throws CreateAsyncOperationTask Throw when task can't be created (for example, when can't resolve some of field)
+     * @throws CreateAsyncOperationException Throw when task can't be created (for example, when can't resolve some of field)
      */
     public CreateAsyncOperationTask(final IDatabaseTask task) throws CreateAsyncOperationException {
         this.task = task;

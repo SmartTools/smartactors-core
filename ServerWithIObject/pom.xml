@@ -69,6 +69,11 @@
             <artifactId>core.field_name</artifactId>
             <version>${core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>core.wds_object</artifactId>
+            <version>${core.version}</version>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>

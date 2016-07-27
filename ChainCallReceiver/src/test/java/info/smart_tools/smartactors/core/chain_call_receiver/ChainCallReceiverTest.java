@@ -44,7 +44,6 @@ public class ChainCallReceiverTest {
         IReceiverChain chainMock = mock(IReceiverChain.class);
         IMessageProcessor messageProcessorMock = mock(IMessageProcessor.class);
         IMessageProcessingSequence sequenceMock = mock(IMessageProcessingSequence.class);
-        IAction actionMock = mock(IAction.class);
         ChainChoiceException exceptionMock = mock(ChainChoiceException.class);
 
         IMessageReceiver receiver = new ChainCallReceiver(chainStorageMock, chainChoiceStrategyMock);
@@ -53,15 +52,14 @@ public class ChainCallReceiverTest {
         when(chainStorageMock.resolve(same(chainIdMock))).thenReturn(chainMock);
         when(messageProcessorMock.getSequence()).thenReturn(sequenceMock);
 
-        receiver.receive(messageProcessorMock, null, actionMock);
+        receiver.receive(messageProcessorMock);
 
         verify(sequenceMock).callChain(same(chainMock));
-        verify(actionMock).execute(isNull());
 
         when(chainChoiceStrategyMock.chooseChain(same(messageProcessorMock))).thenThrow(exceptionMock);
 
         try {
-            receiver.receive(messageProcessorMock, null, actionMock);
+            receiver.receive(messageProcessorMock);
             fail();
         } catch (MessageReceiveException e) {
             assertSame(exceptionMock, e.getCause());

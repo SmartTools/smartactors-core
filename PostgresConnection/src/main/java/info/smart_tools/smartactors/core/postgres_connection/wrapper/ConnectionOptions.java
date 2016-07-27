@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.core.postgres_connection.wrapper;
 
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 
 /**
@@ -7,7 +8,7 @@ import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
  */
 public interface ConnectionOptions {
     /**
-     * @return url of database
+     * @return url to connect with database
      * @throws ReadValueException if any errors occurred
      */
     String getUrl() throws ReadValueException;
@@ -29,4 +30,28 @@ public interface ConnectionOptions {
      * @throws ReadValueException if any errors occurred
      */
     Integer getMaxConnections() throws ReadValueException;
+
+    /**
+     * @param url url to connect with database
+     * @throws ChangeValueException if any errors occurred
+     */
+    void setUrl(String url) throws ChangeValueException;
+
+    /**
+     * @param username of database user
+     * @throws ChangeValueException if any errors occurred
+     */
+    void setUsername(String username) throws ChangeValueException;
+
+    /**
+     * @param password od database user
+     * @throws ChangeValueException if any errors occurred
+     */
+    void setPassword(String password) throws ChangeValueException;
+
+    /**
+     * @param maxConnections maximum of connections for this pool
+     * @throws ChangeValueException if any errors occurred
+     */
+    void setMaxConnections(Integer maxConnections) throws ChangeValueException;
 }

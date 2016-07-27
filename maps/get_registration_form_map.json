@@ -22,18 +22,20 @@
       }
     },
     {
-      "actor": "asyncOpsActor",
-      "handler": "createOperation",
-      "wrapper": {
-        "in_getIObject": "message"
-      }
-    },
-    {
       "actor": "getFormActor",
       "handler": "getForm",
       "wrapper": {
         "in_getFormKey": "message/formKey",
         "out_setForm": "response/form"
+      }
+    },
+    {
+      "actor": "asyncOpsActor",
+      "handler": "createOperation",
+      "wrapper": {
+        "in_getSessionId": "message/sessionId",
+        "in_getExpiredTime": "const/4",
+        "out_setAsyncOperationToken": "response/token"
       }
     }
   ]

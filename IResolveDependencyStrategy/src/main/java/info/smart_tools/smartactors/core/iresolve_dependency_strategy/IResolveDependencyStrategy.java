@@ -14,7 +14,6 @@ public interface IResolveDependencyStrategy {
      * @return instance of type T object
      * @throws ResolveDependencyStrategyException if any errors occurred
      */
-    //TODO: need change IObject by wrapper when needed code will be implemented
     <T> T resolve(final Object ... args)
             throws ResolveDependencyStrategyException;
 }
