@@ -151,6 +151,7 @@
         <module>PluginAuthenticationActor</module>
         <module>IPath</module>
         <module>Path</module>
+        <module>CheckValidityAsyncOperationActor</module>
         <module>PluginGetCookieFromRequestRule</module>
         <module>Field</module>
         <module>PluginGetAsyncOperation</module>
@@ -329,7 +330,4 @@
         </repository>
     </distributionManagement>
 
-    <scm>
-        <connection>scm:git:git@github.com:SmartTools/smartactors-core.git</connection>
-    </scm>
 </project>

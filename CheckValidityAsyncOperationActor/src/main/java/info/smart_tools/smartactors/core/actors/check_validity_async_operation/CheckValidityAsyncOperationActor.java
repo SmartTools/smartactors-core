@@ -24,16 +24,16 @@ public class CheckValidityAsyncOperationActor {
     /**
      * Check validity asynchronous operation, if invalid - throw exception
      * @param message input message
-     * @throws InvalidAsyncOperationIdException
+     * @throws InvalidAsyncOperationIdException Calling when any error
      */
     public void check(final CheckValidityMessage message) throws InvalidAsyncOperationIdException {
         try {
             List<String> validIds = message.getIdentifiers();
             if (validIds == null || validIds.isEmpty()) {
-                throw new ReadValueException("List of valid id is empty");
+                throw new InvalidAsyncOperationIdException("List of valid id is empty");
             }
             if (!validIds.contains(message.getAsyncOperationId())) {
-                throw new InvalidAsyncOperationIdException("List with all identifiers not contains Id from client.");
+                throw new InvalidAsyncOperationIdException("List of asynch operations does not contain operation with received token");
             }
         } catch (ReadValueException e) {
             throw new InvalidAsyncOperationIdException(e);
