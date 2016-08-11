@@ -239,6 +239,8 @@
         <module>PluginChainChoiceStrategy</module>
         <module>ServerForIntern</module>
         <module>PluginStarter</module>
+        <module>IEnvironmentExtractor</module>
+        <module>HttpEnvironmentExtractor</module>
         <module>SampleDBActor</module>
         <module>PluginSampleDBActor</module>
         <module>ExceptionHandlerActor</module>

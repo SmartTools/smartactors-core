@@ -3,6 +3,7 @@ package info.smart_tools.smartactors.core.standard_config_sections;
 import info.smart_tools.smartactors.core.HttpEndpoint;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.ds_object.DSObject;
+import info.smart_tools.smartactors.core.endpoint_handler.exceptions.EndpointException;
 import info.smart_tools.smartactors.core.environment_handler.EnvironmentHandler;
 import info.smart_tools.smartactors.core.field_name.FieldName;
 import info.smart_tools.smartactors.core.ichain_storage.IChainStorage;
@@ -63,7 +64,6 @@ public class EndpointsSectionProcessingStrategyTest {
                 IOC.getKeyForKeyStorage(),
                 new ResolveByNameIocStrategy()
         );
-
         IKey iFieldNameKey = Keys.getOrAdd(IFieldName.class.getCanonicalName());
 
         IOC.register(iFieldNameKey,
@@ -123,8 +123,8 @@ public class EndpointsSectionProcessingStrategyTest {
                             (Integer) configuration.getValue(new FieldName("maxContentLength")),
                             ScopeProvider.getCurrentScope(), environmentHandler,
                             (IReceiverChain) configuration.getValue(new FieldName("startChain")));
-                    } catch (ReadValueException | InvalidArgumentException
-                        | ScopeProviderException | ResolutionException e) {
+                    } catch (ReadValueException | InvalidArgumentException | ScopeProviderException |
+                            ResolutionException | EndpointException e) {
                     }
                     return null;
                 }

@@ -1,7 +1,9 @@
-package info.smart_tools.smartactors.core.exceptions;
+package info.smart_tools.smartactors.core.ideserialize_strategy.exceptions;
+
+import info.smart_tools.smartactors.core.ideserialize_strategy.IDeserializeStrategy;
 
 /**
- * Exception for error in {@link info.smart_tools.smartactors.core.IDeserializeStrategy}
+ * Exception for error in {@link IDeserializeStrategy}
  */
 public class DeserializationException extends Exception {
 

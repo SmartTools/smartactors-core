@@ -2,18 +2,23 @@ package info.smart_tools.smartactors.plugin.http_endpoint;
 
 
 import info.smart_tools.smartactors.core.HttpEndpoint;
-import info.smart_tools.smartactors.core.IDeserializeStrategy;
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.channel_handler_netty.ChannelHandlerNetty;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.deserialize_strategy_post_json.DeserializeStrategyPostJson;
 import info.smart_tools.smartactors.core.ds_object.DSObject;
+import info.smart_tools.smartactors.core.endpoint_handler.EndpointHandlerTask;
+import info.smart_tools.smartactors.core.endpoint_handler.exceptions.EndpointException;
 import info.smart_tools.smartactors.core.environment_handler.EnvironmentHandler;
+import info.smart_tools.smartactors.core.http_environment_extractor.HttpEnvironmentExtractor;
 import info.smart_tools.smartactors.core.http_response_sender.HttpResponseSender;
 import info.smart_tools.smartactors.core.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.core.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.core.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.core.icookies_extractor.ICookiesSetter;
+import info.smart_tools.smartactors.core.ideserialize_strategy.IDeserializeStrategy;
+import info.smart_tools.smartactors.core.ienvironment_extractor.IEnvironmentExtractor;
+import info.smart_tools.smartactors.core.ienvironment_extractor.exceptions.EnvironmentExtractionException;
 import info.smart_tools.smartactors.core.ienvironment_handler.IEnvironmentHandler;
 import info.smart_tools.smartactors.core.ifield_name.IFieldName;
 import info.smart_tools.smartactors.core.iheaders_extractor.IHeadersExtractor;
@@ -158,10 +163,11 @@ public class HttpEndpointPlugin implements IPlugin {
                                                                     (Integer) configuration.getValue(maxContentLengthFieldName),
                                                                     ScopeProvider.getCurrentScope(), environmentHandler,
                                                                     (IReceiverChain) configuration.getValue(startChainNameFieldName));
-                                                        } catch (ReadValueException | InvalidArgumentException
-                                                                | ScopeProviderException | ResolutionException e) {
+                                                        } catch (ReadValueException | InvalidArgumentException |
+                                                                ScopeProviderException | ResolutionException |
+                                                                EndpointException e) {
+                                                            throw new RuntimeException(e);
                                                         }
-                                                        return null;
                                                     }
                                             )
                                     );
@@ -196,12 +202,33 @@ public class HttpEndpointPlugin implements IPlugin {
                                                     }
                                             ));
 
+                                    IOC.register(Keys.getOrAdd(EndpointHandlerTask.class.getCanonicalName()),
+                                            new CreateNewInstanceStrategy(
+                                                    args -> new EndpointHandlerTask(
+                                                            (IEnvironmentExtractor) args[0],
+                                                            args[1], args[2], (IEnvironmentHandler) args[3],
+                                                            (IReceiverChain) args[4])
+                                            )
+                                    );
+                                    IOC.register(Keys.getOrAdd(IEnvironmentExtractor.class.getCanonicalName()),
+                                            new CreateNewInstanceStrategy(
+                                                    args -> {
+                                                        try {
+                                                            return new HttpEnvironmentExtractor();
+                                                        } catch (EnvironmentExtractionException e) {
+                                                        }
+                                                        return null;
+                                                    }
+                                            )
+                                    );
+
                                 } catch (ResolutionException e) {
                                     throw new ActionExecuteException("EndpointCollection plugin can't load: can't get key", e);
                                 } catch (InvalidArgumentException e) {
                                     throw new ActionExecuteException("EndpointCollection plugin can't load: can't create strategy", e);
                                 } catch (RegistrationException e) {
-                                    throw new ActionExecuteException("EndpointCollection plugin can't load: can't register new strategy", e);
+                                    throw new ActionExecuteException(
+                                            "EndpointCollection plugin can't load: can't register new strategy", e);
                                 }
                             }
                     );

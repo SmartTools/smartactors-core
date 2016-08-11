@@ -1,4 +1,4 @@
-import info.smart_tools.smartactors.core.exceptions.DeserializationException;
+import info.smart_tools.smartactors.core.ideserialize_strategy.exceptions.DeserializationException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

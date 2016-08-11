@@ -1,9 +1,10 @@
 package info.smart_tools.smartactors.core.http_endpoint;
 
 import info.smart_tools.smartactors.core.deserialize_strategy_post_json.DeserializeStrategyPostJson;
+import info.smart_tools.smartactors.core.endpoint_handler.exceptions.EndpointException;
 import info.smart_tools.smartactors.core.http_client.HttpClient;
 import info.smart_tools.smartactors.core.HttpEndpoint;
-import info.smart_tools.smartactors.core.IDeserializeStrategy;
+import info.smart_tools.smartactors.core.ideserialize_strategy.IDeserializeStrategy;
 import info.smart_tools.smartactors.core.channel_handler_netty.ChannelHandlerNetty;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.ds_object.DSObject;
@@ -63,7 +64,7 @@ public class HttpEndpointTest {
 
 
     @BeforeMethod
-    public void setUp() throws ExecutionException, InterruptedException, URISyntaxException, InvalidArgumentException, ResolutionException, RegistrationException, ScopeProviderException {
+    public void setUp() throws ExecutionException, InterruptedException, URISyntaxException, InvalidArgumentException, ResolutionException, RegistrationException, ScopeProviderException, EndpointException {
         mapperStub = mock(IMessageMapper.class);
         receiver = mock(IReceiverChain.class);
         environmentHandler = mock(IEnvironmentHandler.class);
@@ -181,7 +182,7 @@ public class HttpEndpointTest {
 
     protected HttpServer createEndpoint(
             IEnvironmentHandler environmentHandler, IReceiverChain receiver, IMessageMapper<byte[]> mapper
-    ) throws ResolutionException, ScopeProviderException {
+    ) throws ResolutionException, ScopeProviderException, EndpointException {
         Map<String, IDeserializeStrategy> strategies = new HashMap<>();
         strategies.put("application/json", new DeserializeStrategyPostJson(mapper));
         return new HttpEndpoint(getTestingPort(), 4096, ScopeProvider.getCurrentScope(),

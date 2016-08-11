@@ -2,6 +2,7 @@ package info.smart_tools.smartactors.core.https_endpoint;
 
 
 import info.smart_tools.smartactors.core.EndpointChannelInboundHandler;
+import info.smart_tools.smartactors.core.endpoint_handler.exceptions.EndpointException;
 import info.smart_tools.smartactors.core.http_request_handler.HttpRequestHandler;
 import info.smart_tools.smartactors.core.https_server.HttpsServer;
 import info.smart_tools.smartactors.core.ienvironment_handler.IEnvironmentHandler;
@@ -28,7 +29,7 @@ public class HttpsEndpoint extends HttpsServer {
     public HttpsEndpoint(final int port, final int maxContentLength, final IScope scope,
                          final IEnvironmentHandler handler, final IReceiverChain receiverChain,
                          final ISslEngineProvider sslContextProvider
-    ) {
+    ) throws EndpointException {
         super(port, new EndpointChannelInboundHandler<>(
                         new HttpRequestHandler(scope, handler, receiverChain),
                         FullHttpRequest.class),

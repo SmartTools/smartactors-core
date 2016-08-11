@@ -56,16 +56,6 @@
       "id": "myChainOther",
       "steps": [
         {
-          "target": "sample-actor-other",
-          "handler": "transformAndPutForResponse",
-          "wrapper": {
-            "in_getSomeField": "message/Field",
-            "out_setSomeValueForRequest": "response/TransformedField",
-            "out_setCurrentActorState": "response/CurrentState",
-            "in_resetState": "message/Reset"
-          }
-        },
-        {
           "target": "respond",
           "handler": "sendResponse"
         }
@@ -88,13 +78,13 @@
       "name": "mainHttpEp",
       "type": "http",
       "port": 9909,
-      "startChain": "SelectChain",
+      "startChain": "myChainOther",
       "maxContentLength": 4098,
       "stackDepth": 5
     }
   ],
   "executor": {
-    "threadCount": 4,
+    "threadCount": 8,
     "maxRunningThreads": 2,
     "maxExecutionDelay": 100000,
     "queueSize": 10000000

@@ -1,6 +1,12 @@
 package info.smart_tools.smartactors.plugin.http_endpoint;
 
 
+<<<<<<< HEAD
+import info.smart_tools.smartactors.core.deserialize_strategy_post_json.DeserializeStrategyPostJson;
+import info.smart_tools.smartactors.core.HttpEndpoint;
+import info.smart_tools.smartactors.core.ideserialize_strategy.IDeserializeStrategy;
+=======
+>>>>>>> develop
 import info.smart_tools.smartactors.core.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.core.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.core.field_name.FieldName;

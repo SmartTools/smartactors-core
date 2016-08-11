@@ -71,9 +71,11 @@ public class PluginMessagingIdentifiers implements IPlugin {
                             IOC.register(Keys.getOrAdd("chain_id_from_map_name"), toStringStrategy);
                             IOC.register(Keys.getOrAdd("receiver_id_from_iobject"), targetToStringStrategy);
                         } catch (ResolutionException e) {
-                            throw new ActionExecuteException("MessagingIdentifiers plugin can't load: can't get MessagingIdentifiers key", e);
+                            throw new ActionExecuteException(
+                                    "MessagingIdentifiers plugin can't load: can't get MessagingIdentifiers key", e);
                         } catch (RegistrationException e) {
-                            throw new ActionExecuteException("MessagingIdentifiers plugin can't load: can't register new strategy", e);
+                            throw new ActionExecuteException(
+                                    "MessagingIdentifiers plugin can't load: can't register new strategy", e);
                         }
                     });
 

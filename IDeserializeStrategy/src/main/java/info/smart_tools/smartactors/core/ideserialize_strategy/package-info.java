@@ -1,4 +1,4 @@
 /**
  * Package contains interface for deserialization strategies
  */
-package info.smart_tools.smartactors.core;
+package info.smart_tools.smartactors.core.ideserialize_strategy;
