@@ -4,8 +4,12 @@ import info.smart_tools.smartactors.actors.validate_form_data.exception.Validate
 import info.smart_tools.smartactors.actors.validate_form_data.wrapper.ValidateFormDataMessage;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.ikey.IKey;
+import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.field.Field;
@@ -20,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -73,17 +78,13 @@ public class ValidateFormDataActorTest {
 
         when(clientForm.getValue(fieldFieldName)).thenReturn("valueFromClient");
 
-        IObject resultObject = mock(IObject.class);
-        IKey iobjectKey = mock(IKey.class);
-        when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
-        when(IOC.resolve(iobjectKey)).thenReturn(resultObject);
-
         actor.validate(message);
-        verify(resultObject).setValue(eq(fieldFieldName), eq("valueFromClient"));
-        verify(message).setFormData(resultObject);
+
+        verify(message).getForm();
+        verify(message).getFormFromRequest();
     }
 
-    @Test(expected = ValidateFormException.class)
+    @Test
     public void shouldThrowExceptionWhenFieldsIsInvalid() throws Exception {
         IObject serverForm = mock(IObject.class);
         IObject clientForm = mock(IObject.class);
@@ -106,11 +107,48 @@ public class ValidateFormDataActorTest {
 
         when(clientForm.getValue(fieldFieldName)).thenReturn("");
 
+        try {
+            actor.validate(message);
+        } catch (ValidateFormException e) {
+            verify(message).getForm();
+            verify(message).getFormFromRequest();
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void MustCorrectCreateObjectByRule() throws ReadValueException, ResolutionException, ValidateFormException, InvalidArgumentException, ChangeValueException {
+        IObject serverForm = mock(IObject.class);
+        IObject clientForm = mock(IObject.class);
+
+        ValidateFormDataMessage message = mock(ValidateFormDataMessage.class);
+        when(message.getFormFromRequest()).thenReturn(clientForm);
+        when(message.getForm()).thenReturn(serverForm);
+
+        Iterator serverIterator = mock(Iterator.class);
+        when(serverForm.iterator()).thenReturn(serverIterator);
+
+        Map.Entry entry = mock(Map.Entry.class);
+        when(serverIterator.next()).thenReturn(entry, null);
+        when(serverIterator.hasNext()).thenReturn(false);
+
+        IFieldName fieldFieldName = mock(IFieldName.class);
+        when(entry.getKey()).thenReturn(fieldFieldName);
+
+        Object clientFormData = new Object();
+        when(clientForm.getValue(fieldFieldName)).thenReturn(clientFormData);
+
         IObject resultObject = mock(IObject.class);
         IKey iobjectKey = mock(IKey.class);
         when(Keys.getOrAdd(IObject.class.getCanonicalName())).thenReturn(iobjectKey);
         when(IOC.resolve(iobjectKey)).thenReturn(resultObject);
 
-        actor.validate(message);
+        actor.createObjectByRule(message);
+
+        verify(message).getForm();
+        verify(message).getFormFromRequest();
+
+        verify(resultObject).setValue(fieldFieldName, clientFormData);
     }
 }

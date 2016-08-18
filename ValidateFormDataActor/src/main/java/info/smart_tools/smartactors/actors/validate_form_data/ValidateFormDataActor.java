@@ -5,8 +5,11 @@ import info.smart_tools.smartactors.actors.validate_form_data.parser.Parser;
 import info.smart_tools.smartactors.actors.validate_form_data.wrapper.ValidateFormDataMessage;
 import info.smart_tools.smartactors.core.ifield.IField;
 import info.smart_tools.smartactors.core.ifield_name.IFieldName;
+import info.smart_tools.smartactors.core.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.core.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.core.iobject.IObject;
+import info.smart_tools.smartactors.core.iobject.exception.ChangeValueException;
+import info.smart_tools.smartactors.core.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.core.ioc.IOC;
 import info.smart_tools.smartactors.core.named_keys_storage.Keys;
 import info.smart_tools.smartactors.core.field.Field;
@@ -47,8 +50,6 @@ public class ValidateFormDataActor {
             IObject formFields = message.getForm();
             IObject clientData = message.getFormFromRequest();
 
-            IObject resultObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
-
             Iterator<Map.Entry<IFieldName, Object>> fieldsIterator = formFields.iterator();
             Map.Entry<IFieldName, Object> entry = fieldsIterator.next();
 
@@ -63,6 +64,35 @@ public class ValidateFormDataActor {
                         }
                     }
                 }
+
+                if (!fieldsIterator.hasNext()) {
+                    break;
+                }
+                entry = fieldsIterator.next();
+            }
+        } catch (Exception e) {
+            throw new ValidateFormException(e);
+        }
+    }
+
+    /**
+     * Validate form data from client
+     * @param message the message
+     * @throws ValidateFormException if form is not valid
+     */
+    public void createObjectByRule(final ValidateFormDataMessage message) throws ValidateFormException {
+        try {
+            IObject formFields = message.getForm();
+            IObject clientData = message.getFormFromRequest();
+
+            IObject resultObject = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()));
+
+            Iterator<Map.Entry<IFieldName, Object>> fieldsIterator = formFields.iterator();
+            Map.Entry<IFieldName, Object> entry = fieldsIterator.next();
+
+            while (entry != null) {
+                IFieldName key = entry.getKey();
+
                 resultObject.setValue(key, clientData.getValue(key));
 
                 if (!fieldsIterator.hasNext()) {
@@ -71,7 +101,7 @@ public class ValidateFormDataActor {
                 entry = fieldsIterator.next();
             }
             message.setFormData(resultObject);
-        } catch (Exception e) {
+        } catch (ReadValueException | ChangeValueException | ResolutionException | InvalidArgumentException e) {
             throw new ValidateFormException(e);
         }
     }
