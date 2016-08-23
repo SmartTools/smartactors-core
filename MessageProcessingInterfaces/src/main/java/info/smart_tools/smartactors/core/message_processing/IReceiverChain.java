@@ -1,6 +1,5 @@
 package info.smart_tools.smartactors.core.message_processing;
 
-import info.smart_tools.smartactors.core.iaction.IAction;
 import info.smart_tools.smartactors.core.iobject.IObject;
 
 /**
@@ -20,7 +19,7 @@ public interface IReceiverChain {
      *
      * @param index    index of the receiver in the chain
      * @return arguments that should be passed to the receiver
-     * @see IMessageReceiver#receive(IMessageProcessor, IObject, IAction)
+     * @see IMessageReceiver#receive(IMessageProcessor)
      */
     IObject getArguments(int index);
 

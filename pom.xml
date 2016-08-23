@@ -285,6 +285,12 @@
         <module>UuidNextIdStrategy</module>
         <module>InMemoryDBCountTask</module>
         <module>InMemoryDBInsertTask</module>
+        <module>ChainTesting</module>
+        <module>TestLoadingPlugins</module>
+        <module>ChainTestsConfigSectionStrategy</module>
+        <module>PluginChainTesting</module>
+        <module>ChainTestingAssertions</module>
+        <module>PluginChainTestingAssertions</module>
     </modules>
 
     <build>
