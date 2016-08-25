@@ -81,4 +81,16 @@ public class GetAsyncOperationActorTest {
 
         fail();
     }
+
+    @Test(expected = GetAsyncOperationActorException.class)
+    public void Should_ThrowException_When_OperationIdIsNull() throws ReadValueException, GetAsyncOperationActorException {
+        when(message.getToken()).thenReturn(null);
+        actor.getOperation(message);
+    }
+
+    @Test(expected = GetAsyncOperationActorException.class)
+    public void Should_ThrowException_When_OperationIdIsEmpty() throws ReadValueException, GetAsyncOperationActorException {
+        when(message.getToken()).thenReturn("");
+        actor.getOperation(message);
+    }
 }

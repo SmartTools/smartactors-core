@@ -73,6 +73,7 @@ public class ServerWithConfiguration implements IServer {
 
             String[] coreArtifacts = {
                     "info.smart_tools.smartactors:core.standard_config_sections:0.2.0-SNAPSHOT",
+                    "info.smart_tools.smartactors:plugin.starter:0.2.0-SNAPSHOT",
                     "info.smart_tools.smartactors:plugin.actor_receiver_creator:0.2.0-SNAPSHOT",
                     "info.smart_tools.smartactors:plugin.configuration_manager:0.2.0-SNAPSHOT",
                     "info.smart_tools.smartactors:plugin.dsobject:0.2.0-SNAPSHOT",
