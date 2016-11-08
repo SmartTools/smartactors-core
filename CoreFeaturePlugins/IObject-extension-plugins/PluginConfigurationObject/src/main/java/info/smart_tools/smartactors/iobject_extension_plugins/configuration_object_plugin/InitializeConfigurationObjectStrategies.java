@@ -1,6 +1,7 @@
 package info.smart_tools.smartactors.iobject_extension_plugins.configuration_object_plugin;
 
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject_extension.configuration_object.ConfigurationObject;
 import info.smart_tools.smartactors.iobject.field_name.FieldName;
 import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecuteException;
@@ -177,6 +178,75 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                     );
                                     IOC.register(
                                             IOC.resolve(
+                                                    IOC.getKeyForKeyStorage(), "checkpoint step"
+                                            ),
+                                            new ApplyFunctionToArgumentsStrategy(
+                                                    a -> {
+                                                        try {
+                                                            IObject checkpointConfig = (IObject) a[0];
+
+                                                            IFieldName targetFieldName = new FieldName("target");
+                                                            IFieldName handlerFieldName = new FieldName("handler");
+                                                            IFieldName wrapperFieldName = new FieldName("wrapper");
+
+                                                            checkpointConfig.setValue(targetFieldName, "checkpoint");
+                                                            checkpointConfig.setValue(handlerFieldName, "enter");
+
+                                                            checkpointConfig.setValue(wrapperFieldName, IOC.resolve(
+                                                                    IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.getCanonicalName()),
+                                                                    "{'in_getProcessor':'processor'}".replace('"', '\'')
+                                                            ));
+
+                                                            return checkpointConfig;
+                                                        } catch (Throwable e) {
+                                                            throw new RuntimeException(e);
+                                                        }
+                                                    }
+                                            )
+                                    );
+                                    IOC.register(
+                                            IOC.resolve(
+                                                    IOC.getKeyForKeyStorage(), "configuration object maps strategy"
+                                            ),
+                                            new ApplyFunctionToArgumentsStrategy(
+                                                    (a) -> {
+                                                        try {
+                                                            IFieldName checkpointFieldName = new FieldName("checkpoint");
+                                                            IFieldName stepsFieldName = new FieldName("steps");
+                                                            IFieldName targetFieldName = new FieldName("target");
+
+                                                            List<IObject> mapDescriptions = (List<IObject>) a[0];
+
+                                                            for (IObject mapDesc : mapDescriptions) {
+                                                                Object cpDesc = mapDesc.getValue(checkpointFieldName);
+                                                                List<IObject> stepsDec = (List<IObject>) mapDesc.getValue(stepsFieldName);
+
+                                                                if (null != cpDesc) {
+                                                                    IObject cpStep = IOC.resolve(
+                                                                            IOC.resolve(
+                                                                                    IOC.getKeyForKeyStorage(),
+                                                                                    "checkpoint step"
+                                                                            ),
+                                                                            cpDesc
+                                                                    );
+
+                                                                    if (stepsDec.isEmpty() ||
+                                                                            !stepsDec.get(stepsDec.size() - 1).getValue(targetFieldName)
+                                                                                    .equals(cpStep.getValue(targetFieldName))) {
+                                                                        stepsDec.add(cpStep);
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            return mapDescriptions;
+                                                        } catch (Throwable e) {
+                                                            throw new RuntimeException(e);
+                                                        }
+                                                    }
+                                            )
+                                    );
+                                    IOC.register(
+                                            IOC.resolve(
                                                     IOC.getKeyForKeyStorage(), "resolve key for configuration object"
                                             ),
                                             new ApplyFunctionToArgumentsStrategy(
@@ -186,6 +256,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                                 put("in_", "configuration object in_ strategy");
                                                                 put("out_", "configuration object out_ strategy");
                                                                 put("exceptional", "configuration object exceptional strategy");
+                                                                put("maps", "configuration object maps strategy");
                                                             }};
                                                             char[] symbols = a[1].toString().toCharArray();
                                                             String resolvedKey = "configuration object default strategy";

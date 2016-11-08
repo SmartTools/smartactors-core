@@ -1,0 +1,16 @@
+{
+  "featureName": "checkpoint-plugins",
+  "afterFeatures": ["checkpoint"],
+
+  "objects_example": [
+    {
+      "name": "checkpoint",
+      "kind": "stateless_actor",
+      "dependency": "checkpoint actor",
+
+      "connectionOptionsDependency": "checkpoint connection options",
+      "connectionPoolDependency": "checkpoint connection pool",
+      "collectionName": "checkpoint_collection"
+    }
+  ]
+}
