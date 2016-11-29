@@ -35,14 +35,13 @@ public class MessageProcessor implements ITask, IMessageProcessor {
 
     private Map<Object, WDSObject> wrappedEnvironmentCache;
 
-    private final IFieldName configFieldName;
-    private final IFieldName messageFieldName;
-    private final IFieldName contextFieldName;
-    private final IFieldName responseFieldName;
-    private final IFieldName sequenceFieldName;
-    private final IFieldName argumentsFieldName;
-    private final IFieldName wrapperFieldName;
-    private final IFieldName processorFieldName;
+    private IFieldName configFieldName;
+    private IFieldName messageFieldName;
+    private IFieldName contextFieldName;
+    private IFieldName responseFieldName;
+    private IFieldName sequenceFieldName;
+    private IFieldName argumentsFieldName;
+    private IFieldName wrapperFieldName;
 
     private ITask finalTask;
 
@@ -115,7 +114,6 @@ public class MessageProcessor implements ITask, IMessageProcessor {
         sequenceFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "sequence");
         argumentsFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "arguments");
         wrapperFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "wrapper");
-        processorFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "processor");
 
         this.finalTask = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), "final task"), this.environment);
     }
@@ -133,8 +131,6 @@ public class MessageProcessor implements ITask, IMessageProcessor {
         environment.setValue(responseFieldName, response);
         environment.setValue(messageFieldName, theMessage);
         environment.setValue(contextFieldName, theContext);
-        environment.setValue(processorFieldName, this);
-
         this.messageProcessingSequence.reset();
         enqueue();
     }
