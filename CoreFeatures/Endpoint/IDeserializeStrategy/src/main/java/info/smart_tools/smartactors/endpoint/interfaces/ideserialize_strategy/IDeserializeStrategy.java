@@ -7,9 +7,10 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
 /**
  * Strategy for different deserialization logic of http request to message
  */
-public interface IDeserializeStrategy <Type>{
+public interface IDeserializeStrategy<Type> {
     /**
      * Deserialize http request
+     *
      * @param request request
      * @return deserializated request
      * @throws DeserializationException if there are some problems on resolving

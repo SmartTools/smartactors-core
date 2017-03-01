@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>endpoint</artifactId>
+        <groupId>info.smart_tools.smartactors</groupId>
+        <version>0.2.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>endpoint.actor.stop-endpoint</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.exception.invalid-argument-exception</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject.iobject</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>endpoint.interfaces.iasync-service</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>ioc.ioc</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>ioc.named-keys-storage</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

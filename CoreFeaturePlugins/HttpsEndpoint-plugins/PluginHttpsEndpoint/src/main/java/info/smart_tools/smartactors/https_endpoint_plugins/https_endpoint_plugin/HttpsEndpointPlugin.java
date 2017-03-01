@@ -104,7 +104,7 @@ public class HttpsEndpointPlugin implements IPlugin {
                                                             stackDepth =
                                                                     (Integer) configuration.getValue(stackDepthFieldName);
                                                             return new EnvironmentHandler(queue, stackDepth);
-                                                        } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {
+                                                        } catch (ReadValueException | InvalidArgumentException e) {
                                                         }
                                                         return null;
                                                     }
@@ -222,12 +222,15 @@ public class HttpsEndpointPlugin implements IPlugin {
                                                 Keys.getOrAdd(ISslEngineProvider.class.getCanonicalName()),
                                                 configuration
                                         );
-                                return new HttpsEndpoint((Integer) configuration.getValue(portFieldName),
+                                HttpsEndpoint httpsEndpoint = new HttpsEndpoint((Integer) configuration.getValue(portFieldName),
                                         (Integer) configuration.getValue(maxContentLengthFieldName),
                                         ScopeProvider.getCurrentScope(), environmentHandler,
                                         (String) configuration.getValue(endpointNameFieldName),
                                         (IReceiverChain) configuration.getValue(startChainNameFieldName),
                                         sslContextProvider);
+                                IOC.resolve(Keys.getOrAdd("endpoints"), configuration.getValue(endpointNameFieldName),
+                                        httpsEndpoint);
+                                return httpsEndpoint;
                             } catch (ReadValueException | ScopeProviderException | ResolutionException | InvalidArgumentException e) {
                             }
                             return null;

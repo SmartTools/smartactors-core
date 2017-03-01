@@ -3,8 +3,6 @@ package info.smart_tools.smartactors.endpoint.actor.client;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.endpoint.actor.client.exception.RequestSenderActorException;
 import info.smart_tools.smartactors.endpoint.actor.client.wrapper.ClientActorMessage;
-import info.smart_tools.smartactors.endpoint.interfaces.irequest_sender.IRequestSender;
-import info.smart_tools.smartactors.endpoint.interfaces.irequest_sender.exception.RequestSenderException;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;

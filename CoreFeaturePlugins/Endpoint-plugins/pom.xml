@@ -19,6 +19,9 @@
 
     <modules>
         <module>PluginResponseSenderActor</module>
+        <module>PluginStartEndpointActor</module>
+        <module>PluginEndpoint</module>
+        <module>PluginStopEndpointActor</module>
     </modules>
 
     <repositories>

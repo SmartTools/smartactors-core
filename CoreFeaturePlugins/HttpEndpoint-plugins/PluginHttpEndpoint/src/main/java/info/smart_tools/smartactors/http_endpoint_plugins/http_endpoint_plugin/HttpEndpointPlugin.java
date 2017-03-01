@@ -133,11 +133,14 @@ public class HttpEndpointPlugin implements IPlugin {
                                                             IEnvironmentHandler environmentHandler = IOC.resolve(
                                                                     Keys.getOrAdd(IEnvironmentHandler.class.getCanonicalName()),
                                                                     configuration);
-                                                            return new HttpEndpoint((Integer) configuration.getValue(portFieldName),
+                                                            HttpEndpoint httpEndpoint = new HttpEndpoint((Integer) configuration.getValue(portFieldName),
                                                                     (Integer) configuration.getValue(maxContentLengthFieldName),
                                                                     ScopeProvider.getCurrentScope(), environmentHandler,
                                                                     (IReceiverChain) configuration.getValue(startChainNameFieldName),
                                                                     (String) configuration.getValue(endpointNameFieldName));
+                                                            IOC.resolve(Keys.getOrAdd("endpoints"), configuration.getValue(endpointNameFieldName),
+                                                                    httpEndpoint);
+                                                            return httpEndpoint;
                                                         } catch (ReadValueException | InvalidArgumentException
                                                                 | ScopeProviderException | ResolutionException e) {
                                                             throw new RuntimeException(e);

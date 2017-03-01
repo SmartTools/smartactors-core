@@ -36,6 +36,8 @@
         <module>ResponseSenderActor</module>
         <module>ClientActor</module>
         <module>IRequestMaker</module>
+        <module>StartEndpointActor</module>
+        <module>StopEndpointActor</module>
     </modules>
 
     <repositories>
