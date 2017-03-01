@@ -27,6 +27,7 @@
         <module>PluginResponseJsonContentStrategy</module>
         <module>PluginEndpoint</module>
         <module>PluginHttpRequestSenderActor</module>
+        <module>PluginDeferredResponseActor</module>
     </modules>
 
     <repositories>

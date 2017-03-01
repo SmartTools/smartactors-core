@@ -1,6 +1,7 @@
 package info.smart_tools.smartactors.http_endpoint.http_response_handler;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.endpoint.interfaces.ichannel_handler.IChannelHandler;
 import info.smart_tools.smartactors.endpoint.interfaces.ideserialize_strategy.IDeserializeStrategy;
 import info.smart_tools.smartactors.endpoint.interfaces.ideserialize_strategy.exceptions.DeserializationException;
 import info.smart_tools.smartactors.endpoint.interfaces.iresponse_handler.IResponseHandler;
@@ -26,7 +27,7 @@ import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutio
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpResponse;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handler for http response
@@ -40,8 +41,6 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
     private IFieldName contextFieldName;
     private IFieldName httpResponseStatusCodeFieldName;
     private IFieldName responseFieldName;
-    private IFieldName headersFieldName;
-    private IFieldName cookiesFieldName;
     private IFieldName requestFieldName;
     private IFieldName messageMapIdFieldName;
     private IFieldName uuidFieldName;
@@ -52,8 +51,7 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
 
     /**
      * Constructor
-     *
-     * @param taskQueue     main queue of the {@link ITask}
+     *  @param taskQueue     main queue of the {@link ITask}
      * @param stackDepth    depth of the stack for {@link io.netty.channel.ChannelOutboundBuffer.MessageProcessor}
      * @param receiverChain chain, that should receive message
      */
@@ -74,8 +72,6 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
                     "httpResponseStatusCode"
             );
             responseFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "response");
-            headersFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "headers");
-            cookiesFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "cookies");
             requestFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "sendRequest");
             messageMapIdFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "messageMapId");
             uuidFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "uuid");
@@ -93,7 +89,12 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
     public void handle(final ChannelHandlerContext ctx, final FullHttpResponse response) throws ResponseHandlerException {
         try {
             ScopeProvider.setCurrentScope(currentScope);
-            IOC.resolve(Keys.getOrAdd("cancelTimerOnRequest"), uuid);
+            try {
+                IOC.resolve(Keys.getOrAdd("cancelTimerOnRequest"), uuid);
+            } catch (ResolutionException e) {
+                // Timeout
+                return;
+            }
             isReceived = true;
             FullHttpResponse responseCopy = response.copy();
             ITask task = () -> {
@@ -116,7 +117,7 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
                 }
             };
             taskQueue.put(task);
-        } catch (ScopeProviderException | InterruptedException | ResolutionException e) {
+        } catch (ScopeProviderException | InterruptedException e) {
             throw new ResponseHandlerException(e);
         }
 
@@ -128,8 +129,6 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
             IObject message = deserializeStrategy.deserialize(response);
             IObject environment = IOC.resolve(Keys.getOrAdd("EmptyIObject"));
             IObject context = IOC.resolve(Keys.getOrAdd("EmptyIObject"));
-            context.setValue(cookiesFieldName, new ArrayList<IObject>());
-            context.setValue(headersFieldName, new ArrayList<IObject>());
             context.setValue(responseFieldName, response);
             context.setValue(httpResponseStatusCodeFieldName, response.status().code());
             context.setValue(requestFieldName, this.request);

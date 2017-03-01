@@ -4,28 +4,5 @@
     "endpoint",
     "http-endpoint",
     "message-bus"
-  ],
-  "objects": [
-    {
-      "kind": "stateless_actor",
-      "dependency": "HttpsRequestSenderActor",
-      "name": "request-sender"
-    }
-  ],
-  "maps": [
-    {
-      "id": "sendRequest",
-      "steps": [
-        {
-          "target": "request-sender",
-          "handler": "sendRequest",
-          "wrapper": {
-            "in_getRequest": "message/request"
-          }
-        }
-      ],
-      "exceptional": []
-    }
-
   ]
 }

@@ -58,12 +58,14 @@ public class HttpHeadersExtractor implements IHeadersExtractor {
         } catch (ReadValueException | InvalidArgumentException e) {
             throw new HeadersSetterException("Failed to get cookies from context", e);
         }
-        for (IObject header : headers) {
-            try {
-                httpResponse.headers().set(String.valueOf(header.getValue(headerName)),
-                        String.valueOf(header.getValue(headerValue)));
-            } catch (ReadValueException | InvalidArgumentException e) {
-                throw new HeadersSetterException("Failed to resolve header", e);
+        if (headers != null) {
+            for (IObject header : headers) {
+                try {
+                    httpResponse.headers().set(String.valueOf(header.getValue(headerName)),
+                            String.valueOf(header.getValue(headerValue)));
+                } catch (ReadValueException | InvalidArgumentException e) {
+                    throw new HeadersSetterException("Failed to resolve header", e);
+                }
             }
         }
         httpResponse.headers().set(HttpHeaders.Names.CONTENT_LENGTH, httpResponse.content().readableBytes());

@@ -69,25 +69,27 @@ public class CookiesSetter implements ICookiesSetter {
             throw new CookieSettingException("Failed to get cookies from context", e);
         }
         List<Cookie> cookiesList = new ArrayList<>();
-        for (IObject cookieObject : cookies) {
-            try {
-                Cookie cookie = new DefaultCookie(
-                        cookieObject.getValue(cookieName).toString(),
-                        cookieObject.getValue(cookieValue).toString());
+        if (cookies != null) {
+            for (IObject cookieObject : cookies) {
+                try {
+                    Cookie cookie = new DefaultCookie(
+                            cookieObject.getValue(cookieName).toString(),
+                            cookieObject.getValue(cookieValue).toString());
 
-                String path = (String) cookieObject.getValue(cookiePath);
-                if (path != null) {
-                    cookie.setPath(path);
-                }
+                    String path = (String) cookieObject.getValue(cookiePath);
+                    if (path != null) {
+                        cookie.setPath(path);
+                    }
 
-                Integer maxCookieAge = (Integer) cookieObject.getValue(maxAgeFieldName);
-                if (maxCookieAge != null) {
-                    cookie.setDiscard(false);
-                    cookie.setMaxAge(maxCookieAge);
+                    Integer maxCookieAge = (Integer) cookieObject.getValue(maxAgeFieldName);
+                    if (maxCookieAge != null) {
+                        cookie.setDiscard(false);
+                        cookie.setMaxAge(maxCookieAge);
+                    }
+                    cookiesList.add(cookie);
+                } catch (ReadValueException | InvalidArgumentException e) {
+                    throw new CookieSettingException("Failed to resolve cookie", e);
                 }
-                cookiesList.add(cookie);
-            } catch (ReadValueException | InvalidArgumentException e) {
-                throw new CookieSettingException("Failed to resolve cookie", e);
             }
         }
         httpResponse.headers().set(HttpHeaders.Names.SET_COOKIE,
