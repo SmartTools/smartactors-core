@@ -1,23 +1,17 @@
 package info.smart_tools.smartactors.message_processing.message_processor;
 
-import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
+import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
-import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
-import info.smart_tools.smartactors.task.interfaces.itask.ITask;
-import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.AsynchronousOperationException;
-import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
-import info.smart_tools.smartactors.iobject_extension.wds_object.WDSObject;
-
-import java.util.Map;
-import java.util.WeakHashMap;
+import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
+import info.smart_tools.smartactors.task.interfaces.itask.ITask;
+import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
 
 /**
  * Task that performs on a message actions defined by a message processing sequence.
@@ -30,10 +24,8 @@ public class MessageProcessor implements ITask, IMessageProcessor {
     private IObject context;
     private IObject message;
     private IObject response;
-    private IObject environment;
-    private WDSObject wrappedEnvironment;
-
-    private Map<Object, WDSObject> wrappedEnvironmentCache;
+    private IObject rawEnvironment;
+    private IObject currentEnvironment;
 
     private final IFieldName configFieldName;
     private final IFieldName messageFieldName;
@@ -41,7 +33,6 @@ public class MessageProcessor implements ITask, IMessageProcessor {
     private final IFieldName responseFieldName;
     private final IFieldName sequenceFieldName;
     private final IFieldName argumentsFieldName;
-    private final IFieldName wrapperFieldName;
     private final IFieldName processorFieldName;
 
     private ITask finalTask;
@@ -104,9 +95,7 @@ public class MessageProcessor implements ITask, IMessageProcessor {
         this.interrupted = 0;
         this.asyncOpDepth = 0;
 
-        this.environment = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.getCanonicalName()));
-        this.wrappedEnvironment = null;
-        this.wrappedEnvironmentCache = new WeakHashMap<>();
+        this.rawEnvironment = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.getCanonicalName()));
 
         configFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "config");
         messageFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "message");
@@ -114,10 +103,9 @@ public class MessageProcessor implements ITask, IMessageProcessor {
         responseFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "response");
         sequenceFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "sequence");
         argumentsFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "arguments");
-        wrapperFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "wrapper");
         processorFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()), "processor");
 
-        this.finalTask = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), "final task"), this.environment);
+        this.finalTask = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), "final task"), this.rawEnvironment);
     }
 
     @Override
@@ -128,12 +116,14 @@ public class MessageProcessor implements ITask, IMessageProcessor {
         this.context = theContext;
         this.response = IOC.resolve(IOC.resolve(IOC.getKeyForKeyStorage(), IObject.class.getCanonicalName()));
 
-        environment.setValue(configFieldName, config);
-        environment.setValue(sequenceFieldName, messageProcessingSequence);
-        environment.setValue(responseFieldName, response);
-        environment.setValue(messageFieldName, theMessage);
-        environment.setValue(contextFieldName, theContext);
-        environment.setValue(processorFieldName, this);
+        rawEnvironment.setValue(configFieldName, config);
+        rawEnvironment.setValue(sequenceFieldName, messageProcessingSequence);
+        rawEnvironment.setValue(responseFieldName, response);
+        rawEnvironment.setValue(messageFieldName, theMessage);
+        rawEnvironment.setValue(contextFieldName, theContext);
+        rawEnvironment.setValue(processorFieldName, this);
+
+        currentEnvironment = rawEnvironment;
 
         enqueue();
     }
@@ -198,11 +188,16 @@ public class MessageProcessor implements ITask, IMessageProcessor {
 
     @Override
     public IObject getEnvironment() {
-        if (null != this.wrappedEnvironment) {
-            return this.wrappedEnvironment;
-        } else {
-            return environment;
+        return currentEnvironment;
+    }
+
+    @Override
+    public void pushEnvironment(final IObject newEnvironment) throws InvalidArgumentException {
+        if (null == newEnvironment) {
+            throw new InvalidArgumentException("Environment is null.");
         }
+
+        this.currentEnvironment = newEnvironment;
     }
 
     @Override
@@ -220,9 +215,9 @@ public class MessageProcessor implements ITask, IMessageProcessor {
             try {
                 this.asyncOpDepth = 0;
                 this.asyncException = null;
-                this.environment.setValue(argumentsFieldName, messageProcessingSequence.getCurrentReceiverArguments());
+                this.rawEnvironment.setValue(argumentsFieldName, messageProcessingSequence.getCurrentReceiverArguments());
 
-                refreshWrappedEnvironment();
+                currentEnvironment = rawEnvironment;
 
                 messageProcessingSequence.getCurrentReceiver().receive(this);
             } catch (Throwable e) {
@@ -235,31 +230,6 @@ public class MessageProcessor implements ITask, IMessageProcessor {
         } catch (final Exception e1) {
             complete();
             throw new TaskExecutionException("Exception occurred while handling exception occurred in message receiver.", e1);
-        }
-    }
-
-    private void refreshWrappedEnvironment()
-            throws ReadValueException, InvalidArgumentException, ResolutionException {
-        IObject args = messageProcessingSequence.getCurrentReceiverArguments();
-
-        // Since addition of chain modification that may add a receiver without arguments the receiver arguments may be null
-        if (null == args) {
-            this.wrappedEnvironment = null;
-            return;
-        }
-
-        Object wrapperConfig = args.getValue(wrapperFieldName);
-
-        if (null == wrapperConfig) {
-            this.wrappedEnvironment = null;
-        } else {
-            if (this.wrappedEnvironmentCache.containsKey(wrapperConfig)) {
-                this.wrappedEnvironment = wrappedEnvironmentCache.get(wrapperConfig);
-            } else {
-                this.wrappedEnvironment = IOC.resolve(Keys.getOrAdd(WDSObject.class.getCanonicalName()), wrapperConfig);
-                this.wrappedEnvironment.init(this.environment);
-                this.wrappedEnvironmentCache.put(wrapperConfig, this.wrappedEnvironment);
-            }
         }
     }
 

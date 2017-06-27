@@ -1,86 +1,72 @@
 package info.smart_tools.smartactors.system_actors_pack_plugins.actor_collection_receiver_plugin;
 
-import info.smart_tools.smartactors.system_actors_pack.actor_collection_receiver.ActorCollectionReceiver;
-import info.smart_tools.smartactors.system_actors_pack.actor_collection_receiver.ActorCollectionRouter;
-import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
-import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.interfaces.i_addition_dependency_strategy.IAdditionDependencyStrategy;
+import info.smart_tools.smartactors.base.interfaces.i_addition_dependency_strategy.exception.AdditionDependencyStrategyException;
+import info.smart_tools.smartactors.base.interfaces.iaction.exception.FunctionExecutionException;
+import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
+import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.BootstrapPlugin;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap_item.IBootstrapItem;
+import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
-import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IPlugin;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
-import info.smart_tools.smartactors.message_processing_interfaces.irouter.IRouter;
-import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
+import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageReceiver;
+import info.smart_tools.smartactors.system_actors_pack.actor_collection_receiver.ActorCollectionReceiver;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Implementation of {@link IPlugin}.
  * Plugin registers into IOC strategy for creation new instance of {@link ActorCollectionReceiver}.
  */
-public class ActorCollectionReceiverPlugin implements IPlugin {
-
-    /** Local storage for instance of {@link IBootstrap}*/
-    private IBootstrap<IBootstrapItem<String>> bootstrap;
+public class ActorCollectionReceiverPlugin extends BootstrapPlugin {
 
     /**
-     * @param bootstrap Target bootstrap for adding strategy
-     * @throws InvalidArgumentException if any errors occurred
+     * The constructor.
+     *
+     * @param bootstrap the bootstrap
      */
-    public ActorCollectionReceiverPlugin(final IBootstrap<IBootstrapItem<String>> bootstrap)
-            throws InvalidArgumentException {
-        if (null == bootstrap) {
-            throw new InvalidArgumentException("Incoming argument should not be null.");
-        }
-        this.bootstrap = bootstrap;
+    public ActorCollectionReceiverPlugin(final IBootstrap bootstrap) {
+        super(bootstrap);
     }
 
-    @Override
-    public void load()
-            throws PluginException {
-        try {
-            IBootstrapItem<String> item = new BootstrapItem("ActorCollectionReceiver");
-            item
-//                    .after("IOC")
-//                    .before("configure")
-//                    .before("starter")
-//                    .after("IFieldPlugin")
-//                    .after("IFieldNamePlugin")
-                    .process(
-                            () -> {
-                                try {
-                                    IOC.register(
-                                            IOC.resolve(
-                                                    IOC.getKeyForKeyStorage(),
-                                                    "ActorCollection"
-                                            ),
-                                            new ApplyFunctionToArgumentsStrategy(
-                                                    (args) -> {
-                                                        try {
-                                                            IRouter router = new ActorCollectionRouter();
-                                                            return new ActorCollectionReceiver(router);
-                                                        } catch (Exception e) {
-                                                            throw new RuntimeException(
-                                                                    "Could not create new instance of ActorCollectionReceiver."
-                                                                    , e
-                                                            );
-                                                        }
-                                                    }
-                                            )
-                                    );
-                                } catch (ResolutionException e) {
-                                    throw new ActionExecuteException("ActorCollectionReceiver plugin can't load: can't get ActorCollectionReceiver key", e);
-                                } catch (InvalidArgumentException e) {
-                                    throw new ActionExecuteException("ActorCollectionReceiver plugin can't load: can't create strategy", e);
-                                } catch (RegistrationException e) {
-                                    throw new ActionExecuteException("ActorCollectionReceiver plugin can't load: can't register new strategy", e);
-                                }
+    @Item("actor_collection_receiver_config_canonization_strategies")
+    public void registerConfigCanonizationStrategies()
+            throws ResolutionException, RegistrationException, InvalidArgumentException, AdditionDependencyStrategyException {
+        IAdditionDependencyStrategy strategy = IOC.resolve(Keys.getOrAdd("expandable_strategy#resolve key for configuration object"));
+
+        strategy.register("new", new ApplyFunctionToArgumentsStrategy(args -> {
+            try {
+                Object value = args[1];
+
+                if (!(value instanceof IObject)) {
+                    return value;
+                }
+
+                return IOC.resolve(Keys.getOrAdd("canonize objects configuration section item filters list"), value);
+            } catch (ResolutionException e) {
+                throw new FunctionExecutionException(e);
+            }
+        }));
+    }
+
+    @Item("ActorCollectionReceiver")
+    public void registerCollectionReceiver()
+            throws ResolutionException, RegistrationException, InvalidArgumentException {
+        IOC.register(
+                Keys.getOrAdd("ActorCollection"),
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -> {
+                            try {
+                                Map<Object, IMessageReceiver> childStorage = new ConcurrentHashMap<>();
+                                return new ActorCollectionReceiver(childStorage);
+                            } catch (Exception e) {
+                                throw new FunctionExecutionException("Could not create new instance of ActorCollectionReceiver.", e);
                             }
-                    );
-            this.bootstrap.add(item);
-        } catch (Throwable e) {
-            throw new PluginException("Could not load 'ActorReceiverCreator plugin'", e);
-        }
+                        }
+                )
+        );
     }
 }

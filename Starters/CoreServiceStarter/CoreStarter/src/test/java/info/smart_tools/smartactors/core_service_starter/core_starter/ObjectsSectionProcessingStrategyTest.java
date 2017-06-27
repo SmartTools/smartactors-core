@@ -1,129 +1,95 @@
 package info.smart_tools.smartactors.core_service_starter.core_starter;
 
-import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.ISectionStrategy;
+import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.IResolveDependencyStrategy;
+import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.exceptions.ConfigurationProcessingException;
+import info.smart_tools.smartactors.helpers.plugins_loading_test_base.PluginsLoadingTestBase;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
-import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject_plugins.dsobject_plugin.PluginDSObject;
+import info.smart_tools.smartactors.iobject_plugins.ifieldname_plugin.IFieldNamePlugin;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
-import info.smart_tools.smartactors.message_processing_interfaces.iroutable_object_creator.IRoutedObjectCreator;
-import info.smart_tools.smartactors.message_processing_interfaces.iroutable_object_creator.exceptions.ObjectCreationException;
-import info.smart_tools.smartactors.message_processing_interfaces.irouter.IRouter;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
-import org.junit.Before;
+import info.smart_tools.smartactors.ioc_plugins.ioc_keys_plugin.PluginIOCKeys;
+import info.smart_tools.smartactors.message_processing_interfaces.object_creation_interfaces.IReceiverObjectCreator;
+import info.smart_tools.smartactors.message_processing_interfaces.object_creation_interfaces.IReceiverObjectListener;
+import info.smart_tools.smartactors.message_processing_interfaces.object_creation_interfaces.exeptions.ReceiverObjectCreatorException;
+import info.smart_tools.smartactors.scope_plugins.scope_provider_plugin.PluginScopeProvider;
+import info.smart_tools.smartactors.scope_plugins.scoped_ioc_plugin.ScopedIOCPlugin;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
-import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.eq;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Test for {@link ObjectsSectionProcessingStrategy}
  */
-@PrepareForTest({IOC.class, Keys.class})
-@RunWith(PowerMockRunner.class)
-public class ObjectsSectionProcessingStrategyTest {
-    private IKey fieldNameKey = mock(IKey.class);
-    private IKey routerKey = mock(IKey.class);
-    private IKey kindACreatorKey = mock(IKey.class);
-    private IKey kindBCreatorKey = mock(IKey.class);
-
-    private IFieldName objectsFieldName;
-    private IFieldName kindFieldName;
-    private IRouter routerMock;
-    private IRoutedObjectCreator kindACreatorMock;
-    private IRoutedObjectCreator kindBCreatorMock;
-    private List<IObject> section;
+public class ObjectsSectionProcessingStrategyTest extends PluginsLoadingTestBase {
+    private IReceiverObjectListener listenerMock;
+    private IReceiverObjectCreator[] creatorMocks;
+    private IObject[] objectConfigMocks;
     private IObject configMock;
+    private IResolveDependencyStrategy fullCreatorResolutionStrategy;
 
-    @Before
-    public void setUp()
-            throws Exception {
-        mockStatic(IOC.class);
-        mockStatic(Keys.class);
+    @Override
+    protected void loadPlugins() throws Exception {
+        load(ScopedIOCPlugin.class);
+        load(PluginScopeProvider.class);
+        load(PluginIOCKeys.class);
+        load(PluginDSObject.class);
+        load(IFieldNamePlugin.class);
+    }
 
-        objectsFieldName = mock(IFieldName.class);
-        kindFieldName = mock(IFieldName.class);
-        routerMock = mock(IRouter.class);
-        kindACreatorMock = mock(IRoutedObjectCreator.class);
-        kindBCreatorMock = mock(IRoutedObjectCreator.class);
-
-        when(Keys.getOrAdd(eq(IFieldName.class.getCanonicalName()))).thenReturn(fieldNameKey);
-        when(Keys.getOrAdd(eq(IRouter.class.getCanonicalName()))).thenReturn(routerKey);
-        when(Keys.getOrAdd(eq(IRoutedObjectCreator.class.getCanonicalName()+"#kind_a"))).thenReturn(kindACreatorKey);
-        when(Keys.getOrAdd(eq(IRoutedObjectCreator.class.getCanonicalName()+"#kind_b"))).thenReturn(kindBCreatorKey);
-
-        when(IOC.resolve(same(fieldNameKey), eq("objects"))).thenReturn(objectsFieldName);
-        when(IOC.resolve(same(fieldNameKey), eq("kind"))).thenReturn(kindFieldName);
-
-        when(IOC.resolve(routerKey)).thenReturn(routerMock);
-        when(IOC.resolve(kindACreatorKey)).thenReturn(kindACreatorMock);
-        when(IOC.resolve(kindBCreatorKey)).thenReturn(kindBCreatorMock);
-
-        section = Arrays.asList(mock(IObject.class), mock(IObject.class));
-
-        when(section.get(0).getValue(same(kindFieldName))).thenReturn("kind_a");
-        when(section.get(1).getValue(same(kindFieldName))).thenReturn("kind_b");
-
+    @Override
+    protected void registerMocks() throws Exception {
         configMock = mock(IObject.class);
+        listenerMock = mock(IReceiverObjectListener.class);
+        fullCreatorResolutionStrategy = mock(IResolveDependencyStrategy.class);
 
-        when(configMock.getValue(same(objectsFieldName))).thenReturn(section);
+        creatorMocks = new IReceiverObjectCreator[3];
+        objectConfigMocks = new IObject[creatorMocks.length];
+
+        for (int i = 0; i < creatorMocks.length; i++) {
+            creatorMocks[i] = mock(IReceiverObjectCreator.class);
+            objectConfigMocks[i] = mock(IObject.class);
+            when(fullCreatorResolutionStrategy.resolve(same(objectConfigMocks[i]))).thenReturn(creatorMocks[i]);
+        }
+
+        when(configMock.getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "objects")))
+                .thenReturn(Arrays.asList(objectConfigMocks));
+
+        IOC.register(Keys.getOrAdd("global router registration receiver object listener"), new SingletonStrategy(listenerMock));
+        IOC.register(Keys.getOrAdd("full receiver object creator"), fullCreatorResolutionStrategy);
     }
 
     @Test
-    public void Should_callObjectCreatorsAccordingToConfiguration()
+    public void Should_createObjects()
             throws Exception {
-        ISectionStrategy strategy = new ObjectsSectionProcessingStrategy();
+        new ObjectsSectionProcessingStrategy().onLoadConfig(configMock);
 
-        assertSame(objectsFieldName, strategy.getSectionName());
-
-        strategy.onLoadConfig(configMock);
-
-        verify(kindACreatorMock).createObject(same(routerMock), same(section.get(0)));
-        verify(kindBCreatorMock).createObject(same(routerMock), same(section.get(1)));
-    }
-
-    @Test
-    public void Should_wrapExceptionsThrownByIOC()
-            throws Exception {
-        when(IOC.resolve(same(kindBCreatorKey))).thenThrow(ResolutionException.class);
-
-        try {
-            ISectionStrategy strategy = new ObjectsSectionProcessingStrategy();
-
-            strategy.onLoadConfig(configMock);
-
-            fail();
-        } catch (ConfigurationProcessingException e) {
-            assertSame(ResolutionException.class, e.getCause().getClass());
-            verify(kindACreatorMock).createObject(same(routerMock), same(section.get(0)));
+        for (int i = 0; i < creatorMocks.length; i++) {
+            verify(creatorMocks[i]).create(same(listenerMock), same(objectConfigMocks[i]), any());
         }
     }
 
     @Test
-    public void Should_wrapExceptionsThrownCreators()
+    public void Should_storeSectionName()
             throws Exception {
-        doThrow(ObjectCreationException.class).when(kindACreatorMock).createObject(same(routerMock), same(section.get(0)));
+        assertEquals(
+                IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "objects"),
+                new ObjectsSectionProcessingStrategy().getSectionName()
+        );
+    }
 
-        try {
-            ISectionStrategy strategy = new ObjectsSectionProcessingStrategy();
+    @Test(expected = ConfigurationProcessingException.class)
+    public void Should_wrapCreationExceptions()
+            throws Exception {
+        doThrow(ReceiverObjectCreatorException.class).when(creatorMocks[0]).create(any(), any(), any());
 
-            strategy.onLoadConfig(configMock);
-
-            fail();
-        } catch (ConfigurationProcessingException e) {
-            assertSame(ObjectCreationException.class, e.getCause().getClass());
-            verify(kindBCreatorMock, never()).createObject(same(routerMock), same(section.get(1)));
-        }
+        new ObjectsSectionProcessingStrategy().onLoadConfig(configMock);
     }
 }

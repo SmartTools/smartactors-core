@@ -7,6 +7,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.imessage.IMess
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
@@ -338,48 +339,26 @@ public class MessageProcessorTest {
         messageProcessor.continueProcess(null);
     }
 
-    @Test
-    public void Should_createWDSObject_When_wrapperSectionPresentInArgumentsObject()
+    @Test(expected = InvalidArgumentException.class)
+    public void Should_throwWhenUpdatedEnvironmentIsNull()
             throws Exception {
-        IMessageReceiver messageReceiverMock1 = mock(IMessageReceiver.class);
-        IObject receiverArguments1 = mock(IObject.class);
-        IObject receiverArguments2 = mock(IObject.class);
-        Object wrapperConfig = mock(Object.class);
-        WDSObject wrapperMock = mock(WDSObject.class);
+        new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock).pushEnvironment(null);
+    }
 
+    @Test
+    public void Should_setEnvironmentAndResetIt()
+            throws Exception {
         MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
 
-        when(IOC.resolve(KEY_FOR_NEW_IOBJECT))
-                .thenReturn(responseMock);
+        IObject nEnv = mock(IObject.class);
 
         messageProcessor.process(messageMock, contextMock);
+        messageProcessor.pushEnvironment(nEnv);
 
-        doAnswer(invocationOnMock -> {
-            messageProcessor.pauseProcess();
-            return null;
-        }).when(messageReceiverMock1).receive(same(messageProcessor));
-
-        when(messageProcessingSequenceMock.getCurrentReceiver())
-                .thenReturn(messageReceiverMock1);
-        when(messageProcessingSequenceMock.getCurrentReceiverArguments())
-                .thenReturn(receiverArguments1);
-        when(receiverArguments1.getValue(eq(new FieldName("wrapper")))).thenReturn(wrapperConfig);
-        when(IOC.resolve(same(Keys.getOrAdd(WDSObject.class.getCanonicalName())), same(wrapperConfig))).thenReturn(wrapperMock);
-        when(messageProcessingSequenceMock.next())
-                .thenReturn(true)
-                .thenReturn(true)
-                .thenReturn(true)
-                .thenReturn(false);
+        assertSame(nEnv, messageProcessor.getEnvironment());
 
         messageProcessor.execute();
-        assertSame(wrapperMock, messageProcessor.getEnvironment());
 
-        when(messageProcessingSequenceMock.getCurrentReceiverArguments()).thenReturn(receiverArguments2);
-        messageProcessor.execute();
-        assertNotSame(wrapperMock, messageProcessor.getEnvironment());
-
-        when(messageProcessingSequenceMock.getCurrentReceiverArguments()).thenReturn(receiverArguments1);
-        messageProcessor.execute();
-        assertSame(wrapperMock, messageProcessor.getEnvironment());
+        assertSame(environmentMock, messageProcessor.getEnvironment());
     }
 }

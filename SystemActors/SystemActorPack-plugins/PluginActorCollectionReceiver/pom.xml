@@ -13,27 +13,27 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.interfaces.iplugin</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>[0.1.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.interfaces.ibootstrap</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>[0.1.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>system-actors-pack.actor-collection-receiver</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>[0.1.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.bootstrap-item</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>[0.1.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.strategy.apply-function-to-arguments</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>[0.1.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -50,14 +50,24 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc.strategy-container</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>0.3.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc.resolve-by-name-ioc-with-lambda-strategy</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>0.3.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>feature-loading-system.bootstrap-plugin</artifactId>
+            <version>[0.1.0, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.interfaces.iaddition-dependency-strategy</artifactId>
+            <version>0.3.3</version>
         </dependency>
     </dependencies>
     <build>

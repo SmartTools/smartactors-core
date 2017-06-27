@@ -1,6 +1,5 @@
 package info.smart_tools.smartactors.iobject_extension.wds_object;
 
-import info.smart_tools.smartactors.iobject.ifield.IField;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
@@ -12,18 +11,14 @@ import info.smart_tools.smartactors.iobject.iobject_wrapper.IObjectWrapper;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Implementation of {@link IObject} and {@link IObjectWrapper}
  */
 public class WDSObject implements IObject, IObjectWrapper {
-
     private IObject initIObject;
-    private Map<IFieldName, IField> inFields;
-    private Map<IFieldName, IField[]> outFields;
-    private IObject wrapperConfig;
+    private WDSObjectFieldSet fieldSet;
 
     /**
      * Create empty instance of {@link WDSObject} by initialization instance of {@link IObject}
@@ -32,9 +27,12 @@ public class WDSObject implements IObject, IObjectWrapper {
      */
     public WDSObject(final IObject wrapperConfig)
             throws InvalidArgumentException {
-        this.inFields = new HashMap<>(0);
-        this.outFields = new HashMap<>(0);
-        this.wrapperConfig = wrapperConfig;
+        this(new WDSObjectFieldSet(wrapperConfig, new HashMap<>(), new HashMap<>()));
+    }
+
+    public WDSObject(final WDSObjectFieldSet fieldSet)
+            throws InvalidArgumentException {
+        this.fieldSet = fieldSet;
     }
 
     @Override
@@ -43,16 +41,8 @@ public class WDSObject implements IObject, IObjectWrapper {
         if (null == name) {
             throw new InvalidArgumentException("Name parameter should not be null.");
         }
-        IField field = inFields.get(name);
-        if (null == field) {
-            try {
-                field = new WDSObjectField((List<IObject>) this.wrapperConfig.getValue(name));
-            } catch (Throwable e) {
-                throw new ReadValueException("Can't read configuration for current field name " + name);
-            }
-            inFields.put(name, field);
-        }
-        return field.in(this.initIObject);
+
+        return fieldSet.read(initIObject, name);
     }
 
     @Override
@@ -61,22 +51,8 @@ public class WDSObject implements IObject, IObjectWrapper {
         if (null == name) {
             throw new InvalidArgumentException("Name parameter should not be null.");
         }
-        IField[] fields = outFields.get(name);
-        if (null == fields) {
-            try {
-                Object config = this.wrapperConfig.getValue(name);
-                fields = new IField[((List<List<IObject>>) config).size()];
-                for (int i = 0; i < fields.length; ++i) {
-                    fields[i] = new WDSObjectField(((List<List<IObject>>) config).get(i));
-                }
-            } catch (Throwable e) {
-                throw new ChangeValueException("Can't read configuration for current field name " + name);
-            }
-            outFields.put(name, fields);
-        }
-        for (IField f : fields) {
-            f.out(this.initIObject, value);
-        }
+
+        fieldSet.write(initIObject, name, value);
     }
 
     @Override

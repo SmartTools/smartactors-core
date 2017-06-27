@@ -296,7 +296,7 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>message-processing-plugins.chain-modification-strategies-plugin</artifactId>
-            <version>0.3.2</version>
+            <version>[0.1.0, 1.0.0)</version>
         </dependency>
 
         <!-- CoreStarter -->

@@ -2002,6 +2002,14 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
+  "artifactId" : "message-processing.object-creation-strategies",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ObjectCreationStrategies",
+  "version" : "0.3.2"
+},{
   "artifactId" : "message-processing.null-response-strategy",
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",
@@ -2136,6 +2144,11 @@
   "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
 } ],
   "rawName" : "ReceiverChain",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "wrapper-creator-receiver-decorator",
+  "uploadRepositories" : [ ],
+  "rawName" : "WrapperCreatorReceiverDecorator",
   "version" : "0.3.3"
 }, {
   "artifactId" : "message-processing.chain-modifications",
@@ -2337,6 +2350,14 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
+  "artifactId" : "message-processing-interfaces.object-creation-interfaces",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ObjectCreationInterfaces",
+  "version" : "0.3.2"
+}, {
   "artifactId" : "message-processing-interfaces.irouted-object-creator",
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",
@@ -2830,6 +2851,16 @@
   "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
 } ],
   "plugins" : [ {
+  "artifactId":"object-creation-strategies-plugin",
+  "uploadRepositories":[],
+  "rawName":"ObjectCreationStrategiesPlugin",
+  "version":"0.3.2"
+}, {
+  "artifactId" : "wrapper-creator-receiver-decorator-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "WrapperCreatorReceiverDecoratorPlugin",
+  "version" : "0.3.2"
+}, {
   "artifactId" : "null-response-strategy-plugin",
   "uploadRepositories" : [ ],
   "rawName" : "NullResponseStrategyPlugin",

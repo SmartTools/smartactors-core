@@ -164,6 +164,16 @@ public class ConfigurationObject implements IObject {
     public Iterator<Map.Entry<IFieldName, Object>> iterator() {
         return null;
     }
+
+    @Override
+    public int hashCode() {
+        return body.hashCode() * 31 + 42;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj;
+    }
 }
 
 /**

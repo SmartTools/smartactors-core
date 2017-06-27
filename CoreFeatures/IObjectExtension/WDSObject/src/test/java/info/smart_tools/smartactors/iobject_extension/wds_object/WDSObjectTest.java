@@ -91,7 +91,7 @@ public class WDSObjectTest {
         IObject env = mock(IObject.class);
         IObject message = mock(IObject.class);
         when(env.getValue(new FieldName("message"))).thenReturn(message);
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         ((IObjectWrapper)wObj).init(env);
         IObject result = ((IObjectWrapper)wObj).getEnvironmentIObject(new FieldName("message"));
         assertSame(result, message);
@@ -100,7 +100,7 @@ public class WDSObjectTest {
     @Test (expected = InvalidArgumentException.class)
     public void checkGetEnvironmentIObjectMehtodExceptionOnNullArgument()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         ((IObjectWrapper) wObj).getEnvironmentIObject(null);
         fail();
     }
@@ -108,7 +108,7 @@ public class WDSObjectTest {
     @Test (expected = InvalidArgumentException.class)
     public void checkGetEnvironmentIObjectMehtodExceptionOnWrongArgument()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         ((IObjectWrapper)wObj).getEnvironmentIObject(new FieldName("message"));
         fail();
     }
@@ -116,7 +116,7 @@ public class WDSObjectTest {
     @Test (expected = DeleteValueException.class)
     public void checkExceptionOnUseDeleteMethod()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         wObj.deleteField(new FieldName("field"));
         fail();
     }
@@ -124,7 +124,7 @@ public class WDSObjectTest {
     @Test (expected = SerializeException.class)
     public void checkExceptionOnUseSerializeMethod()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         wObj.serialize();
         fail();
     }
@@ -132,7 +132,7 @@ public class WDSObjectTest {
     @Test
     public void checkNullOnUseGetIterator()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         Iterator it = wObj.iterator();
         assertNull(it);
     }
@@ -140,7 +140,7 @@ public class WDSObjectTest {
     @Test (expected = InvalidArgumentException.class)
     public void checkGetValueMethodOnNullFieldName()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         wObj.getValue(null);
         fail();
     }
@@ -148,7 +148,7 @@ public class WDSObjectTest {
     @Test (expected = InvalidArgumentException.class)
     public void checkSetValueMethodOnNullFieldName()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         wObj.setValue(null, 1);
         fail();
     }
@@ -156,7 +156,7 @@ public class WDSObjectTest {
     @Test (expected = ReadValueException.class)
     public void checkGetValueMethodOnWrongArgument()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         wObj.getValue(new FieldName("undefinedFieldName"));
         fail();
     }
@@ -164,7 +164,7 @@ public class WDSObjectTest {
     @Test (expected = ChangeValueException.class)
     public void checkSetValueMethodOnWrongArgument()
             throws Exception {
-        IObject wObj = new WDSObject(null);
+        IObject wObj = new WDSObject((IObject) null);
         wObj.setValue(new FieldName("undefinedFieldName"), 1);
         fail();
     }

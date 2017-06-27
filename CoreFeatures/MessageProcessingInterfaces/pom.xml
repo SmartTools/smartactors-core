@@ -21,6 +21,7 @@
         <module>IWrapperGenerator</module>
         <module>IResponseStrategy</module>
         <module>MessageProcessingInterfacesDistribution</module>
+        <module>ObjectCreationInterfaces</module>
     </modules>
     <build>
         <pluginManagement>

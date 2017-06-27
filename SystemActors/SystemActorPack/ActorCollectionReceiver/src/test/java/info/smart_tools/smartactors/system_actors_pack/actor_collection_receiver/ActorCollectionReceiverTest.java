@@ -1,323 +1,183 @@
 package info.smart_tools.smartactors.system_actors_pack.actor_collection_receiver;
 
-import info.smart_tools.smartactors.iobject.field_name.FieldName;
-import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
+
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
-import info.smart_tools.smartactors.iobject.iobject.IObject;
-import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.IResolveDependencyStrategy;
-import info.smart_tools.smartactors.message_processing_interfaces.iroutable_object_creator.IRoutedObjectCreator;
-import info.smart_tools.smartactors.message_processing_interfaces.irouter.IRouter;
-import info.smart_tools.smartactors.scope.iscope.IScope;
+import info.smart_tools.smartactors.helpers.plugins_loading_test_base.PluginsLoadingTestBase;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
+import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject_plugins.dsobject_plugin.PluginDSObject;
+import info.smart_tools.smartactors.iobject_plugins.ifieldname_plugin.IFieldNamePlugin;
+import info.smart_tools.smartactors.ioc.ioc.IOC;
+import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+import info.smart_tools.smartactors.ioc_plugins.ioc_keys_plugin.PluginIOCKeys;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageReceiver;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageReceiveException;
-import info.smart_tools.smartactors.ioc.resolve_by_name_ioc_with_lambda_strategy.ResolveByNameIocStrategy;
-import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
-import info.smart_tools.smartactors.ioc.strategy_container.StrategyContainer;
-import info.smart_tools.smartactors.ioc.string_ioc_key.Key;
-import org.junit.Before;
+import info.smart_tools.smartactors.message_processing_interfaces.object_creation_interfaces.IReceiverObjectCreator;
+import info.smart_tools.smartactors.message_processing_interfaces.object_creation_interfaces.IReceiverObjectListener;
+import info.smart_tools.smartactors.scope_plugins.scope_provider_plugin.PluginScopeProvider;
+import info.smart_tools.smartactors.scope_plugins.scoped_ioc_plugin.ScopedIOCPlugin;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.HashMap;
+
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests for {@link ActorCollectionReceiver}.
  */
-public class ActorCollectionReceiverTest {
+public class ActorCollectionReceiverTest extends PluginsLoadingTestBase {
+    private IResolveDependencyStrategy fullCreatorResolutionStrategy;
+    private IReceiverObjectCreator[] creatorMocks;
+    private IMessageProcessor[] processorMocks;
+    private IObject[] childObjectConfigMocks;
+    private IMessageReceiver[] childReceiverMocks;
 
-    @Before
-    public void init()
-            throws Exception {
-        Object keyOfMainScope = ScopeProvider.createScope(null);
-        IScope scope = ScopeProvider.getScope(keyOfMainScope);
-        scope.setValue(IOC.getIocKey(), new StrategyContainer());
-        ScopeProvider.setCurrentScope(scope);
 
-        IOC.register(
-                IOC.getKeyForKeyStorage(),
-                new ResolveByNameIocStrategy(
-                        (a) -> {
-                            try {
-                                return new Key((String) a[0]);
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
-        );
+    @Override
+    protected void loadPlugins() throws Exception {
+        load(ScopedIOCPlugin.class);
+        load(PluginScopeProvider.class);
+        load(PluginIOCKeys.class);
+        load(PluginDSObject.class);
+        load(IFieldNamePlugin.class);
     }
 
-    @Test (expected = InvalidArgumentException.class)
-    public void checkInvalidArgumentExceptionOnCreationWithEmptyRouter()
-            throws Exception {
-        initIFieldNameStrategy();
-        IMessageReceiver receiver = new ActorCollectionReceiver(null);
-        fail();
-    }
+    @Override
+    protected void registerMocks() throws Exception {
+        fullCreatorResolutionStrategy = mock(IResolveDependencyStrategy.class);
 
-    @Test (expected = InvalidArgumentException.class)
-    public void checkInvalidArgumentExceptionOnCreation()
-            throws Exception {
-        initBrokenIFieldNameStrategy();
-        IRouter router = new ActorCollectionRouter();
-        IMessageReceiver receiver = new ActorCollectionReceiver(router);
-        fail();
-    }
+        processorMocks = new IMessageProcessor[3];
 
-    @Test
-    public void checkCreation() throws Exception {
-        initIFieldNameStrategy();
-        IRouter router = new ActorCollectionRouter();
-        IMessageReceiver receiver = new ActorCollectionReceiver(router);
-        assertNotNull(receiver);
-    }
+        childObjectConfigMocks = new IObject[processorMocks.length];
+        creatorMocks = new IReceiverObjectCreator[processorMocks.length];
+        childReceiverMocks = new IMessageReceiver[processorMocks.length];
 
-    @Test (expected = MessageReceiveException.class)
-    public void checkMessageReceiveExceptionOnUseReceiveMethod()
-            throws Exception {
-        initIFieldNameStrategy();
-        IRouter router = new ActorCollectionRouter();
-        IMessageReceiver receiver = new ActorCollectionReceiver(router);
-        receiver.receive(null);
-        fail();
-    }
+        for (int i = 0; i < processorMocks.length; i++) {
+            final int fi = i;
+            processorMocks[i] = mock(IMessageProcessor.class);
+            childObjectConfigMocks[i] = mock(IObject.class);
+            when(processorMocks[i].getSequence()).thenReturn(mock(IMessageProcessingSequence.class));
+            when(processorMocks[i].getSequence().getCurrentReceiverArguments()).thenReturn(mock(IObject.class));
+            when(processorMocks[i].getSequence().getCurrentReceiverArguments()
+                    .getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "new")))
+                    .thenReturn(childObjectConfigMocks[i]);
+            when(processorMocks[i].getSequence().getCurrentReceiverArguments()
+                    .getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "key")))
+                    .thenReturn("in_keyField");
+            when(processorMocks[i].getEnvironment()).thenReturn(mock(IObject.class));
+            when(processorMocks[i].getEnvironment()
+                    .getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "in_keyField")))
+                    .thenReturn(String.valueOf(i));
 
-    @Test
-    public void checkUsageReceiveMethod() throws Exception {
-        IRouter router = new ActorCollectionRouter();
-        // init
-        initIFieldNameStrategy();
-        IResolveDependencyStrategy objectCreatorStrategy = mock(IResolveDependencyStrategy.class);
-        IOC.register(
-                IOC.resolve(
-                        IOC.getKeyForKeyStorage(),
-                        IRoutedObjectCreator.class.getCanonicalName() + "#" + "actor"
-                ),
-                objectCreatorStrategy
-        );
-        // object mocks
-        IMessageProcessor processor = mock(IMessageProcessor.class);
-        IMessageProcessingSequence sequence = mock(IMessageProcessingSequence.class);
-        IObject section = mock(IObject.class);
-        IObject subsection = mock(IObject.class);
-        IObject environment = mock(IObject.class);
-        String keyName = "actorId";
-        String kindValue = "actor";
-        Object key = "A";
-        IRoutedObjectCreator creator = mock(IRoutedObjectCreator.class);
-        IMessageReceiver internalReceiver = mock(IMessageReceiver.class);
-        // 'when' mocks
-        when(processor.getSequence()).thenReturn(sequence);
-        when(processor.getEnvironment()).thenReturn(environment);
-        when(sequence.getCurrentReceiverArguments()).thenReturn(section);
-        when(section.getValue(new FieldName("key"))).thenReturn(keyName);
-        when(section.getValue(new FieldName("new"))).thenReturn(subsection);
-        when(environment.getValue(new FieldName("actorId"))).thenReturn(key);
-        when(subsection.getValue(new FieldName("kind"))).thenReturn(kindValue);
-        when(objectCreatorStrategy.resolve()).thenReturn(creator);
-        doNothing().when(subsection).setValue(new FieldName("name"), key);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                router.register(key, internalReceiver);
+            creatorMocks[i] = mock(IReceiverObjectCreator.class);
+            when(fullCreatorResolutionStrategy.resolve(same(processorMocks[i].getSequence().getCurrentReceiverArguments()
+                    .getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "new")))))
+                    .thenReturn(creatorMocks[i]);
+            childReceiverMocks[i] = mock(IMessageReceiver.class);
+            doAnswer(invocation -> {
+                invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, childReceiverMocks[fi]);
+                invocation.getArgumentAt(0, IReceiverObjectListener.class).endItems();
                 return null;
-            }
-        }).when(creator).createObject(router, subsection);
-        doNothing().when(internalReceiver).receive(processor);
-        // test
-        IMessageReceiver receiver = new ActorCollectionReceiver(router);
-        receiver.receive(processor);
-        verify(processor, times(1)).getSequence();
-        verify(processor, times(1)).getEnvironment();
-        verify(sequence, times(1)).getCurrentReceiverArguments();
-        verify(section, times(1)).getValue(new FieldName("key"));
-        verify(section, times(1)).getValue(new FieldName("new"));
-        verify(environment, times(1)).getValue(new FieldName("actorId"));
-        verify(subsection, times(1)).getValue(new FieldName("kind"));
-        verify(objectCreatorStrategy, times(1)).resolve();
-        verify(subsection, times(1)).setValue(new FieldName("name"), key);
-        assertSame(router.route(key), internalReceiver);
-        verify(internalReceiver, times(1)).receive(processor);
+            }).when(creatorMocks[i]).create(any(), any(), any());
+        }
+
+        IOC.register(Keys.getOrAdd("full receiver object creator"), fullCreatorResolutionStrategy);
+    }
+
+    @Test(expected = InvalidArgumentException.class)
+    public void Should_throwWhenMapIsNull()
+            throws Exception {
+        new ActorCollectionReceiver(null);
     }
 
     @Test
-    public void checkUsageStoredReceiver()
+    public void Should_createChildReceivers()
             throws Exception {
-        IRouter router = new ActorCollectionRouter();
-        Object key = "A";
-        String keyName = "actorId";
-        // init
-        initIFieldNameStrategy();
-        // object mocks
-        IMessageReceiver internalReceiver = mock(IMessageReceiver.class);
-        IMessageProcessor processor = mock(IMessageProcessor.class);
-        IMessageProcessingSequence sequence = mock(IMessageProcessingSequence.class);
-        IObject section = mock(IObject.class);
-        IObject environment = mock(IObject.class);
-        // 'when' mocks
-        when(processor.getSequence()).thenReturn(sequence);
-        when(processor.getEnvironment()).thenReturn(environment);
-        when(sequence.getCurrentReceiverArguments()).thenReturn(section);
-        when(section.getValue(new FieldName("key"))).thenReturn(keyName);
-        when(environment.getValue(new FieldName("actorId"))).thenReturn(key);
+        IMessageReceiver receiver = new ActorCollectionReceiver(new HashMap<>());
 
-        router.register(key, internalReceiver);
+        receiver.receive(processorMocks[0]);
+        receiver.receive(processorMocks[1]);
+        receiver.receive(processorMocks[2]);
+        receiver.receive(processorMocks[2]);
+        receiver.receive(processorMocks[1]);
+        receiver.receive(processorMocks[1]);
 
-        IMessageReceiver receiver = new ActorCollectionReceiver(router);
-        receiver.receive(processor);
+        verify(childReceiverMocks[0], times(1)).receive(same(processorMocks[0]));
+        verify(childReceiverMocks[1], times(3)).receive(same(processorMocks[1]));
+        verify(childReceiverMocks[2], times(2)).receive(same(processorMocks[2]));
 
-        verify(internalReceiver, times(1)).receive(processor);
+        verify(creatorMocks[0], times(1)).create(any(), any(), any());
+        verify(creatorMocks[1], times(1)).create(any(), any(), any());
+        verify(creatorMocks[2], times(1)).create(any(), any(), any());
     }
 
-    @Test
-    public void checkLockOnConcurrentCreateNewCollectionItem()
+    @Test(expected = MessageReceiveException.class)
+    public void Should_throwWhenChildCreatorReturnsMoreThanOneReceiver()
             throws Exception {
-        IRouter router = new ActorCollectionRouter();
-        // init
-        initIFieldNameStrategy();
-        IResolveDependencyStrategy objectCreatorStrategy = mock(IResolveDependencyStrategy.class);
-        IOC.register(
-                IOC.resolve(
-                        IOC.getKeyForKeyStorage(),
-                        IRoutedObjectCreator.class.getCanonicalName() + "#" + "actor"
-                ),
-                objectCreatorStrategy
-        );
-        // object mocks
-        IMessageProcessor processor1 = mock(IMessageProcessor.class);
-        IMessageProcessor processor2 = mock(IMessageProcessor.class);
-        IMessageProcessingSequence sequence = mock(IMessageProcessingSequence.class);
-        IObject section = mock(IObject.class);
-        IObject subsection = mock(IObject.class);
-        IObject environment = mock(IObject.class);
-        String keyName = "actorId";
-        String kindValue = "actor";
-        Object key = "A";
-        IRoutedObjectCreator creator = mock(IRoutedObjectCreator.class);
-        IMessageReceiver internalReceiver = mock(IMessageReceiver.class);
-        // 'when' mocks
-        when(processor1.getSequence()).thenReturn(sequence);
-        when(processor1.getEnvironment()).thenReturn(environment);
-        when(processor2.getSequence()).thenReturn(sequence);
-        when(processor2.getEnvironment()).thenReturn(environment);
-        when(sequence.getCurrentReceiverArguments()).thenReturn(section);
-        when(section.getValue(new FieldName("key"))).thenReturn(keyName);
-        when(section.getValue(new FieldName("new"))).thenReturn(subsection);
-        when(environment.getValue(new FieldName("actorId"))).thenReturn(key);
-        when(subsection.getValue(new FieldName("kind"))).thenReturn(kindValue);
-        when(objectCreatorStrategy.resolve()).thenReturn(creator);
-        doNothing().when(subsection).setValue(new FieldName("name"), key);
-        Notification notification1 = new Notification();
-        Notification notification2 = new Notification();
-        IScope mainScope = ScopeProvider.getCurrentScope();
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                notification1.setReached(true);
-                while (!notification2.isReached()) {
-                }
-                router.register(key, internalReceiver);
-                return null;
-            }
-        }).when(creator).createObject(router, subsection);
-        doNothing().when(internalReceiver).receive(processor1);
-        doNothing().when(internalReceiver).receive(processor2);
-        // test
-        IMessageReceiver receiver = new ActorCollectionReceiver(router);
-        Thread thread1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ScopeProvider.setCurrentScope(mainScope);
-                    receiver.receive(processor1);
-                } catch (Throwable e) {
+        doAnswer(invocation -> {
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, childReceiverMocks[0]);
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, childReceiverMocks[1]);
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).endItems();
+            return null;
+        }).when(creatorMocks[0]).create(any(), any(), any());
 
-                }
-            }
-        }, "thread-1");
-        Thread thread2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ScopeProvider.setCurrentScope(mainScope);
-                    receiver.receive(processor2);
-                } catch (Throwable e) {
-
-                }
-            }
-        }, "thread-2");
-
-        thread1.start();
-        while (!notification1.isReached()) {
-        }
-        thread2.start();
-        while (true) {
-            if (thread2.getState().equals(Thread.State.WAITING)) {
-                notification2.setReached(true);
-                break;
-            }
-        }
-        while (true) {
-            if (thread1.getState().equals(Thread.State.TERMINATED) && thread2.getState().equals(Thread.State.TERMINATED)) {
-                break;
-            }
-        }
-        verify(creator, times(1)).createObject(router, subsection);
-        assertEquals(router.route(key), internalReceiver);
-        verify(internalReceiver, times(1)).receive(processor1);
-        verify(internalReceiver, times(1)).receive(processor2);
+        IMessageReceiver receiver = new ActorCollectionReceiver(new HashMap<>());
+        receiver.receive(processorMocks[0]);
     }
 
-    private void initIFieldNameStrategy()
+    @Test(expected = MessageReceiveException.class)
+    public void Should_throwWhenChildCreatorReturnsNullItem()
             throws Exception {
-        IOC.register(
-                IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),
-                new ResolveByNameIocStrategy(
-                        (a) -> {
-                            try {
-                                return new FieldName((String) a[0]);
-                            } catch (Throwable e) {
-                                throw new RuntimeException("Could not create new instance of FieldName", e);
-                            }
-                        }
-                )
-        );
+        doAnswer(invocation -> {
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, null);
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, childReceiverMocks[1]);
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).endItems();
+            return null;
+        }).when(creatorMocks[0]).create(any(), any(), any());
+
+        IMessageReceiver receiver = new ActorCollectionReceiver(new HashMap<>());
+        receiver.receive(processorMocks[0]);
     }
 
-    private void initBrokenIFieldNameStrategy()
+    @Test(expected = MessageReceiveException.class)
+    public void Should_throwWhenChildCreatorReturnsNonReceiverItem()
             throws Exception {
-        IOC.register(
-                IOC.resolve(IOC.getKeyForKeyStorage(), IFieldName.class.getCanonicalName()),
-                new ResolveByNameIocStrategy(
-                        (a) -> {
-                            throw new RuntimeException("Could not create new instance of FieldName");
-                        }
-                )
-        );
-    }
-}
+        doAnswer(invocation -> {
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, new Object());
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, childReceiverMocks[1]);
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).endItems();
+            return null;
+        }).when(creatorMocks[0]).create(any(), any(), any());
 
-class Notification {
-
-    private volatile boolean reached = false;
-
-    public boolean isReached() {
-        return reached;
+        IMessageReceiver receiver = new ActorCollectionReceiver(new HashMap<>());
+        receiver.receive(processorMocks[0]);
     }
 
-    public void setReached(boolean reached) {
-        this.reached = reached;
+    @Test(expected = MessageReceiveException.class)
+    public void Should_throwWhenChildCreatorReturnsNoItems()
+            throws Exception {
+        doAnswer(invocation -> {
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).endItems();
+            return null;
+        }).when(creatorMocks[0]).create(any(), any(), any());
+
+        IMessageReceiver receiver = new ActorCollectionReceiver(new HashMap<>());
+        receiver.receive(processorMocks[0]);
+    }
+
+    @Test(expected = MessageReceiveException.class)
+    public void Should_throwWhenChildCreatorDoesNotCall_endItems()
+            throws Exception {
+        doAnswer(invocation -> {
+            invocation.getArgumentAt(0, IReceiverObjectListener.class).acceptItem(null, childReceiverMocks[1]);
+            return null;
+        }).when(creatorMocks[0]).create(any(), any(), any());
+
+        IMessageReceiver receiver = new ActorCollectionReceiver(new HashMap<>());
+        receiver.receive(processorMocks[0]);
     }
 }

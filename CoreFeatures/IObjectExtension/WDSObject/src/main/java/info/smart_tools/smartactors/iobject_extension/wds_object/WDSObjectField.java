@@ -259,11 +259,6 @@ public class WDSObjectField implements IField {
     ) throws InvalidArgumentException {
         Object[] resolvedArgs = new Object[arguments.size()];
         for (int i = 0; i < arguments.size(); ++i) {
-            String key = arguments.get(i).split(SPLITTER)[0];
-            IFunction<Arg, Object> func = this.argumentsResolvers.get(key);
-            if (null == func) {
-                func = this.argumentsResolvers.get(DEFAULT_KEYWORD);
-            }
             resolvedArgs[i] = resolveSingleArgument(arguments.get(i), env, localValue);
         }
         return resolvedArgs;

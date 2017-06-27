@@ -28,9 +28,11 @@
         <module>PluginStarter</module>
         <module>PluginStandardObjectCreators</module>
         <module>PluginConditionChainChoiceStrategy</module>
+        <module>ObjectCreationStrategiesPlugin</module>
         <module>NullResponseStrategyPlugin</module>
         <module>ResponseSenderReceiverPlugin</module>
         <module>ChainModificationStrategiesPlugin</module>
+        <module>WrapperCreatorReceiverDecoratorPlugin</module>
         <module>MessageProcessing-pluginsDistribution</module>
     </modules>
     <build>

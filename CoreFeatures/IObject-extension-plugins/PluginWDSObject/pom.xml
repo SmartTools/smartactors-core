@@ -50,6 +50,16 @@
             <artifactId>ioc.resolve-by-name-ioc-with-lambda-strategy</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.strategy.apply-function-to-arguments</artifactId>
+            <version>0.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>feature-loading-system.bootstrap-plugin</artifactId>
+            <version>0.3.2</version>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>

@@ -30,6 +30,8 @@
         <module>ReceiverChain</module>
         <module>NullResponseStrategy</module>
         <module>ResponseSenderReceiver</module>
+        <module>WrapperCreatorReceiverDecorator</module>
+        <module>ObjectCreationStrategies</module>
         <module>MessageProcessingDistribution</module>
     </modules>
     <build>
