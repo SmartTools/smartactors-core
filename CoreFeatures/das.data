@@ -703,6 +703,11 @@
   "uploadRepositories" : [ ],
   "rawName" : "Strategy.StrategyStorageWithCacheStrategy",
   "version" : "0.3.3"
+}, {
+  "artifactId" : "isynchronous-service",
+  "uploadRepositories" : [ ],
+  "rawName" : "ISynchronousService",
+  "version" : "0.3.3"
 } ],
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-features",
@@ -3210,6 +3215,32 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "debugger-plugins",
   "rawName" : "Debugger-plugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ {
+  "artifactId" : "scheduler-auto-startup-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "SchedulerAutoStartupPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "scheduler-auto-startup",
+  "rawName" : "SchedulerAutoStartup",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ {
+  "artifactId" : "checkpoint-auto-startup-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "CheckpointAutoStartupPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "checkpoint-auto-startup",
+  "rawName" : "CheckpointAutoStartup",
   "version" : "0.3.3"
 } ],
   "on-actor-creation-upload-repositories" : [ ],

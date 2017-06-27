@@ -74,6 +74,8 @@
         <module>Statistics-plugins</module>
         <module>Debugger</module>
         <module>Debugger-plugins</module>
+        <module>SchedulerAutoStartup</module>
+        <module>CheckpointAutoStartup</module>
     </modules>
 
     <build>

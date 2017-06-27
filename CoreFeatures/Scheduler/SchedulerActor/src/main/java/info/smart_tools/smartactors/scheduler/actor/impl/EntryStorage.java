@@ -12,6 +12,7 @@ import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorageO
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryScheduleException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.SchedulerEntryStorageObserverException;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import java.util.WeakHashMap;
  * Implementation of {@link ISchedulerEntryStorage}.
  */
 public class EntryStorage implements ISchedulerEntryStorage {
+    private final ITimer timer;
+
     private final IRemoteEntryStorage remoteEntryStorage;
     private final ISchedulerEntryStorageObserver observer;
 
@@ -48,12 +51,14 @@ public class EntryStorage implements ISchedulerEntryStorage {
      *
      * @param remoteEntryStorage    remote storage to use
      * @param observer              the observer that should be notified on events occurring within this storage
+     * @param timer                 the timer to use
      * @throws ResolutionException if fails to resolve any dependencies
      */
-    public EntryStorage(final IRemoteEntryStorage remoteEntryStorage, final ISchedulerEntryStorageObserver observer)
+    public EntryStorage(final IRemoteEntryStorage remoteEntryStorage, final ISchedulerEntryStorageObserver observer, final ITimer timer)
             throws ResolutionException {
         this.remoteEntryStorage = remoteEntryStorage;
         this.observer = (observer == null) ? NullEntryStorageObserver.INSTANCE : observer;
+        this.timer = timer;
 
         activeEntries = new HashMap<>();
         strongSuspendEntries = new HashMap<>();
@@ -65,6 +70,18 @@ public class EntryStorage implements ISchedulerEntryStorage {
         refreshIterationCounter = 0;
 
         localStorageLock = new Object();
+    }
+
+    /**
+     * The constructor with default system timer.
+     *
+     * @param remoteEntryStorage    remote storage to use
+     * @param observer              the observer that should be notified on events occurring within this storage
+     * @throws ResolutionException if fails to resolve any dependencies (including the timer)
+     */
+    public EntryStorage(final IRemoteEntryStorage remoteEntryStorage, final ISchedulerEntryStorageObserver observer)
+            throws ResolutionException {
+        this(remoteEntryStorage, observer, IOC.resolve(Keys.getOrAdd("timer")));
     }
 
     @Override
@@ -176,6 +193,11 @@ public class EntryStorage implements ISchedulerEntryStorage {
         } catch (CancelledLocalEntryRequestException e) {
             throw new EntryStorageAccessException("The entry was not found as it was cancelled recently.");
         }
+    }
+
+    @Override
+    public ITimer getTimer() {
+        return this.timer;
     }
 
     /**

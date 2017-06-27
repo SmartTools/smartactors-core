@@ -209,6 +209,6 @@ public class DatabaseRemoteStorage implements IRemoteEntryStorage {
             saveEntry(entry);
         } catch (ReadValueException | InvalidArgumentException e) {
             throw new EntryStorageAccessException("", e);
-        }
+        } catch (EntryStorageAccessException ignore) {}
     }
 }

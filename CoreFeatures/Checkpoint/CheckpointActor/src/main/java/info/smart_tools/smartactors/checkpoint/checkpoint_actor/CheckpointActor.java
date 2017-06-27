@@ -1,8 +1,14 @@
 package info.smart_tools.smartactors.checkpoint.checkpoint_actor;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
+import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.IllegalServiceStateException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.ServiceStartupException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.ServiceStopException;
 import info.smart_tools.smartactors.checkpoint.checkpoint_actor.wrappers.EnteringMessage;
 import info.smart_tools.smartactors.checkpoint.checkpoint_actor.wrappers.FeedbackMessage;
+import info.smart_tools.smartactors.checkpoint.checkpoint_actor.wrappers.StartStopMessage;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
@@ -14,7 +20,7 @@ import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
 import info.smart_tools.smartactors.message_bus.interfaces.imessage_bus_container.exception.SendingMessageException;
 import info.smart_tools.smartactors.message_bus.message_bus.MessageBus;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
-import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorage;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerService;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryScheduleException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
 
@@ -30,7 +36,7 @@ public class CheckpointActor {
     private static final String CHECKPOINT_ACTION = "checkpoint scheduler action";
     private static final long COMPLETE_ENTRY_RESCHEDULE_DELAY = 1000;
 
-    private final ISchedulerEntryStorage storage;
+    private final ISchedulerService service;
     private final Object feedbackChainId;
 
     private final CheckpointSchedulerEntryStorageObserver storageObserver;
@@ -44,7 +50,7 @@ public class CheckpointActor {
     private final IFieldName actionFieldName;
     private final IFieldName recoverFieldName;
     private final IFieldName completedFieldName;
-    private final IFieldName gotFeedbckFieldName;
+    private final IFieldName gotFeedbackFieldName;
     private final IFieldName processorFieldName;
 
     /**
@@ -54,10 +60,10 @@ public class CheckpointActor {
      * @throws ResolutionException if error occurs resolving any dependencies
      * @throws ReadValueException if error occurs reading actor description
      * @throws InvalidArgumentException if some methods do not accept our arguments
-     * @throws InterruptedException if thread is interrupted while the actor tries to put entries downloading task to task queue
+     * @throws ActionExecuteException if error occurs executing scheduler service activation action
      */
     public CheckpointActor(final IObject args)
-            throws ResolutionException, ReadValueException, InvalidArgumentException, InterruptedException {
+            throws ResolutionException, ReadValueException, InvalidArgumentException, ActionExecuteException {
         //
         responsibleCheckpointIdFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "responsibleCheckpointId");
         checkpointEntryIdFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "checkpointEntryId");
@@ -68,7 +74,7 @@ public class CheckpointActor {
         actionFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "action");
         recoverFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "recover");
         completedFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "completed");
-        gotFeedbckFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "gotFeedback");
+        gotFeedbackFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "gotFeedback");
         processorFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "processor");
 
         String connectionOptionsDependency = (String) args.getValue(
@@ -82,10 +88,14 @@ public class CheckpointActor {
 
         Object connectionOptions = IOC.resolve(Keys.getOrAdd(connectionOptionsDependency));
         Object connectionPool = IOC.resolve(Keys.getOrAdd(connectionPoolDependency), connectionOptions);
-        storage = IOC.resolve(Keys.getOrAdd(ISchedulerEntryStorage.class.getCanonicalName()),
+        service = IOC.resolve(Keys.getOrAdd("new scheduler service"),
                 connectionPool,
                 collectionName,
                 storageObserver);
+
+        IAction<ISchedulerService> activationAction = IOC.resolve(
+                Keys.getOrAdd("scheduler service activation action for checkpoint actor"));
+        activationAction.execute(service);
 
         //
         feedbackChainId = IOC.resolve(Keys.getOrAdd("chain_id_from_map_name"), FEEDBACK_CHAIN_NAME);
@@ -140,7 +150,7 @@ public class CheckpointActor {
         entryArguments.setValue(actionFieldName, CHECKPOINT_ACTION);
         entryArguments.setValue(processorFieldName, message.getProcessor());
 
-        ISchedulerEntry entry = IOC.resolve(Keys.getOrAdd("new scheduler entry"), entryArguments, storage);
+        ISchedulerEntry entry = IOC.resolve(Keys.getOrAdd("new scheduler entry"), entryArguments, service.getEntryStorage());
 
         // Update checkpoint status in message.
         // Checkpoint status of re-sent messages will be set by checkpoint scheduler action.
@@ -169,7 +179,7 @@ public class CheckpointActor {
     public void feedback(final FeedbackMessage message)
             throws ReadValueException, ChangeValueException, InvalidArgumentException, EntryScheduleException {
         try {
-            ISchedulerEntry entry = storage.getEntry(message.getPrevCheckpointEntryId());
+            ISchedulerEntry entry = service.getEntryStorage().getEntry(message.getPrevCheckpointEntryId());
 
             if (null != entry.getState().getValue(completedFieldName)) {
                 // If the entry is already completed then ignore the feedback message
@@ -178,11 +188,35 @@ public class CheckpointActor {
 
             entry.scheduleNext(System.currentTimeMillis() + COMPLETE_ENTRY_RESCHEDULE_DELAY);
 
-            entry.getState().setValue(gotFeedbckFieldName, true);
+            entry.getState().setValue(gotFeedbackFieldName, true);
             entry.getState().setValue(completedFieldName, true);
         } catch (EntryStorageAccessException ignore) {
             // There is no entry with required identifier. OK
         }
+    }
+
+    /**
+     * Start the scheduler.
+     *
+     * @param message    the message
+     * @throws ServiceStartupException if error occurs starting the service
+     * @throws IllegalServiceStateException if the service is already running/starting
+     */
+    public void start(final StartStopMessage message)
+            throws ServiceStartupException, IllegalServiceStateException {
+        service.start();
+    }
+
+    /**
+     * Stop the scheduler.
+     *
+     * @param message    the message
+     * @throws ServiceStopException if error occurs stopping the service
+     * @throws IllegalServiceStateException if the service is already stopped/not running
+     */
+    public void stop(final StartStopMessage message)
+            throws IllegalServiceStateException, ServiceStopException {
+        service.stop();
     }
 
     private IObject cloneMessage(final IObject message)

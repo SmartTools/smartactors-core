@@ -5,6 +5,7 @@ import info.smart_tools.smartactors.base.interfaces.ipool.IPool;
 import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.base.pool_guard.IPoolGuard;
 import info.smart_tools.smartactors.base.pool_guard.PoolGuard;
+import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.DatabaseRemoteStorage;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.IRemoteEntryStorage;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
@@ -22,6 +23,7 @@ import info.smart_tools.smartactors.ioc_plugins.ioc_keys_plugin.PluginIOCKeys;
 import info.smart_tools.smartactors.scope_plugins.scope_provider_plugin.PluginScopeProvider;
 import info.smart_tools.smartactors.scope_plugins.scoped_ioc_plugin.ScopedIOCPlugin;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -40,6 +42,7 @@ public class EntryStorageTest extends PluginsLoadingTestBase {
     private IObject[] saved;
     private ISchedulerEntry[] entries;
     private IRemoteEntryStorage remoteEntryStorage;
+    private ITimer timerMock;
 
     @Override
     protected void loadPlugins() throws Exception {
@@ -110,6 +113,9 @@ public class EntryStorageTest extends PluginsLoadingTestBase {
         restoreEntryStrategy = mock(IResolveDependencyStrategy.class);
         when(restoreEntryStrategy.resolve(any(), any())).thenReturn(entries[0], Arrays.copyOfRange(entries, 1, entries.length));
         IOC.register(Keys.getOrAdd("restore scheduler entry"), restoreEntryStrategy);
+
+        timerMock = mock(ITimer.class);
+        IOC.register(Keys.getOrAdd("timer"), new SingletonStrategy(timerMock));
     }
 
     private int countDBEntries() throws Exception {
@@ -271,5 +277,11 @@ public class EntryStorageTest extends PluginsLoadingTestBase {
         EntryStorage storage = new EntryStorage(remoteEntryStorage, null);
 
         assertNull(storage.getEntry("666"));
+    }
+
+    @Test
+    public void Should_storeTimer()
+            throws Exception {
+        assertSame(timerMock, new EntryStorage(remoteEntryStorage, null).getTimer());
     }
 }

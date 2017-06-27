@@ -1,8 +1,11 @@
 package info.smart_tools.smartactors.scheduler_plugins.scheduler_plugin;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
 import info.smart_tools.smartactors.base.interfaces.iaction.exception.FunctionExecutionException;
 import info.smart_tools.smartactors.base.interfaces.ipool.IPool;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.IllegalServiceStateException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.ServiceStartupException;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.BootstrapPlugin;
@@ -16,12 +19,21 @@ import info.smart_tools.smartactors.scheduler.actor.SchedulerActor;
 import info.smart_tools.smartactors.scheduler.actor.impl.DefaultSchedulerAction;
 import info.smart_tools.smartactors.scheduler.actor.impl.EntryImpl;
 import info.smart_tools.smartactors.scheduler.actor.impl.EntryStorage;
-import info.smart_tools.smartactors.scheduler.actor.impl.EntryStorageRefresher;
+import info.smart_tools.smartactors.scheduler.actor.impl.refresher.EntryStorageRefresher;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.DatabaseRemoteStorage;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.IRemoteEntryStorage;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.NullRemoteStorage;
+import info.smart_tools.smartactors.scheduler.actor.impl.service.SchedulingService;
+import info.smart_tools.smartactors.scheduler.actor.impl.timer.SchedulerTimer;
+import info.smart_tools.smartactors.scheduler.interfaces.IDelayedSynchronousService;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorage;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorageObserver;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerService;
+import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
+import info.smart_tools.smartactors.task.interfaces.itask.ITask;
+import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITime;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 import info.smart_tools.smartactors.timer.interfaces.itimer.exceptions.TaskScheduleException;
 
 /**
@@ -117,28 +129,86 @@ public class PluginScheduler extends BootstrapPlugin {
     }
 
     /**
-     * Register scheduler entry storage creation strategy.
+     * Register strategy of creation of a refresher service for entry storage.
      *
      * @throws ResolutionException if error occurs resolving key
      * @throws RegistrationException if error occurs registering strategy
      * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
      */
-    @Item("scheduler_entry_storage")
-    @After({"scheduler_entry_strategies", "scheduler_storage_refresh_parameters:default"})
-    public void registerStorage()
+    @Item("scheduler_entry_storage_refresher")
+    @After({
+        "scheduler_entry_strategies",
+        "scheduler_storage_refresh_parameters:default",
+    })
+    public void registerRefresher()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
-        IOC.register(Keys.getOrAdd(ISchedulerEntryStorage.class.getCanonicalName()), new ApplyFunctionToArgumentsStrategy(args -> {
+        IOC.register(Keys.getOrAdd("scheduler entry storage refresher"), new ApplyFunctionToArgumentsStrategy(args -> {
             try {
-                ISchedulerEntryStorageObserver observer = (args.length > 2) ? (ISchedulerEntryStorageObserver) args[2] : null;
-                IRemoteEntryStorage remoteEntryStorage = new DatabaseRemoteStorage((IPool) args[0], (String) args[1]);
-                EntryStorage storage = new EntryStorage(remoteEntryStorage, observer);
+                EntryStorage storage = (EntryStorage) args[0];
+                IRemoteEntryStorage remoteEntryStorage = (IRemoteEntryStorage) args[1];
+
                 long rrInterval = IOC.resolve(Keys.getOrAdd("scheduler storage refresh interval: rri"), args);
                 long raInterval = IOC.resolve(Keys.getOrAdd("scheduler storage refresh interval: rai"), args);
                 long rsInterval = IOC.resolve(Keys.getOrAdd("scheduler storage refresh interval: rsi"), args);
                 int refreshPageSize = IOC.<Number>resolve(Keys.getOrAdd("scheduler storage refresh page size"), args).intValue();
-                new EntryStorageRefresher(storage, remoteEntryStorage, rrInterval, raInterval, rsInterval, refreshPageSize);
-                return storage;
-            } catch (ResolutionException | TaskScheduleException e) {
+                return new EntryStorageRefresher(
+                        storage, remoteEntryStorage, rrInterval, raInterval, rsInterval, refreshPageSize);
+            } catch (ClassCastException | ResolutionException e) {
+                throw new FunctionExecutionException(e);
+            }
+        }));
+    }
+
+    /**
+     * Register strategy of creation of a timer service.
+     *
+     * @throws ResolutionException if error occurs resolving key
+     * @throws RegistrationException if error occurs registering strategy
+     * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
+     */
+    @Item("timer_service")
+    public void registerTimerService()
+            throws ResolutionException, RegistrationException, InvalidArgumentException {
+        IOC.register(Keys.getOrAdd("new timer service"), new ApplyFunctionToArgumentsStrategy(args -> {
+            try {
+                ITimer timer = (ITimer) args[0];
+                return new SchedulerTimer(timer);
+            } catch (ResolutionException e) {
+                throw new FunctionExecutionException(e);
+            }
+        }));
+    }
+
+    /**
+     * Register scheduler service creation strategy.
+     *
+     * @throws ResolutionException if error occurs resolving key
+     * @throws RegistrationException if error occurs registering strategy
+     * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
+     */
+    @Item("scheduler_service")
+    @After({
+        "scheduler_entry_storage_refresher",
+        "timer_service",
+    })
+    public void registerStorage()
+            throws ResolutionException, RegistrationException, InvalidArgumentException {
+        IOC.register(Keys.getOrAdd("new scheduler service"), new ApplyFunctionToArgumentsStrategy(args -> {
+            try {
+                ISchedulerEntryStorageObserver observer = (args.length > 2) ? (ISchedulerEntryStorageObserver) args[2] : null;
+                IRemoteEntryStorage remoteEntryStorage = new DatabaseRemoteStorage((IPool) args[0], (String) args[1]);
+
+                Object systemTimer = IOC.resolve(Keys.getOrAdd("timer"));
+                IDelayedSynchronousService timerService = IOC.resolve(Keys.getOrAdd("new timer service"), systemTimer);
+
+                EntryStorage storage = new EntryStorage(remoteEntryStorage, observer, (ITimer) timerService);
+
+                IDelayedSynchronousService refresher = IOC.resolve(
+                        Keys.getOrAdd("scheduler entry storage refresher"),
+                        storage, remoteEntryStorage);
+
+                return new SchedulingService(timerService, refresher, storage);
+            } catch (ResolutionException e) {
                 throw new FunctionExecutionException(e);
             }
         }));
@@ -153,6 +223,20 @@ public class PluginScheduler extends BootstrapPlugin {
     }
 
     /**
+     * Register default scheduler service activation action for scheduler actor -- do nothing.
+     *
+     * @throws ResolutionException if error occurs resolving key
+     * @throws RegistrationException if error occurs registering strategy
+     * @throws InvalidArgumentException if {@link SingletonStrategy} does not like our function
+     */
+    @Item("default_scheduler_actor_service_activation_action")
+    public void registerDefaultActivationAction()
+            throws ResolutionException, RegistrationException, InvalidArgumentException {
+        IOC.register(Keys.getOrAdd("scheduler service activation action for scheduler actor"),
+                new SingletonStrategy((IAction<ISchedulerService>) service -> { }));
+    }
+
+    /**
      * Register scheduler actor creation strategy.
      *
      * @throws ResolutionException if error occurs resolving key
@@ -160,7 +244,11 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
      */
     @Item("scheduler_actor")
-    @After({"scheduler_entry_storage", "scheduler_entry_strategies"})
+    @After({
+        "scheduler_service",
+        "scheduler_entry_strategies",
+        "default_scheduler_actor_service_activation_action",
+    })
     public void registerActor()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getOrAdd("scheduler actor"), new ApplyFunctionToArgumentsStrategy(args -> {

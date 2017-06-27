@@ -19,7 +19,6 @@ import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
-import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 import info.smart_tools.smartactors.timer.interfaces.itimer.ITimerTask;
 import info.smart_tools.smartactors.timer.interfaces.itimer.exceptions.TaskScheduleException;
 
@@ -38,7 +37,6 @@ public final class EntryImpl implements ISchedulerEntry {
     private final ISchedulingStrategy strategy;
     private long lastScheduledTime;
     private final AtomicReference<ITimerTask> timerTask;
-    private final ITimer timer;
     private boolean isCancelled;
     private boolean isSavedRemotely;
     private final ISchedulerAction action;
@@ -64,8 +62,6 @@ public final class EntryImpl implements ISchedulerEntry {
             final boolean isSavedRemotely)
                 throws ResolutionException, ReadValueException, InvalidArgumentException {
         IFieldName idFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "entryId");
-
-        this.timer = IOC.resolve(Keys.getOrAdd("timer"));
 
         this.storage = storage;
         this.state = state;
@@ -242,7 +238,7 @@ public final class EntryImpl implements ISchedulerEntry {
                     return;
                 }
 
-                tt = this.timerTask.getAndSet(timer.schedule(this.task, time));
+                tt = this.timerTask.getAndSet(storage.getTimer().schedule(this.task, time));
 
                 if (null != tt) {
                     tt.cancel();
@@ -282,8 +278,9 @@ public final class EntryImpl implements ISchedulerEntry {
 
     @Override
     public void awake() throws EntryStorageAccessException, EntryScheduleException {
-        if (null == timerTask.get()) {
-            scheduleNext(getLastTime());
+        long lastTime = getLastTime();
+        if (null == timerTask.get() && lastTime != Long.MAX_VALUE) {
+            scheduleNext(lastTime);
         }
     }
 

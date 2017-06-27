@@ -29,6 +29,9 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
+import info.smart_tools.smartactors.task.interfaces.itask.ITask;
+import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -38,9 +41,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
+ * Implementation written in assumption that there may be at most one feature load request in progress.
  */
 public class FeatureLoader implements IFeatureLoader {
     private final ConcurrentHashMap<String, FeatureStatusImpl> statuses = new ConcurrentHashMap<>();
@@ -56,6 +61,9 @@ public class FeatureLoader implements IFeatureLoader {
 
     private final Set<IBootstrapItem<String>> doneItems = ConcurrentHashMap.newKeySet();
 
+    private final AtomicReference<FeatureStatusImpl> currentLoadingStatus = new AtomicReference<>(null);
+    private IQueue<ITask> featureCompletionTaskQueue;
+
     /**
      * The constructor.
      *
@@ -69,6 +77,7 @@ public class FeatureLoader implements IFeatureLoader {
         pluginLoaderVisitor = IOC.resolve(Keys.getOrAdd("plugin loader visitor"));
         configurationManager = IOC.resolve(Keys.getOrAdd(IConfigurationManager.class.getCanonicalName()));
         fs = IOC.resolve(Keys.getOrAdd("filesystem facade"));
+        featureCompletionTaskQueue = IOC.resolve(Keys.getOrAdd("feature group load completion task queue"));
     }
 
     @Override
@@ -101,6 +110,8 @@ public class FeatureLoader implements IFeatureLoader {
 
             metaFeatureStatus.init(groupPath, IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName())));
 
+            preStartProcess(metaFeatureStatus);
+
             for (FeatureStatusImpl status : statuses) {
                 status.load();
             }
@@ -128,6 +139,7 @@ public class FeatureLoader implements IFeatureLoader {
         }
 
         try {
+            preStartProcess(status);
             status.load();
         } catch (ActionExecuteException e) {
             throw new FeatureLoadException("Error occurred loading the feature.", e);
@@ -247,6 +259,35 @@ public class FeatureLoader implements IFeatureLoader {
             }
 
             throw e;
+        }
+    }
+
+    private void preStartProcess(final FeatureStatusImpl status) throws FeatureLoadException {
+        if (!currentLoadingStatus.compareAndSet(null, status)) {
+            FeatureStatusImpl curStat = currentLoadingStatus.get();
+            throw new FeatureLoadException(String.format("There is some feature load process in progress (feature '%s').",
+                    (null == curStat) ? "<null>" : curStat.getId()));
+        }
+
+        try {
+            status.whenDone(err -> {
+                try {
+                    ITask task;
+                    while (null != (task = featureCompletionTaskQueue.tryTake())) {
+                        if (null == err) {
+                            try {
+                                task.execute();
+                            } catch (TaskExecutionException e) {
+                                throw new ActionExecuteException(e);
+                            }
+                        }
+                    }
+                } finally {
+                    currentLoadingStatus.compareAndSet(status, null);
+                }
+            });
+        } catch (ActionExecuteException e) {
+            throw new FeatureLoadException("Unexpected feature state.");
         }
     }
 }

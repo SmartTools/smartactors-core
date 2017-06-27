@@ -30,6 +30,7 @@
         <module>StrategyStorageStrategy</module>
         <module>ICacheable</module>
         <module>StrategyStorageWithCacheStrategy</module>
+        <module>ISynchronousService</module>
         <module>BaseDistribution</module>
     </modules>
     <build>

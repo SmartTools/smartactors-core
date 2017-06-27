@@ -1,6 +1,7 @@
 package info.smart_tools.smartactors.scheduler.interfaces;
 
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 
 import java.util.List;
 
@@ -65,4 +66,9 @@ public interface ISchedulerEntryStorage {
      * @throws EntryStorageAccessException if there is no entry with given identifier
      */
     ISchedulerEntry getEntry(String id) throws EntryStorageAccessException;
+
+    /**
+     * @return a timer that should be used by entries stored in this storage
+     */
+    ITimer getTimer();
 }

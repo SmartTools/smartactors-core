@@ -58,9 +58,9 @@ public class EntryImplTest extends PluginsLoadingTestBase {
         timerTask2 = mock(ITimerTask.class);
         action = new DefaultSchedulerAction();
 
+        when(storage.getTimer()).thenReturn(timer);
         when(timer.schedule(any(), anyLong())).thenReturn(timerTask).thenThrow(AssertionError.class);
 
-        IOC.register(Keys.getOrAdd("timer"), new SingletonStrategy(timer));
         IOC.register(Keys.getOrAdd("default scheduler action"), new SingletonStrategy(action));
     }
 
@@ -240,10 +240,12 @@ public class EntryImplTest extends PluginsLoadingTestBase {
         entry.suspend();
 
         reset(storage, timer);
+        when(storage.getTimer()).thenReturn(timer);
 
         entry.awake();
 
         verify(storage).notifyActive(entry);
+        verify(storage, atLeast(1)).getTimer();
         verify(timer).schedule(any(), eq(100L));
 
         entry.suspend();
