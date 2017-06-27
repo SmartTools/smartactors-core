@@ -1,4 +1,3 @@
-//package info.smart_tools.smartactors.core_service_starter.core_starter;
 package info.smart_tools.smartactors.core_service_starter.core_starter;
 
 import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.ISectionStrategy;

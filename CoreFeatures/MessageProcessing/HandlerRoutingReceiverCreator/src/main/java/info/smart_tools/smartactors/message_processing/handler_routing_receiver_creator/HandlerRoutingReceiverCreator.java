@@ -83,7 +83,7 @@ public class HandlerRoutingReceiverCreator implements IRoutedObjectCreator {
             IMessageReceiver handlerRoutingReceiver = new HandlerRoutingReceiver(handlerReceiversMap);
             router.register(description.getValue(this.name), handlerRoutingReceiver);
         } catch (Throwable e) {
-            throw new ObjectCreationException("Could not create receiver chain.", e);
+            throw new ObjectCreationException("Could not create receiver chain: " + e.getMessage(), e);
         }
     }
 }

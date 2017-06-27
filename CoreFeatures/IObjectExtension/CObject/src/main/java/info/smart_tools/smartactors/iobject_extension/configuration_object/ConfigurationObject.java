@@ -24,6 +24,7 @@ import info.smart_tools.smartactors.iobject.iobject.exception.SerializeException
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -124,7 +125,7 @@ public class ConfigurationObject implements IObject {
             }
             return canonicalValue;
         } catch (Throwable e) {
-            throw new ReadValueException("Can't read value for current field name");
+            throw new ReadValueException(MessageFormat.format("Can''t read value for ''{0}'' field name: {1}", name.toString(), e.getMessage()), e);
         }
     }
 

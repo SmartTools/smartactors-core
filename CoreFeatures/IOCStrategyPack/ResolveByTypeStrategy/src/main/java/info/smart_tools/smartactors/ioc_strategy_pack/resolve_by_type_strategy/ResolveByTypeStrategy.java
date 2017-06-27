@@ -69,7 +69,7 @@ public class ResolveByTypeStrategy implements IResolveDependencyStrategy, IAddit
             Object result = strategy.resolve(args[0]);
             return (T) result;
         } catch (Exception e) {
-            throw new ResolveDependencyStrategyException("Object resolution failed.", e);
+            throw new ResolveDependencyStrategyException("Object resolution failed: " + e.getMessage(), e);
         }
     }
 }

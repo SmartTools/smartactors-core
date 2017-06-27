@@ -61,7 +61,7 @@ public class ResolveByNameIocStrategy implements IResolveDependencyStrategy {
             }
             return (T) result;
         } catch (Exception e) {
-            throw new ResolveDependencyStrategyException("Object resolution failed.", e);
+            throw new ResolveDependencyStrategyException("Object resolution failed: " + e.getMessage(), e);
         }
     }
 }

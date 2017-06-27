@@ -67,7 +67,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                                 throw new RuntimeException(e);
                                                             }
                                                         } else {
-                                                            throw new RuntimeException("Could not create new instance of Configuration Object.");
+                                                            throw new RuntimeException("Could not create new instance of Configuration Object");
                                                         }
                                                     }
                                             )
@@ -95,7 +95,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                     return a[1];
                                                 } catch (Throwable e) {
                                                     throw new RuntimeException(
-                                                            "Error in configuration 'default' rule.", e
+                                                            "Error in configuration 'default' rule: " + e.getMessage(), e
                                                     );
                                                 }
                                             }
@@ -139,7 +139,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                     return obj;
                                                 } catch (Throwable e) {
                                                     throw new RuntimeException(
-                                                            "Error in configuration 'wrapper' rule.", e
+                                                            "Error in configuration 'wrapper' rule: " + e.getMessage(), e
                                                     );
                                                 }
                                             }
@@ -217,7 +217,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                     }
                                                     return obj;
                                                 } catch (Throwable e) {
-                                                    throw new RuntimeException("Error in configuration 'wrapper' rule.", e);
+                                                    throw new RuntimeException("Error in configuration 'wrapper' rule: " + e.getMessage(), e);
                                                 }
                                             }
                                     );
@@ -259,7 +259,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                     return obj;
                                                 } catch (Throwable e) {
                                                     throw new RuntimeException(
-                                                            "Error in configuration 'exceptional' rule.", e
+                                                            "Error in configuration 'exceptional' rule: " + e.getMessage(), e
                                                     );
                                                 }
                                             }
@@ -327,6 +327,10 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                             }
                                                             if (!innerObject.getValue(new FieldName("id")).equals("tryToTakeResourceMap")) {
                                                                 List exceptionalList = (List) innerObject.getValue(new FieldName("exceptional"));
+                                                                if (exceptionalList == null) {
+                                                                    // TODO: may be set default empty value?
+                                                                    throw new Exception("Field 'exceptional' is missed.");
+                                                                }
 
                                                                 IObject outOfResourcesExceptionObj = new ConfigurationObject();
                                                                 outOfResourcesExceptionObj.setValue(new FieldName("class"), "info.smart_tools.smartactors.base.interfaces.iresource_source.exceptions.OutOfResourceException");
@@ -339,7 +343,7 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                                     return obj;
                                                 } catch (Throwable e) {
                                                     throw new RuntimeException(
-                                                            "Error in configuration 'canonical maps' rule.", e
+                                                            "Error in configuration 'canonical maps' rule: " + e.getMessage(), e
                                                     );
                                                 }
                                             }
@@ -491,14 +495,14 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                                     );
                                 } catch (Exception e) {
                                     throw new ActionExecuteException(
-                                            "Could not create or register some strategies for ConfigurationObject.",
+                                            "Could not create or register some strategies for ConfigurationObject: " + e.getMessage(),
                                             e);
                                 }
                             }
                         );
             this.bootstrap.add(item);
         } catch (Throwable e) {
-            throw new PluginException("Could not load 'ConfigurationObject plugin'", e);
+            throw new PluginException("Could not load 'ConfigurationObject plugin': " + e.getMessage(), e);
         }
     }
 }

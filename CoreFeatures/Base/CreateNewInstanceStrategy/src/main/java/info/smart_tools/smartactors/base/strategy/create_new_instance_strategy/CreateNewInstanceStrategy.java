@@ -48,7 +48,7 @@ public class CreateNewInstanceStrategy implements IResolveDependencyStrategy {
         try {
             return (T) creationFunction.apply(args);
         } catch (Exception e) {
-            throw new ResolveDependencyStrategyException("Object resolution failed.", e);
+            throw new ResolveDependencyStrategyException("Object resolution failed: " + e.getMessage(), e);
         }
     }
 }

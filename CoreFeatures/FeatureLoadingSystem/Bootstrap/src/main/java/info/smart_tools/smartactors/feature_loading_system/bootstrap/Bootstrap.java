@@ -55,10 +55,11 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
                 } catch (Throwable e) {
                     throw new ProcessExecutionException(
                             MessageFormat.format(
-                                    "\n\nError occurred processing item \"{0}\".\nProcessed items are: {1}.\nAll items are: {2}\n",
+                                    "\n\nError occurred processing item \"{0}\".\nProcessed items are: {1}.\nAll items are: {2}.\nCause: {3}.",
                                     item.getItemName(),
                                     String.join(", ", doneItems.stream().map(IBootstrapItem::getItemName).collect(Collectors.toList())),
-                                    String.join(", ", orderedItems.stream().map(IBootstrapItem::getItemName).collect(Collectors.toList()))),
+                                    String.join(", ", orderedItems.stream().map(IBootstrapItem::getItemName).collect(Collectors.toList())),
+                                    e.getMessage()),
                             e);
                 }
             }

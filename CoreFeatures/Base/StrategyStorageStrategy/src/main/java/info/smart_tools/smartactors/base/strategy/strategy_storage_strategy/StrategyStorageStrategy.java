@@ -42,7 +42,7 @@ public class StrategyStorageStrategy implements IResolveDependencyStrategy, IAdd
 
             return null == strategy ? null : strategy.resolve(args);
         } catch (Exception e) {
-            throw new ResolveDependencyStrategyException("Object resolution failed.", e);
+            throw new ResolveDependencyStrategyException("Object resolution failed: " + e.getMessage(), e);
         }
     }
 

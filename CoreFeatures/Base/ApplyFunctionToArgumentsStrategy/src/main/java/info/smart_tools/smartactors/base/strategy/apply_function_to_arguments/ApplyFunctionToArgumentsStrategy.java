@@ -45,7 +45,7 @@ public class ApplyFunctionToArgumentsStrategy implements IResolveDependencyStrat
         try {
             return (T) function.execute(args);
         } catch (Exception e) {
-            throw new ResolveDependencyStrategyException("Object resolution failed.", e);
+            throw new ResolveDependencyStrategyException("Object resolution failed: " + e.getMessage(), e);
         }
     }
 }

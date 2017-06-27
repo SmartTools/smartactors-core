@@ -78,7 +78,7 @@ class ItemCore {
         try {
             this.process.execute();
         } catch (Throwable e) {
-            throw new ProcessExecutionException("Process execution failed.", e);
+            throw new ProcessExecutionException("Process execution failed: " + e.getMessage(), e);
         }
     }
 
@@ -91,7 +91,7 @@ class ItemCore {
         try {
             this.revertProcess.execute();
         } catch (Throwable e) {
-            throw new RevertProcessExecutionException("Revert process execution failed.", e);
+            throw new RevertProcessExecutionException("Revert process execution failed: " + e.getMessage(), e);
         }
     }
 
