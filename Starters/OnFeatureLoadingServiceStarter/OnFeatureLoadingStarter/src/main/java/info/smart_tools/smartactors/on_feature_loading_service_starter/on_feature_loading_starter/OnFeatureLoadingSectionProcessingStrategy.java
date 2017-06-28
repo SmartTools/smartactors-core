@@ -15,6 +15,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.ichain_storage
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 
@@ -109,7 +110,7 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
                     messageProcessor.process(message, (IObject) IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName())));
                 }
             }
-        } catch (ReadValueException | InvalidArgumentException | ChangeValueException | ResolutionException e) {
+        } catch (ReadValueException | InvalidArgumentException | ResolutionException | MessageProcessorProcessException e) {
             throw new ConfigurationProcessingException("Error occurred executing \"onFeatureLoading\" configuration section.", e);
         } catch (ChainNotFoundException e) {
             throw new ConfigurationProcessingException("Error occurred resolving \"chain\".", e);

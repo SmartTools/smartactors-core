@@ -30,6 +30,7 @@
         <module>ReceiverChain</module>
         <module>NullResponseStrategy</module>
         <module>ResponseSenderReceiver</module>
+        <module>Signals</module>
         <module>MessageProcessingDistribution</module>
     </modules>
     <build>

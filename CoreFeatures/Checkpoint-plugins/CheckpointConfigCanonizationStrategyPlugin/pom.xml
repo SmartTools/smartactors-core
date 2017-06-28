@@ -16,88 +16,83 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.exception.invalid-argument-exception</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.strategy.apply-function-to-arguments</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.strategy.singleton-strategy</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.interfaces.iresolve-dependency-strategy</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.interfaces.iaddition-dependency-strategy</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.interfaces.iaction</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
 
         <!-- Components of info.smart_tools.smartactors.feature-loading-system -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.interfaces.iplugin</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.interfaces.ibootstrap</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.bootstrap-item</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.bootstrap-plugin</artifactId>
-            <version>RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>feature-loading-system.bootstrap-plugin</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
 
         <!-- Components of info.smart_tools.smartactors.iobject -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject.iobject</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
 
         <!-- Components of info.smart_tools.smartactors.ioc -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc.iioccontainer</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc.ioc</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc.named-keys-storage</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc.ikey</artifactId>
-            <version>RELEASE</version>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
 
         <!-- Tests -->

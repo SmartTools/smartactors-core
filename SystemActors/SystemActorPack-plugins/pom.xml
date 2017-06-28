@@ -15,6 +15,7 @@
         <module>PluginActorCollectionReceiver</module>
         <module>PluginObjectEnumerationActor</module>
         <module>PluginRepeaterActor</module>
+        <module>ShutdownActorPlugin</module>
         <module>SystemActorPack-pluginsDistribution</module>
     </modules>
     <build>

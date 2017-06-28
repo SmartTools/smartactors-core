@@ -41,6 +41,7 @@ public class PluginWDSObject implements IPlugin {
 
             wdsObjectItem
                     .after("IOC")
+                    .after("FieldNamePlugin")
                     .process(() -> {
                         try {
                             IOC.register(

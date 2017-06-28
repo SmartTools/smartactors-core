@@ -20,6 +20,11 @@
             <artifactId>task.interfaces.iqueue</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>task.itask-preprocess-strategy</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>

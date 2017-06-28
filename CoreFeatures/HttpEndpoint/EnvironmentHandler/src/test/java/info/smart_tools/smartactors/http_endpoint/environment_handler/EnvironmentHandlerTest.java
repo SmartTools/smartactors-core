@@ -2,11 +2,9 @@ package info.smart_tools.smartactors.http_endpoint.environment_handler;
 
 
 import info.smart_tools.smartactors.base.strategy.create_new_instance_strategy.CreateNewInstanceStrategy;
-import info.smart_tools.smartactors.endpoint.interfaces.ienvironment_handler.exception.RequestHandlerInternalException;
 import info.smart_tools.smartactors.iobject.ds_object.DSObject;
 import info.smart_tools.smartactors.iobject.field_name.FieldName;
 import info.smart_tools.smartactors.endpoint.interfaces.ienvironment_handler.IEnvironmentHandler;
-import info.smart_tools.smartactors.endpoint.interfaces.ienvironment_handler.exception.EnvironmentHandleException;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
@@ -153,7 +151,7 @@ public class EnvironmentHandlerTest {
             verify(messageProcessor, times(1)).process(
                     (IObject) environment.getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "message")),
                     (IObject) environment.getValue(IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "context")));
-        } catch (ReadValueException | ChangeValueException e) {
+        } catch (ReadValueException e) {
             e.printStackTrace();
         }
 

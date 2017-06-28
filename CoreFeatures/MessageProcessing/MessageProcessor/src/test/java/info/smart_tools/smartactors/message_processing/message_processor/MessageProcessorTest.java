@@ -1,12 +1,18 @@
 package info.smart_tools.smartactors.message_processing.message_processor;
 
+import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 import info.smart_tools.smartactors.iobject.field_name.FieldName;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
+import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.message_processing_interfaces.imessage.IMessage;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.Signal;
+import info.smart_tools.smartactors.shutdown.ishutdown_aware_task.IShutdownAwareTask;
 import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
@@ -20,8 +26,12 @@ import info.smart_tools.smartactors.iobject_extension.wds_object.WDSObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.same;
@@ -43,6 +53,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({IOC.class})
 public class MessageProcessorTest {
+    private final Signal signal = new Signal("test") { };
+    private final Signal shutdownSignal = new Signal("shutdown") { };
+
     private IQueue<ITask> taskQueueMock;
     private IMessageProcessingSequence messageProcessingSequenceMock;
     private IMessage messageMock;
@@ -51,11 +64,16 @@ public class MessageProcessorTest {
     private IObject environmentMock;
     private IObject configurationMock;
     private ITask finalTaskMock;
+    private IUpCounter upCounterMock;
 
     private final IKey KEY_FOR_KEY_STORAGE = mock(IKey.class);
     private final IKey KEY_FOR_NEW_IOBJECT = mock(IKey.class);
     private final IKey KEY_FOR_FIELD_NAME = mock(IKey.class);
     private final IKey KEY_FOR_FINAL_TASK = mock(IKey.class);
+    private final IKey KEY_FOR_TEST_SIGNAL = mock(IKey.class);
+    private final IKey KEY_FOR_SHUTDOWN_SIGNAL = mock(IKey.class);
+    private final IKey KEY_INVALID_KEY = mock(IKey.class);
+    private final IKey KEY_FOR_UP_COUNTER = mock(IKey.class);
 
     @Before
     public void setUp()
@@ -68,11 +86,16 @@ public class MessageProcessorTest {
         environmentMock = mock(IObject.class);
         configurationMock = mock(IObject.class);
         finalTaskMock = mock(ITask.class);
+        upCounterMock = mock(IUpCounter.class);
 
         mockStatic(IOC.class);
 
         when(IOC.getKeyForKeyStorage()).thenReturn(KEY_FOR_KEY_STORAGE);
         when(IOC.resolve(KEY_FOR_KEY_STORAGE, "final task")).thenReturn(KEY_FOR_FINAL_TASK);
+        when(IOC.resolve(KEY_FOR_KEY_STORAGE, "root upcounter")).thenReturn(KEY_FOR_UP_COUNTER);
+        when(IOC.resolve(KEY_FOR_KEY_STORAGE, "test signal")).thenReturn(KEY_FOR_TEST_SIGNAL);
+        when(IOC.resolve(KEY_FOR_KEY_STORAGE, "shutdown signal")).thenReturn(KEY_FOR_SHUTDOWN_SIGNAL);
+        when(IOC.resolve(KEY_FOR_KEY_STORAGE, "invalid key")).thenReturn(KEY_INVALID_KEY);
         when(IOC.resolve(KEY_FOR_KEY_STORAGE, IObject.class.getCanonicalName())).thenReturn(KEY_FOR_NEW_IOBJECT);
         when(IOC.resolve(KEY_FOR_NEW_IOBJECT))
                 .thenReturn(environmentMock);
@@ -80,6 +103,10 @@ public class MessageProcessorTest {
         when(IOC.resolve(same(KEY_FOR_FIELD_NAME), any()))
                 .thenAnswer(invocationOnMock -> new FieldName((String) invocationOnMock.getArguments()[1]));
         when(IOC.resolve(same(KEY_FOR_FINAL_TASK), any())).thenReturn(this.finalTaskMock);
+        when(IOC.resolve(same(KEY_FOR_UP_COUNTER))).thenReturn(upCounterMock);
+        when(IOC.resolve(same(KEY_FOR_TEST_SIGNAL))).thenReturn(signal);
+        when(IOC.resolve(same(KEY_FOR_SHUTDOWN_SIGNAL))).thenReturn(shutdownSignal);
+        when(IOC.resolve(same(KEY_INVALID_KEY))).thenThrow(ResolutionException.class);
     }
 
     @Test(expected = InvalidArgumentException.class)
@@ -381,5 +408,124 @@ public class MessageProcessorTest {
         when(messageProcessingSequenceMock.getCurrentReceiverArguments()).thenReturn(receiverArguments1);
         messageProcessor.execute();
         assertSame(wrapperMock, messageProcessor.getEnvironment());
+    }
+
+    @Test
+    public void Should_handleSignals()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.signal("test signal");
+
+        messageProcessor.process(messageMock, contextMock);
+        messageProcessor.execute();
+
+        verify(messageProcessingSequenceMock).catchException(same(signal), same(contextMock));
+    }
+
+    @Test(expected = InvalidArgumentException.class)
+    public void Should_throwWhenSignalNameIsNull()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.signal(null);
+    }
+
+    @Test(expected = InvalidArgumentException.class)
+    public void Should_throwWhenSignalNameIsInvalid()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.signal("invalid key");
+    }
+
+    @Test(expected = InvalidArgumentException.class)
+    public void Should_throwWhenSignalIsNotSignal()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.signal(IObject.class.getCanonicalName());
+    }
+
+    @Test
+    public void Should_endSequenceSilentlyWhenThereIsNoExceptionalChainForSignal()
+            throws Exception {
+        doThrow(NoExceptionHandleChainException.class).when(messageProcessingSequenceMock).catchException(same(signal), any());
+
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.signal("test signal");
+        messageProcessor.execute();
+
+        verify(messageProcessingSequenceMock).end();
+    }
+
+    @Test
+    public void Should_interactWithUpCounter()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.process(messageMock, contextMock);
+
+        verify(upCounterMock, times(1)).up();
+        verifyNoMoreInteractions(upCounterMock);
+
+        ArgumentCaptor<List> finalActionListCaptor = ArgumentCaptor.forClass(List.class);
+
+        verify(contextMock).setValue(eq(new FieldName("finalActions")), finalActionListCaptor.capture());
+
+        assertEquals(1, finalActionListCaptor.getValue().size());
+
+        ((IAction)finalActionListCaptor.getValue().get(0)).execute(environmentMock);
+
+        verify(upCounterMock, times(1)).down();
+    }
+
+    @Test
+    public void Should_notOverwriteExistFinalActionsList()
+            throws Exception {
+        IAction<IObject> actionStub = env -> {};
+        List<IAction<IObject>> list = new ArrayList<>();
+        list.add(actionStub);
+
+        when(contextMock.getValue(eq(new FieldName("finalActions")))).thenReturn(list);
+
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.process(messageMock, contextMock);
+
+        verify(contextMock, times(0)).setValue(eq(new FieldName("finalActions")), any());
+
+        assertSame(actionStub, list.get(0));
+        assertEquals(2, list.size());
+    }
+
+    @Test
+    public void Should_haveAssociatedShutdownAwareTask()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        IShutdownAwareTask shutdownAwareTask = messageProcessor.getAs(IShutdownAwareTask.class);
+
+        assertNotNull(shutdownAwareTask);
+    }
+
+    @Test(expected = InvalidArgumentException.class)
+    public void Should_throwWhenAssociatedObjectOfUnknownClassRequired()
+            throws Exception {
+        new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock).getAs(IObject.class);
+    }
+
+    @Test
+    public void Should_emitShutdownSignalWhenNotifiedOnShutdownButExactlyOnce()
+            throws Exception {
+        MessageProcessor messageProcessor = new MessageProcessor(taskQueueMock, messageProcessingSequenceMock, configurationMock);
+
+        messageProcessor.getAs(IShutdownAwareTask.class).notifyShuttingDown();
+        messageProcessor.execute();
+        messageProcessor.getAs(IShutdownAwareTask.class).notifyShuttingDown();
+        messageProcessor.execute();
+
+        verify(messageProcessingSequenceMock, times(1)).catchException(same(shutdownSignal), any());
     }
 }

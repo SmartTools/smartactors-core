@@ -6,6 +6,7 @@ import info.smart_tools.smartactors.task.interfaces.ithread_pool.IThreadPool;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
@@ -31,6 +32,7 @@ public class ExecutionTaskTest {
     public void Should_exit_When_thereIsNoTask()
             throws Exception {
         ExecutionTask executionTask = new ExecutionTask(dispatcherMock);
+        when(dispatcherMock.getExecutionTask()).thenReturn(executionTask);
 
         when(queueMock.tryTake()).thenReturn(null);
 
@@ -41,12 +43,29 @@ public class ExecutionTaskTest {
     public void Should_exit_When_threadIsInterrupted()
             throws Exception {
         ExecutionTask executionTask = new ExecutionTask(dispatcherMock);
+        when(dispatcherMock.getExecutionTask()).thenReturn(executionTask);
 
         Thread.currentThread().interrupt();
 
         executionTask.execute();
 
         verify(queueMock, never()).tryTake();
+
+        assertTrue(Thread.interrupted());
+    }
+
+    @Test(timeout = 100L)
+    public void Should_exit_When_currentExecutionTaskChanges()
+            throws Exception {
+        ExecutionTask executionTask = new ExecutionTask(dispatcherMock);
+        ITask nextExecTsk = mock(ExecutionTask.class);
+        when(dispatcherMock.getExecutionTask()).thenReturn(nextExecTsk);
+
+        executionTask.execute();
+
+        verify(queueMock, never()).tryTake();
+
+        verify(threadPoolMock).tryExecute(same(nextExecTsk));
     }
 
     @Test(timeout = 100L)
@@ -59,6 +78,7 @@ public class ExecutionTaskTest {
                 .thenReturn(null);
 
         ExecutionTask executionTask = new ExecutionTask(dispatcherMock);
+        when(dispatcherMock.getExecutionTask()).thenReturn(executionTask);
 
         executionTask.execute();
 
@@ -71,6 +91,8 @@ public class ExecutionTaskTest {
         ITask taskMock = mock(ITask.class);
 
         ExecutionTask executionTask = new ExecutionTask(dispatcherMock);
+
+        when(dispatcherMock.getExecutionTask()).thenReturn(executionTask);
 
         when(queueMock.tryTake())
                 .thenReturn(taskMock)

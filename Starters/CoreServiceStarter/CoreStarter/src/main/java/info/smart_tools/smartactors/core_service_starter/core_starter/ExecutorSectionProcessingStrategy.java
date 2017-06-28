@@ -1,6 +1,8 @@
 //package info.smart_tools.smartactors.core_service_starter.core_starter;
 package info.smart_tools.smartactors.core_service_starter.core_starter;
 
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
+import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
 import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.ISectionStrategy;
 import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.exceptions.ConfigurationProcessingException;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
@@ -72,7 +74,15 @@ public class ExecutorSectionProcessingStrategy implements ISectionStrategy {
             );
 
             taskDispatcher.start();
-        } catch (InvalidArgumentException | ResolutionException | RegistrationException | ReadValueException e) {
+
+            IUpCounter rootUpCounter = IOC.resolve(Keys.getOrAdd("root upcounter"));
+
+            rootUpCounter.onShutdownComplete(() -> {
+                taskDispatcher.stop();
+                threadPool.terminate();
+            });
+        } catch (InvalidArgumentException | ResolutionException | RegistrationException | ReadValueException
+                | UpCounterCallbackExecutionException e) {
             throw new ConfigurationProcessingException(e);
         }
     }

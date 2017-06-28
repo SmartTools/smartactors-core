@@ -1,6 +1,8 @@
 package info.smart_tools.smartactors.scheduler.interfaces;
 
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 
 import java.util.List;
 
@@ -65,4 +67,20 @@ public interface ISchedulerEntryStorage {
      * @throws EntryStorageAccessException if there is no entry with given identifier
      */
     ISchedulerEntry getEntry(String id) throws EntryStorageAccessException;
+
+    /**
+     * @return a timer that should be used by entries stored in this storage
+     */
+    ITimer getTimer();
+
+    /**
+     * @return {@link ISchedulerEntryFilter filter} that should be applied to all entries
+     */
+    ISchedulerEntryFilter getFilter();
+
+    /**
+     * @param filter    the new {@link ISchedulerEntryFilter filter} to use
+     * @throws InvalidArgumentException if {@code filter} is {@code null}
+     */
+    void setFilter(ISchedulerEntryFilter filter) throws InvalidArgumentException;
 }

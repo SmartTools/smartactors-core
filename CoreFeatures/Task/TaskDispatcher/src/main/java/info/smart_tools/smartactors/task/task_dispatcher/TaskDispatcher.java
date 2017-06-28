@@ -5,6 +5,7 @@ import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
 import info.smart_tools.smartactors.task.interfaces.itask_dispatcher.ITaskDispatcher;
 import info.smart_tools.smartactors.task.interfaces.ithread_pool.IThreadPool;
+import info.smart_tools.smartactors.task.itask_preprocess_strategy.ITaskProcessStrategy;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -26,7 +27,7 @@ public class TaskDispatcher implements ITaskDispatcher {
     private final AtomicLong lastTakeTime;
 
     private final Runnable callback;
-    private final ExecutionTask executionTask;
+    private ITask executionTask;
 
     /**
      * The constructor.
@@ -55,6 +56,13 @@ public class TaskDispatcher implements ITaskDispatcher {
 
         this.runningThreadCount = new AtomicInteger(0);
         this.lastTakeTime = new AtomicLong(0);
+    }
+
+    /**
+     * @return {@link ITask task} that is executed to execute tasks from task queue
+     */
+    ITask getExecutionTask() {
+        return executionTask;
     }
 
     /**
@@ -122,5 +130,12 @@ public class TaskDispatcher implements ITaskDispatcher {
     @Override
     public void stop() {
         taskQueue.removeNewItemCallback(callback);
+    }
+
+    @Override
+    public void setProcessStrategy(final ITaskProcessStrategy strategy) {
+        this.executionTask = (null == strategy)
+                ? new ExecutionTask(this)
+                : new ExecutionTaskWithStrategy(this, strategy);
     }
 }

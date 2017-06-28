@@ -6,13 +6,13 @@
 
     <groupId>info.smart_tools.smartactors</groupId>
     <artifactId>core-pack-for-server-2</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.3</version>
 
     <packaging>pom</packaging>
 
     <properties>
-        <core.version>0.3.1</core.version>
-        <feature.version>0.3.1</feature.version>
+        <core.version>0.3.3</core.version>
+        <feature.version>0.3.3</feature.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -28,160 +28,171 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>configuration-manager</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>configuration-manager-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>core-service-starter</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>dumpable-interface</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-management</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>field</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>field-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject-extension</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject-extension-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc-strategy-pack</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>ioc-strategy-pack-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>message-processing-interfaces</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>message-processing</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>message-processing-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>on-feature-loading-service-starter</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>scope</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>scope-plugins</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>task</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>task-plugins.blocking-queue</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>utility-tools</artifactId>
-            <version>0.3.1</version>
+            <version>${core.version}</version>
             <type>zip</type>
         </dependency>
-
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>shutdown-plugins</artifactId>
+            <version>${core.version}</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>shutdown</artifactId>
+            <version>${core.version}</version>
+            <type>zip</type>
+        </dependency>
     </dependencies>
 
 

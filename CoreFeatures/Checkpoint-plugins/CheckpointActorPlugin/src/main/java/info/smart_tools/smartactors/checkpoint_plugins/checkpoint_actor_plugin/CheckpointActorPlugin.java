@@ -16,6 +16,7 @@ import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationExce
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerService;
 
 /**
  * Plugin that registers stub checkpoint actor dependency.
@@ -73,7 +74,7 @@ public class CheckpointActorPlugin extends BootstrapPlugin {
      *
      * @throws ResolutionException if error occurs resolving the key
      * @throws RegistrationException if error occurs registering actor creation strategy
-     * @throws InvalidArgumentException i unexpected error occurs
+     * @throws InvalidArgumentException if unexpected error occurs
      */
     @Item("checkpoint_failure_action_default")
     @Before({"checkpoint_actor"})
@@ -88,5 +89,22 @@ public class CheckpointActorPlugin extends BootstrapPlugin {
                         throw new ActionExecuteException(e);
                     }
                 }));
+    }
+
+    /**
+     * Register default scheduler service activation action for checkpoints - do nothing.
+     *
+     * @throws ResolutionException if error occurs resolving the key
+     * @throws RegistrationException if error occurs registering actor creation strategy
+     * @throws InvalidArgumentException if unexpected error occurs
+     */
+    @Item("default_scheduler_activation_action_for_checkpoint_actor")
+    @Before({
+        "checkpoint_actor"
+    })
+    public void registerDefaultActivationAction()
+            throws ResolutionException, RegistrationException, InvalidArgumentException {
+        IOC.register(Keys.getOrAdd("scheduler service activation action for checkpoint actor"),
+                new SingletonStrategy((IAction<ISchedulerService>) service -> { }));
     }
 }

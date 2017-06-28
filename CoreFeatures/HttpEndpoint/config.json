@@ -1,5 +1,4 @@
 {
   "featureName":"info.smart_tools.smartactors:http-endpoint",
-  "afterFeatures":["info.smart_tools.smartactors:endpoint","info.smart_tools.smartactors:message-bus"],
-  "objects":[{"name":"request-sender","dependency":"HttpRequestSenderActor","kind":"stateless_actor"}],"maps":[{"id":"sendRequest","steps":[{"handler":"sendRequest","wrapper":{"in_getRequest":"message/request"},"target":"request-sender"}],"exceptional":[]}],"client":{"stackDepth":5}
+  "afterFeatures":["info.smart_tools.smartactors:endpoint","info.smart_tools.smartactors:message-bus"]
 }

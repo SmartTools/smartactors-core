@@ -7,6 +7,8 @@ import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
@@ -74,6 +76,36 @@ public class ThreadPoolTest {
         verify(task, timeout(200)).execute();
 
         assertSame(scope, threadScopeRef.get());
+    }
+
+    @Test(timeout = 10000)
+    public void Should_terminateThreads()
+            throws Exception {
+        Object scopeId = ScopeProvider.createScope(null);
+        IScope scope = ScopeProvider.getScope(scopeId);
+
+        ScopeProvider.setCurrentScope(scope);
+
+        CyclicBarrier barrier = new CyclicBarrier(2);
+
+        threadPool = new ThreadPool(2);
+
+        assertTrue(threadPool.tryExecute(() -> {
+            try {
+                barrier.await();
+            } catch (InterruptedException | BrokenBarrierException e) {
+                throw new TaskExecutionException(e);
+            }
+        }));
+
+        threadPool.terminate();
+
+        assertFalse(threadPool.tryExecute(new SleepingTask()));
+
+        // Running task should not be interrupted, so it will reach the barrier.
+        barrier.await();
+
+        assertFalse(threadPool.tryExecute(new SleepingTask()));
     }
 
     private class SleepingTask implements ITask {

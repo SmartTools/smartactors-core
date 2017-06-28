@@ -89,6 +89,7 @@ public class PluginMessageProcessorAndSequence implements IPlugin {
                     .after("IOC")
                     .after("wds_object")
                     .after("IFieldNamePlugin")
+                    .after("root_upcounter")
                     .process(() -> {
                         try {
                             IOC.register(

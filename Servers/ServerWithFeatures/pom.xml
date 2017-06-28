@@ -6,7 +6,7 @@
 
     <artifactId>server-with-features</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.3</version>
 
     <repositories>
         <repository>
@@ -28,37 +28,37 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.bootstrap</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.path</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject-extension.configuration-object</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.plugin-loader-from-jar</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.plugin-loader-visitor-empty-implementation</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loading-system.plugin-creator</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>feature-loader.interfaces.ifeature-loader</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>(0.0.1, 1.0]</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -117,7 +117,7 @@
 
                     <groupId>info.smart_tools.smartactors</groupId>
                     <artifactId>${artifactId}</artifactId>
-                    <version>0.2.0-SNAPSHOT</version>
+                    <version>0.3.3</version>
                     <packaging>jar</packaging>
                 </configuration>
             </plugin>

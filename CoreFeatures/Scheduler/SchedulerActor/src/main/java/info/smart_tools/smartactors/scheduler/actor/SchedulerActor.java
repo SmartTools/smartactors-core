@@ -1,12 +1,14 @@
 package info.smart_tools.smartactors.scheduler.actor;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
+import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.base.interfaces.ipool.IPool;
-import info.smart_tools.smartactors.scheduler.actor.wrappers.*;
-import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
-import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorage;
-import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryScheduleException;
-import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.IllegalServiceStateException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.ServiceStartupException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.ServiceStopException;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
+import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
@@ -14,11 +16,15 @@ import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+import info.smart_tools.smartactors.scheduler.actor.wrappers.AddEntryQueryListMessage;
 import info.smart_tools.smartactors.scheduler.actor.wrappers.AddEntryQueryMessage;
 import info.smart_tools.smartactors.scheduler.actor.wrappers.DeleteEntryQueryMessage;
 import info.smart_tools.smartactors.scheduler.actor.wrappers.ListEntriesQueryMessage;
+import info.smart_tools.smartactors.scheduler.actor.wrappers.SetEntryIdMessage;
+import info.smart_tools.smartactors.scheduler.actor.wrappers.StartStopMessage;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
-import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorage;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryFilter;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerService;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryScheduleException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
 
@@ -28,7 +34,7 @@ import java.util.stream.Collectors;
  * Actor that manages schedules.
  */
 public class SchedulerActor {
-    private final ISchedulerEntryStorage storage;
+    private final ISchedulerService service;
 
     /**
      * The constructor.
@@ -38,10 +44,12 @@ public class SchedulerActor {
      * @throws ReadValueException if fails to read any value from arguments object
      * @throws EntryStorageAccessException if fails to download entries saved in database
      * @throws InvalidArgumentException if it occurs
-     * @throws InterruptedException if thread is interrupted while enqueuing task downloading entries from remote storage
+     * @throws ActionExecuteException if error occurs executing service activation action
+     * @throws UpCounterCallbackExecutionException if the system is shutting down and error occurs executing any callback
      */
     public SchedulerActor(final IObject args)
-            throws ResolutionException, ReadValueException, EntryStorageAccessException, InvalidArgumentException, InterruptedException {
+            throws ResolutionException, ReadValueException, EntryStorageAccessException, InvalidArgumentException, ActionExecuteException,
+                   UpCounterCallbackExecutionException {
         String connectionOptionsDependency = (String) args.getValue(
                 IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "connectionOptionsDependency"));
         String connectionPoolDependency = (String) args.getValue(
@@ -51,9 +59,27 @@ public class SchedulerActor {
 
         Object connectionOptions = IOC.resolve(Keys.getOrAdd(connectionOptionsDependency));
         IPool connectionPool = IOC.resolve(Keys.getOrAdd(connectionPoolDependency), connectionOptions);
-        storage = IOC.resolve(Keys.getOrAdd(ISchedulerEntryStorage.class.getCanonicalName()),
+        service = IOC.resolve(Keys.getOrAdd("new scheduler service"),
                 connectionPool,
                 collectionName);
+
+        IAction<ISchedulerService> activationAction = IOC.resolve(
+                Keys.getOrAdd("scheduler service activation action for scheduler actor"));
+        activationAction.execute(service);
+
+        IUpCounter upCounter = IOC.resolve(Keys.getOrAdd("root upcounter"));
+        upCounter.onShutdownComplete(() -> {
+            try {
+                service.stop();
+            } catch (IllegalServiceStateException ignore) {
+                // Service is already stopped, OK
+            } catch (ServiceStopException e) {
+                throw new ActionExecuteException(e);
+            }
+        });
+        // Execute only entries with "preShutdownExec" flag after shutdown request received
+        ISchedulerEntryFilter preShutdownModeFilter = IOC.resolve(Keys.getOrAdd("pre shutdown mode entry filter"));
+        upCounter.onShutdownRequest(mode -> service.getEntryStorage().setFilter(preShutdownModeFilter));
     }
 
     /**
@@ -65,7 +91,7 @@ public class SchedulerActor {
      */
     public void addEntry(final AddEntryQueryMessage message)
             throws ResolutionException, ReadValueException {
-        IOC.resolve(Keys.getOrAdd("new scheduler entry"), message.getEntryArguments(), storage);
+        IOC.resolve(Keys.getOrAdd("new scheduler entry"), message.getEntryArguments(), service.getEntryStorage());
     }
 
     /**
@@ -78,7 +104,7 @@ public class SchedulerActor {
      */
     public void addEntryWithSettingId(final SetEntryIdMessage message)
             throws ResolutionException, ReadValueException, ChangeValueException {
-        ISchedulerEntry entry = IOC.resolve(Keys.getOrAdd("new scheduler entry"), message.getEntryArguments(), storage);
+        ISchedulerEntry entry = IOC.resolve(Keys.getOrAdd("new scheduler entry"), message.getEntryArguments(), service.getEntryStorage());
         message.setEntryId(entry.getId());
     }
 
@@ -92,7 +118,7 @@ public class SchedulerActor {
     public void addEntryList(final AddEntryQueryListMessage message)
             throws ResolutionException, ReadValueException {
         for (IObject entry : message.getEntryArgumentsList()) {
-            IOC.resolve(Keys.getOrAdd("new scheduler entry"), entry, storage);
+            IOC.resolve(Keys.getOrAdd("new scheduler entry"), entry, service.getEntryStorage());
         }
     }
 
@@ -106,7 +132,7 @@ public class SchedulerActor {
     public void listEntries(final ListEntriesQueryMessage message)
             throws ChangeValueException, EntryStorageAccessException {
         message.setEntries(
-                storage.listLocalEntries().stream()
+                service.getEntryStorage().listLocalEntries().stream()
                         .map(ISchedulerEntry::getState)
                         .collect(Collectors.toList()));
     }
@@ -121,6 +147,30 @@ public class SchedulerActor {
      */
     public void deleteEntry(final DeleteEntryQueryMessage message)
             throws ReadValueException, EntryStorageAccessException, EntryScheduleException {
-        storage.getEntry(message.getEntryId()).cancel();
+        service.getEntryStorage().getEntry(message.getEntryId()).cancel();
+    }
+
+    /**
+     * Start the scheduler.
+     *
+     * @param message    the message
+     * @throws ServiceStartupException if error occurs starting the service
+     * @throws IllegalServiceStateException if the service is already running/starting
+     */
+    public void start(final StartStopMessage message)
+            throws ServiceStartupException, IllegalServiceStateException {
+        service.start();
+    }
+
+    /**
+     * Stop the scheduler.
+     *
+     * @param message    the message
+     * @throws ServiceStopException if error occurs stopping the service
+     * @throws IllegalServiceStateException if the service is already stopped/not running
+     */
+    public void stop(final StartStopMessage message)
+            throws IllegalServiceStateException, ServiceStopException {
+        service.stop();
     }
 }

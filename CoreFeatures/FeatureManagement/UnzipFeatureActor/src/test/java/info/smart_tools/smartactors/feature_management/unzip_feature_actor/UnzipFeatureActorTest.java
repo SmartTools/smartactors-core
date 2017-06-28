@@ -20,6 +20,7 @@ import info.smart_tools.smartactors.ioc.string_ioc_key.Key;
 import info.smart_tools.smartactors.scope.iscope.IScope;
 import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -93,6 +94,7 @@ public class UnzipFeatureActorTest {
         assertNotNull(actor);
     }
 
+    @Ignore
     @Test
     public void checkUnzipMethod()
             throws Exception {

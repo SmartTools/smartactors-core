@@ -124,7 +124,7 @@ public class ConfigurationObject implements IObject {
             }
             return canonicalValue;
         } catch (Throwable e) {
-            throw new ReadValueException("Can't read value for current field name");
+            throw new ReadValueException("Can't read value for current field name", e);
         }
     }
 

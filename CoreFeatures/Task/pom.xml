@@ -20,6 +20,9 @@
         <module>NonBlockingQueue</module>
         <module>ITask</module>
         <module>TaskDispatcher</module>
+        <module>ITaskPreprocessStrategy</module>
+        <module>ITaskExecutionState</module>
+        <module>IManagedTask</module>
         <module>TaskDistribution</module>
     </modules>
     <build>

@@ -23,6 +23,7 @@ import info.smart_tools.smartactors.scheduler.interfaces.exceptions.SchedulerAct
 public class DefaultSchedulerAction implements ISchedulerAction {
     private final IFieldName messageFieldName;
     private final IFieldName setEntryIdFieldName;
+    private final IFieldName preShutdownExecFieldName;
 
     /**
      * The constructor.
@@ -33,6 +34,7 @@ public class DefaultSchedulerAction implements ISchedulerAction {
             throws ResolutionException {
         messageFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "message");
         setEntryIdFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "setEntryId");
+        preShutdownExecFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "preShutdownExec");
     }
 
     @Override
@@ -52,6 +54,10 @@ public class DefaultSchedulerAction implements ISchedulerAction {
             }
 
             entry.getState().setValue(messageFieldName, message);
+
+            Object preShutdownExecConfig = args.getValue(preShutdownExecFieldName);
+            entry.getState().setValue(preShutdownExecFieldName,
+                    (preShutdownExecConfig == null || preShutdownExecConfig == Boolean.FALSE) ? Boolean.FALSE : Boolean.TRUE);
         } catch (ReadValueException | ChangeValueException | InvalidArgumentException | ResolutionException e) {
             throw new SchedulerActionInitializationException("Error occurred copying message from arguments to entry state.", e);
         }

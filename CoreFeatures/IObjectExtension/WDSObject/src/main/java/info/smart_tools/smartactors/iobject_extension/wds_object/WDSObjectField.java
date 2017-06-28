@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Implementation of {@link IField} only for {@code in} method
+ *
  */
 public class WDSObjectField implements IField {
 

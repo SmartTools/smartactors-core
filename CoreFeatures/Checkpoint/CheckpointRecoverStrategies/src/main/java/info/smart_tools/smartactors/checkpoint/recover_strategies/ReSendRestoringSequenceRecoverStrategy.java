@@ -14,6 +14,7 @@ import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 
 /**
  * {@link IRecoverStrategy Recover strategy} that re-sends the message restoring state of {@link IMessageProcessingSequence processing
@@ -82,7 +83,8 @@ public class ReSendRestoringSequenceRecoverStrategy implements IRecoverStrategy 
                     );
 
             processor.process(messageClone, IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName())));
-        } catch (ReadValueException | InvalidArgumentException | SerializeException | ResolutionException | ChangeValueException e) {
+        } catch (ReadValueException | InvalidArgumentException | SerializeException | ResolutionException | ChangeValueException
+                | MessageProcessorProcessException e) {
             throw new RecoverStrategyExecutionException("Error occurred re-sending message.", e);
         }
     }

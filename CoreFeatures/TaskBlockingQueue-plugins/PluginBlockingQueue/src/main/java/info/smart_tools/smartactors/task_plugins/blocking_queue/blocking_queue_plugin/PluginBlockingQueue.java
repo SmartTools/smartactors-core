@@ -23,6 +23,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * Plugin that registers a blocking queue creation strategy in IOC.
  */
 public class PluginBlockingQueue implements IPlugin {
+    private static final int DEFAULT_QUEUE_SIZE = 16;
 
     private final IBootstrap<IBootstrapItem<String>> bootstrap;
 
@@ -49,8 +50,12 @@ public class PluginBlockingQueue implements IPlugin {
                                 try {
                                     IFieldName queueSizeFieldName = IOC.resolve(
                                             Keys.getOrAdd(IFieldName.class.getCanonicalName()), "queueSize");
-                                    IObject conf = (IObject) args[0];
-                                    int queueSize = (int) conf.getValue(queueSizeFieldName);
+                                    int queueSize = DEFAULT_QUEUE_SIZE;
+
+                                    if (args.length > 0) {
+                                        IObject conf = (IObject) args[0];
+                                        queueSize = (int) conf.getValue(queueSizeFieldName);
+                                    }
 
                                     return new BlockingQueue<>(new ArrayBlockingQueue<>(queueSize));
                                 } catch (Exception e) {

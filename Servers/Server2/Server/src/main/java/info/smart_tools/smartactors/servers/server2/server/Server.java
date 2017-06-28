@@ -71,7 +71,11 @@ public class Server implements IServer {
             File coreDir = new File("core");
             List<IPath> jars = new ArrayList<>();
             for (File file : coreDir.listFiles()) {
-                jars.addAll(getListOfJars(file));
+                if (file.isDirectory()) {
+                    jars.addAll(getListOfJars(file));
+                } else if (isJAR(file)) {
+                    jars.add(new Path(file));
+                }
             }
             loadPlugins(jars);
             System.out.println("\n\n[OK] Stage 1: server core has been loaded successful.\n\n");
@@ -85,12 +89,10 @@ public class Server implements IServer {
         if (!directory.isDirectory()) {
             throw new IOException(MessageFormat.format("File ''{0}'' is not a directory.", directory.getAbsolutePath()));
         }
-        File[] files = directory.listFiles((dir, name) -> name.endsWith(".jar"));
+        File[] files = directory.listFiles(this::isJAR);
         List<IPath> paths = new LinkedList<>();
         for (File file : files) {
-            if (file.isFile()) {
-                paths.add(new Path(file));
-            }
+            paths.add(new Path(file));
         }
 
         return paths;
@@ -124,5 +126,9 @@ public class Server implements IServer {
             }
             throw e;
         }
+    }
+
+    private boolean isJAR(final File file) {
+        return file.isFile() && file.getName().endsWith(".jar");
     }
 }

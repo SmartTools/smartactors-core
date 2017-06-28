@@ -1,6 +1,8 @@
 package info.smart_tools.smartactors.http_endpoint.http_endpoint;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
+import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
 import info.smart_tools.smartactors.base.strategy.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.endpoint.interfaces.ideserialize_strategy.IDeserializeStrategy;
 import info.smart_tools.smartactors.endpoint.interfaces.iresponse_handler.IResponseHandler;
@@ -67,7 +69,7 @@ public class HttpEndpointTest {
 
 
     @BeforeMethod
-    public void setUp() throws ExecutionException, InterruptedException, URISyntaxException, InvalidArgumentException, ResolutionException, RegistrationException, ScopeProviderException, RequestSenderException {
+    public void setUp() throws ExecutionException, InterruptedException, URISyntaxException, InvalidArgumentException, ResolutionException, RegistrationException, ScopeProviderException, RequestSenderException, UpCounterCallbackExecutionException {
         mapperStub = mock(IMessageMapper.class);
         receiver = mock(IReceiverChain.class);
         environmentHandler = mock(IEnvironmentHandler.class);
@@ -182,11 +184,11 @@ public class HttpEndpointTest {
 
     protected HttpServer createEndpoint(
             IEnvironmentHandler environmentHandler, IReceiverChain receiver, IMessageMapper<byte[]> mapper
-    ) throws ResolutionException, ScopeProviderException {
+    ) throws ResolutionException, ScopeProviderException, UpCounterCallbackExecutionException {
         Map<String, IDeserializeStrategy> strategies = new HashMap<>();
         strategies.put("application/json", new DeserializeStrategyPostJson(mapper));
         return new HttpEndpoint(getTestingPort(), 4096, ScopeProvider.getCurrentScope(),
-                environmentHandler, receiver, "");
+                environmentHandler, receiver, "", mock(IUpCounter.class));
     }
 
     protected HttpClient createClient(IResponseHandler handler) throws URISyntaxException, RequestSenderException {

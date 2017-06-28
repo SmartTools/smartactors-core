@@ -84,6 +84,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                     .before("config_sections:done")
                     .after("queue")
                     .after("IFieldNamePlugin")
+                    .after("root_upcounter")
                     .before("starter")
                     .process(() -> {
                         try {

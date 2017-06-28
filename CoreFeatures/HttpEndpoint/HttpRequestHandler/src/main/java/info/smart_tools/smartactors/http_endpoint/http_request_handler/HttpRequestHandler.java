@@ -1,6 +1,8 @@
 package info.smart_tools.smartactors.http_endpoint.http_request_handler;
 
 
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
+import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
 import info.smart_tools.smartactors.endpoint.interfaces.ideserialize_strategy.IDeserializeStrategy;
 import info.smart_tools.smartactors.http_endpoint.channel_handler_netty.ChannelHandlerNetty;
 import info.smart_tools.smartactors.endpoint.endpoint_handler.EndpointHandler;
@@ -40,6 +42,7 @@ import io.netty.handler.codec.http.HttpVersion;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Endpoint handler for HTTP requests.
@@ -64,6 +67,8 @@ public class HttpRequestHandler extends EndpointHandler<ChannelHandlerContext, F
     private final IFieldName endpointName;
     private final IFieldName responseStrategyName;
 
+    private boolean isShuttingDown = false;
+
     /**
      * Constructor for HttpRequestHandler
      *
@@ -71,10 +76,11 @@ public class HttpRequestHandler extends EndpointHandler<ChannelHandlerContext, F
      * @param environmentHandler handler for environment
      * @param receiver           chain, that should receive message
      * @param name               name of the endpoint
+     * @param upCounter          up-counter to use to subscribe on shutdown request
      */
     public HttpRequestHandler(
             final IScope scope, final IEnvironmentHandler environmentHandler, final IReceiverChain receiver,
-            final String name) throws ResolutionException {
+            final String name, final IUpCounter upCounter) throws ResolutionException, UpCounterCallbackExecutionException {
         super(receiver, environmentHandler, scope, name);
         this.name = name;
 
@@ -90,6 +96,8 @@ public class HttpRequestHandler extends EndpointHandler<ChannelHandlerContext, F
         cookiesFieldName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "cookies");
         endpointName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "endpointName");
         responseStrategyName = IOC.resolve(Keys.getOrAdd(IFieldName.class.getCanonicalName()), "responseStrategy");
+
+        upCounter.onShutdownRequest(mode -> isShuttingDown = true);
     }
 
     @Override
@@ -175,8 +183,9 @@ public class HttpRequestHandler extends EndpointHandler<ChannelHandlerContext, F
                 }
             };
 
-            // Do not replace asList by singletonList !!!
-            context.setValue(finalActionsFieldName, Arrays.asList(httpFinalAction));
+            ArrayList<IAction<IObject>> finalActions = new ArrayList<>();
+            finalActions.add(httpFinalAction);
+            context.setValue(finalActionsFieldName, finalActions);
 
             //create environment
             environment.setValue(messageFieldName, message);
@@ -213,5 +222,18 @@ public class HttpRequestHandler extends EndpointHandler<ChannelHandlerContext, F
         response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "application/json");
         return response;
+    }
+
+    @Override
+    public void handle(final ChannelHandlerContext ctx, final FullHttpRequest request) throws ExecutionException {
+        if (isShuttingDown) {
+            try {
+                sendExceptionalResponse(ctx, request, IOC.resolve(Keys.getOrAdd("HttpShuttingDownException")));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } else {
+            super.handle(ctx, request);
+        }
     }
 }

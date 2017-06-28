@@ -6,23 +6,23 @@
 
     <groupId>info.smart_tools.smartactors</groupId>
     <artifactId>core-pack</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.3</version>
 
     <packaging>pom</packaging>
 
     <properties>
-        <core.version>0.3.2</core.version>
-        <feature.version>0.3.1-SNAPSHOT</feature.version>
+        <core.version>0.3.3</core.version>
+        <feature.version>0.3.3</feature.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
     
-    <!--<repositories>
+    <repositories>
         <repository>
             <id>archiva.smartactors-modules</id>
             <url>http://archiva.smart-tools.info/repository/smartactors-modules/</url>
         </repository>
-    </repositories>-->
+    </repositories>
 
     <dependencies>
 
@@ -45,6 +45,21 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.exception.initialization-exception</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.up-counter</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.iup-counter</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.isynchronous-service</artifactId>
             <version>${core.version}</version>
         </dependency>
              
@@ -296,8 +311,46 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>message-processing-plugins.chain-modification-strategies-plugin</artifactId>
-            <version>0.3.2</version>
+            <version>${core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>message-processing.response-sender-receiver</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>message-processing-plugins.response-sender-receiver-plugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>message-processing-plugins.message-bus-response-strategy-plugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>message-processing.null-response-strategy</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>message-processing-plugins.null-response-strategy-plugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+
+        <!--shutdown-->
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>shutdown-plugins.on-shutown-request-configuration-section-plugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>shutdown-plugins.root-up-counter-plugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+
 
         <!-- CoreStarter -->
         <dependency>

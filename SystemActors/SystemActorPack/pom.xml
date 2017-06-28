@@ -15,6 +15,7 @@
         <module>ObjectEnumerationActor</module>
         <module>ActorCollectionReceiver</module>
         <module>RepeaterActor</module>
+        <module>ShutdownActor</module>
         <module>SystemActorPackDistribution</module>
     </modules>
     <build>

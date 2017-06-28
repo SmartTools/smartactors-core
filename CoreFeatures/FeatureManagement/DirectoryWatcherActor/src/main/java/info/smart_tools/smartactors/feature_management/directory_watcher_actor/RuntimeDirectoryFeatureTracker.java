@@ -18,6 +18,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.ichain_storage
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 import info.smart_tools.smartactors.scope.iscope.IScope;
 import info.smart_tools.smartactors.scope.iscope_provider_container.exception.ScopeProviderException;
 import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
@@ -102,7 +103,7 @@ public class RuntimeDirectoryFeatureTracker {
     }
 
     private void startExecutionChain(final IPath newFilePath)
-            throws ResolutionException, ChangeValueException, InvalidArgumentException, ScopeProviderException {
+            throws ResolutionException, ChangeValueException, InvalidArgumentException, ScopeProviderException, MessageProcessorProcessException {
         if (!newFilePath.getPath().endsWith(".zip") && !newFilePath.getPath().endsWith(".json")) {
             return;
         }

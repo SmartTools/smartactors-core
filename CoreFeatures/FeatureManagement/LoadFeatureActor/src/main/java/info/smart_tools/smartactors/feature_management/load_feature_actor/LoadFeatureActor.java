@@ -136,7 +136,7 @@ public class LoadFeatureActor {
         } catch (Throwable e) {
             feature.setFailed(true);
             System.out.println("[FAILED] ---------- Feature '" + feature.getName() + "' loading has been broken with exception:");
-            System.out.println(e);
+            e.printStackTrace(System.out);
         }
     }
 

@@ -51,6 +51,11 @@
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.iup-counter</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -145,6 +150,16 @@
             <artifactId>timer-plugins.timer-plugin</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.exception.invalid-state-exception</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.isynchronous-service</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
         </dependency>
     </dependencies>
     <build>

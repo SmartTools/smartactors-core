@@ -20,6 +20,7 @@ import info.smart_tools.smartactors.ioc_plugins.ioc_keys_plugin.PluginIOCKeys;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerAction;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorage;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerService;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.SchedulerActionExecutionException;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.SchedulerActionInitializationException;
@@ -92,6 +93,7 @@ public class SchedulerIntegrationTest extends PluginsLoadingTestBase {
     private final Object conpletionLock = new Object();
     private ConcurrentHashMap<Object, Long> sMap;
     private IFieldName markerFieldName;
+    private ISchedulerService service;
     private ISchedulerEntryStorage storage;
     private CopyOnWriteArrayList<Object> duplicateMarkers;
 
@@ -243,11 +245,15 @@ public class SchedulerIntegrationTest extends PluginsLoadingTestBase {
 
         Object connectionPool = IOC.resolve(Keys.getOrAdd("PostgresConnectionPool"), connectionOptions);
 
-        storage = IOC.resolve(
-                Keys.getOrAdd(ISchedulerEntryStorage.class.getCanonicalName()),
+        service = IOC.resolve(
+                Keys.getOrAdd("new scheduler service"),
                 connectionPool,
                 "schedulerCollection"
         );
+
+        storage = service.getEntryStorage();
+
+        service.start();
 
         for (int i = 0; i < SCHEDULE_INITIAL; i++) {
             scheduleOne();

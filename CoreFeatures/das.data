@@ -703,6 +703,21 @@
   "uploadRepositories" : [ ],
   "rawName" : "Strategy.StrategyStorageWithCacheStrategy",
   "version" : "0.3.3"
+}, {
+  "artifactId" : "iup-counter",
+  "uploadRepositories" : [ ],
+  "rawName" : "IUpCounter",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "up-counter",
+  "uploadRepositories" : [ ],
+  "rawName" : "UpCounter",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "isynchronous-service",
+  "uploadRepositories" : [ ],
+  "rawName" : "ISynchronousService",
+  "version" : "0.3.3"
 } ],
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-features",
@@ -1803,6 +1818,21 @@
 } ],
   "rawName" : "TaskDispatcher",
   "version" : "0.3.3"
+}, {
+  "artifactId" : "itask-preprocess-strategy",
+  "uploadRepositories" : [ ],
+  "rawName" : "ITaskPreprocessStrategy",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "itask-execution-state",
+  "uploadRepositories" : [ ],
+  "rawName" : "ITaskExecutionState",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "imanaged-task",
+  "uploadRepositories" : [ ],
+  "rawName" : "IManagedTask",
+  "version" : "0.3.3"
 } ],
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-features",
@@ -2137,6 +2167,11 @@
 } ],
   "rawName" : "ReceiverChain",
   "version" : "0.3.3"
+}, {
+  "artifactId" : "signals",
+  "uploadRepositories" : [ ],
+  "rawName" : "Signals",
+  "version" : "0.3.2"
 }, {
   "artifactId" : "message-processing.chain-modifications",
   "uploadRepositories" : [ {
@@ -2830,6 +2865,11 @@
   "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
 } ],
   "plugins" : [ {
+  "artifactId" : "signals-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "SignalsPlugin",
+  "version" : "0.3.2"
+}, {
   "artifactId" : "null-response-strategy-plugin",
   "uploadRepositories" : [ ],
   "rawName" : "NullResponseStrategyPlugin",
@@ -2843,6 +2883,11 @@
   "artifactId" : "chain-modification-strategies-plugin",
   "uploadRepositories" : [ ],
   "rawName" : "ChainModificationStrategiesPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "message-processor-shutdown-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "MessageProcessorShutdownPlugin",
   "version" : "0.3.3"
 } ],
   "groupId" : "info.smart_tools.smartactors",
@@ -3210,6 +3255,73 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "debugger-plugins",
   "rawName" : "Debugger-plugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ {
+  "artifactId" : "scheduler-auto-startup-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "SchedulerAutoStartupPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "scheduler-auto-startup",
+  "rawName" : "SchedulerAutoStartup",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ {
+  "artifactId" : "checkpoint-auto-startup-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "CheckpointAutoStartupPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "checkpoint-auto-startup",
+  "rawName" : "CheckpointAutoStartup",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ {
+  "artifactId" : "root-up-counter-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "RootUpCounterPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "on-shutown-request-configuration-section-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "OnShutownRequestConfigurationSectionPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "shutdown-task-processing-strategies-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "ShutdownTaskProcessingStrategiesPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "shutdown-plugins",
+  "rawName" : "Shutdown-plugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "ishutdown-aware-task",
+  "uploadRepositories" : [ ],
+  "rawName" : "IShutdownAwareTask",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "shutdown-task-processing-strategies",
+  "uploadRepositories" : [ ],
+  "rawName" : "ShutdownTaskProcessingStrategies",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "shutdown",
+  "rawName" : "Shutdown",
   "version" : "0.3.3"
 } ],
   "on-actor-creation-upload-repositories" : [ ],

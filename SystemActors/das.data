@@ -24,6 +24,11 @@
 } ],
   "rawName" : "RepeaterActor",
   "version" : "0.3.3"
+}, {
+  "artifactId" : "shutdown-actor",
+  "uploadRepositories" : [ ],
+  "rawName" : "ShutdownActor",
+  "version" : "0.3.3"
 } ],
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-features",
@@ -64,7 +69,12 @@
   "uploadRepositoryId" : "archiva.smartactors-features",
   "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
 } ],
-  "plugins" : [ ],
+  "plugins" : [ {
+  "artifactId" : "shutdown-actor-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "ShutdownActorPlugin",
+  "version" : "0.3.3"
+} ],
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "system-actors-pack-plugins",
   "rawName" : "SystemActorPack-plugins",

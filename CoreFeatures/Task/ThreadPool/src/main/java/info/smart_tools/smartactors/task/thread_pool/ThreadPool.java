@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ThreadPool implements IThreadPool {
     private final Queue<ThreadImpl> threadsQueue;
     private IScope scope;
+    private boolean terminating = false;
 
     /**
      * The constructor.
@@ -49,13 +50,24 @@ public class ThreadPool implements IThreadPool {
         return false;
     }
 
+    @Override
+    public void terminate() {
+        terminating = true;
+
+        ThreadImpl thread;
+
+        while (null != (thread = threadsQueue.poll())) {
+            thread.interrupt();
+        }
+    }
+
     /**
      * Returns the thread to this pool.
      *
      * @param thread the thread
      */
     void returnThread(final ThreadImpl thread) {
-        if (!threadsQueue.offer(thread)) {
+        if (terminating || !threadsQueue.offer(thread)) {
             thread.interrupt();
         }
     }

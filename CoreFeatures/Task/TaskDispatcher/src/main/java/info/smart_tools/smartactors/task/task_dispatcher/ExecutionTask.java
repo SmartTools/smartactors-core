@@ -24,7 +24,12 @@ class ExecutionTask implements ITask {
         taskDispatcher.notifyThreadStart();
 
         try {
-            while (!Thread.interrupted()) {
+            while (taskDispatcher.getExecutionTask() == this) {
+                if (Thread.interrupted()) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+
                 ITask task = taskDispatcher.getTaskQueue().tryTake();
 
                 if (null == task) {
@@ -37,6 +42,8 @@ class ExecutionTask implements ITask {
 
                 task.execute();
             }
+
+            taskDispatcher.getThreadPool().tryExecute(taskDispatcher.getExecutionTask());
         } finally {
             taskDispatcher.notifyThreadStop();
         }

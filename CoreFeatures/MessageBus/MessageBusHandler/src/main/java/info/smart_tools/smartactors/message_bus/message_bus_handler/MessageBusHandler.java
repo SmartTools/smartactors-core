@@ -13,6 +13,7 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.message_processing_interfaces.iresponse_strategy.IResponseStrategy;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
@@ -103,7 +104,7 @@ public class MessageBusHandler implements IMessageBusHandler {
         try {
             resolveMessageProcessor(dstChain)
                     .process(message, resolveDefaultContext());
-        } catch (ResolutionException | InvalidArgumentException | ChangeValueException e) {
+        } catch (ResolutionException | InvalidArgumentException | ChangeValueException | MessageProcessorProcessException e) {
             throw new MessageBusHandlerException("Failed to handle message to MessageBus.", e);
         }
     }
@@ -113,7 +114,7 @@ public class MessageBusHandler implements IMessageBusHandler {
         try {
             resolveMessageProcessor(dstChain)
                     .process(message, resolveReplyContext(replyChainId));
-        } catch (ResolutionException | ChangeValueException | InvalidArgumentException e) {
+        } catch (ResolutionException | ChangeValueException | InvalidArgumentException | MessageProcessorProcessException e) {
             throw new MessageBusHandlerException("Failed to handle message to MessageBus.", e);
         }
     }

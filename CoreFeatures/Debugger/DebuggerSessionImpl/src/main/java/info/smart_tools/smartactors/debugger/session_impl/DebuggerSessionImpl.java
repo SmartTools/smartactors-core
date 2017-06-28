@@ -21,6 +21,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.message_proces
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.AsynchronousOperationException;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.NestedChainStackOverflowException;
 
 import java.text.MessageFormat;
@@ -253,7 +254,7 @@ public class DebuggerSessionImpl implements IDebuggerSession {
             processor.process(message, context);
 
             paused = false;
-        } catch (ResolutionException | ChangeValueException | InvalidArgumentException e) {
+        } catch (ResolutionException | ChangeValueException | InvalidArgumentException | MessageProcessorProcessException e) {
             throw new CommandExecutionException(e);
         }
 

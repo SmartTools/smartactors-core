@@ -61,7 +61,7 @@ public class CheckpointConfigCanonizationStrategyPlugin extends BootstrapPlugin 
             }
         }));
 
-        IAdditionDependencyStrategy ads = IOC.resolve(Keys.getOrAdd("resolve key for configuration object strategy"));
+        IAdditionDependencyStrategy ads = IOC.resolve(Keys.getOrAdd("expandable_strategy#resolve key for configuration object"));
 
         ads.register("maps", new ApplyFunctionToArgumentsStrategy(args -> {
                 try {

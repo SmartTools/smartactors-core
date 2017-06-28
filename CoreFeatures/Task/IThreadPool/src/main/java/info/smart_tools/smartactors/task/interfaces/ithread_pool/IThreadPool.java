@@ -16,4 +16,12 @@ public interface IThreadPool {
      * @throws TaskExecutionException if any error occurs
      */
     boolean tryExecute(ITask task) throws TaskExecutionException;
+
+    /**
+     * Terminate the thread pool.
+     *
+     * After completion of call to {@code #terminate()} no one call to {@link #tryExecute(ITask)} will finish successfully and all threads
+     * of pool will be destroyed as soon as possible (immediately or after completion of current task).
+     */
+    void terminate();
 }

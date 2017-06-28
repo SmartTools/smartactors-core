@@ -1,5 +1,5 @@
 {
   "featureName":"info.smart_tools.smartactors:https-endpoint-plugins",
-  "afterFeatures":["info.smart_tools.smartactors:https-endpoint"],
+  "afterFeatures":["info.smart_tools.smartactors:https-endpoint", "info.smart_tools.smartactors:http-endpoint-plugins"],
   "objects":[{"name":"request-sender","dependency":"HttpsRequestSenderActor","kind":"stateless_actor"}],"maps":[{"id":"sendRequest","steps":[{"handler":"sendRequest","wrapper":{"in_getRequest":"message/request"},"target":"request-sender"}],"exceptional":[]}]
 }

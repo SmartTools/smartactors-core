@@ -17,6 +17,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.ichain_storage
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 import info.smart_tools.smartactors.scope.iscope.IScope;
 import info.smart_tools.smartactors.scope.iscope_provider_container.exception.ScopeProviderException;
 import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
@@ -111,7 +112,7 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
                     IObject context = (IObject) environment.getValue(contextFieldName);
                     messageProcessor.process(message, context);
                 } catch (ChangeValueException | ReadValueException | InvalidArgumentException | ResponseHandlerException |
-                        ResolutionException e) {
+                        ResolutionException | MessageProcessorProcessException e) {
                     throw new TaskExecutionException(e);
                 }
             };

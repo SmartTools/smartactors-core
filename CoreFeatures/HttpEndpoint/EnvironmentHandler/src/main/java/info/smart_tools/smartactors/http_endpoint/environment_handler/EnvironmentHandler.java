@@ -12,6 +12,7 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence;
@@ -63,7 +64,8 @@ public class EnvironmentHandler implements IEnvironmentHandler {
             IObject context = (IObject) environment.getValue(this.contextFieldName);
             context.setValue(this.fromExternalFieldName, true);
             messageProcessor.process(message, context);
-        } catch (ResolutionException | InvalidArgumentException | ReadValueException | ChangeValueException e) {
+        } catch (ResolutionException | InvalidArgumentException | ReadValueException | ChangeValueException
+                | MessageProcessorProcessException e) {
             throw new EnvironmentHandleException(e);
         }
     }

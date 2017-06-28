@@ -1,10 +1,16 @@
 package info.smart_tools.smartactors.checkpoint.checkpoint_actor;
 
+import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
+import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecuteException;
 import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.exception.ResolveDependencyStrategyException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.IllegalServiceStateException;
+import info.smart_tools.smartactors.base.isynchronous_service.exceptions.ServiceStopException;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.checkpoint.checkpoint_actor.wrappers.EnteringMessage;
 import info.smart_tools.smartactors.checkpoint.checkpoint_actor.wrappers.FeedbackMessage;
+import info.smart_tools.smartactors.checkpoint.checkpoint_actor.wrappers.StartStopMessage;
 import info.smart_tools.smartactors.helpers.plugins_loading_test_base.PluginsLoadingTestBase;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
@@ -20,6 +26,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.message_proces
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorage;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryStorageObserver;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerService;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
 import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
 import info.smart_tools.smartactors.scope_plugins.scope_provider_plugin.PluginScopeProvider;
@@ -43,6 +50,8 @@ public class CheckpointActorTest extends PluginsLoadingTestBase {
 
     private IQueue taskQueueMock;
     private ISchedulerEntryStorage storageMock;
+    private ISchedulerService serviceMock;
+    private IAction activationActionMock;
     private IMessageBusHandler messageBusHandlerMock;
 
     private ISchedulerEntryStorageObserver observer;
@@ -60,6 +69,8 @@ public class CheckpointActorTest extends PluginsLoadingTestBase {
 
     private IMessageProcessor messageProcessorMock;
     private IMessageProcessingSequence messageProcessingSequenceMock;
+
+    private IUpCounter upCounterMock;
 
     @Override
     protected void loadPlugins() throws Exception {
@@ -83,16 +94,23 @@ public class CheckpointActorTest extends PluginsLoadingTestBase {
         IOC.register(Keys.getOrAdd("the connection pool"), new SingletonStrategy(connectionPool));
 
         storageMock = mock(ISchedulerEntryStorage.class);
-        IOC.register(Keys.getOrAdd(ISchedulerEntryStorage.class.getCanonicalName()), new IResolveDependencyStrategy() {
+        serviceMock = mock(ISchedulerService.class);
+        when(serviceMock.getEntryStorage()).thenReturn(storageMock);
+
+        IOC.register(Keys.getOrAdd("new scheduler service"), new IResolveDependencyStrategy() {
             @Override
             public <T> T resolve(Object... args) throws ResolveDependencyStrategyException {
                 assertSame(connectionPool, args[0]);
                 assertEquals(collectionName, args[1]);
                 observer = (ISchedulerEntryStorageObserver) args[2];
 
-                return (T) storageMock;
+                return (T) serviceMock;
             }
         });
+
+        activationActionMock = mock(IAction.class);
+        IOC.register(Keys.getOrAdd("scheduler service activation action for checkpoint actor"),
+                new SingletonStrategy(activationActionMock));
 
         IOC.register(Keys.getOrAdd("chain_id_from_map_name"), new IResolveDependencyStrategy() {
             @Override
@@ -123,6 +141,30 @@ public class CheckpointActorTest extends PluginsLoadingTestBase {
         messageProcessorMock = mock(IMessageProcessor.class);
         messageProcessingSequenceMock = mock(IMessageProcessingSequence.class);
         when(messageProcessorMock.getSequence()).thenReturn(messageProcessingSequenceMock);
+
+        upCounterMock = mock(IUpCounter.class);
+        IOC.register(Keys.getOrAdd("root upcounter"), new SingletonStrategy(upCounterMock));
+    }
+
+    @Test
+    public void Should_resolveActivate_StartAndStop_SchedulerService()
+            throws Exception {
+        IObject args = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()),
+                ("{" +
+                        "'connectionOptionsDependency':'the connection options'," +
+                        "'connectionPoolDependency':'the connection pool'," +
+                        "'collectionName':'" + collectionName + "'" +
+                        "}").replace('\'','"'));
+
+        CheckpointActor actor = new CheckpointActor(args);
+
+        verify(activationActionMock).execute(serviceMock);
+
+        actor.start(mock(StartStopMessage.class));
+        verify(serviceMock).start();
+
+        actor.stop(mock(StartStopMessage.class));
+        verify(serviceMock).stop();
     }
 
     @Test
@@ -336,5 +378,34 @@ public class CheckpointActorTest extends PluginsLoadingTestBase {
 
         verify(entryMock[0]).getState();
         verifyNoMoreInteractions(entryMock[0]);
+    }
+
+    @Test
+    public void Should_registerUpCounterCallback()
+            throws Exception {
+        IObject args = IOC.resolve(Keys.getOrAdd(IObject.class.getCanonicalName()),
+                ("{" +
+                        "'connectionOptionsDependency':'the connection options'," +
+                        "'connectionPoolDependency':'the connection pool'," +
+                        "'collectionName':'" + collectionName + "'" +
+                        "}").replace('\'','"'));
+
+        CheckpointActor actor = new CheckpointActor(args);
+
+        ArgumentCaptor<IAction> callbackCaptor = ArgumentCaptor.forClass(IAction.class);
+
+        verify(upCounterMock).onShutdownRequest(callbackCaptor.capture());
+
+        callbackCaptor.getValue().execute(null);
+        verify(serviceMock).stop();
+
+        doThrow(ServiceStopException.class).when(serviceMock).stop();
+        try {
+            callbackCaptor.getValue().execute(null);
+            fail();
+        } catch (ActionExecuteException ignore) { }
+
+        doThrow(IllegalServiceStateException.class).when(serviceMock).stop();
+        callbackCaptor.getValue().execute(null);
     }
 }

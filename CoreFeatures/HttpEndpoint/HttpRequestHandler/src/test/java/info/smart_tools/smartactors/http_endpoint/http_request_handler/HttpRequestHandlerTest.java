@@ -1,6 +1,7 @@
 package info.smart_tools.smartactors.http_endpoint.http_request_handler;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
@@ -127,7 +128,7 @@ public class HttpRequestHandlerTest {
         IObject message = new DSObject("{\"hello\": \"world\"}");
         when(deserializeStrategy.deserialize(request)).thenReturn(message);
         when(request.method()).thenReturn(HttpMethod.POST);
-        HttpRequestHandler requestHandler = new HttpRequestHandler(ScopeProvider.getCurrentScope(), null, null, null);
+        HttpRequestHandler requestHandler = new HttpRequestHandler(ScopeProvider.getCurrentScope(), null, null, null, mock(IUpCounter.class));
         IObject environment = requestHandler.getEnvironment(ctx, request);
         assertEquals(environment.getValue(new FieldName("message")), message);
     }
@@ -139,7 +140,7 @@ public class HttpRequestHandlerTest {
         IObject message = new DSObject("{\"hello\": \"world\"}");
         when(deserializeStrategy.deserialize(request)).thenThrow(DeserializationException.class);
         when(request.method()).thenReturn(HttpMethod.POST);
-        HttpRequestHandler requestHandler = new HttpRequestHandler(ScopeProvider.getCurrentScope(), null, null, null);
+        HttpRequestHandler requestHandler = new HttpRequestHandler(ScopeProvider.getCurrentScope(), null, null, null, mock(IUpCounter.class));
         IOC.register(Keys.getOrAdd("HttpPostParametersToIObjectException"), new SingletonStrategy(
                         new DSObject("{\"statusCode\": 200}")
                 )
@@ -155,7 +156,7 @@ public class HttpRequestHandlerTest {
         IObject message = new DSObject("{\"hello\": \"world\"}");
         when(request.method()).thenReturn(HttpMethod.GET);
         doThrow(new AddRequestParametersToIObjectException("exception")).when(requestParametersToIObject).extract(any(), any());
-        HttpRequestHandler requestHandler = new HttpRequestHandler(ScopeProvider.getCurrentScope(), null, null, null);
+        HttpRequestHandler requestHandler = new HttpRequestHandler(ScopeProvider.getCurrentScope(), null, null, null, mock(IUpCounter.class));
         IOC.register(Keys.getOrAdd("HttpRequestParametersToIObjectException"), new SingletonStrategy(
                         new DSObject("{\"statusCode\": 200}")
                 )

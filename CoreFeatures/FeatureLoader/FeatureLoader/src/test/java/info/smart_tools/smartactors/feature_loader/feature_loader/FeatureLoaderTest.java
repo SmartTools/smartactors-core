@@ -17,6 +17,8 @@ import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionExcept
 import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
+import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +73,12 @@ public class FeatureLoaderTest {
     private IKey pluginLoaderKey = mock(IKey.class);
     private IPluginLoader pluginLoaderMock;
 
+    private IKey queueKey = mock(IKey.class);
+    private IQueue queueMock = mock(IQueue.class);
+
     private ArgumentCaptor<Object> argsCaptor = ArgumentCaptor.forClass(Object.class);
+
+    private ITask taskMock = mock(ITask.class);
 
     @Before
     public void setUp()
@@ -96,6 +103,7 @@ public class FeatureLoaderTest {
         when(Keys.getOrAdd(eq(FeatureStatusImpl.class.getCanonicalName()))).thenReturn(featureStatusKey);
         when(Keys.getOrAdd(eq("configuration object"))).thenReturn(configurationObjectKey);
         when(Keys.getOrAdd(eq("plugin loader"))).thenReturn(pluginLoaderKey);
+        when(Keys.getOrAdd(eq("feature group load completion task queue"))).thenReturn(queueKey);
 
         when(IOC.resolve(same(fieldNameKey), eq("featureName"))).thenReturn(featureNameFN);
         when(IOC.resolve(same(fieldNameKey), eq("afterFeatures"))).thenReturn(afterFeaturesFN);
@@ -103,6 +111,7 @@ public class FeatureLoaderTest {
         when(IOC.resolve(same(pluginLoaderVisitorKey))).thenReturn(pluginLoaderVisitorMock);
         when(IOC.resolve(same(configurationManagerKey))).thenReturn(configurationManagerMock);
         when(IOC.resolve(same(filesystemFacadeKey))).thenReturn(filesystemFacadeMock);
+        when(IOC.resolve(same(queueKey))).thenReturn(queueMock);
 
         //noinspection unchecked
         when(IOC.resolve(same(iobjectKey))).thenReturn(metafeatureConfigMock).thenThrow(ResolutionException.class);
@@ -141,6 +150,8 @@ public class FeatureLoaderTest {
         IPlugin pluginMock1 = mock(IPlugin.class);
         IPath directoryPathMock = mock(IPath.class);
 
+        when(queueMock.tryTake()).thenReturn(taskMock).thenReturn(null);
+
         when(featureConfigurationMock1.getValue(featureNameFN)).thenReturn("the feature");
         when(featureConfigurationMock1.getValue(afterFeaturesFN)).thenReturn(Collections.emptyList());
 
@@ -169,6 +180,12 @@ public class FeatureLoaderTest {
         when(pluginCreatorMock.create(same(getClass()), any())).thenReturn(pluginMock1);
         classHandler.execute(getClass());
         verify(pluginMock1).load();
+
+        verify(taskMock, times(0)).execute();
+        ArgumentCaptor<IAction> actionArgumentCaptor = ArgumentCaptor.forClass(IAction.class);
+        verify(featureStatusMock1).whenDone(actionArgumentCaptor.capture());
+        actionArgumentCaptor.getValue().execute(null);
+        verify(taskMock, times(1)).execute();
     }
 
     @Test

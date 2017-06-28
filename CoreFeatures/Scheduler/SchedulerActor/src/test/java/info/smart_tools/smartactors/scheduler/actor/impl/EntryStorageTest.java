@@ -1,13 +1,17 @@
 package info.smart_tools.smartactors.scheduler.actor.impl;
 
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
 import info.smart_tools.smartactors.base.interfaces.ipool.IPool;
 import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.base.pool_guard.IPoolGuard;
 import info.smart_tools.smartactors.base.pool_guard.PoolGuard;
+import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
+import info.smart_tools.smartactors.scheduler.actor.impl.filter.AllPassEntryFilter;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.DatabaseRemoteStorage;
 import info.smart_tools.smartactors.scheduler.actor.impl.remote_storage.IRemoteEntryStorage;
 import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntry;
+import info.smart_tools.smartactors.scheduler.interfaces.ISchedulerEntryFilter;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.EntryStorageAccessException;
 import info.smart_tools.smartactors.database_in_memory_plugins.in_memory_database_plugin.PluginInMemoryDatabase;
 import info.smart_tools.smartactors.database_in_memory_plugins.in_memory_db_tasks_plugin.PluginInMemoryDBTasks;
@@ -22,6 +26,7 @@ import info.smart_tools.smartactors.ioc_plugins.ioc_keys_plugin.PluginIOCKeys;
 import info.smart_tools.smartactors.scope_plugins.scope_provider_plugin.PluginScopeProvider;
 import info.smart_tools.smartactors.scope_plugins.scoped_ioc_plugin.ScopedIOCPlugin;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
+import info.smart_tools.smartactors.timer.interfaces.itimer.ITimer;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -40,6 +45,7 @@ public class EntryStorageTest extends PluginsLoadingTestBase {
     private IObject[] saved;
     private ISchedulerEntry[] entries;
     private IRemoteEntryStorage remoteEntryStorage;
+    private ITimer timerMock;
 
     @Override
     protected void loadPlugins() throws Exception {
@@ -110,6 +116,9 @@ public class EntryStorageTest extends PluginsLoadingTestBase {
         restoreEntryStrategy = mock(IResolveDependencyStrategy.class);
         when(restoreEntryStrategy.resolve(any(), any())).thenReturn(entries[0], Arrays.copyOfRange(entries, 1, entries.length));
         IOC.register(Keys.getOrAdd("restore scheduler entry"), restoreEntryStrategy);
+
+        timerMock = mock(ITimer.class);
+        IOC.register(Keys.getOrAdd("timer"), new SingletonStrategy(timerMock));
     }
 
     private int countDBEntries() throws Exception {
@@ -271,5 +280,32 @@ public class EntryStorageTest extends PluginsLoadingTestBase {
         EntryStorage storage = new EntryStorage(remoteEntryStorage, null);
 
         assertNull(storage.getEntry("666"));
+    }
+
+    @Test
+    public void Should_storeTimer()
+            throws Exception {
+        assertSame(timerMock, new EntryStorage(remoteEntryStorage, null).getTimer());
+    }
+
+    @Test
+    public void Should_storeFilterReference()
+            throws Exception {
+        EntryStorage storage = new EntryStorage(remoteEntryStorage, null);
+
+        assertTrue(storage.getFilter() instanceof AllPassEntryFilter);
+
+        ISchedulerEntryFilter filterMock = mock(ISchedulerEntryFilter.class);
+
+        storage.setFilter(filterMock);
+
+        assertSame(filterMock, storage.getFilter());
+
+        try {
+            storage.setFilter(null);
+            fail();
+        } catch (InvalidArgumentException ignore) { }
+
+        assertSame(filterMock, storage.getFilter());
     }
 }

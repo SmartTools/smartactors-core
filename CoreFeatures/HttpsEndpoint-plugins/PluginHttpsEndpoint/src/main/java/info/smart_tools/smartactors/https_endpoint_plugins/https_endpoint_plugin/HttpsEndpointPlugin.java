@@ -1,6 +1,8 @@
 package info.smart_tools.smartactors.https_endpoint_plugins.https_endpoint_plugin;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
+import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.endpoint.interfaces.ideserialize_strategy.IDeserializeStrategy;
@@ -222,15 +224,24 @@ public class HttpsEndpointPlugin implements IPlugin {
                                                 Keys.getOrAdd(ISslEngineProvider.class.getCanonicalName()),
                                                 configuration
                                         );
-                                return new HttpsEndpoint((Integer) configuration.getValue(portFieldName),
+
+                                IUpCounter upCounter = IOC.resolve(Keys.getOrAdd("root upcounter"));
+
+                                HttpsEndpoint endpoint = new HttpsEndpoint(
+                                        (Integer) configuration.getValue(portFieldName),
                                         (Integer) configuration.getValue(maxContentLengthFieldName),
                                         ScopeProvider.getCurrentScope(), environmentHandler,
                                         (String) configuration.getValue(endpointNameFieldName),
                                         (IReceiverChain) configuration.getValue(startChainNameFieldName),
-                                        sslContextProvider);
-                            } catch (ReadValueException | ScopeProviderException | ResolutionException | InvalidArgumentException e) {
+                                        sslContextProvider, upCounter);
+
+                                upCounter.onShutdownComplete(endpoint::stop);
+
+                                return endpoint;
+                            } catch (ReadValueException | ScopeProviderException | ResolutionException | InvalidArgumentException
+                                    | UpCounterCallbackExecutionException e) {
+                                throw new RuntimeException(e);
                             }
-                            return null;
                         }
                 )
         );

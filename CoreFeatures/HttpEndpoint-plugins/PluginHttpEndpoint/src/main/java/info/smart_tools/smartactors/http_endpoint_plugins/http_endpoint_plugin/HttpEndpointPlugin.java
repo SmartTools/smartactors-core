@@ -5,6 +5,8 @@ import info.smart_tools.smartactors.base.exception.invalid_argument_exception.In
 import info.smart_tools.smartactors.base.interfaces.i_addition_dependency_strategy.IAdditionDependencyStrategy;
 import info.smart_tools.smartactors.base.interfaces.i_addition_dependency_strategy.exception.AdditionDependencyStrategyException;
 import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecuteException;
+import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
+import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.create_new_instance_strategy.CreateNewInstanceStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
@@ -130,16 +132,25 @@ public class HttpEndpointPlugin implements IPlugin {
                                                                     "HTTP_application/x-www-form-urlencoded",
                                                                     configuration.getValue(endpointNameFieldName));
 
+                                                            IUpCounter upCounter = IOC.resolve(Keys.getOrAdd("root upcounter"));
+
                                                             IEnvironmentHandler environmentHandler = IOC.resolve(
                                                                     Keys.getOrAdd(IEnvironmentHandler.class.getCanonicalName()),
                                                                     configuration);
-                                                            return new HttpEndpoint((Integer) configuration.getValue(portFieldName),
+                                                            HttpEndpoint endpoint = new HttpEndpoint(
+                                                                    (Integer) configuration.getValue(portFieldName),
                                                                     (Integer) configuration.getValue(maxContentLengthFieldName),
                                                                     ScopeProvider.getCurrentScope(), environmentHandler,
                                                                     (IReceiverChain) configuration.getValue(startChainNameFieldName),
-                                                                    (String) configuration.getValue(endpointNameFieldName));
+                                                                    (String) configuration.getValue(endpointNameFieldName),
+                                                                    upCounter);
+
+                                                            upCounter.onShutdownComplete(endpoint::stop);
+
+                                                            return endpoint;
                                                         } catch (ReadValueException | InvalidArgumentException
-                                                                | ScopeProviderException | ResolutionException e) {
+                                                                | ScopeProviderException | ResolutionException
+                                                                | UpCounterCallbackExecutionException e) {
                                                             throw new RuntimeException(e);
                                                         }
                                                     }
@@ -374,6 +385,10 @@ public class HttpEndpointPlugin implements IPlugin {
         );
         IOC.register(Keys.getOrAdd("HttpInternalException"), new SingletonStrategy(
                         new DSObject("{\"exception\": \"Internal server error\", \"statusCode\": 500}")
+                )
+        );
+        IOC.register(Keys.getOrAdd("HttpShuttingDownException"), new SingletonStrategy(
+                        new DSObject("{\"exception\": \"Service not available (shutting down)\", \"statusCode\": 503}")
                 )
         );
     }

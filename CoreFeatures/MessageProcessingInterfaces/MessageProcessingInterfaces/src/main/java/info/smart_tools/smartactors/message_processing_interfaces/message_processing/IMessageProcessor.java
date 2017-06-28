@@ -1,10 +1,9 @@
 package info.smart_tools.smartactors.message_processing_interfaces.message_processing;
 
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
-import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.AsynchronousOperationException;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageProcessorProcessException;
 
 /**
  * Interface for a object responding for processing of a single message.
@@ -76,11 +75,10 @@ public interface IMessageProcessor {
      * @param context    the context of message processing
      * @throws InvalidArgumentException if message is {@code null}
      * @throws InvalidArgumentException if context is {@code null}
-     * @throws ResolutionException if fails to resolve any dependency
-     * @throws ChangeValueException if modification of internal environment object fails
+     * @throws MessageProcessorProcessException if error occurs starting processing of the message
      */
     void process(IObject message, IObject context)
-            throws InvalidArgumentException, ResolutionException, ChangeValueException;
+            throws InvalidArgumentException, MessageProcessorProcessException;
 
     /**
      * Notify this message processor that currently called message receiver started a asynchronous operation and the
@@ -101,4 +99,20 @@ public interface IMessageProcessor {
      *                                             #pauseProcess()} since start of execution of last receiver
      */
     void continueProcess(Throwable e) throws AsynchronousOperationException;
+
+    /**
+     * Send a signal to this message processor.
+     *
+     * A exception will be resolved using given name and processed by the message processor as soon as possible (usually after completion of
+     * current step) just as if it was thrown on the step being currently executed.
+     *
+     * If there is no chain handling signal exception then processing of the message will be completed silently.
+     *
+     * Signal exception should extend {@link Signal}.
+     *
+     * @param signalName    name of the signal
+     * @throws InvalidArgumentException if {@code signalName} is {@code null}
+     * @throws InvalidArgumentException if {@code signalName} is not a valid signal name
+     */
+    void signal(String signalName) throws InvalidArgumentException;
 }
