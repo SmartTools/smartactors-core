@@ -23,6 +23,12 @@
         <module>IAssertion</module>
         <module>TestDataSourceIObject</module>
         <module>ChainTestsConfigSectionStrategy</module>
+        <module>ITestReporter</module>
+        <module>TestReporter</module>
+        <module>TestReportConsolePrinterActor</module>
+        <module>TestReportTextBuilderActor</module>
+        <module>TestReportXmlBuilderActor</module>
+        <module>TestReportFilePrinterActor</module>
         <module>TestDataSourceStringArray</module>
         <module>TestingDistribution</module>
     </modules>

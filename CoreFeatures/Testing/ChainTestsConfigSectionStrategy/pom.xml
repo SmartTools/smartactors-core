@@ -17,6 +17,11 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>testing.interfaces.itest-reporter</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>configuration-manager.configuration-manager</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
@@ -25,6 +30,13 @@
             <artifactId>ioc.ioc</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject.ifield</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Tests -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>helpers.plugins-loading-test-base</artifactId>
@@ -65,6 +77,18 @@
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>iobject-plugins.ifieldname-plugin</artifactId>
             <version>[0.0.1, 1.0.0)</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>field-plugins.field-plugin</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>testing-plugins.test-reporter-plugin</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
