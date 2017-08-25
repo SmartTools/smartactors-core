@@ -1,0 +1,4 @@
+{
+  "featureName": "feature.scatter-gather-plugin",
+  "afterFeatures": ["feature.scatter-gather-feature"]
+}
