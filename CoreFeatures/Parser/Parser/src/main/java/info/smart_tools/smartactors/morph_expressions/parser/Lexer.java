@@ -28,7 +28,7 @@ class Lexer {
     private List<ReaderContainer> tokenReaders;
 
     private static final Pattern DIGIT = Pattern.compile("\\d");
-    private static final Pattern ALPHABETIC = Pattern.compile("[A-zА-я]");
+    private static final Pattern ALPHABETIC = Pattern.compile("[A-zА-яёЁ]");
     private static final String WHITESPACE = " \f\n\r\t\u00A0\u2028\u2029";
 
     @FunctionalInterface

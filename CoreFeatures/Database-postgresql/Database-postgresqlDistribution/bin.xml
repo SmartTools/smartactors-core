@@ -17,7 +17,7 @@
             <binaries>
                 <dependencySets>
                     <dependencySet>
-                        <unpack>false</unpack>
+                        <unpack>${build.unpack}</unpack>
                         <scope>runtime</scope>
                         <outputDirectory>/</outputDirectory>
                         <!--<excludes>-->

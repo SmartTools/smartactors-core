@@ -6,6 +6,7 @@
 # Package Files #
 *.jar
 !PluginLoaderFormJar/src/test/resources/*.jar
+**/*.jar
 
 
 *.war
