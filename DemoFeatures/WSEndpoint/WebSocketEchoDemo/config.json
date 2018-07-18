@@ -1,0 +1,69 @@
+{
+  "featureName": "websocket-echo-demo",
+  "afterFeatures": [],
+
+  "endpoints": [
+    {
+      "skeleton": "netty/server/tcp/single-port",
+      "profile": "netty/server/http",
+
+      "parentEventLoopGroup": "defaultServerParent",
+      "childEventLoopGroup": "defaultServerChild",
+
+      "transport": "prefer-native",
+      "upcounter": "root",
+
+      "connectPipeline": "accept-client",
+
+      "address": ":9966",
+
+      "mainInboundChain": "httpInboundChain",
+      "webSocketInboundChain": "wsEchoChain",
+      "webSocketPath": "/ws",
+
+      "httpPathTemplates": [
+        "/ws"
+      ]
+    }
+  ],
+
+  "objects": [
+    {
+      "name": "sendResponse",
+      "kind": "raw",
+      "dependency": "response sender receiver"
+    },
+    {
+      "name": "sendOutbound",
+      "kind": "stateless_actor",
+      "dependency": "outbound message sender"
+    }
+  ],
+
+  "maps": [
+    {
+      "id": "wsEchoChain",
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "sendOutbound",
+          "handler": "send",
+          "wrapper": {
+            "in_getMessage": "message",
+            "in_getContext": "context",
+            "in_getConnectionId": "context/channelId"
+          }
+        }
+      ]
+    },
+    {
+      "id": "httpInboundChain",
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "sendResponse"
+        }
+      ]
+    }
+  ]
+}

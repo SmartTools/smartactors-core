@@ -1,0 +1,7 @@
+{
+  "featureName": "info.smart_tools.smartactors:endpoints-generic",
+  "afterFeatures": [
+    "info.smart_tools.smartactors:endpoint-components-generic",
+    "info.smart_tools.smartactors:endpoint-interfaces"
+  ]
+}

@@ -59,15 +59,7 @@
         <module>MessageProcessing</module>
         <module>MessageProcessing-plugins</module>
         <module>FeatureManagement</module>
-        <module>Endpoint</module>
-        <module>Endpoint-plugins</module>
         <module>MessageBus</module>
-        <module>HttpEndpoint</module>
-        <module>HttpEndpoint-plugins</module>
-        <module>HttpsEndpoint</module>
-        <module>HttpsEndpoint-plugins</module>
-        <module>Testing</module>
-        <module>Testing-plugins</module>
         <module>Timer</module>
         <module>Timer-plugins</module>
         <module>Scheduler</module>
@@ -86,6 +78,17 @@
         <module>DatabasePostgresqlAsyncOpsCollection</module>
         <module>DatabasePostgresqlCachedCollection</module>
         <module>MessageBus-plugins</module>
+        <module>EndpointInterfaces</module>
+        <module>EndpointComponentsGeneric</module>
+        <module>EndpointComponentsNetty</module>
+        <module>EndpointsNetty</module>
+        <module>EndpointComponentsNettyPlugins</module>
+        <module>EndpointComponentsGenericPlugins</module>
+        <module>EndpointsNettyPlugins</module>
+        <module>EndpointProfilesNetty</module>
+        <module>EndpointsGeneric</module>
+        <module>EndpointsGenericPlugins</module>
+        <module>EndpointsCompatibility</module>
     </modules>
 
     <build>

@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>TestLoadingPlugins</module>
+        <module>TrivialPluginsLoadingTestBase</module>
         <module>HelpersDistribution</module>
     </modules>
     <build>

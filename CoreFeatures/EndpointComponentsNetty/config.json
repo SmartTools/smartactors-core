@@ -1,0 +1,4 @@
+{
+  "featureName": "info.smart_tools.smartactors:endpoint-components-netty",
+  "afterFeatures": ["info.smart_tools.smartactors:endpoint-components-generic"]
+}

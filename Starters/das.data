@@ -96,25 +96,6 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
-  "artifactId" : "endpoint-service-starter.endpoint-starter",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "EndpointStarter",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "endpoint-service-starter",
-  "rawName" : "EndpointServiceStarter",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
   "artifactId" : "database-starter",
   "uploadRepositories" : [ ],
   "rawName" : "DatabaseStarter",

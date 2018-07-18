@@ -68,89 +68,6 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
-  "artifactId" : "http-endpoint-plugins.http-endpoint-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginHttpEndpoint",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.get-cookie-from-request-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginGetCookieFromRequestRule",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.endpoint-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginEndpoint",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.http-client-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginHttpClient",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.response-content-json-strategy-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginResponseJsonContentStrategy",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.get-query-parameter-rule-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginGetQueryParameterRule",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.response-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginResponse",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.get-header-from-request-rule-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginGetHeaderRule",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint-plugins.http-request-sender-actor-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginHttpRequestSenderActor",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "http-endpoint-plugins",
-  "rawName" : "HttpEndpoint-plugins",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
   "artifactId" : "dumpable-interface.idumpable",
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",
@@ -248,273 +165,6 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "scheduler-plugins",
   "rawName" : "Scheduler-plugins",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
-  "artifactId" : "http-endpoint.strategy.get-header-from-request",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "GetHeaderFromRequestRule",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-response-sender",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpResponseSender",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.deserialize-strategy-post-form-urlencoded",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "DeserializeStrategyPostFormUrlencoded",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-request-maker",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpRequestMaker",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.channel-handler-netty",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ChannelHandlerNetty",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-endpoint",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpEndpoint",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.strategy.get-cookie-from-request",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "GetCookieFromRequestRule",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-response-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpResponseHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-headers-setter",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpHeadersSetter",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-request-sender-actor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpRequestSenderActor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-client-initializer",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpClientInitializer",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.deserialize-strategy-get",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "DeserializeStrategyGet",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.completable-netty-future",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "CompletableNettyFuture",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-client",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpClient",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.interfaces.icookies-extractor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ICookiesSetter",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.response-content-json-strategy",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ResponseContentJsonStrategy",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.interfaces.iheaders-extractor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IHeadersExtractor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.deserialize-strategy-post-json",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "DeserializeStrategyPostJson",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.strategy.get-query-parameter",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "GetQueryParameterRule",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.message-to-bytes-mapper",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "MessageToBytesMapper",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-server",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpServer",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.tcp-server",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TcpServer",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.response-status-extractor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ResponseStatusExtractor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.netty-client",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "NettyClient",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.plugin-http-request-sender-actor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginHttpRequestSenderActor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-response-deserialization-strategy",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpResponseDeserializationStrategy",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.interfaces.iresponse-status-extractor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IResponseStatusExtractor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.netty-server",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "NettyServer",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-request-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpRequestHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.cookies-setter",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "CookiesSetter",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.environment-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "EnvironmentHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "http-endpoint.http-client-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpClientHandler",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "http-endpoint",
-  "rawName" : "HttpEndpoint",
   "version" : "0.3.3"
 }, {
   "actors" : [ {
@@ -693,6 +343,22 @@
   "artifactId" : "isynchronous-service",
   "uploadRepositories" : [ ],
   "rawName" : "ISynchronousService",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "synchronized-lazy-named-items-storage-strategy",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "SynchronizedLazyNamedItemsStorageStrategy",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "simple-strict-storage-strategy",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "SimpleStrictStorageStrategy",
   "version" : "0.3.3"
 } ],
   "uploadRepositories" : [ {
@@ -1053,169 +719,6 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
-  "artifactId" : "endpoint.response_strategy",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "EndpointResponseStrategy",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iresponse-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IResponseHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.irequest-maker",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IRequestMaker",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.response",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "Response",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.irequest-sender",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IRequestSender",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.ichannel-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IChannelHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iadd-request-parameters-to-iobject",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IAddRequestParametersToIObject",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.endpoint-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "EndpointHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.ideserialize-strategy",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IDeserializeStrategy",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iresponse-sender",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IResponseSender",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.actor.response-sender",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ResponseSenderActor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iasync-service",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IAsyncService",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.imessage-mapper",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IMessageMapper",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.ienvironment-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IEnvironmentHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iresponse",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IResponse",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.endpoint-channel-inbound-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "EndpointChannelInboundHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iclient",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IClient",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.actor.client",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ClientActor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "endpoint.interfaces.iresponse-body-strategy",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IResponseContentStrategy",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "endpoint",
-  "rawName" : "Endpoint",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
   "artifactId" : "morph-expressions.parser",
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",
@@ -1240,73 +743,6 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "morph-expressions",
   "rawName" : "Parser",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
-  "artifactId" : "testing-plugins.test-assertions-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginChainTestingAssertions",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing-plugins.test-checkers-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginTestCheckers",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing-plugins.test-http-endpoint-and-environment-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginTestHttpEndpointAndEnvironment",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing-plugins.chain-testing-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginChainTesting",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "testing-plugins",
-  "rawName" : "Testing-plugins",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
-  "artifactId" : "endpoint-plugins.response-sender-actor-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginResponseSenderActor",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ {
-  "artifactId" : "endpoint-response-strategy-plugin",
-  "uploadRepositories" : [ ],
-  "rawName" : "EndpointResponseStrategyPlugin",
-  "version" : "0.3.3"
-} ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "endpoint-plugins",
-  "rawName" : "Endpoint-plugins",
   "version" : "0.3.3"
 }, {
   "actors" : [ {
@@ -1699,6 +1135,11 @@
   "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
 } ],
   "rawName" : "TestLoadingPlugins",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "trivial-plugins-loading-test-base",
+  "uploadRepositories" : [ ],
+  "rawName" : "TrivialPluginsLoadingTestBase",
   "version" : "0.3.3"
 } ],
   "uploadRepositories" : [ {
@@ -2166,65 +1607,6 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
-  "artifactId" : "https-endpoint.https-request-sender-actor",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpsRequestSenderActor",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint.https-server",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpsServer",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint.issl-engine-provider",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ISslEngineProvider",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint.https-client",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpsClient",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint.https-endpoint",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpsEndpoint",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint.ssl-engine-provider",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "SslEngineProvider",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "https-endpoint",
-  "rawName" : "HttpsEndpoint",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
   "artifactId" : "scope-plugins.scoped-ioc-plugin",
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",
@@ -2461,113 +1843,6 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "security",
   "rawName" : "Security",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
-  "artifactId" : "testing.test-http-endpoint",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestHttpEndpoint",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.test-assertions",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestAssertions",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.interfaces.iresult-checker",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IResultChecker",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.test-checkers",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestCheckers",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.test-runner",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestRunner",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.interfaces.itest-runner",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ITestRunner",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.interfaces.isource",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ISource",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.test-environment-handler",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestEnvironmentHandler",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.interfaces.iassertion",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "IAssertion",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.test-data-source-iobject",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestDataSourceIObject",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.section-strategy",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "ChainTestsConfigSectionStrategy",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "testing.test-data-source-string-array",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "TestDataSourceStringArray",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "testing",
-  "rawName" : "Testing",
   "version" : "0.3.3"
 }, {
   "actors" : [ {
@@ -3060,41 +2335,6 @@
   "version" : "0.3.3"
 }, {
   "actors" : [ {
-  "artifactId" : "https-endpoint-plugins.https-endpoint-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginHttpsEndpoint",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint-plugins.https-client-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "HttpsClientPlugin",
-  "version" : "0.3.3"
-}, {
-  "artifactId" : "https-endpoint-plugins.https-request-sender-actor-plugin",
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-modules",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
-} ],
-  "rawName" : "PluginHttpsRequestSenderActor",
-  "version" : "0.3.3"
-} ],
-  "uploadRepositories" : [ {
-  "uploadRepositoryId" : "archiva.smartactors-features",
-  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
-} ],
-  "plugins" : [ ],
-  "groupId" : "info.smart_tools.smartactors",
-  "artifactId" : "https-endpoint-plugins",
-  "rawName" : "HttpsEndpoint-plugins",
-  "version" : "0.3.3"
-}, {
-  "actors" : [ {
   "artifactId" : "iobject-plugins.fieldname-plugin",
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",
@@ -3381,6 +2621,741 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "message-bus-plugins",
   "rawName" : "MessageBus-plugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "imessage-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "IMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "imessage-byte-array",
+  "uploadRepositories" : [ ],
+  "rawName" : "IMessageByteArray",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "iendpoint-pipeline",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "IEndpointPipeline",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "iendpoint-pipeline-set",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "IEndpointPipelineSet",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "iendpoint-profile",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "IEndpointProfile",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "ioutbound-connection-channel",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "IOutboundConnectionChannel",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "iclient-callback",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "IClientCallback",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoint-interfaces",
+  "rawName" : "EndpointInterfaces",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "scope-setter-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "ScopeSetterMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "send-internal-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "SendInternalMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "create-environment-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "CreateEnvironmentMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "asynchronous-unordered-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "AsynchronousUnorderedMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-message-context-implementation",
+  "uploadRepositories" : [ ],
+  "rawName" : "DefaultMessageContextImplementation",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "message-attribute-routing-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "MessageAttributeRoutingMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "create-empty-message-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "CreateEmptyMessageMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-message-codecs",
+  "uploadRepositories" : [ ],
+  "rawName" : "DefaultMessageCodecs",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "generic-exception-interceptor-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "GenericExceptionInterceptorMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-response-strategy",
+  "uploadRepositories" : [ ],
+  "rawName" : "EndpointResponseStrategy",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "response-strategy-set-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "ResponseStrategySetMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-endpoint-profile",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DefaultEndpointProfile",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-profiles-configuration-section",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointProfilesConfigurationSection",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-endpoint-pipeline-set",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DefaultEndpointPipelineSet",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "dead-end-message-handler",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DeadEndMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-outbound-connection-channel",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DefaultOutboundConnectionChannel",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "outbound-message-sender",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "OutboundMessageSender",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "message-handler-resolution-strategy",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "MessageHandlerResolutionStrategy",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "error-message-handler",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ErrorMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoints-config-section-strategy",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointsConfigSectionStrategy",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-outbound-channel-listener",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DefaultOutboundChannelListener",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "composite-exceptional-action",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "CompositeExceptionalAction",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "common-exception-types",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "CommonExceptionTypes",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "handler-configuration-object",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HandlerConfigurationObject",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "null-client-callback",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "NullClientCallback",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "outbound-request-sender",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "OutboundRequestSender",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "interrupt-client-callback",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "InterruptClientCallback",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "client-handlers",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ClientHandlers",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "outbound-url-parser",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "OutboundUrlParser",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "add-final-actions-handler",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "AddFinalActionsHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "expect-sent-response-final-action",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ExpectSentResponseFinalAction",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "store-raw-inbound-message-handler",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "StoreRawInboundMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "respond-to-chain-client-callback",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "RespondToChainClientCallback",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoint-components-generic",
+  "rawName" : "EndpointComponentsGeneric",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "inbound-netty-message-reference-count-management-components",
+  "uploadRepositories" : [ ],
+  "rawName" : "InboundNettyMessageReferenceCountManagementComponents",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "wrap-inbound-netty-message-to-message-byte-array-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "WrapInboundNettyMessageToMessageByteArrayMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "inbound-netty-channel-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "InboundNettyChannelHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-query-string-parser",
+  "uploadRepositories" : [ ],
+  "rawName" : "HttpQueryStringParser",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "send-netty-message-message-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "SendNettyMessageMessageHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-exceptional-action",
+  "uploadRepositories" : [ ],
+  "rawName" : "HttpExceptionalAction",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "outbound-netty-message-creation-handler",
+  "uploadRepositories" : [ ],
+  "rawName" : "OutboundNettyMessageCreationHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "inetty-transport-provider",
+  "uploadRepositories" : [ ],
+  "rawName" : "INettyTransportProvider",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-transport-providers",
+  "uploadRepositories" : [ ],
+  "rawName" : "DefaultTransportProviders",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "event-loops-configuration-section",
+  "uploadRepositories" : [ ],
+  "rawName" : "EventLoopsConfigurationSection",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-channel-initialization-handlers",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DefaultChannelInitializationHandlers",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-response-metadata-presetup",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HttpResponseMetadataPresetup",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-message-attribute-extractors",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HttpMessageAttributeExtractors",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-web-socket-upgrade-listener",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HttpWebSocketUpgradeListener",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "ssl-channel-initialization-handler",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "SslChannelInitializationHandler",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-status-setter",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HttpStatusSetter",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-tcp-client-connection-pool",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "DefaultTcpClientConnectionPool",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "isocket-connection-pool",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ISocketConnectionPool",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "channel-pool-handlers",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ChannelPoolHandlers",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "client-context-binding-handlers",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ClientContextBindingHandlers",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-method-setter",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HttpMethodSetter",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "read-timeout-connection-pool-observer",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ReadTimeoutConnectionPoolObserver",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoint-components-netty",
+  "rawName" : "EndpointComponentsNetty",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "netty-tc-psingle-port-server-endpoint",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "NettyTCPSinglePortServerEndpoint",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "netty-ud-pserver-endpoint",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "NettyUDPServerEndpoint",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "netty-base-endpoint",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "NettyBaseEndpoint",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoints-netty",
+  "rawName" : "EndpointsNetty",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ {
+  "artifactId" : "netty-event-loop-groups-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "NettyEventLoopGroupsPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "default-netty-transports-plugin",
+  "uploadRepositories" : [ ],
+  "rawName" : "DefaultNettyTransportsPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "message-handler-resolution-strategies-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "MessageHandlerResolutionStrategiesPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "http-message-attribute-extractors-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "HttpMessageAttributeExtractorsPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "ssl-context-strategies-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "SslEngineStrategiesPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "connection-pools-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ConnectionPoolsPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoint-components-netty-plugins",
+  "rawName" : "EndpointComponentsNettyPlugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ {
+  "artifactId" : "message-handler-resolution-strategies-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "MessageHandlerResolutionStrategiesPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-profile-strategies-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointProfileStrategiesPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-skeletons-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointSkeletonsPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoints-config-section-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointsConfigSectionPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-pipeline-set-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointPipelineSetPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-pipeline-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointPipelinePlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "endpoint-profiles-configuration-section-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointProfilesConfigurationSectionPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "mime-codec-tables-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "MimeCodecTablesPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "outbound-message-sender-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "OutboundMessageSenderPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "global-outbound-connection-channel-storage-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "GlobalOutboundConnectionChannelStoragePlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "composite-exceptional-action-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "CompositeExceptionalActionPlugin",
+  "version" : "0.3.3"
+}, {
+  "artifactId" : "client-callbacks-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ClientCallbacksPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoint-components-generic-plugins",
+  "rawName" : "EndpointComponentsGenericPlugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ {
+  "artifactId" : "endpoints-netty-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointsNettyPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoints-netty-plugins",
+  "rawName" : "EndpointsNettyPlugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "profile-pipeline-exceptions",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "ProfilePipelineExceptions",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoint-profiles-netty",
+  "rawName" : "EndpointProfilesNetty",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ {
+  "artifactId" : "generic-outound-endpoint",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "GenericOutboundEndpoint",
+  "version" : "0.3.3"
+} ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoints-generic",
+  "rawName" : "EndpointsGeneric",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ {
+  "artifactId" : "endpoints-generic-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointsGenericPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoints-generic-plugins",
+  "rawName" : "EndpointsGenericPlugins",
+  "version" : "0.3.3"
+}, {
+  "actors" : [ ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ {
+  "artifactId" : "endpoints-section-canonization-strategy-plugin",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EndpointsSectionCanonizationStrategyPlugin",
+  "version" : "0.3.3"
+} ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "endpoints-compatibility",
+  "rawName" : "EndpointsCompatibility",
   "version" : "0.3.3"
 } ],
   "on-actor-creation-upload-repositories" : [ {

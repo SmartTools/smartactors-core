@@ -1,0 +1,22 @@
+{
+  "features" : [ {
+  "actors" : [ {
+  "artifactId" : "demo-actor",
+  "uploadRepositories" : [ ],
+  "rawName" : "DemoActor",
+  "version" : "0.1.0-SNAPSHOT"
+} ],
+  "uploadRepositories" : [ ],
+  "plugins" : [ ],
+  "groupId" : "com.my-project",
+  "artifactId" : "http-client-server-demo",
+  "rawName" : "HttpClientServerDemo",
+  "version" : "0.1.0-SNAPSHOT"
+} ],
+  "on-actor-creation-upload-repositories" : [ ],
+  "on-feature-creation-upload-repositories" : [ ],
+  "on-plugin-creation-upload-repositories" : [ ],
+  "groupId" : "com.my-project",
+  "name" : "EndpointsDemo",
+  "version" : "0.1.0-SNAPSHOT"
+}

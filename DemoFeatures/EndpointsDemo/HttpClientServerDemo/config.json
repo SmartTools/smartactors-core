@@ -1,0 +1,150 @@
+{
+  "featureName": "com.my-project:http-client-server-demo",
+  "afterFeatures": [],
+
+  "endpoints": [
+    {
+      "skeleton": "netty/server/tcp/single-port",
+      "profile": "netty/server/http",
+
+      "transport": "prefer-native",
+      "upcounter": "root",
+
+      "parentEventLoopGroup": "defaultServerParent",
+      "childEventLoopGroup": "defaultServerChild",
+
+      "connectPipeline": "accept-client",
+
+      "address": ":8080",
+
+      "mainInboundChain": "httpInboundChain",
+      "webSocketInboundChain": "webSocketInboundChain",
+      "webSocketPath": "/ws",
+
+      "httpPathTemplates": [
+        "/ws",
+        "/mm/:messageMapId"
+      ]
+    },
+    {
+      "skeleton": "generic/outbound",
+      "profile": "netty/client/http",
+
+      "transport": "prefer-native",
+      "upcounter": "root",
+
+      "pipeline": "send-request",
+
+      "channelId": "http-client-demo"
+    }
+  ],
+
+  "objects": [
+    {
+      "name": "sendResponse",
+      "kind": "raw",
+      "dependency": "response sender receiver"
+    },
+    {
+      "name": "sendOutbound",
+      "kind": "stateless_actor",
+      "dependency": "outbound message sender"
+    },
+    {
+      "name": "router",
+      "kind": "raw",
+      "dependency": "info.smart_tools.smartactors.message_processing.chain_call_receiver.ChainCallReceiver",
+      "strategyDependency": "chain choice strategy"
+    },
+    {
+      "name": "demo",
+      "kind": "actor",
+      "dependency": "http cl-sv demo actor"
+    },
+    {
+      "name": "requestSender",
+      "kind": "stateless_actor",
+      "dependency": "outbound request sender"
+    }
+  ],
+
+  "maps": [
+    {
+      "id": "httpInboundChain",
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "router"
+        },
+        {
+          "target": "sendResponse"
+        }
+      ]
+    },
+    {
+      "id": "webSocketInboundChain",
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "sendOutbound",
+          "handler": "send",
+          "wrapper": {
+            "in_getMessage": "message",
+            "in_getContext": "context",
+            "in_getConnectionId": "context/channelId"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "echo",
+      "externalAccess": true,
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "demo",
+          "handler": "processRequest",
+          "wrapper": {
+            "in_getReceivedRequest": "message",
+            "out_setResponse": "response/received1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ping",
+      "externalAccess": true,
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "demo",
+          "handler": "prepareRequest",
+          "wrapper": {
+            "in_getRequestContent": "message/body",
+            "in_getURL": "message/url",
+            "in_getMessageProcessor": "processor",
+            "out_setRequest": "message/request"
+          }
+        },
+        {
+          "target": "requestSender",
+          "handler": "sendRequest",
+          "wrapper": {
+            "in_getRequestMode": "const/interrupt",
+            "in_getRequest": "message/request",
+            "in_getChannelId": "const/http-client-demo"
+          }
+        },
+        {
+          "target": "demo",
+          "handler": "processResponse",
+          "wrapper": {
+            "in_getReceivedResponse": "message/response/message",
+            "out_setResponse": "response/received2"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,975 @@
+{
+  "featureName": "info.smart_tools.smartactors:endpoint-profiles-netty",
+  "afterFeatures": [
+    "info.smart_tools.smartactors:endpoint-components-netty-plugins",
+    "info.smart_tools.smartactors:endpoints-netty"
+  ],
+
+  "nettyEventLoops": [
+    {
+      "id": "defaultWorker",
+      "upcounter": "root",
+      "transport": "prefer-native",
+      "threads": 4
+    },
+    {
+      "id": "defaultMaster",
+      "upcounter": "root",
+      "transport": "prefer-native",
+      "threads": 1
+    },
+
+    {
+      "id": "defaultClient",
+      "alias": "defaultWorker"
+    },
+    {
+      "id": "defaultServerParent",
+      "alias": "defaultMaster"
+    },
+    {
+      "id": "defaultServerChild",
+      "alias": "defaultWorker"
+    }
+  ],
+
+  "endpointProfiles": [
+    {
+      "id": "netty/server/tcp-base",
+      "extend": [],
+      "pipelines": [
+        {
+          "id": "accept-client",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "accept-client/optional/enable-ssl"
+            },
+            {
+              "type": "include",
+              "pipeline": "accept-client/setup-channel"
+            },
+            {
+              "type": "include",
+              "pipeline": "accept-client/setup-handler"
+            },
+            {
+              "type": "dead end"
+            }
+          ]
+        },
+
+        {
+          "id": "accept-client/optional/enable-ssl",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "accept-client/no-ssl"
+            }
+          ]
+        },
+        {
+          "id": "accept-client/no-ssl",
+          "stages": []
+        },
+        {
+          "id": "accept-client/enable-ssl",
+          "stages": [
+            {
+              "type": "netty/ssl-setup/server",
+              "ciphers": "@@sslCiphers",
+              "sslCiphers": [
+                "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                "TLS_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_RSA_WITH_AES_256_CBC_SHA",
+                "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+                "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+                "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+                "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+                "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+                "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA"
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "accept-client/setup-handler",
+          "stages": [
+            {
+              "type": "netty/setup/inbound chanel handler",
+              "pipeline": "receive-inbound",
+              "errorPipeline": "handle-channel-exception",
+              "messageClass": "java.lang.Object"
+            }
+          ]
+        },
+
+        {
+          "id": "intercept-exception",
+          "stages": []
+        },
+
+        {
+          "id": "handle-channel-exception",
+          "stages": [
+            {
+              "type": "dead end"
+            }
+          ]
+        },
+
+        {
+          "id": "delegate-to-executor",
+          "stages": [
+            {
+              "type": "netty/retain message",
+              "messageExtractor": "unwrapped inbound"
+            },
+            {
+              "type": "default async unordered executor"
+            },
+            {
+              "type": "netty/release message",
+              "messageExtractor": "unwrapped inbound"
+            },
+            {
+              "type": "include",
+              "pipeline": "intercept-exception"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-inbound/optional/delegate-to-executor",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "delegate-to-executor"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-inbound/send-internal",
+          "stages": [
+            {
+              "type": "internal message sender",
+              "stackDepth": "@@mainInboundMessageChainStackDepth",
+              "mainInboundMessageChainStackDepth": 5,
+              "chain": "@@mainInboundChain",
+              "mainInboundChain": "defaultEndpointInboundChain"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-inbound/set-response-strategy",
+          "stages": [
+            {
+              "type": "response strategy setter",
+              "pipeline": "send-response"
+            }
+          ]
+        },
+        {
+          "id": "receive-inbound/optional/set-response-strategy",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "receive-inbound/set-response-strategy"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-inbound",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "intercept-exception"
+            },
+            {
+              "type": "include",
+              "pipeline": "receive-inbound/optional/delegate-to-executor"
+            },
+
+            {
+              "type": "netty/wrap inbound message"
+            },
+
+            {
+              "type": "include",
+              "pipeline": "preprocess-inbound"
+            },
+
+            {
+              "type": "create environment"
+            },
+
+            {
+              "type": "include",
+              "pipeline": "process-inbound"
+            },
+
+            {
+              "type": "include",
+              "pipeline": "receive-inbound/optional/set-response-strategy"
+            },
+            {
+              "type": "include",
+              "pipeline": "receive-inbound/send-internal"
+            }
+          ]
+        },
+
+        {
+          "id": "process-inbound",
+          "stages": [
+            {
+              "type": "create empty message"
+            }
+          ]
+        },
+        {
+          "id": "preprocess-inbound",
+          "stages": [
+          ]
+        },
+
+        {
+          "id": "send-response",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "create-response"
+            },
+
+            {
+              "type": "include",
+              "pipeline": "fill-response"
+            },
+
+            {
+              "type": "netty/send outbound message"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "netty/server/ssl",
+      "extend": [],
+      "pipelines": [
+        {
+          "id": "accept-client/optional/enable-ssl",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "accept-client/enable-ssl"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "netty/server/http",
+      "extend": ["netty/server/tcp-base"],
+      "pipelines": [
+        {
+          "id": "create-response",
+          "stages": [
+            {
+              "type": "netty/create outbound message",
+              "messageType": "http response"
+            }
+          ]
+        },
+
+        {
+          "id": "accept-client/setup-handler",
+          "stages": [
+            {
+              "type": "netty/setup/inbound chanel handler",
+              "pipeline": "receive-inbound",
+              "errorPipeline": "handle-channel-exception",
+              "messageClass": "io.netty.handler.codec.http.HttpMessage"
+            }
+          ]
+        },
+
+        {
+          "id": "accept-client/setup-channel",
+          "stages": [
+            {
+              "type": "netty/setup/http server channel",
+              "maxAggregatedContentLength": "@@maxHttpAggregatedContentLength",
+              "maxHttpAggregatedContentLength": 4096
+            },
+            {
+              "type": "include",
+              "pipeline": "accept-client/setup-channel/optional/setup-websocket-upgrade-handler"
+            }
+          ]
+        },
+
+        {
+          "id": "accept-client/setup-channel/optional/setup-websocket-upgrade-handler",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "accept-client/setup-channel/setup-websocket-upgrade-handler"
+            }
+          ]
+        },
+
+        {
+          "id": "accept-client/setup-channel/setup-websocket-upgrade-handler",
+          "stages": [
+            {
+              "type": "netty/setup/http web-socket upgrade listener",
+              "path": "@@webSocketPath",
+              "webSocketPath": "/web-socket",
+              "pipeline": "upgrade-to-websocket"
+            }
+          ]
+        },
+
+        {
+          "id": "upgrade-to-websocket",
+          "stages": [
+            {
+              "type": "netty/setup/attach dynamic outbound channel",
+              "pipeline": "send-websocket",
+              "listener": "global outbound connection channel storage channel listener"
+            },
+            {
+              "type": "netty/setup/inbound chanel handler",
+              "pipeline": "receive-websocket-text",
+              "errorPipeline": "handle-websocket-channel-exception",
+              "messageClass": "io.netty.handler.codec.http.websocketx.TextWebSocketFrame"
+            },
+            {
+              "type": "netty/setup/inbound chanel handler",
+              "pipeline": "receive-websocket-binary",
+              "errorPipeline": "handle-websocket-channel-exception",
+              "messageClass": "io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame"
+            },
+            {
+              "type": "dead end"
+            }
+          ]
+        },
+
+        {
+          "id": "handle-websocket-channel-exception",
+          "stages": [
+            {
+              "type": "dead end"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-websocket/optional/delegate-to-executor",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "delegate-to-executor"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-websocket/pre-process",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "receive-websocket/optional/delegate-to-executor"
+            },
+            {
+              "type": "default scope setter"
+            },
+            {
+              "type": "create environment"
+            }
+          ]
+        },
+
+        {
+          "id": "decode-websocket-binary",
+          "stages": [
+            {
+              "type": "error",
+              "message": "no binary web-socket frame decoder configured"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-websocket-binary",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "receive-websocket/pre-process"
+            },
+            {
+              "type": "include",
+              "pipeline": "decode-websocket-binary"
+            },
+            {
+              "type": "include",
+              "pipeline": "web-socket/send-inbound"
+            }
+          ]
+        },
+
+        {
+          "id": "decode-websocket-text",
+          "stages": [
+            {
+              "type": "netty/wrap inbound message"
+            },
+            {
+              "type": "decoder/block/json"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-websocket-text",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "receive-websocket/pre-process"
+            },
+            {
+              "type": "include",
+              "pipeline": "decode-websocket-text"
+            },
+            {
+              "type": "include",
+              "pipeline": "web-socket/send-inbound"
+            }
+          ]
+        },
+
+        {
+          "id": "web-socket/send-inbound",
+          "stages": [
+            {
+              "type": "netty/store outbound channel id"
+            },
+            {
+              "type": "internal message sender",
+              "stackDepth": "@@webSocketInboundMessageChainStackDepth",
+              "webSocketInboundMessageChainStackDepth": 5,
+              "chain": "@@webSocketInboundChain",
+              "webSocketInboundChain": "defaultWebSocketInboundChain"
+            }
+          ]
+        },
+
+        {
+          "id": "send-websocket",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "send-websocket/build-frame"
+            },
+            {
+              "type": "netty/send outbound message"
+            }
+          ]
+        },
+
+        {
+          "id": "send-websocket/build-frame",
+          "stages": [
+            {
+              "type": "netty/create outbound message",
+              "messageType": "websocket text frame"
+            },
+            {
+              "type": "encoder/block/json"
+            }
+          ]
+        },
+
+        {
+          "id": "process-inbound/parse-request-metadata-default",
+          "stages": [
+            {
+              "type": "netty/http query string parser"
+            },
+            {
+              "type": "netty/fixed http path parser",
+              "templates": "@@httpPathTemplates"
+            }
+          ]
+        },
+
+        {
+          "id": "process-inbound/parse-request-metadata",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "process-inbound/parse-request-metadata-default"
+            }
+          ]
+        },
+
+        {
+          "id": "process-inbound",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "parse-request-body"
+            },
+            {
+              "type": "include",
+              "pipeline": "process-inbound/parse-request-metadata"
+            },
+            {
+              "type": "netty/http response metadata presetup"
+            },
+            {
+              "type": "store raw inbound message"
+            },
+            {
+              "type": "add final actions",
+              "actions": [
+                {
+                  "action": "expect response sent",
+                  "exceptionalAction": "netty/http/server/default",
+                  "status": 500
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "fill-response",
+          "stages": [
+            {
+              "type": "encoder/block/json"
+            },
+            {
+              "type": "include",
+              "pipeline": "fill-response-headers"
+            }
+          ]
+        },
+
+        {
+          "id": "fill-response-headers",
+          "stages": [
+            {
+              "type": "netty/http headers setter"
+            },
+            {
+              "type": "netty/http cookie setter"
+            },
+
+            {
+              "type": "netty/http response status code setter"
+            }
+          ]
+        },
+
+        {
+          "id": "parse-request-body",
+          "stages": [
+            {
+              "type": "fixed attribute router",
+              "extractor": "netty/http/method",
+              "messageExtractor": "wrapped inbound",
+              "default": {
+                "type": "global table attribute router",
+                "extractor": "netty/http/header",
+                "messageExtractor": "wrapped inbound",
+                "defaultValue": "application/json",
+                "header": "content-type",
+                "table": "@@httpDecoderTable",
+                "httpDecoderTable": "default block decoders by mime type",
+                "default": {
+                  "type": "error",
+                  "message": "unsupported mime type",
+                  "errorClass": "info.smart_tools.smartactors.endpoint_profiles_netty.profile_pipeline_exceptions.UnknownMimeTypeException"
+                }
+              },
+              "routes": [
+                {
+                  "value": "GET",
+                  "type": "create empty message"
+                },
+                {
+                  "value": "HEAD",
+                  "type": "create empty message"
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "intercept-exception/default",
+          "stages": [
+            {
+              "type": "exception interceptor",
+              "action": "composite",
+              "exceptionClassActions": [
+                {
+                  "class": "info.smart_tools.smartactors.endpoint_components_generic.common_exceptions.InboundMessageDecoderException",
+                  "action": "netty/http/server/default",
+                  "status": 400
+                },
+                {
+                  "class": "info.smart_tools.smartactors.endpoint_profiles_netty.profile_pipeline_exceptions.UnknownMimeTypeException",
+                  "action": "netty/http/server/default",
+                  "status": 415
+                }
+              ],
+              "defaultAction": {
+                "action": "netty/http/server/default",
+                "status": 500
+              }
+            }
+          ]
+        },
+
+        {
+          "id": "intercept-exception",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "intercept-exception/default"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "netty/server/https",
+      "extend": ["netty/server/ssl", "netty/server/http"],
+      "pipelines": []
+    },
+
+    {
+      "id": "netty/client/tcp",
+      "extend": [],
+      "pipelines": [
+        {
+          "id": "setup-connection/optional/enable-ssl",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "setup-connection/no-ssl"
+            }
+          ]
+        },
+        {
+          "id": "setup-connection/no-ssl",
+          "stages": [
+          ]
+        },
+        {
+          "id": "setup-connection/enable-ssl",
+          "stages": [
+            {
+              "type": "netty/ssl-setup/client",
+              "ciphers": "@@sslCiphers",
+              "sslCiphers": [
+                "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                "TLS_RSA_WITH_AES_128_GCM_SHA256",
+                "TLS_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_RSA_WITH_AES_256_CBC_SHA",
+                "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+                "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+                "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+                "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+                "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+                "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "netty/client/ssl",
+      "extend": [],
+      "pipelines": [
+        {
+          "id": "setup-connection/optional/enable-ssl",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "setup-connection/enable-ssl"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "netty/client/tcp-rr",
+      "extend": ["netty/client/tcp"],
+      "pipelines": [
+        {
+          "id": "send-request",
+          "stages": [
+            {
+              "type": "outbound url parser"
+            },
+            {
+              "type": "include",
+              "pipeline": "create-request"
+            },
+            {
+              "type": "include",
+              "pipeline": "encode-request"
+            },
+            {
+              "type": "netty/client/acquire channel",
+              "setupPipeline": "setup-connection",
+
+              "poolType": "@@connectionPoolType",
+              "connectionPoolType": "default",
+
+              "transport": "@@transportType",
+              "transportType": "prefer-native",
+
+              "eventLoopGroup": "@@eventLoop",
+              "eventLoop": "defaultClient",
+
+              "readTimeout": "@@channelReadTimeout"
+            },
+            {
+              "type": "netty/client/bind request to channel"
+            },
+            {
+              "type": "client callback/start"
+            },
+            {
+              "type": "netty/send outbound message"
+            }
+          ]
+        },
+
+        {
+          "id": "setup-connection",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "setup-connection/optional/enable-ssl"
+            },
+            {
+              "type": "include",
+              "pipeline": "setup-connection/setup-codec"
+            },
+            {
+              "type": "netty/setup/inbound chanel handler",
+              "pipeline": "receive-response",
+              "errorPipeline": "receive-error",
+              "messageClass": "java.lang.Object"
+            },
+            {
+              "type": "dead end"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-response/optional/delegate-to-executor",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "receive-response/delegate-to-executor"
+            }
+          ]
+        },
+        {
+          "id": "receive-response/delegate-to-executor",
+          "stages": [
+            {
+              "type": "netty/retain message",
+              "messageExtractor": "unwrapped inbound"
+            },
+            {
+              "type": "default async unordered executor"
+            },
+            {
+              "type": "netty/release message",
+              "messageExtractor": "unwrapped inbound"
+            },
+            {
+              "type": "include",
+              "pipeline": "receive-response/intercept-exception"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-response",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "receive-response/intercept-exception"
+            },
+
+            {
+              "type": "include",
+              "pipeline": "receive-response/optional/delegate-to-executor"
+            },
+
+            {
+              "type": "default scope setter"
+            },
+
+            {
+              "type": "netty/wrap inbound message"
+            },
+            {
+              "type": "create environment"
+            },
+            {
+              "type": "netty/client/get bound request"
+            },
+            {
+              "type": "netty/client/release channel"
+            },
+            {
+              "type": "include",
+              "pipeline": "decode-response"
+            },
+            {
+              "type": "store raw inbound message"
+            },
+            {
+              "type": "client callback/success"
+            }
+          ]
+        },
+        {
+          "id": "receive-error",
+          "stages": [
+            {
+              "type": "default scope setter"
+            },
+            {
+              "type": "create environment"
+            },
+            {
+              "type": "netty/client/get bound request"
+            },
+            {
+              "type": "client callback/error"
+            }
+          ]
+        },
+
+        {
+          "id": "receive-response/intercept-exception",
+          "stages": [
+            {
+              "type": "exception forwarder",
+              "pipeline": "receive-error"
+            }
+          ]
+        },
+
+        {
+          "id": "encode-request",
+          "stages": [
+            {
+              "type": "encoder/block/json"
+            }
+          ]
+        },
+        {
+          "id": "decode-response",
+          "stages": [
+            {
+              "type": "include",
+              "pipeline": "decode-response/default"
+            }
+          ]
+        },
+        {
+          "id": "decode-response/default",
+          "stages": [
+            {
+              "type": "global table attribute router",
+              "extractor": "netty/http/header",
+              "messageExtractor": "wrapped inbound",
+              "defaultValue": "application/json",
+              "header": "content-type",
+              "table": "@@httpDecoderTable",
+              "httpDecoderTable": "default block decoders by mime type",
+              "default": {
+                "type": "error",
+                "message": "unsupported mime type",
+                "errorClass": "info.smart_tools.smartactors.endpoint_profiles_netty.profile_pipeline_exceptions.UnknownMimeTypeException"
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "netty/client/http",
+      "extend": ["netty/client/tcp-rr"],
+      "pipelines": [
+        {
+          "id": "create-request",
+          "stages": [
+            {
+              "type": "netty/create outbound message",
+              "messageType": "http request"
+            }
+          ]
+        },
+
+        {
+          "id": "encode-request",
+          "stages": [
+            {
+              "type": "encoder/block/json"
+            },
+            {
+              "type": "netty/http headers setter"
+            },
+            {
+              "type": "netty/set outbound http request method"
+            }
+          ]
+        },
+
+        {
+          "id": "setup-connection/setup-codec",
+          "stages": [
+            {
+              "type": "netty/setup/http client channel",
+              "maxAggregatedContentLength": "@@maxAggregatedHttpContentLength",
+              "maxAggregatedHttpContentLength": 4096
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

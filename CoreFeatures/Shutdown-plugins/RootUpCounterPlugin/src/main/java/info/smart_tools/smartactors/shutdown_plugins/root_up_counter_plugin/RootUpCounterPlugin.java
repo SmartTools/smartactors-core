@@ -1,12 +1,16 @@
 package info.smart_tools.smartactors.shutdown_plugins.root_up_counter_plugin;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
+import info.smart_tools.smartactors.base.interfaces.i_addition_dependency_strategy.exception.AdditionDependencyStrategyException;
 import info.smart_tools.smartactors.base.interfaces.iaction.exception.FunctionExecutionException;
+import info.smart_tools.smartactors.base.interfaces.iresolve_dependency_strategy.IResolveDependencyStrategy;
 import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 import info.smart_tools.smartactors.base.iup_counter.exception.IllegalUpCounterState;
 import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
+import info.smart_tools.smartactors.base.simple_strict_storage_strategy.SimpleStrictStorageStrategy;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
+import info.smart_tools.smartactors.base.strategy.strategy_storage_strategy.StrategyStorageStrategy;
 import info.smart_tools.smartactors.base.up_counter.UpCounter;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.BootstrapPlugin;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
@@ -14,6 +18,8 @@ import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationExce
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.named_keys_storage.Keys;
+
+import java.util.Map;
 
 public class RootUpCounterPlugin extends BootstrapPlugin {
 
@@ -62,6 +68,32 @@ public class RootUpCounterPlugin extends BootstrapPlugin {
                 throw new FunctionExecutionException(e);
             }
         }));
+    }
+
+    /**
+     * Registers a composite strategy at key "upcounter" that stores named upcounter instances.
+     *
+     * @throws ResolutionException if error occurs resolving keys or root upcounter
+     * @throws RegistrationException if error occurs registering strategies
+     * @throws AdditionDependencyStrategyException if error occurs adding predefined upcounter instances
+     * @throws InvalidArgumentException if {@link SingletonStrategy} doesn't accept given argument
+     */
+    @Item("named_upcounter_storage")
+    @After({
+            "root_upcounter",
+    })
+    @Before({
+            "core_upcounters_setup:start",
+    })
+    public void registerNamedUpcounterStorage()
+            throws ResolutionException, RegistrationException, AdditionDependencyStrategyException, InvalidArgumentException {
+        SimpleStrictStorageStrategy storage = new SimpleStrictStorageStrategy("named upcounter");
+
+        IUpCounter rootUpCounter = IOC.resolve(Keys.getOrAdd("root upcounter"));
+        storage.register("root", new SingletonStrategy(rootUpCounter));
+
+        IOC.register(Keys.getOrAdd("upcounter"), storage);
+        IOC.register(Keys.getOrAdd("expandable_strategy#upcounter"), new SingletonStrategy(storage));
     }
 
     /**

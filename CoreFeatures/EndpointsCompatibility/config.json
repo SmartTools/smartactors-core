@@ -1,0 +1,14 @@
+{
+  "featureName": "info.smart_tools.smartactors:endpoints-compatibility",
+  "afterFeatures": [
+    "info.smart_tools.smartactors:endpoint-profiles-netty"
+  ],
+
+  "maps": [
+    {
+      "id": "null",
+      "exceptional": [],
+      "steps": []
+    }
+  ]
+}

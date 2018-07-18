@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Web-socket endpoint demo</title>
+    </head>
+    <body>
+        <input type="text" id="messageIn" />
+        <button id="button">SEND</button>
+        <script>
+            var WS_ADDR = "ws://localhost:8080/ws";
+            var socket = null;
+
+            function reqPermission() {
+                return Notification.requestPermission()
+                    .then(function(permission) {
+                        if (permission != "granted") {
+                            return reqPermission();
+                        }
+                    });
+            }
+
+            function showNotification(title, body) {
+                var n = new Notification(title, {
+                    'title': title,
+                    'body': body,
+                    'requireInteraction': false,
+                });
+
+                n.onclick = function() {
+                    n.close();
+                }
+            }
+
+            function openSocket() {
+                socket = new WebSocket(WS_ADDR);
+                socket.onopen = function() {
+                    showNotification("Connected", "Successfully connected to " + WS_ADDR);
+                }
+                socket.onclose = function(e) {
+                    if (e.wasClean) {
+                        showNotification("Disconnected", "Cleanly disconnected from " + WS_ADDR + " code: " + e.code);
+                    } else {
+                        showNotification("Disconnected", "Uncleanly disconnected from " + WS_ADDR + " code: " + e.code);
+                    }
+                    socket = null;
+                }
+                socket.onmessage = function(e) {
+                    var m = JSON.parse(e.data);
+                    showNotification("Message", "Message: " + m['body']);
+                }
+            }
+
+            reqPermission().then(function() {
+                openSocket();
+            });
+
+            document.getElementById('button').onclick = function() {
+                if (!socket) {
+                    showNotification("Not connected", "Websocket is not connected");
+                    return;
+                }
+                var m = {};
+                m.body = document.getElementById('messageIn').value;
+                socket.send(JSON.stringify(m));
+            }
+        </script>
+    </body>
+</html>

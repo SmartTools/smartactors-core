@@ -21,7 +21,6 @@
         <module>MessageBusServiceStarter</module>
         <module>OnFeatureLoadingServiceStarter</module>
         <module>GlobalConstantsServiceStarter</module>
-        <module>EndpointServiceStarter</module>
         <module>DatabaseServiceStarter</module>
     </modules>
 

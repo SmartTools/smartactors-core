@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>info.smart_tools.smartactors</groupId>
+        <artifactId>core-features</artifactId>
+        <version>0.3.3</version>
+    </parent>
+    <artifactId>endpoint-components-netty</artifactId>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <netty.version>4.1.2.Final</netty.version>
+    </properties>
+
+    <dependencies>
+        <!-- Endpoint component interfaces -->
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>endpoint-interfaces.imessage-handler</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>endpoint-interfaces.imessage-byte-array</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
+
+        <!-- Netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>helpers.trivial-plugins-loading-test-base</artifactId>
+            <scope>test</scope>
+            <version>[0.0.1,1.0.0)</version>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <module>InboundNettyMessageReferenceCountManagementComponents</module>
+        <module>WrapInboundNettyMessageToMessageByteArrayMessageHandler</module>
+        <module>InboundNettyChannelHandler</module>
+        <module>HttpQueryStringParser</module>
+        <module>SendNettyMessageMessageHandler</module>
+        <module>HttpExceptionalAction</module>
+        <module>OutboundNettyMessageCreationHandler</module>
+        <module>INettyTransportProvider</module>
+        <module>DefaultTransportProviders</module>
+        <module>EventLoopsConfigurationSection</module>
+        <module>HttpPathParse</module>
+        <module>CookiesSetter</module>
+        <module>HttpHeadersSetter</module>
+        <module>DefaultChannelInitializationHandlers</module>
+        <module>HttpResponseMetadataPresetup</module>
+        <module>HttpMessageAttributeExtractors</module>
+        <module>HttpWebSocketUpgradeListener</module>
+        <module>SslChannelInitializationHandler</module>
+        <module>HttpStatusSetter</module>
+        <module>DefaultTcpClientConnectionPool</module>
+        <module>ISocketConnectionPool</module>
+        <module>ChannelPoolHandlers</module>
+        <module>ClientContextBindingHandlers</module>
+        <module>HttpMethodSetter</module>
+        <module>ReadTimeoutConnectionPoolObserver</module>
+        <module>EndpointComponentsNettyDistribution</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.5.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <useSystemClassLoader>false</useSystemClassLoader>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <version>2.8.2</version>
+                    <executions>
+                        <execution>
+                            <id>default-deploy</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

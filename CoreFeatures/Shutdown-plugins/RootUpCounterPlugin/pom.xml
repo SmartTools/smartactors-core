@@ -105,6 +105,16 @@
             <artifactId>base.up-counter</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.strategy.strategy-storage-strategy</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>base.simple-strict-storage-strategy</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
     </dependencies>
 
     <build>
