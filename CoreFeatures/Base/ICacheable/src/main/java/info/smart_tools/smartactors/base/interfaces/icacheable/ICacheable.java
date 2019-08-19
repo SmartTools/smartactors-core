@@ -7,6 +7,6 @@ public interface ICacheable {
     void dropCache()
             throws CacheDropException;
 
-    void dropCacheFor(final Object key)
+    void dropCacheFor(Object key)
             throws CacheDropException;
 }

@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * Extension of {@link URLClassLoader}
  */
-public class SmartactorsClassLoader extends URLClassLoader implements ISmartactorsClassLoader {
+public final class SmartactorsClassLoader extends URLClassLoader implements ISmartactorsClassLoader {
 
     private static SmartactorsClassLoader defaultClassLoader = null;
 
@@ -26,13 +26,13 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * @param moduleName the name of module which class loader contains
      * @param moduleVersion the version of module which class loader contains
      */
-    private SmartactorsClassLoader(String moduleName, String moduleVersion) {
+    private SmartactorsClassLoader(final String moduleName, final String moduleVersion) {
         super(new URL[]{});
         this.moduleName = moduleName;
         this.moduleVersion = moduleVersion;
     }
 
-    public static ISmartactorsClassLoader newInstance(String moduleName, String moduleVersion) {
+    public static ISmartactorsClassLoader newInstance(final String moduleName, final String moduleVersion) {
         return new SmartactorsClassLoader(moduleName, moduleVersion);
     }
 
@@ -40,24 +40,24 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         defaultClassLoader = this;
     }
 
-    public void addDependency(ISmartactorsClassLoader base) {
+    public void addDependency(final ISmartactorsClassLoader base) {
         if (base != null && base != this) {
             synchronized (this) {
-                dependencies.add((SmartactorsClassLoader)base);
+                dependencies.add((SmartactorsClassLoader) base);
             }
         }
     }
 
-    private void addDependenciesToSet(Set<ClassLoader> classLoaders) {
+    private void addDependenciesToSet(final Set<ClassLoader> classLoaders) {
         classLoaders.add(this);
         if (dependencies.size() == 0) {
             ClassLoader parent = this.getParent();
-            while(parent != null) {
+            while (parent != null) {
                 classLoaders.add(parent);
                 parent = parent.getParent();
             }
         } else {
-            for(SmartactorsClassLoader classLoader : dependencies) {
+            for (SmartactorsClassLoader classLoader : dependencies) {
                 classLoader.addDependenciesToSet(classLoaders);
             }
         }
@@ -69,7 +69,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         addDependenciesToSet(classLoaders);
 
         ArrayList<URL> urlArrayList = new ArrayList<>();
-        for( ClassLoader classLoader : classLoaders) {
+        for (ClassLoader classLoader : classLoaders) {
             if (classLoader instanceof URLClassLoader) {
                 Collections.addAll(urlArrayList, ((URLClassLoader) classLoader).getURLs());
             }
@@ -87,10 +87,10 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * @param className The name of the class to get
      * @return The reference to the class
      */
-    private final Class<?> searchClassInDependencies(String className) {
+    private Class<?> searchClassInDependencies(final String className) {
         Class clazz = this.findLoadedClass(className);
         if (null == clazz) {
-            for(SmartactorsClassLoader dependency : this.dependencies) {
+            for (SmartactorsClassLoader dependency : this.dependencies) {
                 clazz = dependency.searchClassInDependencies(className);
                 if (clazz != null) {
                     break;
@@ -100,8 +100,9 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         return clazz;
     }
 
-    private Class<?> loadClassFromDependencies(String className, ClassLoader scl, ClassLoader dcl, boolean[] rclUsed )
-            throws ClassNotFoundException {
+    private Class<?> loadClassFromDependencies(
+            final String className, final ClassLoader scl, final ClassLoader dcl, final boolean[] rclUsed
+    ) throws ClassNotFoundException {
         if (dependencies.size() == 0) {
             try {
                 ClassLoader parent = getParent();
@@ -111,7 +112,9 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
                     rclUsed[0] = true;
                     return parent.loadClass(className);
                 }
-            } catch (ClassNotFoundException e) { }
+            } catch (ClassNotFoundException e) {
+                // TODO: Empty catch block
+            }
         } else {
             for (SmartactorsClassLoader dependency : dependencies) {
                 try {
@@ -121,15 +124,17 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
                         rclUsed[1] = true;
                         return dependency.loadClassFromDependencies(className, scl, dcl, rclUsed);
                     }
-                } catch (ClassNotFoundException e) { }
+                } catch (ClassNotFoundException e) {
+                    // TODO: Empty catch block
+                }
             }
         }
         return this.findClass(className);
     }
 
-    protected Class<?> loadClass(String className, boolean resolve)
+    protected Class<?> loadClass(final String className, final boolean resolve)
             throws ClassNotFoundException {
-        synchronized(this.getClassLoadingLock(className)) {
+        synchronized (this.getClassLoadingLock(className)) {
 
             Class clazz = this.searchClassInDependencies(className);
             if (clazz == null) {
@@ -156,7 +161,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * @param classByteCode Compiled byte code of the class to add
      * @return The reference to the class
      */
-    public Class<?> addClass(final String className, byte[] classByteCode) {
+    public Class<?> addClass(final String className, final byte[] classByteCode) {
         return defineClass(className, classByteCode, 0, classByteCode.length);
     }
 

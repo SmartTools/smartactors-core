@@ -12,5 +12,5 @@ public interface AsyncOperationTaskQuery {
      * @param query equals condition object
      * @throws ChangeValueException change value ex
      */
-    void setToken(final EQMessage query) throws ChangeValueException;
+    void setToken(EQMessage query) throws ChangeValueException;
 }

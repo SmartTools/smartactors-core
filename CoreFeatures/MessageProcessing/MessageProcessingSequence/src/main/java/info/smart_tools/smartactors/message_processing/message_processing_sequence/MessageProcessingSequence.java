@@ -130,7 +130,9 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
         }
         try {
             callChain(mainChainName);
-        } catch(NestedChainStackOverflowException | ScopeProviderException e) {}
+        } catch (NestedChainStackOverflowException | ScopeProviderException e) {
+            // TODO: Empty catch block
+        }
 
         if (!next()) {
             throw new InvalidArgumentException("Main chain should contain at least one receiver.");
@@ -175,7 +177,9 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
             }
             try {
                 callChain(chainName);
-            } catch(NestedChainStackOverflowException | ScopeProviderException e) {}
+            } catch (NestedChainStackOverflowException | ScopeProviderException e) {
+                // TODO: Empty catch block
+            }
             int pos = ((Number) stepStack.next()).intValue();
             uncheckedGoTo(level++, pos + 1);
         }
@@ -240,7 +244,7 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
                 }
             }
 
-            if(scopeSwitchingStack[stackIndex]) {
+            if (scopeSwitchingStack[stackIndex]) {
                 ModuleManager.setCurrentModule(moduleStack[stackIndex]);
                 try {
                     ScopeProvider.setCurrentScope(scopeStack[stackIndex]);
@@ -263,7 +267,7 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
         }
 
         int lastScopeSwitchingLevel = -1;
-        for(int idx=0; idx <= level; idx++) {
+        for (int idx = 0; idx <= level; idx++) {
             if (scopeSwitchingStack[idx]) {
                 lastScopeSwitchingLevel = idx;
             }
@@ -313,10 +317,12 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
     }
 
     @Override
-    public void setScopeSwitchingChainName(Object chainName) { scopeSwitchingChainName = chainName; }
+    public void setScopeSwitchingChainName(final Object chainName) {
+        scopeSwitchingChainName = chainName;
+    }
 
     @Override
-    public void callChainSecurely(final Object chainName, IMessageProcessor processor)
+    public void callChainSecurely(final Object chainName, final IMessageProcessor processor)
             throws NestedChainStackOverflowException, ResolutionException, ChainNotFoundException,
             ChainChoiceException, ScopeProviderException {
 
@@ -333,7 +339,7 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
         putChainToStack(chain);
     }
 
-    private void putChainToStack(IReceiverChain chain)
+    private void putChainToStack(final IReceiverChain chain)
             throws NestedChainStackOverflowException, ScopeProviderException {
         int newStackIndex = stackIndex + 1;
 
@@ -376,6 +382,7 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void catchException(final Throwable exception, final IObject context)
             throws NoExceptionHandleChainException,
                    NestedChainStackOverflowException,
@@ -393,7 +400,7 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
         for (int i = stackIndex; i >= 0; --i) {
             IObject exceptionalChainAndEnv = chainStack[i].getExceptionalChainNamesAndEnvironments(exception);
             if (null != exceptionalChainAndEnv) {
-                this.afterExceptionAction = (IAction<IMessageProcessingSequence>)exceptionalChainAndEnv.getValue(this.afterExceptionActionFieldName);
+                this.afterExceptionAction = (IAction<IMessageProcessingSequence>) exceptionalChainAndEnv.getValue(this.afterExceptionActionFieldName);
                 caughtLevel = i;
                 caughtStep = stepStack[caughtLevel];
 
@@ -406,7 +413,7 @@ public class MessageProcessingSequence implements IMessageProcessingSequence, ID
                 this.isException = true;
                 Object chainName = exceptionalChainAndEnv.getValue(this.chainFieldName);
                 Boolean scopeSwitching = (Boolean) exceptionalChainAndEnv.getValue(this.scopeSwitchingFieldName);
-                if (scopeSwitching == null || scopeSwitching == true) {
+                if (scopeSwitching == null || scopeSwitching) {
                     setScopeSwitchingChainName(chainName);
                 }
                 callChain(chainName);

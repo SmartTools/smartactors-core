@@ -94,7 +94,7 @@ public class ObjectsSectionProcessingStrategy implements ISectionStrategy {
                     exception.addSuppressed(e);
                 }
             }
-        } catch ( ResolutionException | InvalidArgumentException | ReadValueException e) {
+        } catch (ResolutionException | InvalidArgumentException | ReadValueException e) {
             exception.addSuppressed(e);
         }
         if (exception.getSuppressed().length > 0) {

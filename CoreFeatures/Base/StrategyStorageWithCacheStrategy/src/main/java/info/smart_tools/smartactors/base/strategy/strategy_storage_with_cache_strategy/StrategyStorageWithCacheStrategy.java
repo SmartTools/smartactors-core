@@ -43,7 +43,8 @@ public class StrategyStorageWithCacheStrategy implements IStrategy, IStrategyReg
 
 
     @Override
-    public <T> T resolve(Object... args)
+    @SuppressWarnings("unchecked")
+    public <T> T resolve(final Object... args)
             throws StrategyException {
         try {
             Object key = this.argToKeyFunction.execute(args[0]);
@@ -67,7 +68,7 @@ public class StrategyStorageWithCacheStrategy implements IStrategy, IStrategyReg
     }
 
     @Override
-    public void register(Object key, IStrategy value)
+    public void register(final Object key, final IStrategy value)
             throws StrategyRegistrationException {
         try {
             this.dropCacheFor(key);
@@ -78,7 +79,7 @@ public class StrategyStorageWithCacheStrategy implements IStrategy, IStrategyReg
     }
 
     @Override
-    public IStrategy unregister(Object key)
+    public IStrategy unregister(final Object key)
             throws StrategyRegistrationException {
         try {
             this.dropCacheFor(key);

@@ -13,7 +13,13 @@ import info.smart_tools.smartactors.ioc.key_tools.Keys;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,21 +40,21 @@ public class AllInDirectoryFeatureTracker {
     private final IFieldName versionFN;
     private final IFieldName packageTypeFN;
 
-    private final static String END_OF_INPUT_DELIMITER = "\\Z";
-    private final static String CONFIG_FILE_NAME = "config.json";
-    private final static String EXTENSION_SEPARATOR = ".";
-    private final static String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
+    private static final String END_OF_INPUT_DELIMITER = "\\Z";
+    private static final String CONFIG_FILE_NAME = "config.json";
+    private static final String EXTENSION_SEPARATOR = ".";
+    private static final String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
+    private static final String FIELD_NAME_FACTORY_STARTEGY_NAME =
             "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
-    private final static String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
+    private static final String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
 
     //TODO: this parameters would be took out into the config.json as actor arguments
-    private final static String FEATURE_LIST_FILE_NAME = "features.json";
-    private final static String DEF_PACKAGE_TYPE = "jar";
-    private final static String FILENAME_VERSION_PATTERN = "-\\d+\\.\\d+\\.\\d+";
-    private final static String FEATURE_VERSION_PATTERN = "\\d+\\.\\d+\\.\\d+";
-    private final static List<String> FILE_TYPE_LIST = Arrays.asList("zip", "jar");
-    private final static String FEATURE_NAME_DELIMITER = ":";
+    private static final String FEATURE_LIST_FILE_NAME = "features.json";
+    private static final String DEF_PACKAGE_TYPE = "jar";
+    private static final String FILENAME_VERSION_PATTERN = "-\\d+\\.\\d+\\.\\d+";
+    private static final String FEATURE_VERSION_PATTERN = "\\d+\\.\\d+\\.\\d+";
+    private static final List<String> FILE_TYPE_LIST = Arrays.asList("zip", "jar");
+    private static final String FEATURE_NAME_DELIMITER = ":";
 
     /**
      * Default constructor
@@ -195,11 +201,11 @@ public class AllInDirectoryFeatureTracker {
     }
 
     // todo: replace this code by parsing strategy
-    private String[] parseFullName(String fullName)
+    private String[] parseFullName(final String fullName)
             throws FeatureTrackerException {
         String[] dependencyNames = fullName.split(FEATURE_NAME_DELIMITER);
         if (dependencyNames.length < 2) {
-            throw new FeatureTrackerException("Wrong feature name or dependency format '"+fullName+"'.");
+            throw new FeatureTrackerException("Wrong feature name or dependency format '" + fullName + "'.");
         }
         String[] result = {
                 dependencyNames[0],

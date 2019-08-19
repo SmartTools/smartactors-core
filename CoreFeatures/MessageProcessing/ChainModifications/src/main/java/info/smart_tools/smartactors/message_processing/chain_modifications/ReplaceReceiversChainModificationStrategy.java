@@ -80,10 +80,14 @@ class ReceiverReplacingChainDecorator implements IReceiverChain {
     }
 
     @Override
-    public IScope getScope() { return original.getScope(); }
+    public IScope getScope() {
+        return original.getScope();
+    }
 
     @Override
-    public IModule getModule() { return original.getModule(); }
+    public IModule getModule() {
+        return original.getModule();
+    }
 
     @Override
     public IObject getExceptionalChainNamesAndEnvironments(final Throwable exception) {

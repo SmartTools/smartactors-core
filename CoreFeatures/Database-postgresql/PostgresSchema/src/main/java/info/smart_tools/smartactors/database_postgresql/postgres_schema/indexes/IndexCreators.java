@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * A set of classes to write CREATE INDEX SQL statements.
  */
-public class IndexCreators {
+public final class IndexCreators {
 
     /**
      * Set of index creation functions.
@@ -46,7 +46,9 @@ public class IndexCreators {
      * @param options document describing create collection options
      * @throws Exception when something goes wrong
      */
-    public static void writeIndexes(Writer body, CollectionName collection, IObject options) throws Exception {
+    public static void writeIndexes(
+            final Writer body, final CollectionName collection, final IObject options
+    ) throws Exception {
         try {
             if (options == null) {
                 // no indexes definition, ignoring
@@ -60,8 +62,9 @@ public class IndexCreators {
         }
     }
 
-    private static void writeCreateIndex(final String indexType, final Writer body, final CollectionName collection, IObject options)
-            throws Exception {
+    private static void writeCreateIndex(
+            final String indexType, final Writer body, final CollectionName collection, final IObject options
+    ) throws Exception {
         IKey fieldNameKey = Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName");
         Object indexFields = null;
         try {
@@ -89,8 +92,11 @@ public class IndexCreators {
         INDEX_WRITERS.get(indexType).resolve(options).write(body, collection, fieldPaths);
     }
 
-    private static void writeOrderedIndex(final Writer body, final CollectionName collection,
-                                          final List<FieldPath> fields) throws IOException {
+    private static void writeOrderedIndex(
+            final Writer body,
+            final CollectionName collection,
+            final List<FieldPath> fields
+    ) throws IOException {
         for (FieldPath field : fields) {
             body.write("CREATE INDEX ON ");
             body.write(collection.toString());

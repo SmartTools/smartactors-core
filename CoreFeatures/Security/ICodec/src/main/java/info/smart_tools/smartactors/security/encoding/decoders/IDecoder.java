@@ -13,5 +13,5 @@ public interface IDecoder {
      * @return decoded message
      * @throws DecodingException if any errors is occurred
      */
-    byte[] decode(@Nonnull final byte[] message) throws DecodingException;
+    byte[] decode(@Nonnull byte[] message) throws DecodingException;
 }

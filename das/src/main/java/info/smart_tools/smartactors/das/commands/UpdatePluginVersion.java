@@ -17,13 +17,13 @@ import java.util.List;
 public class UpdatePluginVersion implements IAction {
 
     @Override
-    public void execute(Object o)
+    public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Updating plugin version ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             String newVersion = clar.getVersion();
             Feature feature = null;
@@ -43,7 +43,7 @@ public class UpdatePluginVersion implements IAction {
             }
             String pluginName = clar.getPluginName();
 
-            for(Feature f : features) {
+            for (Feature f : features) {
                 System.out.println("Feature - " + f.getName() + " ...");
                 List<Plugin> plugins = new ArrayList<>();
                 if (null == pluginName || pluginName.toLowerCase().equals("all")) {

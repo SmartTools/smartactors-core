@@ -29,14 +29,14 @@ public interface CreateAsyncOperationMessage {
     /**
      * Getter
      * @return Return sessionId of user
-     * @throws ReadValueException
+     * @throws ReadValueException if the value cannot be read by any reason
      */
     String getSessionId() throws ReadValueException;
 
     /**
      * Must set sessionId in target asyncData
      * @param sessionId Target sessionId
-     * @throws ChangeValueException
+     * @throws ChangeValueException if the value cannot be changed by any reason
      */
     void setSessionIdInData(String sessionId) throws ChangeValueException;
 

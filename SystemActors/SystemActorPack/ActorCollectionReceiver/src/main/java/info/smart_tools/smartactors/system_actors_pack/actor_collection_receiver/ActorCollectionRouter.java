@@ -28,7 +28,7 @@ public class ActorCollectionRouter implements IRouter {
     }
 
     @Override
-    public void unregister(Object targetId) {
+    public void unregister(final Object targetId) {
         IMessageReceiver receiver = storage.remove(targetId);
 
         if (null != receiver) {

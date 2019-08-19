@@ -30,7 +30,9 @@ public final class NullRemoteStorage implements IRemoteEntryStorage {
     }
 
     @Override
-    public List<IObject> downloadEntries(final long untilTime, final IObject lastSkip, int pageSize) throws EntryStorageAccessException {
+    public List<IObject> downloadEntries(
+            final long untilTime, final IObject lastSkip, final int pageSize
+    ) throws EntryStorageAccessException {
         return Collections.emptyList();
     }
 

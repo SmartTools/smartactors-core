@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Implementation of password encoder that realizes message digest
  */
-public class MDPasswordEncoder implements IPasswordEncoder {
+public final class MDPasswordEncoder implements IPasswordEncoder {
     private final String algorithm;
     private final IEncoder encoder;
     private final ICharSequenceCodec charSequenceCodec;

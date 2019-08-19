@@ -29,6 +29,7 @@ import java.net.URI;
 public class HttpsClient extends NettyClient<FullHttpRequest> {
     private IResponseHandler inboundHandler;
     private static ISslEngineProvider sslEngineProvider;
+    private static final Integer DEFAULT_HTTPS_PORT = 443;
 
 
     static {
@@ -55,7 +56,7 @@ public class HttpsClient extends NettyClient<FullHttpRequest> {
     protected ChannelPipeline setupPipeline(final ChannelPipeline pipeline) {
         SSLEngine clientEngine = sslEngineProvider.getClientContext(
                 super.serverUri.getHost(),
-                super.serverUri.getPort() == -1 ? 443 : super.serverUri.getPort()
+                super.serverUri.getPort() == -1 ? DEFAULT_HTTPS_PORT : super.serverUri.getPort()
         );
         SslHandler sslHandler = new SslHandler(clientEngine);
         return super.setupPipeline(pipeline)

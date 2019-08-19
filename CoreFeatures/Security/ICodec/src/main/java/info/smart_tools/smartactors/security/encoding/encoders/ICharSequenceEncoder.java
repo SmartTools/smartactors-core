@@ -13,5 +13,5 @@ public interface ICharSequenceEncoder {
      * @return encoded message
      * @throws EncodingException if any error is occurred during encoding
      */
-    byte[] encode(@Nonnull final CharSequence message) throws EncodingException;
+    byte[] encode(@Nonnull CharSequence message) throws EncodingException;
 }

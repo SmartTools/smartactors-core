@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ResolveByTypeAndNameStrategy implements IStrategy, IStrategyRegistration {
 
-    Map<String, IStrategy> creatingStrategy = new HashMap<>();
-    Map<String, Object> createdDeserializationStrategies = new ConcurrentHashMap<>();
+    private Map<String, IStrategy> creatingStrategy = new HashMap<>();
+    private Map<String, Object> createdDeserializationStrategies = new ConcurrentHashMap<>();
 
     @Override
     public Object resolve(final Object... args) throws StrategyException {

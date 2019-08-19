@@ -35,7 +35,7 @@ public class MessageBusResponseStrategy implements IResponseStrategy {
     }
 
     @Override
-    public void sendResponse(IObject environment) throws ResponseException {
+    public void sendResponse(final IObject environment) throws ResponseException {
         try {
             IObject context = (IObject) environment.getValue(contextFieldName);
             IObject response = (IObject) environment.getValue(responseFieldName);

@@ -42,6 +42,7 @@ public class PluginChainTesting implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
         try {
             IBootstrapItem<String> testHandlerItem = new BootstrapItem("test environment handler");
@@ -138,7 +139,7 @@ public class PluginChainTesting implements IPlugin {
                                     new CreateNewInstanceStrategy(args -> {
                                         try {
                                             return new MainTestChain(args[0], (IAction) args[1], (IObject) args[2],
-                                                    (IScope)args[3], (IModule)args[4]);
+                                                    (IScope) args[3], (IModule) args[4]);
                                         } catch (InvalidArgumentException | InitializationException e) {
                                             throw new RuntimeException(e);
                                         }

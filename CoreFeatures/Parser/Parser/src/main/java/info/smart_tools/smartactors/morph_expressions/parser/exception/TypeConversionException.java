@@ -9,7 +9,7 @@ public class TypeConversionException extends Exception {
      *
      * @param message the detail message.
      */
-    public TypeConversionException(String message) {
+    public TypeConversionException(final String message) {
         super(message);
     }
 

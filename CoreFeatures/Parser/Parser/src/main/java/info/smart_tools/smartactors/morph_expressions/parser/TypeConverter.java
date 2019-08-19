@@ -11,6 +11,10 @@ import java.util.List;
  * <code>Java</code> <code>null</code> associated with a <code>undefined</code> in the <code>JavaScript</code>.
  */
 public class TypeConverter {
+
+    private TypeConverter() {
+    }
+
     /**
      * Converts a given value to a boolean type.
      *

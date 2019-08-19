@@ -69,6 +69,7 @@ public class ConstantsSectionStrategy implements ISectionStrategy {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onRevertConfig(final IObject config) throws ConfigurationProcessingException {
         ConfigurationProcessingException exception = new ConfigurationProcessingException("Error occurred reverting \"const\" configuration section.");
         try {
@@ -83,7 +84,7 @@ public class ConstantsSectionStrategy implements ISectionStrategy {
                     exception.addSuppressed(e);
                 }
             }
-        } catch ( ReadValueException | InvalidArgumentException | ResolutionException e) {
+        } catch (ReadValueException | InvalidArgumentException | ResolutionException e) {
             exception.addSuppressed(e);
         }
         if (exception.getSuppressed().length > 0) {

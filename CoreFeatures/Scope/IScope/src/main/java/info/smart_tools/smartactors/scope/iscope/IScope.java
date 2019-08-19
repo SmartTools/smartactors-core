@@ -16,7 +16,7 @@ public interface IScope {
      * @return found object
      * @throws ScopeException if value is not found or any error occurred
      */
-    Object getValue(final Object key)
+    Object getValue(Object key)
             throws ScopeException;
 
     /**
@@ -25,7 +25,7 @@ public interface IScope {
      * @param value given value
      * @throws ScopeException any if error occurred
      */
-    void setValue(final Object key, final Object value)
+    void setValue(Object key, Object value)
             throws ScopeException;
 
     /**
@@ -33,6 +33,6 @@ public interface IScope {
      * @param key given key
      * @throws ScopeException if any error occurred
      */
-    void deleteValue(final Object key)
+    void deleteValue(Object key)
             throws ScopeException;
 }

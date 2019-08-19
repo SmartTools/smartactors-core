@@ -19,5 +19,5 @@ public interface ITimer {
      * @return a {@link ITimerTask} instance associated with the task scheduled on this timer
      * @throws TaskScheduleException if eny error occurs scheduling the task
      */
-    ITimerTask schedule(final ITask task, final long time) throws TaskScheduleException;
+    ITimerTask schedule(ITask task, long time) throws TaskScheduleException;
 }

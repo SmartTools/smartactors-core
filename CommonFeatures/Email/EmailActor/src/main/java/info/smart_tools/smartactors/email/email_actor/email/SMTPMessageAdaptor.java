@@ -21,7 +21,7 @@ public class SMTPMessageAdaptor implements SMTPMessage {
 
     // Constructor
 
-    public SMTPMessageAdaptor(MimeMessage message)
+    public SMTPMessageAdaptor(final MimeMessage message)
         throws MessagingException {
         mimeMessage = message;
         mimeMessageContent = new MimeMultipart();
@@ -46,7 +46,7 @@ public class SMTPMessageAdaptor implements SMTPMessage {
 
     // Own methods
 
-    public void addPart(MimeBodyPart part)
+    public void addPart(final MimeBodyPart part)
             throws MessagingException {
         mimeMessageContent.addBodyPart(part);
     }

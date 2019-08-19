@@ -18,7 +18,7 @@ public class CObjectStrategy implements IStrategy, IStrategyRegistration {
     private final Map<Object, List<IStrategy>> strategyStorage = new HashMap<>();
 
     @Override
-    public <T> T resolve(Object... args)
+    public <T> T resolve(final Object... args)
             throws StrategyException {
         char[] symbols = args[0].toString().toCharArray();
         String defaultKey = "default";
@@ -46,14 +46,14 @@ public class CObjectStrategy implements IStrategy, IStrategyRegistration {
     }
 
     @Override
-    public void register(Object arg, IStrategy value)
+    public void register(final Object arg, final IStrategy value)
             throws StrategyRegistrationException {
         List strategies = this.strategyStorage.computeIfAbsent(arg, k -> new LinkedList());
         strategies.add(value);
     }
 
     @Override
-    public IStrategy unregister(Object arg)
+    public IStrategy unregister(final Object arg)
             throws StrategyRegistrationException {
         return null;
     }

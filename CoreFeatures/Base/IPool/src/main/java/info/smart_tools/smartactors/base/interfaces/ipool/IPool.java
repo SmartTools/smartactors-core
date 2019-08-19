@@ -20,5 +20,5 @@ public interface IPool extends IResourceSource {
      * @param item given item
      * @throws PuttingToPoolException any if error occurred
      */
-    void put(final Object item) throws PuttingToPoolException;
+    void put(Object item) throws PuttingToPoolException;
 }

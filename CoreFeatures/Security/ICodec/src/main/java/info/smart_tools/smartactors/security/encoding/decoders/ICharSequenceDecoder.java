@@ -13,5 +13,5 @@ public interface ICharSequenceDecoder {
      * @return decoded message
      * @throws DecodingException if any error is occurred during decoding
      */
-    String decode(@Nonnull final byte[] message) throws DecodingException;
+    String decode(@Nonnull byte[] message) throws DecodingException;
 }

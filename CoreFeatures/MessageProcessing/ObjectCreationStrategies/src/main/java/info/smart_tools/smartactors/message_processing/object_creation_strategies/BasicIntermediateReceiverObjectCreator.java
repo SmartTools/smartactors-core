@@ -56,7 +56,7 @@ public abstract class BasicIntermediateReceiverObjectCreator implements IReceive
     }
 
     @Override
-    public void create(IReceiverObjectListener listener, IObject config, IObject context)
+    public void create(final IReceiverObjectListener listener, final IObject config, final IObject context)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         this.listener = listener;
         this.context = context;
@@ -64,7 +64,7 @@ public abstract class BasicIntermediateReceiverObjectCreator implements IReceive
     }
 
     @Override
-    public Collection<Object> enumIdentifiers(IObject config, IObject context)
+    public Collection<Object> enumIdentifiers(final IObject config, final IObject context)
             throws InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         return getUnderlyingCreator().enumIdentifiers(config, context);
     }

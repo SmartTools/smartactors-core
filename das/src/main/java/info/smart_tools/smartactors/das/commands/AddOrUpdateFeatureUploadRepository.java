@@ -17,12 +17,12 @@ import java.util.List;
 public class AddOrUpdateFeatureUploadRepository implements IAction {
 
     @Override
-    public void execute(Object o) throws ActionExecutionException, InvalidArgumentException {
+    public void execute(final Object o) throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Adding/updating repository to the feature ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             Feature feature = null;
             String featureName = clar.getFeatureName();
@@ -42,7 +42,7 @@ public class AddOrUpdateFeatureUploadRepository implements IAction {
             String repId = clar.getUploadRepositoryId();
             String repUrl = clar.getUploadRepositoryUrl();
 
-            for(Feature f : features) {
+            for (Feature f : features) {
                 System.out.println("Feature - " + f.getName() + " ...");
                 forOneFeature(f, repId, repUrl);
                 System.out.println("... processed.");

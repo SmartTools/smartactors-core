@@ -62,7 +62,8 @@ public class WDSObjectFieldSet {
      * @throws ChangeValueException if any error occurs
      * @throws InvalidArgumentException if arguments are not valid
      */
-    public void write(final IObject env, final IFieldName fieldName, Object value) throws ChangeValueException, InvalidArgumentException {
+    @SuppressWarnings("unchecked")
+    public void write(final IObject env, final IFieldName fieldName, final Object value) throws ChangeValueException, InvalidArgumentException {
         IField[] fields = outFields.get(fieldName);
         if (null == fields) {
             try {

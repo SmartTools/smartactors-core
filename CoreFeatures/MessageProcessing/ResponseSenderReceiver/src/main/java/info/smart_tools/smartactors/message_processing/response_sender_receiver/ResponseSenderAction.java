@@ -26,7 +26,7 @@ public class ResponseSenderAction implements IAction<IObject> {
     }
 
     @Override
-    public void execute(IObject env) throws ActionExecutionException, InvalidArgumentException {
+    public void execute(final IObject env) throws ActionExecutionException, InvalidArgumentException {
         try {
             IObject context = (IObject) env.getValue(contextFN);
             IResponseStrategy responseStrategy = (IResponseStrategy) context.getValue(responseStrategyFN);

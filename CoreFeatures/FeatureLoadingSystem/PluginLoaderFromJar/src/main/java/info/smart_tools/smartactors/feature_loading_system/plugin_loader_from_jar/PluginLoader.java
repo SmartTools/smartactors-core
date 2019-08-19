@@ -90,7 +90,7 @@ public class PluginLoader implements IPluginLoader<Collection<IPath>> {
                         clazz = classLoader.loadClass(className);
                     } catch (Throwable e) {
                         // ignoring, because the plugin which class cannot be loaded cannot be loaded
-                        System.out.println("[WARNING] Class "+className+" loading failed.");
+                        System.out.println("[WARNING] Class " + className + " loading failed.");
                         continue;
                     }
 

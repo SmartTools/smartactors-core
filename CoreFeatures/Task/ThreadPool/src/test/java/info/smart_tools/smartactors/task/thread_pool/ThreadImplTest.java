@@ -60,6 +60,7 @@ public class ThreadImplTest {
             throws Exception {
         thread.execute(() -> {
             try {
+                //ToDo: Need to exclude Thread.sleep from tests
                 Thread.sleep(200);
             } catch (InterruptedException e) {
                 thread.interrupt();
@@ -90,9 +91,11 @@ public class ThreadImplTest {
         doThrow(new TaskExecutionException("Whoops!")).when(taskMock1).execute();
 
         thread.execute(taskMock1);
-        verify(taskMock1, timeout(100)).execute();
-        Thread.sleep(200);
+        verify(taskMock1, timeout(300)).execute();
+
+        //ToDo: Need to exclude Thread.sleep from tests
+        Thread.sleep(300);
 
         thread.execute(taskMock2);
-        verify(taskMock2, timeout(100)).execute();    }
+        verify(taskMock2, timeout(300)).execute();    }
 }

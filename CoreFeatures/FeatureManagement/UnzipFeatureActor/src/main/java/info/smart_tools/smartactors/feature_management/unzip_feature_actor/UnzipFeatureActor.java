@@ -19,7 +19,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Actor that unpack feature
@@ -29,15 +35,15 @@ public class UnzipFeatureActor {
     private final IFieldName featureNameFN;
     private final IFieldName dependenciesFieldName;
 
-    private final static String CONFIG_FILE_NAME = "config.json";
-    private final static String EXTENSION_SEPARATOR = ".";
-    private final static String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
+    private static final String CONFIG_FILE_NAME = "config.json";
+    private static final String EXTENSION_SEPARATOR = ".";
+    private static final String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
+    private static final String FIELD_NAME_FACTORY_STARTEGY_NAME =
             "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
-    private final static String ARCHIVE_POSTFIX = "archive";
-    private final static String FEATURE_NAME_DELIMITER = ":";
-    private final static String END_OF_INPUT_DELIMITER = "\\Z";
-    private final static String NAME_OF_CHECK_FILE = ".checkfile";
+    private static final String ARCHIVE_POSTFIX = "archive";
+    private static final String FEATURE_NAME_DELIMITER = ":";
+    private static final String END_OF_INPUT_DELIMITER = "\\Z";
+    private static final String NAME_OF_CHECK_FILE = ".checkfile";
 
     private final Map<String, IFunctionTwoArgs<File, IFeature, File>> unzipFunctions;
 
@@ -51,7 +57,7 @@ public class UnzipFeatureActor {
         this.featureNameFN =         IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "featureName");
 
         //TODO: need refactoring. This actions would be took out to the plugin.
-        this.unzipFunctions = new HashMap<String, IFunctionTwoArgs<File, IFeature, File>>(){{
+        this.unzipFunctions = new HashMap<String, IFunctionTwoArgs<File, IFeature, File>>() {{
             put("zip", (file, feature) -> {
                 try {
                     return unzip0(file, feature);
@@ -123,6 +129,7 @@ public class UnzipFeatureActor {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private File copyJar(final File f, final IFeature feature)
             throws Exception {
         try {
@@ -142,7 +149,7 @@ public class UnzipFeatureActor {
                         .filter(fh -> {
                             String[] names = fh.getFileName().split(File.pathSeparator);
                             return names[names.length - 1].equals(CONFIG_FILE_NAME);
-                        } )
+                        })
                         .findFirst()
                         .get();
                 if (null != configFileHeader) {
@@ -190,6 +197,7 @@ public class UnzipFeatureActor {
         );
     }
 
+    @SuppressWarnings("unchecked")
     private void updateFeature(final File f, final IFeature feature)
             throws Exception {
         String content = new Scanner(f).useDelimiter(END_OF_INPUT_DELIMITER).next();
@@ -221,11 +229,11 @@ public class UnzipFeatureActor {
         }
     }
 
-    private String[] parseFullName(String fullName)
+    private String[] parseFullName(final String fullName)
             throws UnzipFeatureException {
         String[] dependencyNames = fullName.split(FEATURE_NAME_DELIMITER);
         if (dependencyNames.length < 2) {
-            throw new UnzipFeatureException("Wrong feature name or dependency format '"+fullName+"'.");
+            throw new UnzipFeatureException("Wrong feature name or dependency format '" + fullName + "'.");
         }
         String[] result = {
                 dependencyNames[0],

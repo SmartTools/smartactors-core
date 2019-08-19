@@ -37,7 +37,7 @@ public class MessageBusContainer implements IMessageBusContainer {
     }
 
     @Override
-    public void send(final IObject message, boolean scopeSwitching) throws SendingMessageException {
+    public void send(final IObject message, final boolean scopeSwitching) throws SendingMessageException {
         try {
             final IMessageBusHandler handler = (IMessageBusHandler) ScopeProvider
                     .getCurrentScope()
@@ -53,7 +53,7 @@ public class MessageBusContainer implements IMessageBusContainer {
     }
 
     @Override
-    public void send(final IObject message, final Object chainName, boolean scopeSwitching)
+    public void send(final IObject message, final Object chainName, final boolean scopeSwitching)
             throws SendingMessageException {
         try {
             final IMessageBusHandler handler = (IMessageBusHandler) ScopeProvider
@@ -70,7 +70,7 @@ public class MessageBusContainer implements IMessageBusContainer {
     }
 
     @Override
-    public void sendAndReply(final IObject message, final Object replyToChainName, boolean scopeSwitching)
+    public void sendAndReply(final IObject message, final Object replyToChainName, final boolean scopeSwitching)
             throws SendingMessageException {
         try {
             final IMessageBusHandler handler = (IMessageBusHandler) ScopeProvider
@@ -87,8 +87,9 @@ public class MessageBusContainer implements IMessageBusContainer {
     }
 
     @Override
-    public void sendAndReply(final IObject message, final Object chainName, final Object replyToChainName, boolean scopeSwitching)
-            throws SendingMessageException {
+    public void sendAndReply(
+            final IObject message, final Object chainName, final Object replyToChainName, final boolean scopeSwitching
+    ) throws SendingMessageException {
         try {
             final IMessageBusHandler handler = (IMessageBusHandler) ScopeProvider
                     .getCurrentScope()

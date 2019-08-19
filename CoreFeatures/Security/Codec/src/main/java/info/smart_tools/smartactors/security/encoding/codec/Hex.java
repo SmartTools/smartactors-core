@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 /**
  * Codec implementation for hex algorithm
  */
-public class Hex implements ICodec {
+public final class Hex implements ICodec {
     private final org.apache.commons.codec.binary.Hex hexCodec;
 
     private Hex() {

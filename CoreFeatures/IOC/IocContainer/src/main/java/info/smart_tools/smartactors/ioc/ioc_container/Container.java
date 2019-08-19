@@ -63,6 +63,7 @@ public class Container implements IContainer {
      * @throws ResolutionException if resolution is impossible because of any errors
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         try {

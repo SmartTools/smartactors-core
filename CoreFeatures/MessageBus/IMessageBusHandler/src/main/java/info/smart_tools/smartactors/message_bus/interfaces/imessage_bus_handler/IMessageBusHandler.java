@@ -14,7 +14,7 @@ public interface IMessageBusHandler {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws MessageBusHandlerException if any errors occurred
      */
-    void handle(final IObject message, boolean scopeSwitching)
+    void handle(IObject message, boolean scopeSwitching)
             throws MessageBusHandlerException;
 
     /**
@@ -24,7 +24,7 @@ public interface IMessageBusHandler {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws MessageBusHandlerException if any errors occurred
      */
-    void handle(final IObject message, final Object chainName, boolean scopeSwitching)
+    void handle(IObject message, Object chainName, boolean scopeSwitching)
             throws MessageBusHandlerException;
 
     /**
@@ -34,7 +34,7 @@ public interface IMessageBusHandler {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws MessageBusHandlerException if any errors occurred
      */
-    void handleForReply(final IObject message, final Object replyToChainName, boolean scopeSwitching)
+    void handleForReply(IObject message, Object replyToChainName, boolean scopeSwitching)
             throws MessageBusHandlerException;
 
     /**
@@ -45,6 +45,6 @@ public interface IMessageBusHandler {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws MessageBusHandlerException if any errors occurred
      */
-    void handleForReply(final IObject message, final Object chainName, final Object replyToChainName, boolean scopeSwitching)
+    void handleForReply(IObject message, Object chainName, Object replyToChainName, boolean scopeSwitching)
             throws MessageBusHandlerException;
 }

@@ -14,7 +14,8 @@ import java.sql.SQLException;
  *  {@link PreparedStatement} created using this text.
  */
 public class QueryStatement implements PreparedQuery {
-    StringWriter bodyWriter;
+
+    private StringWriter bodyWriter;
 
     public QueryStatement() {
         this.bodyWriter = new StringWriter();

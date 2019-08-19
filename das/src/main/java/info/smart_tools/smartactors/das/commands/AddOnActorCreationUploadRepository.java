@@ -13,13 +13,13 @@ import info.smart_tools.smartactors.das.utilities.interfaces.IProjectResolver;
 public class AddOnActorCreationUploadRepository implements IAction {
 
     @Override
-    public void execute(Object o)
+    public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Adding/updating on feature creation upload repository ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver)  ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver)  ((Object[]) o)[1];
             Project project = pr.resolveProject();
 
             String id = clar.getUploadRepositoryId();

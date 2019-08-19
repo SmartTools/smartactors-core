@@ -12,5 +12,5 @@ public interface IRequestSender {
      *
      * @param request request, that should be send
      */
-    void sendRequest(final IObject request) throws RequestSenderException;
+    void sendRequest(IObject request) throws RequestSenderException;
 }

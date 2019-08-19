@@ -17,6 +17,6 @@ public interface IActionTwoArgs<T1, T2> {
      * @throws ActionExecutionException if any errors occurred
      * @throws InvalidArgumentException if incoming argument are incorrect
      */
-    void execute(final T1 firstActingObject, final T2 secondActingObject)
+    void execute(T1 firstActingObject, T2 secondActingObject)
             throws ActionExecutionException, InvalidArgumentException;
 }

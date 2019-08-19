@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MessagePartCreators {
+public final class MessagePartCreators {
     private static Map<String, MessagePartCreator> creatorsMap = new HashMap<>();
     private static Field partType_Part_F;
     private static Field partText_TextPart_F;
@@ -30,6 +30,9 @@ public class MessagePartCreators {
     private static Field sourcePath_FilePart_F;
     private static Field attachmentName_FilePart_F;
     private static IField sourceF;
+
+    private MessagePartCreators() {
+    }
 
     public static void addAllPartsTo(final SMTPMessageAdaptor smtpMessage, final IObject context, final List<IObject> parts) throws Exception {
         for (IObject part : parts) {
@@ -47,7 +50,7 @@ public class MessagePartCreators {
         }
     }
 
-    public static void add(String name, MessagePartCreator creator) {
+    public static void add(final String name, final MessagePartCreator creator) {
         creatorsMap.put(name, creator);
     }
 

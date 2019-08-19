@@ -13,14 +13,27 @@ import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import io.netty.buffer.Unpooled;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.EmptyHttpHeaders;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -312,17 +325,17 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
     }
 
     private FullHttpRequest createHttpRequest(
-            HttpMethod method,
-            HttpVersion version,
-            URL url,
+            final HttpMethod method,
+            final HttpVersion version,
+            final URL url,
             final IObject content,
             final HttpHeaders headers,
             final List<Cookie> cookies,
-            ServerCookieEncoder cookieEncoder
+            final ServerCookieEncoder cookieEncoder
     ) throws RequestMakerException {
         try {
             FullHttpRequest httpRequest;
-            if (content == null){
+            if (content == null) {
                 httpRequest = new DefaultFullHttpRequest(
                         version,
                         method,
@@ -371,7 +384,7 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
         }
     }
 
-    private RequestMakerException getError(String message, Throwable cause) {
+    private RequestMakerException getError(final String message, final Throwable cause) {
         String errMsg = String.format(COMMON_ERROR_MSG, message);
         return new RequestMakerException(errMsg, cause);
     }

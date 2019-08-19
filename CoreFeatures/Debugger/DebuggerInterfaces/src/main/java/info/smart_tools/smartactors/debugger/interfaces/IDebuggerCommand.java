@@ -16,5 +16,5 @@ public interface IDebuggerCommand {
      * @throws InvalidArgumentException if arguments are not valid
      * @throws CommandExecutionException if execution fails because of any error
      */
-    Object execute(final Object args) throws InvalidArgumentException, CommandExecutionException;
+    Object execute(Object args) throws InvalidArgumentException, CommandExecutionException;
 }

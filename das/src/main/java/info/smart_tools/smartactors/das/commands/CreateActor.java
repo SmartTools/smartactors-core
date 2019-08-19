@@ -22,8 +22,8 @@ public class CreateActor implements IAction {
         System.out.println("Creating actor ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             String name = clar.getActorName();
             String version = null;

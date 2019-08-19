@@ -4,15 +4,15 @@ package info.smart_tools.smartactors.https_endpoint.https_request_sender_actor.e
  * Created by sevenbits on 15.10.16.
  */
 public class HttpsRequestSenderActorException extends Exception {
-    public HttpsRequestSenderActorException(String message) {
+    public HttpsRequestSenderActorException(final String message) {
         super(message);
     }
 
-    public HttpsRequestSenderActorException(String message, Throwable cause) {
+    public HttpsRequestSenderActorException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public HttpsRequestSenderActorException(Throwable cause) {
+    public HttpsRequestSenderActorException(final Throwable cause) {
         super(cause);
     }
 }

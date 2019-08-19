@@ -32,7 +32,7 @@ public class PluginWDSObject extends BootstrapPlugin {
      *
      * @param bootstrap the bootstrap
      */
-    public PluginWDSObject(IBootstrap bootstrap) {
+    public PluginWDSObject(final IBootstrap bootstrap) {
         super(bootstrap);
     }
 

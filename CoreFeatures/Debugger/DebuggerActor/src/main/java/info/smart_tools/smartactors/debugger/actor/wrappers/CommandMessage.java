@@ -29,7 +29,7 @@ public interface CommandMessage {
      * @param object    result of command execution
      * @throws ChangeValueException if any error occurs
      */
-    void setCommandResult(final Object object) throws ChangeValueException;
+    void setCommandResult(Object object) throws ChangeValueException;
 
     /**
      * @return address ("target") of the debugger actor.
@@ -41,5 +41,5 @@ public interface CommandMessage {
      * @param e    the exception occurred executing the command
      * @throws ChangeValueException if any error occurs
      */
-    void setException(final Throwable e) throws ChangeValueException;
+    void setException(Throwable e) throws ChangeValueException;
 }

@@ -22,8 +22,9 @@ public class ChainNotFoundException extends Exception {
      * The constructor.
      *
      * @param chainId    identifier of the chain.
+     * @param e nested exception.
      */
-    public ChainNotFoundException(final Object chainId, Throwable e) {
+    public ChainNotFoundException(final Object chainId, final Throwable e) {
         super(MessageFormat.format("Chain ''{0}'' not found.", chainId), e);
     }
 }

@@ -23,7 +23,7 @@ public class FeatureLoadStarterActor {
             wrapper.setFileName(f.getName());
             wrapper.setObservedDirectory(f.getParent());
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new FeatureLoadStarterException(e);
         }
     }
@@ -42,7 +42,7 @@ public class FeatureLoadStarterActor {
             wrapper.setRepositoriesDescription(repositories);
             wrapper.setFeaturesDescription(features);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new FeatureLoadStarterException(e);
         }
     }

@@ -128,6 +128,7 @@ public class Feature {
         this.ownerProject = project;
     }
 
+    @SuppressWarnings("unchecked")
     public Feature(final IObject feature, final Project project)
             throws Exception {
         try {
@@ -138,19 +139,19 @@ public class Feature {
             this.ownerProject = project;
 
             List<IObject> actors = (List<IObject>) feature.getValue(new FieldName("actors"));
-            for(IObject actor : actors) {
+            for (IObject actor : actors) {
                 Actor restoredActor = new Actor(actor, this);
                 this.actors.add(restoredActor);
             }
 
             List<IObject> plugins = (List<IObject>) feature.getValue(new FieldName("plugins"));
-            for(IObject plugin : plugins) {
+            for (IObject plugin : plugins) {
                 Plugin restoredPlugin = new Plugin(plugin, this);
                 this.plugins.add(restoredPlugin);
             }
 
             List<IObject> repositories = (List<IObject>) feature.getValue(new FieldName("uploadRepositories"));
-            for(IObject repository : repositories) {
+            for (IObject repository : repositories) {
                 UploadRepository restoredRepository = new UploadRepository(repository);
                 this.uploadRepositories.add(restoredRepository);
             }
@@ -221,7 +222,7 @@ public class Feature {
         return ownerProject;
     }
 
-    public void setOwnerProject(Project ownerProject) {
+    public void setOwnerProject(final Project ownerProject) {
         this.ownerProject = ownerProject;
     }
 
@@ -237,7 +238,7 @@ public class Feature {
         return actors;
     }
 
-    public void setActors(List<Actor> actors) {
+    public void setActors(final List<Actor> actors) {
         this.actors = actors;
     }
 
@@ -245,7 +246,7 @@ public class Feature {
         return plugins;
     }
 
-    public void setPlugins(List<Plugin> plugins) {
+    public void setPlugins(final List<Plugin> plugins) {
         this.plugins = plugins;
     }
 
@@ -346,7 +347,7 @@ public class Feature {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     featurePomFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PROJECT_GROUP_ID_TOKEN, projectGroupId);
                         put(PROJECT_NAME_TOKEN, projectName);
                         put(PROJECT_VERSION_TOKEN, projectVersion);
@@ -374,7 +375,7 @@ public class Feature {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     featureConfigJsonFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(FEATURE_GROUP_ID_TOKEN, groupId);
                         put(FEATURE_NAME_TOKEN, name);
                     }}
@@ -391,7 +392,7 @@ public class Feature {
             throws Exception {
         Path featureConfigJsonFile = Paths.get(this.getPath().toString(), CONFIG_JSON);
 
-        try(PrintWriter out = new PrintWriter(featureConfigJsonFile.toFile())) {
+        try (PrintWriter out = new PrintWriter(featureConfigJsonFile.toFile())) {
             out.println((String) object.serialize());
         } catch (NullPointerException  e) {
             System.out.println("Could not find template of feature config.json: ");
@@ -431,7 +432,7 @@ public class Feature {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     featureDistributionBin.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(FEATURE_GROUP_ID_TOKEN, groupId);
                         put(FEATURE_NAME_TOKEN, name);
                     }}
@@ -453,7 +454,7 @@ public class Feature {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     featureDistributionPom.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(FEATURE_GROUP_ID_TOKEN, groupId);
                         put(FEATURE_NAME_TOKEN, name);
                         put(FEATURE_VERSION_TOKEN, version);
@@ -476,7 +477,7 @@ public class Feature {
                 projectPomFile.toFile(),
                 END_MODULES_TAG,
                 new File(MODULE_SECTION_TEMPLATE),
-                new HashMap<String, String>(){{
+                new HashMap<String, String>() {{
                     put(MODULE_NAME_TOKEN, name);
                 }}
         );
@@ -494,7 +495,7 @@ public class Feature {
         PomBuilder.addOrUpdateExecutionSectionToDeployPlugin(
                 new File(DEPLOY_PLUGIN_TEMPLATE),
                 featurePomFile.toFile(),
-                new HashMap<String, String>(){{
+                new HashMap<String, String>() {{
                     put(DEPLOY_REPOSITORY_ID_TOKEN, repId);
                     put(DEPLOY_REPOSITORY_URL_TOKEN, repUrl);
                 }}
@@ -505,10 +506,10 @@ public class Feature {
             throws Exception {
         Path featurePomFile = Paths.get(this.getPath().toString(), POM_NAME);
         PomBuilder.updateVersion(featurePomFile.toFile(), newVersion);
-        for(Actor actor : this.actors) {
+        for (Actor actor : this.actors) {
             actor.updateParentVersionInPom(newVersion);
         }
-        for(Plugin plugin : this.plugins) {
+        for (Plugin plugin : this.plugins) {
             plugin.updateParentVersionInPom(newVersion);
         }
         Path featureDistributionPom = Paths.get(

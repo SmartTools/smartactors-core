@@ -9,7 +9,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
-public class PomReader {
+public final class PomReader {
+
+    private PomReader() {
+    }
 
     public static String getGroupId(final File target)
             throws PomReadingException {

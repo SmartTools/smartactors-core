@@ -14,5 +14,5 @@ public interface EnumerationResult {
      * @param items    list of identifiers of enumerated objects
      * @throws ChangeValueException if errors occurs writing the value
      */
-    void setItems(final List items) throws ChangeValueException;
+    void setItems(List items) throws ChangeValueException;
 }

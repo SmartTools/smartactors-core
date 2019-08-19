@@ -13,5 +13,5 @@ public interface IConditionVerifier {
      * @param document  document, that should be verified
      * @return true if the condition is applicable to the document
      */
-    boolean verify(final IObject condition, final IObject document);
+    boolean verify(IObject condition, IObject document);
 }

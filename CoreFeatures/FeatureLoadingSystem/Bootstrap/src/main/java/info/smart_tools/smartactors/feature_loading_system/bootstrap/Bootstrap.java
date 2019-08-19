@@ -76,14 +76,14 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
                         item.executeProcess();
                         doneItems.add(item);
                         retryDoneItems.add(item);
-                        System.out.println("[OK] "+Thread.currentThread().getName()+" Load retry of plugin \""+item.getItemName()+"\" done.");
+                        System.out.println("[OK] " + Thread.currentThread().getName() + " Load retry of plugin \"" + item.getItemName() + "\" done.");
                     } catch (Throwable ex) {
                         ex.printStackTrace();
-                        System.out.println("[WARNING] "+Thread.currentThread().getName()+" Load retry of plugin \""+item.getItemName()+"\" failed.");
+                        System.out.println("[WARNING] " + Thread.currentThread().getName() + " Load retry of plugin \"" + item.getItemName() + "\" failed.");
                         item.executeRevertProcess();
                     }
                 }
-            } while ( retryDoneItems.size() > 0 );
+            } while (retryDoneItems.size() > 0);
             if (failedItems.size() > 0) {
                 throw new ProcessExecutionException(
                         MessageFormat.format(
@@ -110,15 +110,15 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
             throw new RevertProcessExecutionException("Can't revert bootstrap if no bootstrap items started.");
         }
         ListIterator<IBootstrapItem<String>> i = doneItems.listIterator(doneItems.size());
-        while(i.hasPrevious()) {
+        while (i.hasPrevious()) {
             IBootstrapItem<String> item = i.previous();
             try {
                 item.executeRevertProcess();
                 i.remove();
-                System.out.println("[OK] "+Thread.currentThread().getName()+" Revert of plugin \""+item.getItemName()+"\" done.");
+                System.out.println("[OK] " + Thread.currentThread().getName() + " Revert of plugin \"" + item.getItemName() + "\" done.");
             } catch (Throwable e) {
                 exception.addSuppressed(e);
-                System.out.println("[WARNING] "+Thread.currentThread().getName()+" Revert of plugin \""+item.getItemName()+"\" failed.");
+                System.out.println("[WARNING] " + Thread.currentThread().getName() + " Revert of plugin \"" + item.getItemName() + "\" failed.");
             }
         }
         if (exception.getSuppressed().length > 0) {

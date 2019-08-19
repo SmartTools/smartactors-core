@@ -30,20 +30,24 @@ public class HandlerRouterReceiverCreator extends BasicIntermediateReceiverObjec
      * @param filterConfig            configuration of the step of pipeline
      * @param objectConfig            configuration of the object
      */
-    public HandlerRouterReceiverCreator(IReceiverObjectCreator underlyingObjectCreator, IObject filterConfig, IObject objectConfig) {
+    public HandlerRouterReceiverCreator(
+            final IReceiverObjectCreator underlyingObjectCreator,
+            final IObject filterConfig,
+            final IObject objectConfig
+    ) {
         super(underlyingObjectCreator, filterConfig, objectConfig);
 
         handlersMap = new HashMap<>();
     }
 
     @Override
-    public Collection<Object> enumIdentifiers(IObject config, IObject context)
+    public Collection<Object> enumIdentifiers(final IObject config, final IObject context)
             throws InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         return Collections.singletonList(null);
     }
 
     @Override
-    public void acceptItem(Object itemId, Object item)
+    public void acceptItem(final Object itemId, final Object item)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, InvalidArgumentException {
         if (null == item) {
             throw new InvalidArgumentException("Item is null.");

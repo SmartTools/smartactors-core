@@ -6,26 +6,25 @@ package info.smart_tools.smartactors.base.exception.initialization_exception;
 public class InitializationException extends Exception {
 
     /**
-     * Constructor with specific error message as argument
-     * @param message specific error message
+     * Constructor with a specific error message as the argument
+     * @param message the specific error message
      */
     public InitializationException(final String message) {
         super(message);
     }
 
     /**
-     * Constructor with specific error message and specific cause as arguments
-     * @param message specific error message
-     * @param cause specific cause
+     * Constructor with a specific error message and a specific cause as arguments
+     * @param message the specific error message
+     * @param cause the specific cause
      */
-
     public InitializationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Constructor with specific cause as argument
-     * @param cause specific cause
+     * Constructor with a specific cause as the argument
+     * @param cause the specific cause
      */
     public InitializationException(final Throwable cause) {
         super(cause);

@@ -3,7 +3,11 @@ package info.smart_tools.smartactors.feature_loading_system.bootstrap;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap_item.IBootstrapItem;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Sort given list of {@link IBootstrapItem} using topological sorting graph.
@@ -27,6 +31,7 @@ class TopologicalSort {
      * @param items map of depended instances of {@link IBootstrapItem}
      * @throws Exception throws if graph has cycle or any errors occurred
      */
+    @SuppressWarnings("unchecked")
     TopologicalSort(final List<IBootstrapItem<String>> items)
             throws Exception {
         this.items = items;
@@ -87,8 +92,7 @@ class TopologicalSort {
         }
     }
 
-    private boolean topologicalSort()
-            throws Exception {
+    private boolean topologicalSort() {
         boolean cycle;
         for (int i = 0; i <= this.size - 1; ++i) {
             cycle = dfs(i);

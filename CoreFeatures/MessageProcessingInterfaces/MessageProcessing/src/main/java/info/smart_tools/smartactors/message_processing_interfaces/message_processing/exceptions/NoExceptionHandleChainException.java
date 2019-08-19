@@ -26,7 +26,7 @@ public class NoExceptionHandleChainException extends Exception {
     public NoExceptionHandleChainException(final Throwable cause, final IReceiverChain[] chainsStack, final int[] stepsStack) {
         super(
                 MessageFormat.format("No exceptional chain found for exception occurred at step {0} of chain ''{1}''.",
-                        (stepsStack.length != 0) ? stepsStack[stepsStack.length - 1]+1 : "<none>",
+                        (stepsStack.length != 0) ? stepsStack[stepsStack.length - 1] + 1 : "<none>",
                         (chainsStack.length != 0) ? chainsStack[chainsStack.length - 1].getId() : "<none>"),
                 cause);
 

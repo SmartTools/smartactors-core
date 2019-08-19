@@ -60,7 +60,7 @@ public interface EnteringMessage {
      * Set checkpoint status object.
      *
      * @param checkpointStatus new status object
-     * @throws ReadValueException if error occurs reading the value
+     * @throws ChangeValueException if error occurs changing the value
      * @see #getCheckpointStatus()
      */
     void setCheckpointStatus(IObject checkpointStatus) throws ChangeValueException;

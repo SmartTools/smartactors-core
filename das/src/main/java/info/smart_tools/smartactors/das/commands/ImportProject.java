@@ -33,8 +33,8 @@ public class ImportProject implements IAction {
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Importing project ...");
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             String projectName = clar.getProjectName();
             String groupId = null;
             String version = null;
@@ -150,7 +150,7 @@ public class ImportProject implements IAction {
 
         File[] modules = new File(feature.getPath().toString()).listFiles(File::isDirectory);
         if (null != modules && modules.length > 0) {
-            for(File module : modules) {
+            for (File module : modules) {
                 System.out.print("module location: " + Paths.get(module.getName(), POM_NAME));
                 if (
                         !module.getName().equals(feature.getFeatureDistributionModuleName()) &&

@@ -104,7 +104,12 @@ public class TestEnvironmentHandler implements IEnvironmentHandler {
             );
 
             IMessageProcessor mp = IOC.resolve(
-                    IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"), taskQueue, sequence
+                    IOC.resolve(
+                            IOC.getKeyForKeyByNameStrategy(),
+                            "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"
+                    ),
+                    taskQueue,
+                    sequence
             );
             fmp[0] = mp;
             mp.process(message, context);

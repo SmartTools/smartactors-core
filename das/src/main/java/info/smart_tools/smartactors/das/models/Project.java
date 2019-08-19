@@ -53,6 +53,7 @@ public class Project {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Project(final IObject project, final Path path)
             throws Exception {
         try {
@@ -62,25 +63,25 @@ public class Project {
             this.path = path;
 
             List<IObject> restoredFeatures = (List<IObject>) project.getValue(new FieldName("features"));
-            for(IObject feature : restoredFeatures) {
+            for (IObject feature : restoredFeatures) {
                 Feature restoredFeature = new Feature(feature, this);
                 this.features.add(restoredFeature);
             }
 
             List<IObject> restoredUploadFeatureRepositories = (List<IObject>) project.getValue(new FieldName("on-feature-creation-upload-repositories"));
-            for(IObject repository : restoredUploadFeatureRepositories) {
+            for (IObject repository : restoredUploadFeatureRepositories) {
                 UploadRepository restoredRepository = new UploadRepository(repository);
                 this.featureOnCreationUploadRepositories.add(restoredRepository);
             }
 
             List<IObject> restoredUploadActorRepositories = (List<IObject>) project.getValue(new FieldName("on-actor-creation-upload-repositories"));
-            for(IObject repository : restoredUploadActorRepositories) {
+            for (IObject repository : restoredUploadActorRepositories) {
                 UploadRepository restoredRepository = new UploadRepository(repository);
                 this.actorOnCreationUploadRepositories.add(restoredRepository);
             }
 
             List<IObject> restoredUploadPluginRepositories = (List<IObject>) project.getValue(new FieldName("on-plugin-creation-upload-repositories"));
-            for(IObject repository : restoredUploadPluginRepositories) {
+            for (IObject repository : restoredUploadPluginRepositories) {
                 UploadRepository restoredRepository = new UploadRepository(repository);
                 this.pluginOnCreationUploadRepositories.add(restoredRepository);
             }
@@ -131,7 +132,7 @@ public class Project {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -139,7 +140,7 @@ public class Project {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -151,7 +152,7 @@ public class Project {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(final String groupId) {
         this.groupId = groupId;
     }
 
@@ -159,7 +160,7 @@ public class Project {
         return features;
     }
 
-    public void setFeatures(List<Feature> features) {
+    public void setFeatures(final List<Feature> features) {
         this.features = features;
     }
 
@@ -167,7 +168,7 @@ public class Project {
         return featureOnCreationUploadRepositories;
     }
 
-    public void setFeatureOnCreationUploadRepositories(List<UploadRepository> featureOnCreationUploadRepositories) {
+    public void setFeatureOnCreationUploadRepositories(final List<UploadRepository> featureOnCreationUploadRepositories) {
         this.featureOnCreationUploadRepositories = featureOnCreationUploadRepositories;
     }
 
@@ -175,7 +176,7 @@ public class Project {
         return pluginOnCreationUploadRepositories;
     }
 
-    public void setPluginOnCreationUploadRepositories(List<UploadRepository> pluginOnCreationUploadRepositories) {
+    public void setPluginOnCreationUploadRepositories(final List<UploadRepository> pluginOnCreationUploadRepositories) {
         this.pluginOnCreationUploadRepositories = pluginOnCreationUploadRepositories;
     }
 
@@ -183,7 +184,7 @@ public class Project {
         return actorOnCreationUploadRepositories;
     }
 
-    public void setActorOnCreationUploadRepositories(List<UploadRepository> actorOnCreationUploadRepositories) {
+    public void setActorOnCreationUploadRepositories(final List<UploadRepository> actorOnCreationUploadRepositories) {
         this.actorOnCreationUploadRepositories = actorOnCreationUploadRepositories;
     }
 
@@ -308,7 +309,7 @@ public class Project {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     projectPomFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PROJECT_GROUP_ID_TOKEN, groupId);
                         put(PROJECT_NAME_TOKEN, name);
                         put(PROJECT_VERSION_TOKEN, version);

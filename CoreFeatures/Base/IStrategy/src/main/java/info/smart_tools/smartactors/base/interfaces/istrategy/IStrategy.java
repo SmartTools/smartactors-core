@@ -14,6 +14,6 @@ public interface IStrategy {
      * @return instance of type T object
      * @throws StrategyException if any errors occurred
      */
-    <T> T resolve(final Object ... args)
+    <T> T resolve(Object ... args)
             throws StrategyException;
 }

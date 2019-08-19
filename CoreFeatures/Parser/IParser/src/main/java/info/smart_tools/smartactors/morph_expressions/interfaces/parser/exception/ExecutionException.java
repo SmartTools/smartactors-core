@@ -10,7 +10,7 @@ public class ExecutionException extends Exception {
      *
      * @param message the detail message.
      */
-    public ExecutionException(String message) {
+    public ExecutionException(final String message) {
         super(message);
     }
 
@@ -20,7 +20,7 @@ public class ExecutionException extends Exception {
      * @param message the detail message.
      * @param cause the cause of the exception.
      */
-    public ExecutionException(String message, Throwable cause) {
+    public ExecutionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

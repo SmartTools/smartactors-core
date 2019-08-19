@@ -15,7 +15,7 @@ public interface IScopeProviderContainer {
      * @throws ScopeProviderException if value is not found or any errors occurred
      * @return instance of IScope
      */
-    IScope getScope(final Object key)
+    IScope getScope(Object key)
             throws ScopeProviderException;
 
     /**
@@ -32,7 +32,7 @@ public interface IScopeProviderContainer {
      * @param value instance of {@link IScope}
      * @throws ScopeProviderException if any error occurred
      */
-    void addScope(final Object key, final IScope value)
+    void addScope(Object key, IScope value)
             throws ScopeProviderException;
 
     /**
@@ -48,7 +48,7 @@ public interface IScopeProviderContainer {
      * @param key given key
      * @throws ScopeProviderException if value is absent or any errors occurred
      */
-    void deleteScope(final Object key)
+    void deleteScope(Object key)
             throws ScopeProviderException;
 
     /**
@@ -57,7 +57,7 @@ public interface IScopeProviderContainer {
      * @return unique instance of {@link IScope} identifier
      * @throws ScopeProviderException if any errors occurred
      */
-    Object createScope(final Object params)
+    Object createScope(Object params)
             throws ScopeProviderException;
 
     /**
@@ -65,7 +65,7 @@ public interface IScopeProviderContainer {
      * @param handler handler for execute when event will be happened
      * @throws ScopeProviderException if any errors occurred
      */
-    void subscribeOnCreationNewScope(final IAction<IScope> handler)
+    void subscribeOnCreationNewScope(IAction<IScope> handler)
             throws ScopeProviderException;
 
     /**

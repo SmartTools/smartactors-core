@@ -33,14 +33,14 @@ public class TaskQueueDecorator implements IQueue<ITask> {
         IScope scope;
         try {
             scope = ScopeProvider.getCurrentScope();
-        } catch(ScopeProviderException e) {
+        } catch (ScopeProviderException e) {
             throw new InterruptedException(e.getMessage());
         }
         this.queue.put(() -> {
             ModuleManager.setCurrentModule(module);
             try {
                 ScopeProvider.setCurrentScope(scope);
-            } catch(ScopeProviderException e) {
+            } catch (ScopeProviderException e) {
                 throw new RuntimeException(e);
             }
             item.execute();

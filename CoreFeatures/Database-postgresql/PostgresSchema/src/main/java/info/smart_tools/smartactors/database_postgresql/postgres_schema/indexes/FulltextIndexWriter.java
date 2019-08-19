@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * Writes fulltext index and appropriate trigger definitions.
  */
-class FulltextIndexWriter implements IndexWriter {
+final class FulltextIndexWriter implements IndexWriter {
 
-    static IndexWriter resolve(IObject options) throws Exception {
+    static IndexWriter resolve(final IObject options) throws Exception {
         IKey fieldNameKey = Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName");
         IFieldName languageField = IOC.resolve(fieldNameKey, "language");
         String language = (String) options.getValue(languageField);

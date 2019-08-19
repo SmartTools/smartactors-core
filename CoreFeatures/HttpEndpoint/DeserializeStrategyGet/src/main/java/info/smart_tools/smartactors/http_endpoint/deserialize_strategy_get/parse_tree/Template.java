@@ -8,8 +8,8 @@ import java.util.List;
  * Created by sevenbits on 01.09.16.
  */
 public class Template {
-    List<String> template = new ArrayList<>();
-    boolean[] isVariable;
+    private List<String> template = new ArrayList<>();
+    private boolean[] isVariable;
 
     public Template(final String template) {
         this.template = Arrays.asList(template.split("/"));

@@ -58,8 +58,13 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
      * @param stackDepth    depth of the stack for {@link io.netty.channel.ChannelOutboundBuffer.MessageProcessor}
      * @param mapName chain, that should receive message
      */
-    public HttpResponseHandler(final IQueue<ITask> taskQueue, final int stackDepth, final Object mapName,
-                               final IObject request, final IScope scope, IModule module) throws ResponseHandlerException {
+    public HttpResponseHandler(final IQueue<ITask> taskQueue,
+                               final int stackDepth,
+                               final Object mapName,
+                               final IObject request,
+                               final IScope scope,
+                               final IModule module
+    ) throws ResponseHandlerException {
         this.taskQueue = taskQueue;
         this.stackDepth = stackDepth;
 
@@ -100,10 +105,21 @@ public class HttpResponseHandler implements IResponseHandler<ChannelHandlerConte
                 try {
                     IObject environment = getEnvironment(responseCopy);
                     IObject message = (IObject) environment.getValue(messageFieldName);
-                    IMessageProcessingSequence processingSequence =
-                            IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"), stackDepth, receiverMapName, message);
-                    IMessageProcessor messageProcessor =
-                            IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"), taskQueue, processingSequence);
+                    IMessageProcessingSequence processingSequence = IOC.resolve(
+                            Keys.getKeyByName(
+                                    "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"
+                            ),
+                            stackDepth,
+                            receiverMapName,
+                            message
+                    );
+                    IMessageProcessor messageProcessor = IOC.resolve(
+                            Keys.getKeyByName(
+                                    "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"
+                            ),
+                            taskQueue,
+                            processingSequence
+                    );
                     message.setValue(messageMapIdFieldName, messageMapId);
                     IObject context = (IObject) environment.getValue(contextFieldName);
                     messageProcessor.process(message, context);

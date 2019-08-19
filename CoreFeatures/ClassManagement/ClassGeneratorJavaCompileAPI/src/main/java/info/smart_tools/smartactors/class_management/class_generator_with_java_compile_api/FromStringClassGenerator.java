@@ -19,7 +19,7 @@ public class FromStringClassGenerator implements IClassGenerator<String> {
     public FromStringClassGenerator() {}
 
     @Override
-    public Class<?> generate(final String source, ClassLoader classLoader)
+    public Class<?> generate(final String source, final ClassLoader classLoader)
             throws ClassGenerationException, InvalidArgumentException {
 
         if (null == source || source.isEmpty()) {

@@ -38,6 +38,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
         try {
             /* "objects" section */
@@ -67,7 +68,9 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
                         } catch (InvalidArgumentException e) {
                             System.out.println("[WARNING] Deregistration of \"ObjectsSectionProcessingStrategy\" has failed while reverting \"config_section:objects\" plugin.");
-                        } catch (ResolutionException e) { }
+                        } catch (ResolutionException e) {
+                            // TODO: Empty catch block
+                        }
                     });
 
             bootstrap.add(objectsSectionItem);
@@ -105,7 +108,10 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                                                         List exceptionalList = (List) innerObject.getValue(new FieldName("exceptional"));
 
                                                         IObject outOfResourcesExceptionObj = new ConfigurationObject();
-                                                        outOfResourcesExceptionObj.setValue(new FieldName("class"), "info.smart_tools.smartactors.base.interfaces.iresource_source.exceptions.OutOfResourceException");
+                                                        outOfResourcesExceptionObj.setValue(
+                                                                new FieldName("class"),
+                                                                "info.smart_tools.smartactors.base.interfaces.iresource_source.exceptions.OutOfResourceException"
+                                                        );
                                                         outOfResourcesExceptionObj.setValue(new FieldName("chain"), "tryToTakeResourceMap");
                                                         outOfResourcesExceptionObj.setValue(new FieldName("after"), "break");
                                                         exceptionalList.add(0, outOfResourcesExceptionObj);
@@ -219,7 +225,9 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             } catch (StrategyRegistrationException e) {
                                 System.out.println("[WARNING] Deregistration of \"maps\" strategy has failed while reverting \"config_section:maps\" plugin.");
                             }
-                        } catch (ResolutionException e) { }
+                        } catch (ResolutionException e) {
+                            // TODO: Empty catch block
+                        }
                         try {
                             IConfigurationManager configurationManager =
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
@@ -227,7 +235,9 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
                         } catch (InvalidArgumentException e) {
                             System.out.println("[WARNING] Deregistration of \"MapsSectionProcessingStrategy\" has failed while reverting \"config_section:maps\" plugin.");
-                        } catch (ResolutionException e) { }
+                        } catch (ResolutionException e) {
+                            // TODO: Empty catch block
+                        }
                     });
 
             bootstrap.add(mapsSectionItem);
@@ -260,7 +270,9 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
                         } catch (InvalidArgumentException e) {
                             System.out.println("[WARNING] Deregistration of \"ExecutorSectionProcessingStrategy\" has failed while reverting \"config_section:executor\" plugin.");
-                        } catch (ResolutionException e) { }
+                        } catch (ResolutionException e) {
+                            // TODO: Empty catch block
+                        }
                     });
 
             bootstrap.add(executorSectionItem);

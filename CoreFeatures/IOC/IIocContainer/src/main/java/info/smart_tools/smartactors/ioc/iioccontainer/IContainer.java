@@ -32,7 +32,7 @@ public interface IContainer {
      * @return instance of class with classId identifier
      * @throws ResolutionException if resolution is impossible because of any errors
      */
-    <T> T resolve(final IKey key, final Object... args)
+    <T> T resolve(IKey key, Object... args)
             throws ResolutionException;
 
     /**
@@ -41,7 +41,7 @@ public interface IContainer {
      * @param strategy instance of {@link IStrategy}
      * @throws RegistrationException when registration is impossible because of any error
      */
-    void register(final IKey key, final IStrategy strategy)
+    void register(IKey key, IStrategy strategy)
             throws RegistrationException;
 
     /**
@@ -51,6 +51,6 @@ public interface IContainer {
      * @return the previous instance of {@link IStrategy} associated with <tt>key</tt>,
      *         or <tt>null</tt> if there was no association for <tt>key</tt>.
      */
-    IStrategy unregister(final IKey key)
+    IStrategy unregister(IKey key)
             throws DeletionException;
 }

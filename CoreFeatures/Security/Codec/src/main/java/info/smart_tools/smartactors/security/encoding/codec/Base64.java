@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 /**
  * Codec implementation for base64 algorithm
  */
-public class Base64 implements ICodec {
+public final class Base64 implements ICodec {
     private final java.util.Base64.Encoder base64Encoder;
     private final java.util.Base64.Decoder base64Decoder;
 

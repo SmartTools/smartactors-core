@@ -50,7 +50,8 @@ public class FullObjectCreatorStrategy implements IStrategy {
     }
 
     @Override
-    public <T> T resolve(Object... args) throws StrategyException {
+    @SuppressWarnings("unchecked")
+    public <T> T resolve(final Object... args) throws StrategyException {
         IObject config = (IObject) args[0];
 
         try {

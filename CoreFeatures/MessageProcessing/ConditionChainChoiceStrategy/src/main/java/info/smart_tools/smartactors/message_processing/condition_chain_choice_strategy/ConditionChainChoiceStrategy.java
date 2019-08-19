@@ -30,7 +30,7 @@ public class ConditionChainChoiceStrategy implements IChainChoiceStrategy {
     @Override
     public Object chooseChain(final IMessageProcessor messageProcessor)
             throws InvalidArgumentException, ReadValueException {
-        IFieldName chainFN = ((Boolean)messageProcessor.getMessage().getValue(chainConditionFN) ? trueChainFN : falseChainFN);
+        IFieldName chainFN = ((Boolean) messageProcessor.getMessage().getValue(chainConditionFN) ? trueChainFN : falseChainFN);
         return messageProcessor.getSequence().getCurrentReceiverArguments().getValue(chainFN);
     }
 }

@@ -17,13 +17,13 @@ import java.util.List;
 public class UpdateActorVersion implements IAction {
 
     @Override
-    public void execute(Object o)
+    public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Updating actor version ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             String newVersion = clar.getVersion();
             Feature feature = null;
@@ -43,7 +43,7 @@ public class UpdateActorVersion implements IAction {
             }
             String actorName = clar.getActorName();
 
-            for(Feature f : features) {
+            for (Feature f : features) {
                 System.out.println("Feature - " + f.getName() + " ...");
                 List<Actor> actors = new ArrayList<>();
                 System.out.println("Actor name " + actorName);

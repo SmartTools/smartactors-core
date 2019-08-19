@@ -62,6 +62,7 @@ public class OnShutdownRequestConfigurationSectionStrategy implements ISectionSt
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onLoadConfig(final IObject config) throws ConfigurationProcessingException {
         try {
             List<IObject> section = (List) config.getValue(sectionNameFieldName);
@@ -75,7 +76,7 @@ public class OnShutdownRequestConfigurationSectionStrategy implements ISectionSt
                     actionKeyName = defaultActionKeyName;
                 }
 
-                upCounter.onShutdownRequest( "cfg-"+actionKeyName,
+                upCounter.onShutdownRequest("cfg-" + actionKeyName,
                         IOC.resolve(IOC.resolve(IOC.getKeyForKeyByNameStrategy(), actionKeyName)));
             }
         } catch (ReadValueException | InvalidArgumentException | ClassCastException | ResolutionException
@@ -85,8 +86,11 @@ public class OnShutdownRequestConfigurationSectionStrategy implements ISectionSt
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onRevertConfig(final IObject config) throws ConfigurationProcessingException {
-        ConfigurationProcessingException exception = new ConfigurationProcessingException("Error occurred reverting \"onShutdownRequest\" configuration section.");
+        ConfigurationProcessingException exception = new ConfigurationProcessingException(
+                "Error occurred reverting \"onShutdownRequest\" configuration section."
+        );
         try {
             List<IObject> section = (List) config.getValue(sectionNameFieldName);
 

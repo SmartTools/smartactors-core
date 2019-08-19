@@ -17,7 +17,7 @@ public interface IResultChecker {
      * @param exc the exception occurred processing message or {@code null} if chain completed successful
      * @throws AssertionFailureException if test is completed not as expected
      */
-    void check(final IMessageProcessor mp, final Throwable exc)
+    void check(IMessageProcessor mp, Throwable exc)
             throws AssertionFailureException;
 
     /**

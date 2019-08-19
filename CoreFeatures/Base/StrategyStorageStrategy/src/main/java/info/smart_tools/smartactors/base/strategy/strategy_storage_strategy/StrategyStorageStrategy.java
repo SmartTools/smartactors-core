@@ -36,7 +36,8 @@ public class StrategyStorageStrategy implements IStrategy, IStrategyRegistration
     }
 
     @Override
-    public <T> T resolve(Object... args) throws StrategyException {
+    @SuppressWarnings("unchecked")
+    public <T> T resolve(final Object... args) throws StrategyException {
         try {
             IStrategy strategy = (IStrategy) this.findValueByArgumentFunction.execute(this.strategyStorage, args[0]);
 
@@ -47,7 +48,8 @@ public class StrategyStorageStrategy implements IStrategy, IStrategyRegistration
     }
 
     @Override
-    public void register(Object arg, IStrategy value)
+    @SuppressWarnings("unchecked")
+    public void register(final Object arg, final IStrategy value)
             throws StrategyRegistrationException {
         try {
             this.strategyStorage.put(this.argToKeyFunction.execute(arg), value);
@@ -57,7 +59,8 @@ public class StrategyStorageStrategy implements IStrategy, IStrategyRegistration
     }
 
     @Override
-    public IStrategy unregister(Object arg)
+    @SuppressWarnings("unchecked")
+    public IStrategy unregister(final Object arg)
             throws StrategyRegistrationException {
         try {
             return this.strategyStorage.remove(this.argToKeyFunction.execute(arg));

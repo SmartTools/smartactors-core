@@ -7,15 +7,15 @@ import info.smart_tools.smartactors.endpoint.actor.client.ClientActor;
  */
 public class RequestSenderActorException extends Exception {
 
-    public RequestSenderActorException(String message) {
+    public RequestSenderActorException(final String message) {
         super(message);
     }
 
-    public RequestSenderActorException(String message, Throwable cause) {
+    public RequestSenderActorException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public RequestSenderActorException(Throwable cause) {
+    public RequestSenderActorException(final Throwable cause) {
         super(cause);
     }
 }

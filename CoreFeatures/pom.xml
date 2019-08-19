@@ -27,6 +27,7 @@
 
     <modules>
         <module>Base</module>
+        <module>EventHandler</module>
         <module>ClassManagement</module>
         <module>VersionManagement</module>
         <module>VersionManagement-plugins</module>
@@ -99,6 +100,7 @@
         <module>EndpointServiceStarter</module>
         <module>DatabaseServiceStarter</module>
         <module>RemoteManagement</module>
+        <module>EventHandlerWithLoggingToFile</module>
     </modules>
 
     <build>

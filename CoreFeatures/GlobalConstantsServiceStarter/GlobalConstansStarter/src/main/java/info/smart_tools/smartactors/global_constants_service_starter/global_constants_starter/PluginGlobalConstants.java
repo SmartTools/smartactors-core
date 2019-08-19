@@ -36,14 +36,11 @@ public class PluginGlobalConstants implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
         try {
             /* "constants_object" - create global constants object */
             IBootstrapItem<String> constantsObjectItem = new BootstrapItem("constants_object");
-
-//            constantsObjectItem.after("IOC");
-//            constantsObjectItem.before("starter");
-//            constantsObjectItem.after("iobject");
             constantsObjectItem.process(() -> {
                 try {
                     IObject obj = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
@@ -60,7 +57,7 @@ public class PluginGlobalConstants implements IPlugin {
                                     config = (IObject) args[2];
                                 } else {
                                     try {
-                                        config = IOC.resolve(Keys.getKeyByName("global constants"));;
+                                        config = IOC.resolve(Keys.getKeyByName("global constants"));
                                     } catch (ResolutionException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -75,15 +72,11 @@ public class PluginGlobalConstants implements IPlugin {
                     throw new ActionExecutionException(e);
                 }
             });
-
             bootstrap.add(constantsObjectItem);
 
             /* "config_section:const" - register strategy processing "const" section of config */
             IBootstrapItem<String> constantsSectionItem = new BootstrapItem("config_section:const");
-
             constantsSectionItem.after("constants_object");
-//            constantsSectionItem.after("config_sections:start");
-//            constantsSectionItem.before("config_sections:done");
             constantsSectionItem.process(() -> {
                 try {
                     IConfigurationManager configurationManager = IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));

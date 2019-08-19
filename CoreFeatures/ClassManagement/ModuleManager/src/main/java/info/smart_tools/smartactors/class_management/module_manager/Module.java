@@ -15,7 +15,7 @@ class Module implements IModule {
     private List<IModule> dependencies;
     private ISmartactorsClassLoader classLoader;
 
-    Module(Object id, String name, String version) {
+    Module(final Object id, final String name, final String version) {
         this.name = name;
         this.version = version;
         this.id = id;
@@ -24,22 +24,30 @@ class Module implements IModule {
     }
 
     @Override
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     @Override
-    public String getVersion() { return version; }
+    public String getVersion() {
+        return version;
+    }
 
     @Override
-    public Object getId() { return id; }
+    public Object getId() {
+        return id;
+    }
 
     @Override
-    public List<IModule> getDependencies() { return dependencies; }
+    public List<IModule> getDependencies() {
+        return dependencies;
+    }
 
     @Override
     public ISmartactorsClassLoader getClassLoader() { return classLoader; }
 
     @Override
-    public void addDependency(IModule base) {
+    public void addDependency(final IModule base) {
         synchronized (dependencies) {
             if (base != this) {
                 dependencies.add(base);
@@ -54,7 +62,7 @@ class Module implements IModule {
     }
 
     @Override
-    public void finalizeDependencies(IModule defaultModule) {
+    public void finalizeDependencies(final IModule defaultModule) {
         synchronized (dependencies) {
             if (dependencies.size() == 0) {
                 addDependency(defaultModule);
@@ -62,13 +70,15 @@ class Module implements IModule {
         }
     }
 
-    public void setDefault() { classLoader.setDefault(); }
+    public void setDefault() {
+        classLoader.setDefault();
+    }
 
     @Override
-    public <T> T getFromMap(Map<IModule, T> objects) {
+    public <T> T getFromMap(final Map<IModule, T> objects) {
         T object = objects.get(this);
         if (object == null) {
-            for(IModule dependency : dependencies) {
+            for (IModule dependency : dependencies) {
                 object = objects.get(dependency);
                 if (object != null) {
                     break;
@@ -79,7 +89,7 @@ class Module implements IModule {
     }
 
     @Override
-    public <T> T removeFromMap(Map<IModule, T> objects) {
+    public <T> T removeFromMap(final Map<IModule, T> objects) {
         T object = objects.remove(this);
         /*
         // if we need to remove value from dependencies too then uncomment the following
@@ -95,7 +105,7 @@ class Module implements IModule {
         return object;
     }
 
-    public <T> T putToMap(Map<IModule, T> objects, T object) {
+    public <T> T putToMap(final Map<IModule, T> objects, final T object) {
         return objects.put(this, object);
     }
 }

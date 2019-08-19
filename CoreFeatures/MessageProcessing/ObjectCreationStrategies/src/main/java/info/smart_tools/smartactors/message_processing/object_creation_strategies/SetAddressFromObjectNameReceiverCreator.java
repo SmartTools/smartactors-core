@@ -32,8 +32,11 @@ public class SetAddressFromObjectNameReceiverCreator extends BasicIntermediateRe
      * @param filterConfig            configuration of the step of pipeline
      * @param objectConfig            configuration of the object
      */
-    public SetAddressFromObjectNameReceiverCreator(IReceiverObjectCreator underlyingObjectCreator, IObject filterConfig, IObject objectConfig)
-            throws ResolutionException {
+    public SetAddressFromObjectNameReceiverCreator(
+            final IReceiverObjectCreator underlyingObjectCreator,
+            final IObject filterConfig,
+            final IObject objectConfig
+    ) throws ResolutionException {
         super(underlyingObjectCreator, filterConfig, objectConfig);
 
         objectNameFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "name");
@@ -41,7 +44,7 @@ public class SetAddressFromObjectNameReceiverCreator extends BasicIntermediateRe
 
 
     @Override
-    public void create(IReceiverObjectListener listener, IObject config, IObject context)
+    public void create(final IReceiverObjectListener listener, final IObject config, final IObject context)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         try {
             this.objectName = config.getValue(objectNameFieldName);
@@ -53,7 +56,7 @@ public class SetAddressFromObjectNameReceiverCreator extends BasicIntermediateRe
     }
 
     @Override
-    public Collection<Object> enumIdentifiers(IObject config, IObject context)
+    public Collection<Object> enumIdentifiers(final IObject config, final IObject context)
             throws InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         try {
             Object name = config.getValue(objectNameFieldName);
@@ -64,7 +67,7 @@ public class SetAddressFromObjectNameReceiverCreator extends BasicIntermediateRe
     }
 
     @Override
-    public void acceptItem(Object itemId, Object item)
+    public void acceptItem(final Object itemId,final Object item)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, InvalidArgumentException {
         getListener().acceptItem(objectName, item);
     }

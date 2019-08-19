@@ -5,6 +5,8 @@ import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExec
 import info.smart_tools.smartactors.base.interfaces.ipath.IPath;
 import info.smart_tools.smartactors.base.path.Path;
 import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
+import info.smart_tools.smartactors.event_handler.event_handler.Event;
+import info.smart_tools.smartactors.event_handler.event_handler.EventHandler;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap.Bootstrap;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.ProcessExecutionException;
@@ -32,6 +34,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,7 +55,13 @@ public class Server implements IServer {
             throws Exception {
         IServer server = new Server();
         server.initialize();
-        server.start();
+        try {
+            server.start();
+        } catch (Exception e) {
+            EventHandler.handle(
+                    Event.builder().body(e).build()
+            );
+        }
     }
 
     @Override
@@ -65,6 +74,17 @@ public class Server implements IServer {
     @Override
     public void start()
             throws ServerExecutionException {
+        EventHandler.handle(
+            Event
+                .builder()
+                .body(
+                        String.format(
+                                "\n%s\nStarting server ...",
+                                (new Date()).toString()
+                        )
+                )
+                .build()
+        );
         loadCore();
     }
 
@@ -85,10 +105,15 @@ public class Server implements IServer {
             loadPlugins(jars);
             Duration elapsedTime = Duration.between(start, LocalTime.now());
             LocalTime elapsedTimeToLocalTime = LocalTime.ofNanoOfDay(elapsedTime.toNanos());
-            System.out.println("\n\n");
-            System.out.println("[OK] Stage 1: server core has been loaded successful.");
-            System.out.println("[OK] Stage 1: elapsed time - " + elapsedTimeToLocalTime.format(df) + ".");
-            System.out.println("\n\n");
+            EventHandler.handle(
+                    Event.builder().body("[OK] Stage 1: server core has been loaded successful.").build()
+            );
+            EventHandler.handle(
+                    Event.builder().body("[OK] Stage 1: elapsed time - " + elapsedTimeToLocalTime.format(df) + ".").build())
+            ;
+            EventHandler.handle(
+                    Event.builder().body("\n\n").build()
+            );
         } catch (IOException | InvalidArgumentException | PluginLoaderException | ProcessExecutionException e) {
             throw new ServerExecutionException(e);
         }
@@ -97,7 +122,12 @@ public class Server implements IServer {
     private List<IPath> getListOfJars(final File directory)
             throws IOException {
         if (!directory.isDirectory()) {
-            throw new IOException(MessageFormat.format("File ''{0}'' is not a directory.", directory.getAbsolutePath()));
+            throw new IOException(
+                    MessageFormat.format(
+                            "File ''{0}'' is not a directory.",
+                            directory.getAbsolutePath()
+                    )
+            );
         }
         File[] files = directory.listFiles(this::isJAR);
         List<IPath> paths = new LinkedList<>();
@@ -124,7 +154,8 @@ public class Server implements IServer {
                         throw new ActionExecutionException(e);
                     }
                 },
-                pluginLoaderVisitor);
+                pluginLoaderVisitor
+        );
         pluginLoader.loadPlugins(jars);
         try {
             bootstrap.start();

@@ -8,7 +8,7 @@ public interface IResponse {
      * Method, that setting content for response
      * @param response Byte array of response
      */
-    void setContent(final byte[] response);
+    void setContent(byte[] response);
 
     /**
      * @return content of the response

@@ -121,7 +121,7 @@ public class Actor {
             this.artifactId = (String) actor.getValue(new FieldName("artifactId"));
 
             List<IObject> repositories = (List<IObject>) actor.getValue(new FieldName("uploadRepositories"));
-            for(IObject repository : repositories) {
+            for (IObject repository : repositories) {
                 UploadRepository restoredRepository = new UploadRepository(repository);
                 this.uploadRepositories.add(restoredRepository);
             }
@@ -155,7 +155,7 @@ public class Actor {
         return this.rawName;
     }
 
-    public void setRawName(String rawName) {
+    public void setRawName(final String rawName) {
         this.rawName = rawName;
     }
 
@@ -163,7 +163,7 @@ public class Actor {
         return ownerFeature;
     }
 
-    public void setOwnerFeature(Feature ownerFeature) {
+    public void setOwnerFeature(final Feature ownerFeature) {
         this.ownerFeature = ownerFeature;
     }
 
@@ -171,7 +171,7 @@ public class Actor {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -243,7 +243,7 @@ public class Actor {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     actorPomFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(FEATURE_GROUP_ID_TOKEN, featureGroupId);
                         put(FEATURE_NAME_TOKEN, featureName);
                         put(FEATURE_VERSION_TOKEN, featureVersion);
@@ -271,7 +271,7 @@ public class Actor {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     actorPomFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(FEATURE_GROUP_ID_TOKEN, featureGroupId);
                         put(FEATURE_NAME_TOKEN, featureArtifactId);
                         put(FEATURE_VERSION_TOKEN, featureVersion);
@@ -324,7 +324,7 @@ public class Actor {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     actorClassFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PACKAGE_TOKEN, packageName);
                         put(ACTOR_NAME_TOKEN, actorName);
                     }}
@@ -376,7 +376,7 @@ public class Actor {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     actorExceptionClassFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PACKAGE_TOKEN, packageName);
                     }}
             );
@@ -428,7 +428,7 @@ public class Actor {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     actorWrapperClassFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PACKAGE_TOKEN, packageName);
                     }}
             );
@@ -478,7 +478,7 @@ public class Actor {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     actorTestClassFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PACKAGE_TOKEN, packageName);
                         put(ACTOR_NAME_TOKEN, className + TEST_FILE_POSTFIX);
                     }}
@@ -499,7 +499,7 @@ public class Actor {
                 featurePomFile.toFile(),
                 START_MODULE_TAG + this.ownerFeature.getName() + DISTRIBUTION_FEATURE_NAME_POSTFIX + END_MODULE_TAG,
                 new File(MODULE_SECTION_TEMPLATE),
-                new HashMap<String, String>(){{
+                new HashMap<String, String>() {{
                     put(MODULE_NAME_TOKEN, moduleName);
                 }}
         );
@@ -512,7 +512,7 @@ public class Actor {
         PomBuilder.addOrUpdateExecutionSectionToDeployPlugin(
                 new File(DEPLOY_PLUGIN_TEMPLATE),
                 actorPomFile.toFile(),
-                new HashMap<String, String>(){{
+                new HashMap<String, String>() {{
                     put(DEPLOY_REPOSITORY_ID_TOKEN, repId);
                     put(DEPLOY_REPOSITORY_URL_TOKEN, repUrl);
                 }}

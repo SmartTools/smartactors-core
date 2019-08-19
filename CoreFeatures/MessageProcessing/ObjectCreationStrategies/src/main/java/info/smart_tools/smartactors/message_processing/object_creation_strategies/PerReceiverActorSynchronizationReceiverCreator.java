@@ -22,12 +22,16 @@ public class PerReceiverActorSynchronizationReceiverCreator extends BasicInterme
      * @param filterConfig            configuration of the step of pipeline
      * @param objectConfig            configuration of the object
      */
-    public PerReceiverActorSynchronizationReceiverCreator(IReceiverObjectCreator underlyingObjectCreator, IObject filterConfig, IObject objectConfig) {
+    public PerReceiverActorSynchronizationReceiverCreator(
+            final IReceiverObjectCreator underlyingObjectCreator,
+            final IObject filterConfig,
+            final IObject objectConfig
+    ) {
         super(underlyingObjectCreator, filterConfig, objectConfig);
     }
 
     @Override
-    public void acceptItem(Object itemId, Object item)
+    public void acceptItem(final Object itemId, final Object item)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, InvalidArgumentException {
         if (null == item) {
             throw new InvalidArgumentException("Item is null.");

@@ -132,7 +132,7 @@ class TokenTree {
         return root;
     }
 
-    private void addNode(Token token) {
+    private void addNode(final Token token) {
         Node nextNode, currentNode = root;
         String lexeme = token.getLexeme();
         int length = lexeme.length();

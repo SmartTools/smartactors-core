@@ -31,6 +31,8 @@ import java.util.List;
  */
 public class RegisterTestHttpEndpointAndEnvironment implements IPlugin {
 
+    private static final long TIME_BETWEEN_TESTS = 1000L;
+
     /** Local storage for instance of {@link IBootstrap}*/
     private IBootstrap<IBootstrapItem<String>> bootstrap;
 
@@ -48,6 +50,7 @@ public class RegisterTestHttpEndpointAndEnvironment implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
         try {
             IBootstrapItem<String> item = new BootstrapItem("RegisterTestHttpEndpoint");
@@ -89,7 +92,7 @@ public class RegisterTestHttpEndpointAndEnvironment implements IPlugin {
                                             source,
                                             ScopeProvider.getCurrentScope(),
                                             handler,
-                                            1000L,
+                                            TIME_BETWEEN_TESTS,
                                             null
                                     );
                                     IOC.register(

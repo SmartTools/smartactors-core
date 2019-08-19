@@ -15,7 +15,7 @@ public interface ISmartactorsClassLoader {
      * Add {@link URL} to the current url class loader if url class loader doesn't contain this {@link URL} yet
      * @param url instance of {@link URL}
      */
-    public void addURL(final URL url);
+    public void addURL(URL url);
 
     /**
      * Returns the search path of URLs for loading classes and resources.
@@ -33,7 +33,7 @@ public interface ISmartactorsClassLoader {
      * @param classByteCode Compiled byte code of the class to add
      * @return The reference to the class
      */
-    Class<?> addClass(final String className, byte[] classByteCode);
+    Class<?> addClass(String className, byte[] classByteCode);
 
     ClassLoader getCompilationClassLoader();
 }

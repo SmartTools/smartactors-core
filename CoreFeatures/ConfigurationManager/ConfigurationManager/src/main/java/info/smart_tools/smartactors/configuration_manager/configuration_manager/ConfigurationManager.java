@@ -88,7 +88,7 @@ public class ConfigurationManager implements IConfigurationManager {
             } catch (ConfigurationProcessingException e) {
                 exception.addSuppressed(e);
             } catch (ReadValueException e) {
-                exception.addSuppressed( new ConfigurationProcessingException(
+                exception.addSuppressed(new ConfigurationProcessingException(
                         MessageFormat.format("Could not read section ''{0}'' from given configuration object.",
                                 sectionStrategy.getSectionName()), e));
             }

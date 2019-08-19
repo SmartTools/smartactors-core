@@ -49,19 +49,18 @@ public class RuntimeDirectoryFeatureTracker {
     private IScope scope;
     private IModule module;
 
-    private final static String EXTENSION_SEPARATOR = ".";
-    private final static String TASK_QUEUE_IOC_NAME = "task_queue";
-    private final static String CHAIN_ID_STORAGE_STRATEGY_NAME = "chain_id_from_map_name_and_message";
-    private final static String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
+    private static final String EXTENSION_SEPARATOR = ".";
+    private static final String TASK_QUEUE_IOC_NAME = "task_queue";
+    private static final String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
+    private static final String FIELD_NAME_FACTORY_STARTEGY_NAME =
             "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
-    private final static String MESSAGE_PROCESSOR_SEQUENCE_FACTORY_STRATEGY_NAME =
+    private static final String MESSAGE_PROCESSOR_SEQUENCE_FACTORY_STRATEGY_NAME =
             "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence";
-    private final static String MESSAGE_PROCESSOR_FACTORY_STRATEGY_NAME =
+    private static final String MESSAGE_PROCESSOR_FACTORY_STRATEGY_NAME =
             "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor";
 
     //TODO: this parameters would be took out into the config.json as actor arguments
-    private final static List<String> FILE_TYPE_LIST = Arrays.asList("zip", "jar", "json");
+    private static final List<String> FILE_TYPE_LIST = Arrays.asList("zip", "jar", "json");
 
     /**
      * Default constructor

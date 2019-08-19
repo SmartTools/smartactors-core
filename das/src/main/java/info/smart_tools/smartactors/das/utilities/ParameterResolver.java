@@ -2,7 +2,10 @@ package info.smart_tools.smartactors.das.utilities;
 
 import java.io.File;
 
-public class ParameterResolver {
+public final class ParameterResolver {
+
+    private ParameterResolver() {
+    }
 
     public static String getModuleDirectoryName(final String str) {
 

@@ -15,7 +15,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.object_creatio
  */
 public class RouterRegistrationObjectListener implements IReceiverObjectListener {
     @Override
-    public void acceptItem(Object itemId, Object item)
+    public void acceptItem(final Object itemId, final Object item)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, InvalidArgumentException {
         if (null == item) {
             throw new InvalidArgumentException("Item is null.");

@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Conditions {
+public final class Conditions {
     private Conditions(){}
 
     private static void writeDefaultEmptyCondition(final QueryStatement query)
@@ -59,7 +59,7 @@ public class Conditions {
                     writer.write(delimiter);
                 }
             } else if (IObject.class.isAssignableFrom(queryParameter.getClass())) {
-                Iterator<Map.Entry<IFieldName, Object>> paramIterator = ((IObject)queryParameter).iterator();
+                Iterator<Map.Entry<IFieldName, Object>> paramIterator = ((IObject) queryParameter).iterator();
 
                 if (!paramIterator.hasNext()) {
                     writeDefaultEmptyCondition(query);

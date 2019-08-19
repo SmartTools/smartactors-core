@@ -27,7 +27,7 @@ public class VersionedRouterDecorator implements IRouter {
      * @param map    {@link Map} instance to use as routing table
      * @throws InvalidArgumentException if map is {@code null}
      */
-    public VersionedRouterDecorator(final Map<Object, Map<IModule, Object>> map, IRouter router)
+    public VersionedRouterDecorator(final Map<Object, Map<IModule, Object>> map, final IRouter router)
             throws InvalidArgumentException {
         if (null == map || router == null) {
             throw new InvalidArgumentException("Map and router should not be null.");
@@ -54,6 +54,7 @@ public class VersionedRouterDecorator implements IRouter {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void register(final Object targetId, final IMessageReceiver receiver) {
         Map<IModule, Object> versions = map.get(targetId);
 
@@ -67,12 +68,12 @@ public class VersionedRouterDecorator implements IRouter {
         }
 
         IModule currentModule = ModuleManager.getCurrentModule();
-        for(IModule module : versions.keySet()) {
+        for (IModule module : versions.keySet()) {
             if (!currentModule.getName().equals(module.getName())) {
                 System.out.println(
-                        "[WARNING] Receiver with Id '"+targetId.toString()+
-                        "' already registered in module '"+module.getName()+":"+module.getVersion()+
-                        "', but registering in module '"+currentModule.getName()+":"+currentModule.getVersion()+"'."
+                        "[WARNING] Receiver with Id '" + targetId.toString() +
+                        "' already registered in module '" + module.getName() + ":" + module.getVersion() +
+                        "', but registering in module '" + currentModule.getName() + ":" + currentModule.getVersion() + "'."
                 );
             }
         }

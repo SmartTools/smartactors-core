@@ -16,7 +16,7 @@ public interface ISslEngineProvider {
      * @param params Parameters for ssl engine provider
      * @throws SSLEngineProviderException if there are some problems on initialization
      */
-    void init(final IObject params) throws SSLEngineProviderException;
+    void init(IObject params) throws SSLEngineProviderException;
 
     /**
      * Method for getting ssl engine
@@ -39,7 +39,7 @@ public interface ISslEngineProvider {
      * @param port     port of the server
      * @return ssl engine
      */
-    SSLEngine getClientContext(final String hostname, final int port);
+    SSLEngine getClientContext(String hostname, int port);
 
     /**
      * Is ssl engine provider initialized

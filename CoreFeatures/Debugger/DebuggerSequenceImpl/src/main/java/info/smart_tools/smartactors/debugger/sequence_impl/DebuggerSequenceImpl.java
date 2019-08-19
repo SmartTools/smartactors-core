@@ -175,7 +175,9 @@ public class DebuggerSequenceImpl implements IDebuggerSequence, IDumpable {
     }
 
     @Override
-    public void setScopeSwitchingChainName(Object chainName) { wrapped.setScopeSwitchingChainName(chainName); }
+    public void setScopeSwitchingChainName(final Object chainName) {
+        wrapped.setScopeSwitchingChainName(chainName);
+    }
 
     @Override
     public void callChain(final Object chainName)
@@ -184,7 +186,7 @@ public class DebuggerSequenceImpl implements IDebuggerSequence, IDumpable {
     }
 
     @Override
-    public void callChainSecurely(final Object chainName, IMessageProcessor processor)
+    public void callChainSecurely(final Object chainName, final IMessageProcessor processor)
             throws NestedChainStackOverflowException, ResolutionException, ChainNotFoundException,
             ChainChoiceException, ScopeProviderException {
         wrapped.callChainSecurely(chainName, processor);

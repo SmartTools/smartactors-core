@@ -18,7 +18,16 @@ import info.smart_tools.smartactors.statistics.statistics_manager.exceptions.Com
 import info.smart_tools.smartactors.statistics.statistics_manager.wrappers.StatisticsCommandWrapper;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Statistics manager actor manages sensors (accessible through {@link ISensorHandle sensor handles}), data collectors (represented as

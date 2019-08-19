@@ -17,6 +17,6 @@ public interface IResponseSender {
      * @param ctx            Channel handler from endpoint
      * @throws ResponseSendingException if there are some problems on sending response
      */
-    void send(final IResponse responseObject, final IObject environment, final IChannelHandler ctx)
+    void send(IResponse responseObject, IObject environment, IChannelHandler ctx)
             throws ResponseSendingException;
 }

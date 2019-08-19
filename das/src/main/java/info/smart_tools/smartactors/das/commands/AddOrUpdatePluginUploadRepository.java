@@ -18,13 +18,13 @@ import java.util.List;
 public class AddOrUpdatePluginUploadRepository implements IAction {
 
     @Override
-    public void execute(Object o)
+    public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Adding/updating repository to the plugin ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             Feature feature = null;
             String featureName = clar.getFeatureName();
@@ -47,7 +47,7 @@ public class AddOrUpdatePluginUploadRepository implements IAction {
             String repId = clar.getUploadRepositoryId();
             String repUrl = clar.getUploadRepositoryUrl();
 
-            for(Feature f : features) {
+            for (Feature f : features) {
                 System.out.println("Feature - " + f.getName() + " ...");
                 List<Plugin> plugins = new ArrayList<>();
                 if (null == pluginName || pluginName.toLowerCase().equals("all")) {

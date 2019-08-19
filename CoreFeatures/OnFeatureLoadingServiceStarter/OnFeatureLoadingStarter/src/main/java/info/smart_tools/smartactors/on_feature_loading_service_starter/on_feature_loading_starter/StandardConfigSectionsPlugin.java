@@ -36,6 +36,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
         try {
             /* "onFeatureLoading" section */
@@ -43,8 +44,6 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 
             onFeatureLoadingItem
                     .after("config_sections:done")
-//                    .before("config_sections:done")
-//                    .before("starter")
                     .process(() -> {
                         try {
                             IConfigurationManager configurationManager =
@@ -81,15 +80,19 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             } catch (StrategyRegistrationException e) {
                                 System.out.println("[WARNING] Deregistration of \"onFeatureLoading\" strategy has failed while reverting \"config_section:onFeatureLoading\" plugin.");
                             }
-                        } catch (ResolutionException e) { }
+                        } catch (ResolutionException e) {
+                            // TODO: Empty catch block
+                        }
                         try {
                             IConfigurationManager configurationManager =
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
                             ISectionStrategy sectionStrategy = new OnFeatureLoadingSectionProcessingStrategy();
                             configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
-                        } catch ( InvalidArgumentException e) {
+                        } catch (InvalidArgumentException e) {
                             System.out.println("[WARNING] Deregistration of \"OnFeatureLoadingSectionProcessingStrategy\" has failed while reverting \"config_section:onFeatureLoading\" plugin.");
-                        } catch (ResolutionException e) { }
+                        } catch (ResolutionException e) {
+                            // TODO: Empty catch block
+                        }
                     });
             bootstrap.add(onFeatureLoadingItem);
         } catch (InvalidArgumentException e) {

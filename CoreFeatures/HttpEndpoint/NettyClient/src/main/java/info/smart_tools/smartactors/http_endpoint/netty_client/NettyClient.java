@@ -9,7 +9,12 @@ import info.smart_tools.smartactors.http_endpoint.completable_netty_future.Compl
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.Future;
@@ -26,6 +31,9 @@ import java.util.concurrent.ExecutionException;
  * @param <TRequest> type of the request which client can send
  */
 public abstract class NettyClient<TRequest> implements IClient<TRequest>, IRequestSender {
+
+    private static final int READ_TIME_OUT = 1000;
+
     private static EventLoopGroup workerGroup = new NioEventLoopGroup(1);
     private Channel channel;
     protected URI serverUri;
@@ -144,7 +152,7 @@ public abstract class NettyClient<TRequest> implements IClient<TRequest>, IReque
                         setupPipeline(ch.pipeline())
                                 .addLast(new ReadTimeoutHandler(
                                         clientConfig != null && clientConfig.getReadTimeout() != null ?
-                                                clientConfig.getReadTimeout() / 1000 : DEFAULT_READ_TIMEOUT_SEC
+                                                clientConfig.getReadTimeout() / READ_TIME_OUT : DEFAULT_READ_TIMEOUT_SEC
                                 ));
                     }
                 });

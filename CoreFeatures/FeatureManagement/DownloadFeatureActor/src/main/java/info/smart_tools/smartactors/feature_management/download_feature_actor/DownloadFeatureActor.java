@@ -38,16 +38,16 @@ public class DownloadFeatureActor {
     private final IFieldName repositoryPrivateKeyFileFN;
     private final IFieldName repositoryPassPhraseFN;
 
-    private final static String DOWNLOAD_DIRECTORY = "downloads";
-    private final static String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
-    private final static String MAVEN_ARTIFACT_SCOPE = "runtime";
-    private final static String ARCHIVE_POSTFIX = "archive";
+    private static final String DOWNLOAD_DIRECTORY = "downloads";
+    private static final String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
+    private static final String MAVEN_ARTIFACT_SCOPE = "runtime";
+    private static final String ARCHIVE_POSTFIX = "archive";
 
     //TODO: this parameters would be took out into the config.json as actor arguments
     private static final String DEF_PACKAGE_TYPE = "jar";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
+    private static final String FIELD_NAME_FACTORY_STARTEGY_NAME =
             "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
-    private final static List<String> FILE_TYPE_LIST = Arrays.asList("zip", "jar");
+    private static final List<String> FILE_TYPE_LIST = Arrays.asList("zip", "jar");
 
     /**
      * Default constructor
@@ -79,7 +79,7 @@ public class DownloadFeatureActor {
         }
         if (null == feature.getDependencies() && null != feature.getGroupId()) {
             System.out.println("[INFO] Start downloading feature - '" + feature.getDisplayName() + "'.");
-            for(String type : FILE_TYPE_LIST) {
+            for (String type : FILE_TYPE_LIST) {
                 if (
                         Paths.get(
                                 feature.getDirectory().getPath(),

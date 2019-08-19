@@ -15,5 +15,5 @@ public interface IResponseContentStrategy {
      *
      * @throws SerializeException if there is error on serialization
      */
-    void setContent(final IObject responseObject, final IResponse response) throws SerializeException;
+    void setContent(IObject responseObject, IResponse response) throws SerializeException;
 }

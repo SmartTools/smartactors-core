@@ -9,7 +9,7 @@ public class SyntaxException extends RuntimeException {
      *
      * @param message the detail message.
      */
-    public SyntaxException(String message) {
+    public SyntaxException(final String message) {
         super(message);
     }
 
@@ -19,7 +19,7 @@ public class SyntaxException extends RuntimeException {
      * @param message the detail message.
      * @param cause the cause of the exception.
      */
-    public SyntaxException(String message, Throwable cause) {
+    public SyntaxException(final String message, final Throwable cause) {
         super(message.isEmpty() ? cause.toString() : message, cause);
     }
 

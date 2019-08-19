@@ -15,6 +15,6 @@ public interface IAction<T> {
      * @throws ActionExecutionException if any errors occurred
      * @throws InvalidArgumentException if incoming argument are incorrect
      */
-    void execute(final T actingObject)
+    void execute(T actingObject)
             throws ActionExecutionException, InvalidArgumentException;
 }

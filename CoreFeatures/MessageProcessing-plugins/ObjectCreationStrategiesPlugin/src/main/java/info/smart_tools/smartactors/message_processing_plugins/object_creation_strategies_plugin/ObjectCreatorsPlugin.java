@@ -12,7 +12,12 @@ import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationExce
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
-import info.smart_tools.smartactors.message_processing.object_creation_strategies.*;
+import info.smart_tools.smartactors.message_processing.object_creation_strategies.GenericDecoratorReceiverObjectCreator;
+import info.smart_tools.smartactors.message_processing.object_creation_strategies.HandlerRouterReceiverCreator;
+import info.smart_tools.smartactors.message_processing.object_creation_strategies.PerReceiverActorSynchronizationReceiverCreator;
+import info.smart_tools.smartactors.message_processing.object_creation_strategies.SetAddressFromObjectNameReceiverCreator;
+import info.smart_tools.smartactors.message_processing.object_creation_strategies.TopLevelObjectCreator;
+import info.smart_tools.smartactors.message_processing.object_creation_strategies.UserObjectMethodInvokerReceiverCreator;
 import info.smart_tools.smartactors.message_processing_interfaces.object_creation_interfaces.IReceiverObjectCreator;
 
 import java.util.Arrays;
@@ -76,7 +81,9 @@ public class ObjectCreatorsPlugin extends BootstrapPlugin {
     private void unregisterCreatorType(final String typeName) {
         try {
             unregisterCreatorType(typeName, IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")));
-        } catch(ResolutionException e) { }
+        } catch (ResolutionException e) {
+            // TODO: Empty catch block
+        }
     }
 
     private void unregisterCreatorType(final String typeName, final IObject namedFilterConfig) {

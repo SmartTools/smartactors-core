@@ -1,12 +1,20 @@
 package info.smart_tools.smartactors.das.utilities;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Scanner;
 
-public class FileBuilder {
+public final class FileBuilder {
 
     private static final String RESOURCE_DIR = "resources";
+
+    private FileBuilder() {
+    }
 
     public static void createFileByTemplateWithReplace(
             final File sourceTemplate, final File target, final Map<String, String> tags
@@ -33,13 +41,12 @@ public class FileBuilder {
                 }
                 writer.write(line + "\n");
             }
-            scanner.close();
         } catch (IOException e) {
             System.out.println("Could not create project file :");
             System.err.println(e);
         } finally {
             try {
-                if(writer != null) {
+                if (writer != null) {
                     writer.close();
                 }
             } catch (IOException e) {
@@ -106,7 +113,7 @@ public class FileBuilder {
             System.err.println(e);
         } finally {
             try {
-                if(writer != null) {
+                if (writer != null) {
                     writer.close();
                 }
             } catch (IOException e) {

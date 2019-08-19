@@ -23,7 +23,7 @@ public class IObjectDataSource implements ISource<IObject, IObject> {
     }
 
     @Override
-    public IObject setSource(IObject source)
+    public IObject setSource(final IObject source)
             throws SourceExtractionException {
             try {
                 this.queue.put(source);

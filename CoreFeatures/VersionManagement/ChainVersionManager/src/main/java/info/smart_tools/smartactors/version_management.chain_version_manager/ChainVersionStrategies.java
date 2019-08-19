@@ -13,13 +13,13 @@ class ChainVersionStrategies {
     private List<IStrategy> versionResolutionStrategies;
     private List<Comparable> versions;
 
-    ChainVersionStrategies(Object mapName) {
+    ChainVersionStrategies(final Object mapName) {
         this.mapName = mapName;
         this.versionResolutionStrategies = Collections.synchronizedList(new LinkedList<>());
         this.versions = Collections.synchronizedList(new LinkedList<>());
     }
 
-    void registerVersionResolutionStrategy(Comparable version, IStrategy strategy) {
+    void registerVersionResolutionStrategy(final Comparable version, final IStrategy strategy) {
         int idx, order;
         for (idx = 0; idx < versions.size(); idx++) {
             order = versions.get(idx).compareTo(version);
@@ -37,11 +37,11 @@ class ChainVersionStrategies {
         versionResolutionStrategies.add(idx, strategy);
     }
 
-    Comparable resolveVersion(IObject message)
+    Comparable resolveVersion(final IObject message)
             throws StrategyException {
 
         Comparable version = null;
-        for(IStrategy strategy : versionResolutionStrategies) {
+        for (IStrategy strategy : versionResolutionStrategies) {
             if (strategy != null) {
                 try {
                     version = strategy.resolve(message);
@@ -49,7 +49,7 @@ class ChainVersionStrategies {
                         break;
                     }
                 } catch (Throwable e) {
-                    System.out.println("[WARNING] Chain '"+ mapName.toString() +"' version resolution strategy thrown exception: "+ e.getMessage());
+                    System.out.println("[WARNING] Chain '" + mapName.toString() + "' version resolution strategy thrown exception: " + e.getMessage());
                     e.printStackTrace();
                 }
             }

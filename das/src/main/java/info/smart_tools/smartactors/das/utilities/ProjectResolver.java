@@ -15,7 +15,7 @@ public class ProjectResolver implements IProjectResolver {
     private Project project = null;
     private Feature currentFeature = null;
 
-    private final static String PROJECT_META_DATA_FILE = "das.data";
+    private static final String PROJECT_META_DATA_FILE = "das.data";
 
     public Project resolveProject()
             throws ProjectResolutionException {

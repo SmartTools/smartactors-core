@@ -52,6 +52,7 @@ public class VersionedMapRouter implements IRouter {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void register(final Object targetId, final IMessageReceiver receiver) {
         Map<IModule, IMessageReceiver> versions = map.get(targetId);
 
@@ -65,12 +66,12 @@ public class VersionedMapRouter implements IRouter {
         }
 
         IModule currentModule = ModuleManager.getCurrentModule();
-        for(IModule module : versions.keySet()) {
+        for (IModule module : versions.keySet()) {
             if (!currentModule.getName().equals(module.getName())) {
                 System.out.println(
-                        "[WARNING] Receiver with Id '"+targetId.toString()+
-                        "' already registered in module '"+module.getName()+":"+module.getVersion()+
-                        "', but registering in module '"+currentModule.getName()+":"+currentModule.getVersion()+"'."
+                        "[WARNING] Receiver with Id '" + targetId.toString() +
+                        "' already registered in module '" + module.getName() + ":" + module.getVersion() +
+                        "', but registering in module '" + currentModule.getName() + ":" + currentModule.getVersion() + "'."
                 );
             }
         }

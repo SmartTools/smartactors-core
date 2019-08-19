@@ -13,5 +13,5 @@ public interface IEncoder {
      * @return encoded
      * @throws EncodingException if any errors is occurred
      */
-    byte[] encode(@Nonnull final byte[] message) throws EncodingException;
+    byte[] encode(@Nonnull byte[] message) throws EncodingException;
 }

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Wrapper for collection name string
  */
-public class CollectionName {
+public final class CollectionName {
 
     private static final Pattern VALIDATION_PATTERN = Pattern.compile("[a-zA-Z_][0-9a-zA-Z_]*");
 

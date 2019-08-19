@@ -9,6 +9,6 @@ import info.smart_tools.smartactors.message_processing_interfaces.iresponse_stra
  */
 public enum NullResponseStrategy implements IResponseStrategy { INSTANCE;
     @Override
-    public void sendResponse(IObject environment) throws ResponseException {
+    public void sendResponse(final IObject environment) throws ResponseException {
     }
 }

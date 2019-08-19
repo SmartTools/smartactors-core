@@ -19,17 +19,34 @@ import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionExcept
 import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
-import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_bigdecimal.*;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_bigdecimal.DoubleToBigDecimalStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_bigdecimal.FloatToBigDecimalStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_bigdecimal.IntegerToBigDecimalStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_bigdecimal.StringToBigDecimalStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_boolean_strategies.BooleanToPrimitiveStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_character_strategies.StringToCharacterStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_date_strategies.StringToDateStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_integer_strategies.DoubleToIntStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_integer_strategies.StringToIntStrategy;
-import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.*;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.BooleanArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.ByteArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.CharArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.DoubleArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.FloatArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.IntArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.LongArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.ObjectArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.ShortArrayToListStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_self.ClassToClassStrategy;
-import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.*;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.BooleanToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.ByteToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.CharToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.DoubleToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.FloatToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.IntToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.LongToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.ObjectToStringStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.ShortToStringStrategy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -53,6 +70,7 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
 
         try {
@@ -61,7 +79,7 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
                     .after("IOC")
                     .process(() -> {
                         try {
-                            IFunction argToKey = arg -> arg.getClass();
+                            IFunction argToKey = Object::getClass;
                             IFunctionTwoArgs findValueByArgument = (map, arg) -> {
                                 IStrategy strategy = null;
                                 for (Map.Entry<Class, IStrategy> entry : ((Map<Class, IStrategy>) map).entrySet()) {
@@ -78,43 +96,43 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
                             IKey stringKey = Keys.getKeyByName(String.class.getCanonicalName() + "convert");
                             IKey expandableStrategyStringKey = Keys.getKeyByName("expandable_strategy#" + String.class.getCanonicalName());
                             IStrategy stringStrategy = new StrategyStorageWithCacheStrategy(argToKey, findValueByArgument);
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     String.class,
                                     new ClassToClassStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     Object.class,
                                     new ObjectToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     int.class,
                                     new IntToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     long.class,
                                     new LongToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     float.class,
                                     new FloatToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     double.class,
                                     new DoubleToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     boolean.class,
                                     new BooleanToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     byte.class,
                                     new ByteToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     short.class,
                                     new ShortToStringStrategy()
                             );
-                            ((IStrategyRegistration)stringStrategy).register(
+                            ((IStrategyRegistration) stringStrategy).register(
                                     char.class,
                                     new CharToStringStrategy()
                             );

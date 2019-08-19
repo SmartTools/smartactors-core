@@ -33,7 +33,7 @@ public class TopLevelObjectCreator implements IReceiverObjectCreator {
     }
 
     @Override
-    public void create(IReceiverObjectListener listener, IObject config, IObject context)
+    public void create(final IReceiverObjectListener listener, final IObject config, final IObject context)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         try {
             Object object = IOC.resolve(
@@ -51,7 +51,7 @@ public class TopLevelObjectCreator implements IReceiverObjectCreator {
     }
 
     @Override
-    public Collection<Object> enumIdentifiers(IObject config, IObject context)
+    public Collection<Object> enumIdentifiers(final IObject config, final IObject context)
             throws InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         return Collections.singletonList(null);
     }

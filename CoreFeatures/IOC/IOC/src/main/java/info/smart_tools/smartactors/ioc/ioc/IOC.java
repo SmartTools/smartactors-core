@@ -32,7 +32,6 @@ public final class IOC {
     /**
      * Initialize IOC by default implementation of {@link IContainer}
      */
-
     static {
         container = new Container();
     }
@@ -56,7 +55,9 @@ public final class IOC {
      * @return instance of {@link IKey}
      */
     @Deprecated
-    public static IKey getKeyForKeyStorage() { return container.getKeyForKeyByNameStrategy(); }
+    public static IKey getKeyForKeyStorage() {
+        return container.getKeyForKeyByNameStrategy();
+    }
 
     /**
      * Return specific instance of {@link IKey} for strategy of resolving key by name
@@ -83,6 +84,7 @@ public final class IOC {
      * @return instance of class with classId identifier
      * @throws ResolutionException if resolution is impossible because of any errors
      */
+    @SuppressWarnings("unchecked")
     public static <T> T resolve(final IKey key, final Object ... args)
             throws ResolutionException {
         return (T) container.resolve(key, args);

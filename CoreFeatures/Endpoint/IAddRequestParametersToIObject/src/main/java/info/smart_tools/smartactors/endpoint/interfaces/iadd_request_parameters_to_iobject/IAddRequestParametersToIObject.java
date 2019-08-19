@@ -8,5 +8,5 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
  */
 public interface IAddRequestParametersToIObject {
 
-    void extract(final IObject message, final Object request) throws AddRequestParametersToIObjectException;
+    void extract(IObject message, Object request) throws AddRequestParametersToIObjectException;
 }

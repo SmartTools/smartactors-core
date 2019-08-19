@@ -11,7 +11,7 @@ import info.smart_tools.smartactors.ioc.key_tools.Keys;
  */
 public final class FieldNames {
 
-    static IKey iFieldNameKey = null;
+    private static IKey iFieldNameKey = null;
 
     /**
      * Default private constructor

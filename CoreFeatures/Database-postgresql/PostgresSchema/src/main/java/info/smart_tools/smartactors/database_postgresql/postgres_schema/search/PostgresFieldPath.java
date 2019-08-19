@@ -7,7 +7,7 @@ import info.smart_tools.smartactors.database.database_storage.exceptions.QueryBu
  * If it's the path in
  * {@see FiledPath} {@link FieldPath}
  */
-public class PostgresFieldPath implements FieldPath {
+public final class PostgresFieldPath implements FieldPath {
     private String path;
 
     private PostgresFieldPath(final String[] parts) {

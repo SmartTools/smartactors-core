@@ -12,6 +12,9 @@
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
+    <module name="EmptyCatchBlock">
+      <property name="exceptionVariableName" value="expected|ignore"/>
+    </module>
     <module name="JavadocMethod">
       <property name="scope" value="package"/>
       <property name="excludeScope" value="private"/>

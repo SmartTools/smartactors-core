@@ -26,8 +26,8 @@ public class UpCounter implements IUpCounter {
     private final AtomicLong counter = new AtomicLong(0);
     private Object shutdownMode = null;
 
-    private final Map<Object,IAction<Object>> shutdownRequestCallbacks = new ConcurrentHashMap<>();
-    private final Map<Object,IAction<Void>> shutdownCompletionCallbacks = new ConcurrentHashMap<>();
+    private final Map<Object, IAction<Object>> shutdownRequestCallbacks = new ConcurrentHashMap<>();
+    private final Map<Object, IAction<Void>> shutdownCompletionCallbacks = new ConcurrentHashMap<>();
 
     /**
      * The constructor.
@@ -98,7 +98,8 @@ public class UpCounter implements IUpCounter {
      * @throws UpCounterCallbackExecutionException if at least one of callbacks throws; exceptions thrown by subsequent callbacks are
      *                                             suppressed
      */
-    private <T> void executeCallbacks(final Map<Object,IAction<T>> callbacks, final T arg) throws UpCounterCallbackExecutionException {
+    private <T> void executeCallbacks(final Map<Object, IAction<T>> callbacks, final T arg)
+            throws UpCounterCallbackExecutionException {
         UpCounterCallbackExecutionException exception = null;
 
         for (IAction<T> cb : callbacks.values()) {

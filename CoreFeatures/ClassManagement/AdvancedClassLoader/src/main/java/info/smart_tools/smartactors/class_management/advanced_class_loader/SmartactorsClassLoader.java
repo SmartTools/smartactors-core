@@ -4,7 +4,11 @@ import info.smart_tools.smartactors.class_management.interfaces.ismartactors_cla
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,7 +27,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * @param moduleName the name of module which class loader contains
      * @param moduleVersion the version of module which class loader contains
      */
-    private SmartactorsClassLoader(String moduleName, String moduleVersion) {
+    private SmartactorsClassLoader(String moduleName, final String moduleVersion) {
         super(new URL[]{});
         moduleName = moduleName.replace('/', '.');
         moduleName = moduleName.replace(':', '.');
@@ -33,18 +37,18 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         classMap.put(this.moduleName, this);
     }
 
-    public static ISmartactorsClassLoader newInstance(String moduleName, String moduleVersion) {
+    public static ISmartactorsClassLoader newInstance(final String moduleName, final String moduleVersion) {
         return new SmartactorsClassLoader(moduleName, moduleVersion);
     }
 
     public void setDefault() { }
 
-    public void addDependency(ISmartactorsClassLoader base) {
+    public void addDependency(final ISmartactorsClassLoader base) {
         if (base != null && base != this) {
             Set<SmartactorsClassLoader> classLoaders = new HashSet<SmartactorsClassLoader>();
-            classLoaders.add((SmartactorsClassLoader)base);
+            classLoaders.add((SmartactorsClassLoader) base);
             synchronized (base) {
-                classLoaders.addAll(((SmartactorsClassLoader)base).dependencies);
+                classLoaders.addAll(((SmartactorsClassLoader) base).dependencies);
             }
             synchronized (this) {
                 for (SmartactorsClassLoader cl : classLoaders) {
@@ -62,17 +66,17 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         dependencies.addAll(this.dependencies);
 
         Set<ClassLoader> classLoaders = new HashSet<>();
-        for(ClassLoader classLoader : dependencies) {
+        for (ClassLoader classLoader : dependencies) {
             classLoaders.add(classLoader);
             ClassLoader parent = classLoader.getParent();
-            while(parent != null) {
+            while (parent != null) {
                 classLoaders.add(parent);
                 parent = parent.getParent();
             }
         }
 
         ArrayList<URL> urlArrayList = new ArrayList<>();
-        for( ClassLoader classLoader : classLoaders) {
+        for (ClassLoader classLoader : classLoaders) {
             if (classLoader instanceof URLClassLoader) {
                 Collections.addAll(urlArrayList, ((URLClassLoader) classLoader).getURLs());
             }
@@ -90,7 +94,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * @param classByteCode Compiled byte code of the class to add
      * @return The reference to the class
      */
-    public Class<?> addClass(final String className, byte[] classByteCode) {
+    public Class<?> addClass(final String className, final byte[] classByteCode) {
         return defineClass(className, classByteCode, 0, classByteCode.length);
     }
 
@@ -113,7 +117,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         super.addURL(url);
     }
 
-    private Class<?> loadClass0(String className, boolean upperLevel)
+    private Class<?> loadClass0(final String className, final boolean upperLevel)
             throws ClassNotFoundException {
 
         Class clazz = this.findLoadedClass(className);
@@ -123,14 +127,18 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
             if (classLoader != null) {
                 try {
                     clazz = classLoader.loadClass(className);
-                } catch (ClassNotFoundException e) { }
+                } catch (ClassNotFoundException e) {
+                    // TODO: Empty catch block
+                }
             }
 
             if (clazz == null) {
                 if (this.getParent() != null) {
                     try {
                         clazz = this.getParent().loadClass(className);
-                    } catch (ClassNotFoundException e) { }
+                    } catch (ClassNotFoundException e) {
+                        // TODO: Empty catch block
+                    }
                 }
 
                 if (clazz == null && upperLevel) {
@@ -148,7 +156,9 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
                         try {
                             clazz = classLoader.loadClass(className);
                             classMap.put(className, clazz.getClassLoader());
-                        } catch (ClassNotFoundException e) { }
+                        } catch (ClassNotFoundException e) {
+                            // TODO: Empty catch block
+                        }
                     }
                 }
 
@@ -159,7 +169,9 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
                                 clazz = dependency.loadClass0(className, false);
                                 classMap.put(className, clazz.getClassLoader());
                                 break;
-                            } catch (ClassNotFoundException e) { }
+                            } catch (ClassNotFoundException e) {
+                                // TODO: Empty catch block
+                            }
                         }
                     }
                 }
@@ -173,7 +185,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         return clazz;
     }
 
-    protected Class<?> loadClass(String className, boolean resolve)
+    protected Class<?> loadClass(final String className, final boolean resolve)
             throws ClassNotFoundException {
         synchronized (this.getClassLoadingLock(className)) {
 

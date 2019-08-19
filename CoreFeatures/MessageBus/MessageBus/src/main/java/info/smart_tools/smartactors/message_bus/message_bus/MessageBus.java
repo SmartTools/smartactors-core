@@ -88,7 +88,7 @@ public final class MessageBus {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws SendingMessageException if sending of message has been failed
      */
-    public static void send(final IObject message, boolean scopeSwitching)
+    public static void send(final IObject message, final boolean scopeSwitching)
             throws SendingMessageException {
         container.send(message, scopeSwitching);
     }
@@ -101,7 +101,7 @@ public final class MessageBus {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws SendingMessageException if message sending has been failed
      */
-    public static void send(final IObject message, final Object chainName, boolean scopeSwitching)
+    public static void send(final IObject message, final Object chainName, final boolean scopeSwitching)
             throws SendingMessageException {
         container.send(message, chainName, scopeSwitching);
     }
@@ -113,7 +113,7 @@ public final class MessageBus {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws SendingMessageException if message sending has been failed
      */
-    public static void sendAndReply(final IObject message, final Object replyToChainName, boolean scopeSwitching)
+    public static void sendAndReply(final IObject message, final Object replyToChainName, final boolean scopeSwitching)
             throws SendingMessageException {
         container.sendAndReply(message, replyToChainName, scopeSwitching);
     }
@@ -127,8 +127,12 @@ public final class MessageBus {
      * @param scopeSwitching if false then scope is not changed on chain call
      * @throws SendingMessageException if message sending has been failed
      */
-    public static void sendAndReply(final IObject message, final Object chainName, final Object replyToChainName, boolean scopeSwitching)
-            throws SendingMessageException {
+    public static void sendAndReply(
+            final IObject message,
+            final Object chainName,
+            final Object replyToChainName,
+            final boolean scopeSwitching
+    ) throws SendingMessageException {
         container.sendAndReply(message, chainName, replyToChainName, scopeSwitching);
     }
 }

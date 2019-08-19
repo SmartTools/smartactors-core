@@ -30,7 +30,7 @@ public class ConnectionOptionsPlugin extends BootstrapPlugin {
 
     @Item("PostgresConnectionOptionsPlugin")
     public void registerCanonizationStrategies()
-            throws ResolutionException, InvalidArgumentException,RegistrationException {
+            throws ResolutionException, InvalidArgumentException, RegistrationException {
         IField urlF = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "url");
         IField usernameF = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "username");
         IField passwordF = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "password");
@@ -45,25 +45,33 @@ public class ConnectionOptionsPlugin extends BootstrapPlugin {
                         public String getUrl() throws ReadValueException {
                             try {
                                 return urlF.in(opts);
-                            } catch (InvalidArgumentException e) {return null;}
+                            } catch (InvalidArgumentException e) {
+                                return null;
+                            }
                         }
                         @Override
                         public String getUsername() throws ReadValueException {
                             try {
                                 return usernameF.in(opts);
-                            } catch (InvalidArgumentException e) {return null;}
+                            } catch (InvalidArgumentException e) {
+                                return null;
+                            }
                         }
                         @Override
                         public String getPassword() throws ReadValueException {
                             try {
                                 return passwordF.in(opts);
-                            } catch (InvalidArgumentException e) {return null;}
+                            } catch (InvalidArgumentException e) {
+                                return null;
+                            }
                         }
                         @Override
                         public Integer getMaxConnections() throws ReadValueException {
                             try {
                                 return maxConnectionsF.in(opts);
-                            } catch (InvalidArgumentException e) {return 1;}
+                            } catch (InvalidArgumentException e) {
+                                return 1;
+                            }
                         }
                         @Override
                         public void setUrl(final String url) throws ChangeValueException {

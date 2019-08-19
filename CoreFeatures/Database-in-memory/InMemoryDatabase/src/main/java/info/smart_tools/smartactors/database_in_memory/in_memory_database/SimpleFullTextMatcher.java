@@ -18,7 +18,7 @@ class SimpleFullTextMatcher {
      * Creates the matcher
      * @param search search string to be split to tokens.
      */
-    public SimpleFullTextMatcher(final String search) {
+    SimpleFullTextMatcher(final String search) {
         for (String word : search.split("\\W+")) {
             String token = word.substring(0, Math.min(TOKEN_LENGTH, word.length()));
             tokens.add(token.toLowerCase());
@@ -30,7 +30,7 @@ class SimpleFullTextMatcher {
      * @param search the string where to try to found tokens
      * @return true if any token was found
      */
-    public boolean matches(final String search) {
+    boolean matches(final String search) {
         if (search == null) {
             return false;
         }

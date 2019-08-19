@@ -15,7 +15,7 @@ public interface IDebuggerSession {
      * @param messageProcessor    the message processor processing the debuggable message
      * @throws InterruptProcessingException if any error occurs
      */
-    void handleInterrupt(final IMessageProcessor messageProcessor) throws InterruptProcessingException;
+    void handleInterrupt(IMessageProcessor messageProcessor) throws InterruptProcessingException;
 
     /**
      * Execute a command in this session.
@@ -26,7 +26,7 @@ public interface IDebuggerSession {
      * @throws InvalidArgumentException if command name or arguments are not valid
      * @throws CommandExecutionException if any error occurs executing the command
      */
-    Object executeCommand(final String name, final Object args) throws InvalidArgumentException, CommandExecutionException;
+    Object executeCommand(String name, Object args) throws InvalidArgumentException, CommandExecutionException;
 
     /**
      * Close this session.

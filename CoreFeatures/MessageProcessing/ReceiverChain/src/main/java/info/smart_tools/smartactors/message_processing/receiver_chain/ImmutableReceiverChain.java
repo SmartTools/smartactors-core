@@ -14,7 +14,11 @@ import info.smart_tools.smartactors.message_processing_interfaces.message_proces
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
 import info.smart_tools.smartactors.scope.iscope.IScope;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Basic implementation of {@link IReceiverChain} -- immutable sequence of receivers.
@@ -43,9 +47,15 @@ public class ImmutableReceiverChain implements IReceiverChain, IDumpable {
      * @throws ResolutionException if cannot resolve any dependency
      * @throws ReadValueException if cannot read chains from {@code exceptionalChainNamesAndEnv}
      */
-    public ImmutableReceiverChain(final Object id, final IObject chainDescription, final IMessageReceiver[] receivers, final IObject[] arguments,
-                                  final Map<Class<? extends Throwable>, IObject> exceptionalChainNamesAndEnv, IScope scope, IModule module)
-            throws InvalidArgumentException, ResolutionException, ReadValueException {
+    public ImmutableReceiverChain(
+            final Object id,
+            final IObject chainDescription,
+            final IMessageReceiver[] receivers,
+            final IObject[] arguments,
+            final Map<Class<? extends Throwable>, IObject> exceptionalChainNamesAndEnv,
+            final IScope scope,
+            final IModule module
+    ) throws InvalidArgumentException, ResolutionException, ReadValueException {
         if (null == id) {
             throw new InvalidArgumentException("Chain id should not be null.");
         }
@@ -116,10 +126,14 @@ public class ImmutableReceiverChain implements IReceiverChain, IDumpable {
     }
 
     @Override
-    public IScope getScope() { return scope; }
+    public IScope getScope() {
+        return scope;
+    }
 
     @Override
-    public IModule getModule() { return module; }
+    public IModule getModule() {
+        return module;
+    }
 
     @Override
     public IObject getExceptionalChainNamesAndEnvironments(final Throwable exception) {
@@ -131,10 +145,10 @@ public class ImmutableReceiverChain implements IReceiverChain, IDumpable {
             e = exception;
             i = 0;
             while (null != e) {
-                if (exceptionClasses.size() == i ) {
+                if (exceptionClasses.size() == i) {
                     try {
                         exceptionClasses.add(ModuleManager.getCurrentClassLoader().loadClass(e.getClass().getName()));
-                    }catch (ClassNotFoundException cnf) {
+                    } catch (ClassNotFoundException cnf) {
                         exceptionClasses.add(e.getClass());
                     }
                 }

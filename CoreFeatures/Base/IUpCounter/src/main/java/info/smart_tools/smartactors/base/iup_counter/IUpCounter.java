@@ -57,7 +57,7 @@ public interface IUpCounter {
      * @return            the reference to replaced callback if so, otherwise null
      * @throws UpCounterCallbackExecutionException if there is a pending shutdown request and error occurs calling callback synchronously
      */
-    IAction<Object> onShutdownRequest(final Object key, IAction<Object> callback) throws UpCounterCallbackExecutionException;
+    IAction<Object> onShutdownRequest(Object key, IAction<Object> callback) throws UpCounterCallbackExecutionException;
 
     /**
      * Remove the callback (by the key) from the set of shutdown request callbacks.
@@ -65,7 +65,7 @@ public interface IUpCounter {
      * @param key         the key under which callback is stored
      * @return            the reference to removed callback
      */
-    IAction<Object> removeFromShutdownRequest(final Object key);
+    IAction<Object> removeFromShutdownRequest(Object key);
 
     /**
      * Add a callback (under the key) to be called when shutdown is done.
@@ -79,7 +79,7 @@ public interface IUpCounter {
      * @return            the reference to replaced callback if so, otherwise null
      * @throws UpCounterCallbackExecutionException if system is already down and error occurs executing callback synchronously
      */
-    IActionNoArgs onShutdownComplete(final Object key, IActionNoArgs callback) throws UpCounterCallbackExecutionException;
+    IActionNoArgs onShutdownComplete(Object key, IActionNoArgs callback) throws UpCounterCallbackExecutionException;
 
     /**
      * Remove the callback (by the key) from the set of shutdown completion callbacks.
@@ -87,5 +87,5 @@ public interface IUpCounter {
      * @param key         the key under which callback is stored
      * @return            the reference to removed callback
      */
-    IActionNoArgs removeFromShutdownComplete(final Object key);
+    IActionNoArgs removeFromShutdownComplete(Object key);
 }

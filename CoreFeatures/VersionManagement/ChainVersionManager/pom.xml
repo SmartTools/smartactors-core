@@ -18,12 +18,6 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject.ds-object</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.interfaces.istrategy</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>compile</scope>
@@ -34,6 +28,20 @@
             <version>[0.0.1, 1.0.0)</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject.iobject</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject.ds-object</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <pluginManagement>

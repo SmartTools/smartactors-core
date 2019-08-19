@@ -44,7 +44,7 @@ public class HandlerRoutingReceiver implements IMessageReceiver {
             IMessageReceiver handlerReceiver = handlerReceiversMap.get(handlerId);
 
             if (null == handlerReceiver) {
-                throw new MessageReceiveException("Handler with Id '"+handlerId.toString()+"' not found.");
+                throw new MessageReceiveException("Handler with Id '" + handlerId.toString() + "' not found.");
             }
             handlerReceiver.receive(processor);
 

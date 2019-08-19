@@ -33,7 +33,7 @@ enum TokenType {
      * @param tokenType  the type to check.
      * @return if {@param token} has {@param tokenType} then true, else false.
      */
-    static boolean match(Token token, TokenType tokenType) {
+    static boolean match(final Token token, final TokenType tokenType) {
         return token != null && token.getType().equals(tokenType);
     }
 

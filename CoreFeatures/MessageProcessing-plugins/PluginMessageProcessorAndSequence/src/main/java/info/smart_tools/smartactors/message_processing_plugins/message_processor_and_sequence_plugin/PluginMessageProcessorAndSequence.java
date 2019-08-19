@@ -40,6 +40,7 @@ public class PluginMessageProcessorAndSequence implements IPlugin {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load() throws PluginException {
         try {
             /* "after exception actions" - register after exception action strategy */
@@ -163,10 +164,10 @@ public class PluginMessageProcessorAndSequence implements IPlugin {
                                     new CreateNewInstanceStrategy(args -> {
                                         int stackDepth = ((Number) args[0]).intValue();
                                         Object mainChainName = args[1];
-                                        IObject message = (IObject)args[2];
+                                        IObject message = (IObject) args[2];
 
                                         try {
-                                            boolean switchScopeOnStartup = args.length > 3 ? (Boolean)args[3] : true;
+                                            boolean switchScopeOnStartup = args.length > 3 ? (Boolean) args[3] : true;
                                             return new MessageProcessingSequence(stackDepth, mainChainName, message, switchScopeOnStartup);
                                         } catch (InvalidArgumentException | ResolutionException | ChainNotFoundException e) {
                                             throw new RuntimeException(e);

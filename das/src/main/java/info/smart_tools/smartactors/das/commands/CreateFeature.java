@@ -21,15 +21,15 @@ public class CreateFeature implements IAction {
         System.out.println("Creating feature ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             String name = clar.getFeatureName();
             String groupId = project.getGroupId();
             if (clar.isGroupId()) {
                 groupId = clar.getGroupId();
             }
-            String version = project.getVersion();;
+            String version = project.getVersion();
             if (clar.isVersion()) {
                 version = clar.getVersion();
             }

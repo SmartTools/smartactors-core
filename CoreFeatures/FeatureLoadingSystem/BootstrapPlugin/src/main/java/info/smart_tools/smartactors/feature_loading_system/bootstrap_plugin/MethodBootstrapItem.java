@@ -60,7 +60,7 @@ class MethodBootstrapItem extends BootstrapItem {
         });
         this.revertProcess(() -> {
             try {
-                if (null != method2 ) {
+                if (null != method2) {
                     method2.invoke(plugin);
                 }
             } catch (InvocationTargetException | IllegalAccessException e) {

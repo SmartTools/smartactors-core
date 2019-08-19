@@ -145,6 +145,7 @@ public class ConfigurationObject implements IObject {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T serialize()
             throws SerializeException {
         try {
@@ -171,7 +172,7 @@ public class ConfigurationObject implements IObject {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         return this == obj;
     }
 }
@@ -183,6 +184,7 @@ public class ConfigurationObject implements IObject {
 class ObjectDeserializer extends UntypedObjectDeserializer {
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object deserialize(final JsonParser jp, final DeserializationContext ctxt)
             throws IOException {
         try {

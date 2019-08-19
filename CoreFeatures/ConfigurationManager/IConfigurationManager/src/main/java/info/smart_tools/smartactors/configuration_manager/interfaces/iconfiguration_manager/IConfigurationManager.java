@@ -17,7 +17,7 @@ public interface IConfigurationManager {
      * @throws InvalidArgumentException if there already is a strategy for the same section
      * @see ISectionStrategy#getSectionName()
      */
-    void addSectionStrategy(final ISectionStrategy strategy) throws InvalidArgumentException;
+    void addSectionStrategy(ISectionStrategy strategy) throws InvalidArgumentException;
 
     /**
      * Remove the strategy of processing specific section of configuration by section name.
@@ -27,7 +27,7 @@ public interface IConfigurationManager {
      * @throws InvalidArgumentException if there is no strategy registered with such {@code sectionName}
      * @see ISectionStrategy#getSectionName()
      */
-    void removeSectionStrategy(final IFieldName sectionName) throws InvalidArgumentException;
+    void removeSectionStrategy(IFieldName sectionName) throws InvalidArgumentException;
 
     /**
      * Apply given configuration object.
@@ -36,7 +36,7 @@ public interface IConfigurationManager {
      * @throws InvalidArgumentException if {@code config} is {@code null}
      * @throws ConfigurationProcessingException if any error occurs processing given configuration
      */
-    void applyConfig(final IObject config) throws InvalidArgumentException, ConfigurationProcessingException;
+    void applyConfig(IObject config) throws InvalidArgumentException, ConfigurationProcessingException;
 
     /**
      * Revert given configuration object.
@@ -45,5 +45,5 @@ public interface IConfigurationManager {
      * @throws InvalidArgumentException if {@code config} is {@code null}
      * @throws ConfigurationProcessingException if any error occurs while reverting given configuration
      */
-    void revertConfig(final IObject config) throws InvalidArgumentException, ConfigurationProcessingException;
+    void revertConfig(IObject config) throws InvalidArgumentException, ConfigurationProcessingException;
 }

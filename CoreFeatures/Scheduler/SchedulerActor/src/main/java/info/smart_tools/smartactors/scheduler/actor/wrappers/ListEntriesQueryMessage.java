@@ -15,5 +15,5 @@ public interface ListEntriesQueryMessage {
      * @param entries    list of state objects of all entries
      * @throws ChangeValueException if error occurs writing value to the message
      */
-    void setEntries(final List<IObject> entries) throws ChangeValueException;
+    void setEntries(List<IObject> entries) throws ChangeValueException;
 }

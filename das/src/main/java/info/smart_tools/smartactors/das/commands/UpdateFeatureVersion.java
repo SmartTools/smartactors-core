@@ -16,13 +16,13 @@ import java.util.List;
 public class UpdateFeatureVersion implements IAction {
 
     @Override
-    public void execute(Object o)
+    public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Updating feature version ...");
 
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             Project project = pr.resolveProject();
             String newVersion = clar.getVersion();
             Feature feature = null;
@@ -41,7 +41,7 @@ public class UpdateFeatureVersion implements IAction {
                 features = project.getFeatures();
             }
 
-            for(Feature f : features) {
+            for (Feature f : features) {
                 System.out.println("Feature - " + f.getName() + " ...");
                 f.setVersion(newVersion);
                 f.updateVersionInPom(newVersion);

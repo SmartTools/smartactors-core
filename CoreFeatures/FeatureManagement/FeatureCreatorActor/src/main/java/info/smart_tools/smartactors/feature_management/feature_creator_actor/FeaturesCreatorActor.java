@@ -21,7 +21,11 @@ import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,16 +48,16 @@ public class FeaturesCreatorActor {
     private final IFieldName repositoryTypeFN;
     private final IFieldName repositoryUrlFN;
 
-    private final static String END_OF_INPUT_DELIMITER = "\\Z";
-    private final static String EXTENSION_SEPARATOR = ".";
-    private final static String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
+    private static final String END_OF_INPUT_DELIMITER = "\\Z";
+    private static final String EXTENSION_SEPARATOR = ".";
+    private static final String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
+    private static final String FIELD_NAME_FACTORY_STARTEGY_NAME =
             "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
-    private final static String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
+    private static final String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
 
     //TODO: this parameters would be took out into the config.json as actor arguments
-    private final static String FILENAME_VERSION_PATTERN = "-\\d+\\.\\d+\\.\\d+";
-    private final static String FEATURE_VERSION_PATTERN = "\\d+\\.\\d+\\.\\d+";
+    private static final String FILENAME_VERSION_PATTERN = "-\\d+\\.\\d+\\.\\d+";
+    private static final String FEATURE_VERSION_PATTERN = "\\d+\\.\\d+\\.\\d+";
 
     private final Map<String, IActionTwoArgs<File, CreateMessageWrapper>> creationFunctions;
 
@@ -75,7 +79,7 @@ public class FeaturesCreatorActor {
         this.repositoryUrlFN =   IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "url");
 
         //TODO: need refactoring. This actions would be took out to the plugin.
-        this.creationFunctions = new HashMap<String, IActionTwoArgs<File, CreateMessageWrapper>>(){{
+        this.creationFunctions = new HashMap<String, IActionTwoArgs<File, CreateMessageWrapper>>() {{
             put("zip", (f, w) -> {
                 try {
                     w.setJsonFeaturesDescription(createJsonFeatureDescriptionByZip(f));
@@ -138,9 +142,9 @@ public class FeaturesCreatorActor {
             List<IObject> repositories = wrapper.getRepositoriesDescription();
             List<IObject> repositoryStorage = IOC.resolve(Keys.getKeyByName(IOC_FEATURE_REPOSITORY_STORAGE_NAME));
 
-            for(IObject repository : repositories) {
+            for (IObject repository : repositories) {
                 boolean found = false;
-                for(IObject stored : repositoryStorage ) {
+                for (IObject stored : repositoryStorage) {
                     if (stored.getValue(this.repositoryIdFN).equals(repository.getValue(this.repositoryIdFN)) &&
                         stored.getValue(this.repositoryTypeFN).equals(repository.getValue(this.repositoryTypeFN)) &&
                         stored.getValue(this.repositoryUrlFN).equals(repository.getValue(this.repositoryUrlFN))) {
@@ -202,6 +206,7 @@ public class FeaturesCreatorActor {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private List<IObject> getProperty(final File file, final IFieldName fieldName)
             throws FeatureCreationException {
         try {

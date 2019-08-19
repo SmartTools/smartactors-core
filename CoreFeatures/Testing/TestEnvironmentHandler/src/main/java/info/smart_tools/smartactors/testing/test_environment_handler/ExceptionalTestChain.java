@@ -35,7 +35,9 @@ class ExceptionalTestChain implements IReceiverChain {
     }
 
     @Override
-    public IScope getScope() { return null; }
+    public IScope getScope() {
+        return null;
+    }
 
     @Override
     public IModule getModule() {
@@ -43,7 +45,7 @@ class ExceptionalTestChain implements IReceiverChain {
     }
 
     @Override
-    public IObject getExceptionalChainNamesAndEnvironments(Throwable exception) {
+    public IObject getExceptionalChainNamesAndEnvironments(final Throwable exception) {
         return null;
     }
 

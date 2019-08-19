@@ -33,7 +33,7 @@ public class CreateServer implements IAction {
     public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Creating server ...");
-        ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
+        ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
 
         try {
             String groupId = defGroupId;
@@ -69,7 +69,9 @@ public class CreateServer implements IAction {
             RemoteRepository remoteRepository = new RemoteRepository(
                     rid, "default", rurl
             );
-            Collection<RemoteRepository> repositories = new ArrayList<RemoteRepository>(){{add(remoteRepository);}};
+            Collection<RemoteRepository> repositories = new ArrayList<RemoteRepository>() {{
+                add(remoteRepository);
+            }};
 
             List<Artifact> artifacts = new Aether(repositories, Paths.get(
                     destination.getAbsolutePath().toString(), "/downloads"

@@ -24,6 +24,10 @@ import java.util.Map;
  * Strategy initializer for {@link HttpClient}
  */
 public class HttpClientInitializer {
+
+    private HttpClientInitializer() {
+    }
+
     public static void init() throws InvalidArgumentException, ResolutionException, RegistrationException {
         IFieldName uuidFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "uuid");
         IFieldName timeFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "timeout");

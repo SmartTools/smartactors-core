@@ -7,7 +7,7 @@ import info.smart_tools.smartactors.scheduler.interfaces.exceptions.SchedulerEnt
 /**
  * Null-object implementing {@link ISchedulerEntryStorageObserver}.
  */
-public class NullEntryStorageObserver implements ISchedulerEntryStorageObserver {
+public final class NullEntryStorageObserver implements ISchedulerEntryStorageObserver {
     private NullEntryStorageObserver() {
     }
 

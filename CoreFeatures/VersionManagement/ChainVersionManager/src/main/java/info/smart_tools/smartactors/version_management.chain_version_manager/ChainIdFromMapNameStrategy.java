@@ -10,28 +10,28 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ChainIdFromMapNameStrategy {
 
-    Map<Object, Map<Comparable, Object>> chainIds = new ConcurrentHashMap<>();
+    private Map<Object, Map<Comparable, Object>> chainIds = new ConcurrentHashMap<>();
     private static Map<Object, ChainVersionStrategies> chainVersionStrategies = new ConcurrentHashMap<>();
-    private IStrategy resolve_by_message_strategy = new IStrategy(){
+    private IStrategy resolve_by_message_strategy = new IStrategy() {
         @Override
-        public <T> T resolve(Object... args) throws StrategyException {
+        public <T> T resolve(final Object... args) throws StrategyException {
             return (T) resolve_by_message(args[0], (IObject) args[1]);
         }
     };
 
-    private IStrategy resolve_by_module_dependencies_strategy = new IStrategy(){
+    private IStrategy resolve_by_module_dependencies_strategy = new IStrategy() {
         @Override
-        public <T> T resolve(Object... args) throws StrategyException {
+        public <T> T resolve(final Object... args) throws StrategyException {
             return (T) resolve_by_module_dependencies(args[0]);
         }
     };
 
-    private IStrategy register_message_version_strategy = new IStrategy(){
+    private IStrategy register_message_version_strategy = new IStrategy() {
         @Override
-        public <T> T resolve(Object... args) throws StrategyException {
+        public <T> T resolve(final Object... args) throws StrategyException {
             registerVersionResolutionStrategy(
                     args[0],                            // map name
-                    (IStrategy)args[1] // message version resolution strategy
+                    (IStrategy) args[1] // message version resolution strategy
             );
             return (T) null;
         }
@@ -49,7 +49,7 @@ public class ChainIdFromMapNameStrategy {
         return resolve_by_module_dependencies_strategy;
     }
 
-    private void registerVersionResolutionStrategy(Object mapName, IStrategy strategy)
+    private void registerVersionResolutionStrategy(final Object mapName, final IStrategy strategy)
             throws StrategyException {
         Comparable version = ModuleManager.getCurrentModule().getVersion();
         if (mapName == null || version == null) {
@@ -63,7 +63,7 @@ public class ChainIdFromMapNameStrategy {
         versionStrategies.registerVersionResolutionStrategy(version, strategy);
     }
 
-    private Object registerChain(Object mapName, Comparable version)
+    private Object registerChain(final Object mapName, final Comparable version)
             throws StrategyException {
 
         //if (mapName == null || version == null) {
@@ -89,7 +89,7 @@ public class ChainIdFromMapNameStrategy {
         return chainId;
     }
 
-    private Object resolve_by_message(Object chainName, IObject message)
+    private Object resolve_by_message(final Object chainName, final IObject message)
             throws StrategyException {
         if (chainName == null) {
             throw new StrategyException("Chain name cannot be null.");
@@ -105,7 +105,7 @@ public class ChainIdFromMapNameStrategy {
         return resolve_by_version(chainName, version);
     }
 
-    private Object resolve_by_module_dependencies(Object chainName)
+    private Object resolve_by_module_dependencies(final Object chainName)
             throws StrategyException {
         if (chainName.toString().indexOf(":") > -1) {
             return chainName;
@@ -114,7 +114,7 @@ public class ChainIdFromMapNameStrategy {
         return resolve_by_version(chainName, version);
     }
 
-    private Object resolve_by_version(Object chainName, Comparable version)
+    private Object resolve_by_version(final Object chainName, final Comparable version)
             throws StrategyException {
 
         //if (chainName == null) {
@@ -122,7 +122,7 @@ public class ChainIdFromMapNameStrategy {
         //}
 
         if (version == null) {
-            throw new StrategyException("Chain Id resolution failed for chain name '"+chainName+"'.");
+            throw new StrategyException("Chain Id resolution failed for chain name '" + chainName + "'.");
         }
 
         Map<Comparable, Object> versions = chainIds.get(chainName);

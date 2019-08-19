@@ -22,7 +22,7 @@ public interface IDatabase {
      * @param collectionName name of the collection
      * @throws IDatabaseException if insert failed
      */
-    void insert(final IObject document, final String collectionName) throws IDatabaseException;
+    void insert(IObject document, String collectionName) throws IDatabaseException;
 
     /**
      * Updates the document in the collection
@@ -30,7 +30,7 @@ public interface IDatabase {
      * @param collectionName name of the collection
      * @throws IDatabaseException if update failed
      */
-    void update(final IObject document, final String collectionName) throws IDatabaseException;
+    void update(IObject document, String collectionName) throws IDatabaseException;
 
     /**
      * Upserts (inserts or updates) the document in the collection
@@ -38,7 +38,7 @@ public interface IDatabase {
      * @param collectionName name of the collection
      * @throws IDatabaseException if upsert failed
      */
-    void upsert(final IObject document, final String collectionName) throws IDatabaseException;
+    void upsert(IObject document, String collectionName) throws IDatabaseException;
 
     /**
      * Selects the document from the collection by it's ID.
@@ -47,7 +47,7 @@ public interface IDatabase {
      * @return the found document
      * @throws IDatabaseException if lookup failed
      */
-    IObject getById(final Object id, final String collectionName) throws IDatabaseException;
+    IObject getById(Object id, String collectionName) throws IDatabaseException;
 
     /**
      * Deletes the document from the collection.
@@ -55,7 +55,7 @@ public interface IDatabase {
      * @param collectionName name of the collection
      * @throws IDatabaseException if deletion failed
      */
-    void delete(IObject document, final String collectionName) throws IDatabaseException;
+    void delete(IObject document, String collectionName) throws IDatabaseException;
 
     /**
      * Selects the documents from the collection using the specified conditions
@@ -64,7 +64,7 @@ public interface IDatabase {
      * @return list of found documents
      * @throws IDatabaseException if selection failed
      */
-    List<IObject> select(final IObject condition, final String collectionName) throws IDatabaseException;
+    List<IObject> select(IObject condition, String collectionName) throws IDatabaseException;
 
     /**
      * Counts the documents in the collection using the specified conditions
@@ -73,6 +73,6 @@ public interface IDatabase {
      * @return number of found documents
      * @throws IDatabaseException if selection failed
      */
-    Long count(final IObject condition, final String collectionName) throws IDatabaseException;
+    Long count(IObject condition, String collectionName) throws IDatabaseException;
 
 }

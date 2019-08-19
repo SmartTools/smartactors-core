@@ -13,5 +13,5 @@ public interface IScopeFactory {
      * @return instance of {@link IScope}
      * @throws ScopeFactoryException if any errors occurred
      */
-    IScope createScope(final Object obj) throws ScopeFactoryException;
+    IScope createScope(Object obj) throws ScopeFactoryException;
 }

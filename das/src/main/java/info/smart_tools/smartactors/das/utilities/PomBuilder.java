@@ -7,12 +7,21 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class PomBuilder {
+public final class PomBuilder {
+
+    private PomBuilder() {
+    }
 
     public static void addOrUpdateExecutionSectionToDeployPlugin(
             final File sourceTemplate,
@@ -44,7 +53,6 @@ public class PomBuilder {
                         .append(line)
                         .append("\n");
             }
-            scanner.close();
         } catch (Exception e) {
             System.out.println("Could not load feature plugin section template.");
             throw new Exception("Could not load feature plugin section template.");
@@ -150,8 +158,7 @@ public class PomBuilder {
         }
     }
 
-    private static void replaceVersion(final List<Dependency> dependencies)
-            throws Exception {
+    private static void replaceVersion(final List<Dependency> dependencies) {
         for (Dependency dependency : dependencies) {
             if (dependency.getVersion().equals("${core.version}")) {
                 dependency.setVersion("0.6.0");

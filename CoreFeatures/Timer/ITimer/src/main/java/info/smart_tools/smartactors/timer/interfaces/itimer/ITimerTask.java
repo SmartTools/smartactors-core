@@ -28,5 +28,5 @@ public interface ITimerTask {
      * @param time    the time to schedule task on
      * @throws TaskScheduleException if any error occurs scheduling the task
      */
-    void reschedule(final long time) throws TaskScheduleException;
+    void reschedule(long time) throws TaskScheduleException;
 }

@@ -9,14 +9,14 @@ public interface SetParamsToLoadFromFileWrapper {
      *
      * @throws ChangeValueException
      */
-    void setFileName(final String fileName)
+    void setFileName(String fileName)
             throws ChangeValueException;
 
     /**
      *
      * @throws ChangeValueException
      */
-    void setObservedDirectory(final String directory)
+    void setObservedDirectory(String directory)
             throws ChangeValueException;
 
     /**

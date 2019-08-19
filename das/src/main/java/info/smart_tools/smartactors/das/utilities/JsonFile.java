@@ -14,13 +14,15 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Scanner;
 
-public class JsonFile {
+public final class JsonFile {
+
+    private JsonFile() {
+    }
 
     public static IObject load(final File file) {
         IObject data = null;
         try (Scanner scanner = new Scanner(file)) {
             data = new DSObject(scanner.useDelimiter("\\Z").next());
-            scanner.close();
         } catch (IOException e) {
             System.out.println("Could not read file: ");
             System.err.println(e);
@@ -52,12 +54,12 @@ public class JsonFile {
             System.out.println("Could not save data to the file: ");
             System.err.println(e);
         } catch (NoSuchFieldException e) {
-
+            // TODO: Empty catch block
         } catch (IllegalAccessException e) {
-
+            // TODO: Empty catch block
         } finally {
             try {
-                if(writer != null) {
+                if (writer != null) {
                     writer.close();
                 }
             } catch (IOException e) {

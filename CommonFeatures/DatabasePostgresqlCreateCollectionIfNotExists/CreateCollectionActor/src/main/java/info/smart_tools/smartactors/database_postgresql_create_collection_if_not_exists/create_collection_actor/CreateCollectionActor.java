@@ -20,7 +20,7 @@ import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutio
  * so creates collection if it is not exist yet.
  */
 public class CreateCollectionActor {
-    public void createTable(CreateCollectionWrapper message) throws CreateCollectionActorException {
+    public void createTable(final CreateCollectionWrapper message) throws CreateCollectionActorException {
         try {
             final ConnectionOptions options = IOC.resolve(Keys.getKeyByName(message.getConnectionOptionsRegistrationName()));
             final IPool pool = IOC.resolve(Keys.getKeyByName("PostgresConnectionPool"), options);

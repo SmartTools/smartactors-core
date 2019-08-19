@@ -48,6 +48,9 @@ import java.util.List;
  * </pre>
  */
 public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrategy {
+
+    private static final int DEFAULT_STACK_DEPTH = 5;
+
     private final IFieldName sectionNameFieldName;
     private final IFieldName chainFieldName;
     private final IFieldName messagesFieldName;
@@ -81,6 +84,7 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onLoadConfig(final IObject config)
             throws ConfigurationProcessingException {
         try {
@@ -91,32 +95,43 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
             try {
                 stackDepth = IOC.resolve(Keys.getKeyByName("default_stack_depth"));
             } catch (ResolutionException e) {
-                stackDepth = 5;
+                stackDepth = DEFAULT_STACK_DEPTH;
             }
 
             for (IObject task : onFeatureLoadingConfig) {
                 Boolean isRevert = (Boolean) task.getValue(this.revertFieldName);
-                if ( !isRevert ) {
+                if (!isRevert) {
                     String chainName = (String) task.getValue(this.chainFieldName);
                     Boolean scopeSwitching = (Boolean) task.getValue(this.scopeSwitchingFieldName);
                     if (scopeSwitching == null) {
                         scopeSwitching = true;
                     }
-                    List<IObject> messages = (List<IObject>)task.getValue(this.messagesFieldName);
+                    List<IObject> messages = (List<IObject>) task.getValue(this.messagesFieldName);
                     for (IObject message : messages) {
                         IMessageProcessingSequence processingSequence = IOC.resolve(
-                                IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"),
+                                IOC.resolve(
+                                        IOC.getKeyForKeyByNameStrategy(),
+                                        "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"
+                                ),
                                 stackDepth,
                                 chainName,
                                 message,
                                 scopeSwitching
                         );
                         IMessageProcessor messageProcessor = IOC.resolve(
-                                IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"),
+                                IOC.resolve(
+                                        IOC.getKeyForKeyByNameStrategy(),
+                                        "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"
+                                ),
                                 queue,
                                 processingSequence
                         );
-                        messageProcessor.process(message, (IObject) IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")));
+                        messageProcessor.process(
+                                message,
+                                (IObject) IOC.resolve(
+                                        Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")
+                                )
+                        );
                     }
                 }
             }
@@ -126,6 +141,7 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onRevertConfig(final IObject config)
             throws ConfigurationProcessingException {
         ConfigurationProcessingException exception = new ConfigurationProcessingException("Error occurred reverting \"onFeatureLoading\" configuration section.");
@@ -137,7 +153,7 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
             try {
                 stackDepth = IOC.resolve(Keys.getKeyByName("default_stack_depth"));
             } catch (ResolutionException e) {
-                stackDepth = 5;
+                stackDepth = DEFAULT_STACK_DEPTH;
             }
 
             for (IObject task : onFeatureLoadingConfig) {
@@ -153,18 +169,29 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
                         for (IObject message : messages) {
                             try {
                                 IMessageProcessingSequence processingSequence = IOC.resolve(
-                                        IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"),
+                                        IOC.resolve(
+                                                IOC.getKeyForKeyByNameStrategy(),
+                                                "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"
+                                        ),
                                         stackDepth,
                                         chainName,
                                         message,
                                         scopeSwitching
                                 );
                                 IMessageProcessor messageProcessor = IOC.resolve(
-                                        IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"),
+                                        IOC.resolve(
+                                                IOC.getKeyForKeyByNameStrategy(),
+                                                "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"
+                                        ),
                                         queue,
                                         processingSequence
                                 );
-                                messageProcessor.process(message, (IObject) IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")));
+                                messageProcessor.process(
+                                        message,
+                                        (IObject) IOC.resolve(
+                                                Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")
+                                        )
+                                );
                             } catch (InvalidArgumentException | ResolutionException | MessageProcessorProcessException | RuntimeException e) {
                                 exception.addSuppressed(e);
                             }

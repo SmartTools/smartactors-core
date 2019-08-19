@@ -12,13 +12,13 @@ class Token {
     private TokenType type;
     private IFunction function;
 
-    private Token(String lexeme, TokenType type) {
+    private Token(final String lexeme, final TokenType type) {
         this.lexeme = lexeme;
         this.type = type;
         this.function = null;
     }
 
-    private Token(String lexeme, TokenType type, IFunction function) {
+    private Token(final String lexeme, final TokenType type, final IFunction function) {
         this.lexeme = lexeme;
         this.type = type;
         this.function = function;
@@ -32,7 +32,7 @@ class Token {
      *
      * @see TokenType
      */
-    static Token of(String lexeme, TokenType type) {
+    static Token of(final String lexeme, final TokenType type) {
         return new Token(lexeme, type);
     }
 
@@ -43,7 +43,7 @@ class Token {
      * @param type     the type of token.
      * @param function the handler of lexeme.
      */
-    static Token of(String lexeme, TokenType type, IFunction function) {
+    static Token of(final String lexeme, final TokenType type, final IFunction function) {
         return new Token(lexeme, type, function);
     }
 
@@ -59,7 +59,7 @@ class Token {
         return function;
     }
 
-    void setFunction(IFunction function) {
+    void setFunction(final IFunction function) {
         this.function = function;
     }
 

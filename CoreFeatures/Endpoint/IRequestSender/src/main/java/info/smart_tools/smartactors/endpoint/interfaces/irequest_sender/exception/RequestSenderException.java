@@ -6,15 +6,15 @@ import info.smart_tools.smartactors.endpoint.interfaces.irequest_sender.IRequest
  * Exception for {@link IRequestSender}
  */
 public class RequestSenderException extends Exception {
-    public RequestSenderException(String message) {
+    public RequestSenderException(final String message) {
         super(message);
     }
 
-    public RequestSenderException(String message, Throwable cause) {
+    public RequestSenderException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public RequestSenderException(Throwable cause) {
+    public RequestSenderException(final Throwable cause) {
         super(cause);
     }
 }

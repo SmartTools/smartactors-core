@@ -38,6 +38,7 @@ public class ReceiverGenerator implements IReceiverGenerator {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public IMessageReceiver generate(
             final Object objInstance,
             final IStrategy wrapperResolutionStrategy,
@@ -54,7 +55,7 @@ public class ReceiverGenerator implements IReceiverGenerator {
         try {
             Class objClass = objInstance.getClass();
             Class<IMessageReceiver> clazz = (Class<IMessageReceiver>) objClass.getClassLoader().loadClass(
-                    objClass.getName()+"_"+methodName+"_"+"receiver"
+                    objClass.getName() + "_" + methodName + "_" + "receiver"
             );
             return clazz.newInstance();
 
@@ -71,7 +72,7 @@ public class ReceiverGenerator implements IReceiverGenerator {
             return clazz.getConstructor(
                     new Class[]{objInstance.getClass(), IStrategy.class}
             )
-                    .newInstance(new Object[]{objInstance, wrapperResolutionStrategy});
+                    .newInstance(objInstance, wrapperResolutionStrategy);
         } catch (Throwable e) {
             throw new ReceiverGeneratorException(
                     "Could not generate message receiver because of the following error:",
@@ -80,6 +81,7 @@ public class ReceiverGenerator implements IReceiverGenerator {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private Class<IMessageReceiver> generateClass(
             final Object usersObject,
             final String handlerName

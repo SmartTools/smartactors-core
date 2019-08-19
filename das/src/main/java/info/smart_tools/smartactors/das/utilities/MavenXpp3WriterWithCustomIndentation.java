@@ -13,11 +13,11 @@ import java.lang.reflect.Method;
 
 public class MavenXpp3WriterWithCustomIndentation extends MavenXpp3Writer {
 
-    private final static String SERIALIZER_INDENTATION_PROPERTY = "http://xmlpull.org/v1/doc/properties.html#serializer-indentation";
-    private final static String SERIALIZER_LINE_SEPARATOR_PROPERTY = "http://xmlpull.org/v1/doc/properties.html#serializer-line-separator";
+    private static final String SERIALIZER_INDENTATION_PROPERTY = "http://xmlpull.org/v1/doc/properties.html#serializer-indentation";
+    private static final String SERIALIZER_LINE_SEPARATOR_PROPERTY = "http://xmlpull.org/v1/doc/properties.html#serializer-line-separator";
 
-    private final static String WRITE_MODEL_METHOD_NAME = "writeModel";
-    private final static String PROJECT_TAG_NAME = "project";
+    private static final String WRITE_MODEL_METHOD_NAME = "writeModel";
+    private static final String PROJECT_TAG_NAME = "project";
 
     private String indentationString;
     private String lineSeparator = "\n";
@@ -32,7 +32,7 @@ public class MavenXpp3WriterWithCustomIndentation extends MavenXpp3Writer {
     }
 
     @Override
-    public void write(Writer writer, Model model)
+    public void write(final Writer writer, final Model model)
             throws IOException {
         XmlSerializer serializer = new MXSerializer();
         serializer.setProperty(SERIALIZER_INDENTATION_PROPERTY , this.indentationString);
@@ -46,13 +46,13 @@ public class MavenXpp3WriterWithCustomIndentation extends MavenXpp3Writer {
             method.setAccessible(true);
             method.invoke(this, new Object[]{model, PROJECT_TAG_NAME, serializer});
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-
+            // TODO: Empty catch block
         }
         serializer.endDocument();
     }
 
     @Override
-    public void write(OutputStream stream, Model model)
+    public void write(final OutputStream stream, final Model model)
             throws IOException {
         XmlSerializer serializer = new MXSerializer();
         serializer.setProperty(SERIALIZER_INDENTATION_PROPERTY, this.indentationString);
@@ -66,7 +66,7 @@ public class MavenXpp3WriterWithCustomIndentation extends MavenXpp3Writer {
             method.setAccessible(true);
             method.invoke(this, new Object[]{model, PROJECT_TAG_NAME, serializer});
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-
+            // TODO: Empty catch block
         }
         serializer.endDocument();
     }

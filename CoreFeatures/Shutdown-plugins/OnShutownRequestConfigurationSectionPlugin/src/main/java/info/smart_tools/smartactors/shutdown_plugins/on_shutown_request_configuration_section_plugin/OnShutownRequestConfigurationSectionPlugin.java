@@ -27,6 +27,8 @@ import java.util.List;
 
 public class OnShutownRequestConfigurationSectionPlugin extends BootstrapPlugin {
 
+    private static final int DEFAULT_STACK_DEPTH = 5;
+
     /**
      * The constructor.
      *
@@ -44,6 +46,7 @@ public class OnShutownRequestConfigurationSectionPlugin extends BootstrapPlugin 
      * @throws InvalidArgumentException if strategy does not accept function
      * TODO:: Simplify the strategy... Move MessageBus to core and use it may be..
      */
+    @SuppressWarnings("unchecked")
     public void registerDefaultOnShutdownRequestAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("default shutdown request action"), new ApplyFunctionToArgumentsStrategy(args -> {
@@ -68,7 +71,7 @@ public class OnShutownRequestConfigurationSectionPlugin extends BootstrapPlugin 
                 try {
                     stackDepth0 = IOC.resolve(Keys.getKeyByName("default_stack_depth"));
                 } catch (ResolutionException e) {
-                    stackDepth0 = 5;
+                    stackDepth0 = DEFAULT_STACK_DEPTH;
                 }
                 Integer stackDepth = stackDepth0;
 
@@ -79,17 +82,28 @@ public class OnShutownRequestConfigurationSectionPlugin extends BootstrapPlugin 
                                 message.setValue(modeFieldName, mode);
                             }
                             IMessageProcessingSequence processingSequence = IOC.resolve(
-                                    IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"),
+                                    IOC.resolve(
+                                            IOC.getKeyForKeyByNameStrategy(),
+                                            "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence"
+                                    ),
                                     stackDepth,
                                     chainName,
                                     message
                             );
                             IMessageProcessor messageProcessor = IOC.resolve(
-                                    IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"),
+                                    IOC.resolve(
+                                            IOC.getKeyForKeyByNameStrategy(),
+                                            "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor"
+                                    ),
                                     queue,
                                     processingSequence
                             );
-                            messageProcessor.process(message, (IObject) IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")));
+                            messageProcessor.process(
+                                    message,
+                                    (IObject) IOC.resolve(
+                                            Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject")
+                                    )
+                            );
                         }
                     } catch (ResolutionException | ChangeValueException | MessageProcessorProcessException e) {
                         throw new ActionExecutionException(e);

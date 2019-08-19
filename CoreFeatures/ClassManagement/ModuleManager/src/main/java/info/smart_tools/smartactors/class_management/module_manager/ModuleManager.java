@@ -27,7 +27,9 @@ public final class ModuleManager {
         try {
             addModule(coreId, coreName, coreVersion);
             modules.get(coreId).setDefault();
-        } catch(InvalidArgumentException | ModuleManagerException e) {}
+        } catch (InvalidArgumentException | ModuleManagerException e) {
+            // TODO: Empty catch block
+        }
     }
 
     private ModuleManager() {}
@@ -43,7 +45,7 @@ public final class ModuleManager {
         if (modules.get(moduleId) == null) {
             modules.put(moduleId, new Module(moduleId, moduleName, version));
         } else {
-            throw new ModuleManagerException("Module "+String.valueOf(moduleId)+" already defined.");
+            throw new ModuleManagerException("Module " + String.valueOf(moduleId) + " already defined.");
         }
     }
 
@@ -51,7 +53,7 @@ public final class ModuleManager {
         return currentModule.get().getClassLoader();
     }
 
-    public static void addModuleDependency(Object dependentModuleId, Object baseModuleId)
+    public static void addModuleDependency(final Object dependentModuleId, final Object baseModuleId)
             throws InvalidArgumentException {
 
         if (baseModuleId == null || dependentModuleId == null) {
@@ -61,7 +63,7 @@ public final class ModuleManager {
         modules.get(dependentModuleId).addDependency(modules.get(baseModuleId));
     }
 
-    public static void finalizeModuleDependencies(Object moduleId)
+    public static void finalizeModuleDependencies(final Object moduleId)
             throws InvalidArgumentException {
         if (moduleId == null) {
             throw new InvalidArgumentException("Module id cannot be null.");
@@ -69,17 +71,27 @@ public final class ModuleManager {
         modules.get(moduleId).finalizeDependencies(modules.get(coreId));
     }
 
-    public static IModule getModuleById(Object moduleId) { return modules.get(moduleId); }
+    public static IModule getModuleById(final Object moduleId) {
+        return modules.get(moduleId);
+    }
 
-    public static void setCurrentModule(IModule module) { currentModule.set(module); }
+    public static void setCurrentModule(final IModule module) {
+        currentModule.set(module);
+    }
 
     public static IModule getCurrentModule() {
         return currentModule.get();
     }
 
-    public static <T> T getFromMap(Map<IModule, T> objects) { return getCurrentModule().getFromMap(objects); }
+    public static <T> T getFromMap(final Map<IModule, T> objects) {
+        return getCurrentModule().getFromMap(objects);
+    }
 
-    public static <T> T removeFromMap(Map<IModule, T> objects) { return getCurrentModule().removeFromMap(objects); }
+    public static <T> T removeFromMap(final Map<IModule, T> objects) {
+        return getCurrentModule().removeFromMap(objects);
+    }
 
-    public static <T> T putToMap(Map<IModule, T> objects, T object) { return getCurrentModule().putToMap(objects, object); }
+    public static <T> T putToMap(final Map<IModule, T> objects, final T object) {
+        return getCurrentModule().putToMap(objects, object);
+    }
 }

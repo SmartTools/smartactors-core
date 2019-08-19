@@ -9,7 +9,7 @@ public class ParsingException extends Exception {
      *
      * @param message the detail message.
      */
-    public ParsingException(String message) {
+    public ParsingException(final String message) {
         super(message);
     }
 
@@ -19,7 +19,7 @@ public class ParsingException extends Exception {
      * @param message the detail message.
      * @param cause   the cause exception.
      */
-    public ParsingException(String message, Throwable cause) {
+    public ParsingException(final String message, final Throwable cause) {
         super(message.isEmpty() ? cause.toString() : message, cause);
     }
 

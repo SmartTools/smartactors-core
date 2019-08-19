@@ -9,7 +9,7 @@ public class EvaluatingExpressionException extends Exception {
      *
      * @param message the detail message.
      */
-    public EvaluatingExpressionException(String message) {
+    public EvaluatingExpressionException(final String message) {
         super(message);
     }
 
@@ -19,7 +19,7 @@ public class EvaluatingExpressionException extends Exception {
      * @param message the detail message.
      * @param cause   the cause of the exception.
      */
-    public EvaluatingExpressionException(String message, Throwable cause) {
+    public EvaluatingExpressionException(final String message, final Throwable cause) {
         super(message.isEmpty() ? cause.toString() : message, cause);
     }
 

@@ -21,7 +21,7 @@ public class ConstantChainChoiceStrategy implements IChainChoiceStrategy {
     }
 
     @Override
-    public Object chooseChain(IMessageProcessor messageProcessor)
+    public Object chooseChain(final IMessageProcessor messageProcessor)
             throws InvalidArgumentException, ReadValueException {
         return messageProcessor.getSequence().getCurrentReceiverArguments().getValue(chainIdFieldName);
     }

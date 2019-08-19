@@ -44,12 +44,14 @@ public final class Keys {
      * @param keyNames array of names of instances of {@link IKey}
      */
     public static void unregisterByNames(final String[] keyNames) {
-        for(String keyName : keyNames) {
+        for (String keyName : keyNames) {
             try {
                 IOC.unregister(Keys.getKeyByName(keyName));
             } catch (DeletionException e) {
-                System.out.println("[WARNING] Deregistration of key '"+keyName+"' failed.");
-            } catch (ResolutionException e) { }
+                System.out.println("[WARNING] Deregistration of key '" + keyName + "' failed.");
+            } catch (ResolutionException e) {
+                // TODO: Empty catch block
+            }
         }
     }
 }

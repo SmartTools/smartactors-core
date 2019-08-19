@@ -20,7 +20,11 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.ZipException;
 
@@ -76,7 +80,7 @@ public class DownloadCore implements IAction {
     public void execute(final Object o)
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Download server core ...");
-        ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
+        ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
 
         try {
             String groupId = defGroupId;
@@ -151,7 +155,9 @@ public class DownloadCore implements IAction {
         RemoteRepository remoteRepository = new RemoteRepository(
                 rid, "default", rurl
         );
-        Collection<RemoteRepository> repositories = new ArrayList<RemoteRepository>(){{add(remoteRepository);}};
+        Collection<RemoteRepository> repositories = new ArrayList<RemoteRepository>() {{
+            add(remoteRepository);
+        }};
 
         List<Artifact> artifacts = new Aether(repositories, Paths.get(
                 destination.getAbsolutePath(), "downloads"
@@ -186,6 +192,7 @@ public class DownloadCore implements IAction {
         return JsonFile.load(location.toFile());
     }
 
+    @SuppressWarnings("unchecked")
     private void loadCoreFeatures(final IObject repositoriesAndFeatures, final Path path, final String type)
             throws Exception {
         List<IObject> repositoriesParams = (List<IObject>) repositoriesAndFeatures.getValue(new FieldName("repositories"));

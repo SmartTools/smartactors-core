@@ -8,12 +8,17 @@ import info.smart_tools.smartactors.security.encoding.encoders.EncodingException
 import javax.annotation.Nonnull;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.*;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 
 /**
  * Charset codec implementation
  */
-public class CharSequenceCodec implements ICharSequenceCodec {
+public final class CharSequenceCodec implements ICharSequenceCodec {
 
     private final CharsetEncoder encoder;
     private final CharsetDecoder decoder;

@@ -17,7 +17,7 @@ public interface IStrategyContainer {
      * @return instance of {@link IStrategy}
      * @throws StrategyContainerException if any error occurred
      */
-    IStrategy resolve(final Object key)
+    IStrategy resolve(Object key)
             throws StrategyContainerException;
 
     /**
@@ -26,7 +26,7 @@ public interface IStrategyContainer {
      * @param strategy instance of {@link IStrategy}
      * @throws StrategyContainerException  if any error occurred
      */
-    void register(final Object key, final IStrategy strategy)
+    void register(Object key, IStrategy strategy)
             throws StrategyContainerException;
 
     /**
@@ -36,6 +36,6 @@ public interface IStrategyContainer {
      * @return the previous instance of {@link IStrategy} associated with <tt>key</tt>,
      *         or <tt>null</tt> if there was no association for <tt>key</tt>.
      */
-    IStrategy unregister(final Object key)
+    IStrategy unregister(Object key)
             throws StrategyContainerException;
 }

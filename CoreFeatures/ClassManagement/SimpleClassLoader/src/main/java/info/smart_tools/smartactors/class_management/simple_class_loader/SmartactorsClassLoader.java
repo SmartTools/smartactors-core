@@ -10,7 +10,7 @@ import java.util.Collections;
 /**
  * Extension of {@link URLClassLoader}
  */
-public class SmartactorsClassLoader extends URLClassLoader implements ISmartactorsClassLoader {
+public final class SmartactorsClassLoader extends URLClassLoader implements ISmartactorsClassLoader {
 
     private static SmartactorsClassLoader single = null;
     private static SmartactorsClassLoader compilation = null;
@@ -19,11 +19,11 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * Redefined constructor
      * @param urls the URLs from which to load classes and resources
      */
-    private SmartactorsClassLoader(final URL[] urls, ClassLoader parent) {
+    private SmartactorsClassLoader(final URL[] urls, final ClassLoader parent) {
         super(urls, parent);
     }
 
-    public static ISmartactorsClassLoader newInstance(String moduleName, String moduleVersion) {
+    public static ISmartactorsClassLoader newInstance(final String moduleName, final String moduleVersion) {
         if (single == null) {
             single = new SmartactorsClassLoader(new URL[]{}, ClassLoader.getSystemClassLoader());
         }
@@ -35,7 +35,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
 
     public void setDefault() { }
 
-    public void addDependency(ISmartactorsClassLoader base) { }
+    public void addDependency(final ISmartactorsClassLoader base) { }
 
     /**
      * Add new instance of {@link URL} to the current url class loader if url class loader doesn't contain this instance of {@link URL}
@@ -50,7 +50,7 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
         ArrayList<URL> urlArrayList = new ArrayList<>();
         Collections.addAll(urlArrayList, getURLs());
         ClassLoader parent = getParent();
-        while(parent != null) {
+        while (parent != null) {
             if (parent instanceof URLClassLoader) {
                 Collections.addAll(urlArrayList, ((URLClassLoader) parent).getURLs());
             }
@@ -69,9 +69,11 @@ public class SmartactorsClassLoader extends URLClassLoader implements ISmartacto
      * @param classByteCode Compiled byte code of the class to add
      * @return The reference to the class
      */
-    public Class<?> addClass(final String className, byte[] classByteCode) {
+    public Class<?> addClass(final String className, final byte[] classByteCode) {
         return defineClass(className, classByteCode, 0, classByteCode.length);
     }
 
-    public ClassLoader getCompilationClassLoader() { return compilation; }
+    public ClassLoader getCompilationClassLoader() {
+        return compilation;
+    }
 }

@@ -34,7 +34,7 @@ class Lexer {
     @FunctionalInterface
     private interface ITokenReader {
         /* Detects and reads a specified tokens from an expression. */
-        int read(String expression, int index, final List<Token> tokens);
+        int read(String expression, int index, List<Token> tokens);
     }
 
     private class ReaderContainer {
@@ -42,7 +42,7 @@ class Lexer {
         private Predicate<Character> predicate;
         private ITokenReader tokenReader;
 
-        ReaderContainer(Predicate<Character> predicate, ITokenReader tokenReader) {
+        ReaderContainer(final Predicate<Character> predicate, final ITokenReader tokenReader) {
             this.predicate = predicate;
             this.tokenReader = tokenReader;
         }
@@ -169,7 +169,7 @@ class Lexer {
      * @return a list of tokens corresponding to the given expression.
      * @throws SyntaxException when the given expression has an illegal grammar or a syntax errors.
      */
-    List<Token> getTokens(String expression) {
+    List<Token> getTokens(final String expression) {
         LinkedList<Token> tokens = new LinkedList<>();
         int index = 0;
         int length = expression.length();
@@ -179,7 +179,7 @@ class Lexer {
         return tokens;
     }
 
-    private int readToken(String expression, int index, final List<Token> tokens) {
+    private int readToken(final String expression, final int index, final List<Token> tokens) {
         int skip = readReservedToken(expression, index, tokens);
         if (skip != -1) {
             return skip;
@@ -194,13 +194,15 @@ class Lexer {
                 "'. Unrecognized lexeme at " + index + " index!");
     }
 
-    private int readReservedToken(String expression, int index, final List<Token> tokens) {
+    private int readReservedToken(final String expression, int index, final List<Token> tokens) {
         TokenTree.Node found = null;
         TokenTree.Node node = reservedTokens.getRoot();
         final int length = expression.length();
         while (index < length) {
             node = node.getChild(expression.charAt(index));
-            if (node == null) break;
+            if (node == null) {
+                break;
+            }
             found = node.getToken() != null ? node : found;
             ++index;
         }

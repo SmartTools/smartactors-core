@@ -43,9 +43,9 @@ public class WrapperGenerator implements IWrapperGenerator {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T generate(final Class<T> targetInterface)
             throws InvalidArgumentException, WrapperGeneratorException {
-        T instance = null;
 
         if (null == targetInterface) {
             throw new InvalidArgumentException("Target class should not be null!");
@@ -56,7 +56,7 @@ public class WrapperGenerator implements IWrapperGenerator {
 
         try {
             Class<T> clazz = (Class<T>) targetInterface.getClassLoader().loadClass(
-                    targetInterface.getName()+"Impl"
+                    targetInterface.getName() + "Impl"
             );
             return clazz.newInstance();
 
@@ -81,6 +81,7 @@ public class WrapperGenerator implements IWrapperGenerator {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Class<T> generateClass(final Class<T> targetInterface)
             throws Exception {
 

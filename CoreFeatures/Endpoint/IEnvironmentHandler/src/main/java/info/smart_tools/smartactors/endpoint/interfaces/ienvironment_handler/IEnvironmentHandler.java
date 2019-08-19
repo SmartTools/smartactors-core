@@ -17,6 +17,6 @@ public interface IEnvironmentHandler {
      * @param callback      the callback for processing exception
      * @throws EnvironmentHandleException exception for case if there are some problem on handle
      */
-    void handle(final IObject environment, final Object receiverChainName, final IAction<Throwable> callback)
+    void handle(IObject environment, Object receiverChainName, IAction<Throwable> callback)
             throws EnvironmentHandleException, InvalidArgumentException;
 }

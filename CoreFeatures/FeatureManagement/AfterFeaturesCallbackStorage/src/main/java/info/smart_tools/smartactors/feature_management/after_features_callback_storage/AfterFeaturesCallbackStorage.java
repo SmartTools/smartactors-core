@@ -5,15 +5,17 @@ import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 /**
  * Thread storage of IQueue
  */
-public class AfterFeaturesCallbackStorage {
+public final class AfterFeaturesCallbackStorage {
 
-    private static final ThreadLocal<IQueue> localCallbackQueue = new ThreadLocal<>();
+    private AfterFeaturesCallbackStorage() {}
+
+    private static final ThreadLocal<IQueue> LOCAL_CALLBACK_QUEUE = new ThreadLocal<>();
 
     public static IQueue getLocalCallbackQueue() {
-        return localCallbackQueue.get();
+        return LOCAL_CALLBACK_QUEUE.get();
     }
 
     public static void setLocalCallbackQueue(final IQueue queue) {
-        localCallbackQueue.set(queue);
+        LOCAL_CALLBACK_QUEUE.set(queue);
     }
 }

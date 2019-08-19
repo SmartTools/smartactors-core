@@ -35,14 +35,14 @@ public class UserObjectMethodInvokerReceiverCreator extends BasicIntermediateRec
     }
 
     @Override
-    public Collection<Object> enumIdentifiers(IObject config, IObject context)
+    public Collection<Object> enumIdentifiers(final IObject config, final IObject context)
             throws InvalidReceiverPipelineException, ReceiverObjectCreatorException {
         // TODO:: Implement some way to predict list of object method names
         throw new InvalidReceiverPipelineException("Enumeration of user object methods is not implemented.");
     }
 
     @Override
-    public void acceptItem(Object itemId, Object item)
+    public void acceptItem(final Object itemId, final Object item)
             throws ReceiverObjectListenerException, InvalidReceiverPipelineException, InvalidArgumentException {
         if (null == item) {
             throw new InvalidArgumentException("Item is null.");

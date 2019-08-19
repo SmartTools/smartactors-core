@@ -46,12 +46,12 @@ public class LoadFeatureActor {
     private final IPluginCreator pluginCreator;
     private final IConfigurationManager configurationManager;
 
-    private final static String CONFIG_FILE_NAME = "config.json";
-    private final static String LIBRARY_EXTENSION = "jar";
-    private final static String PLUGIN_LOADER_KEY = "plugin loader";
-    private final static String CONFIGURATION_OBJECT_KEY = "configuration object";
-    private final static String END_OF_INPUT_DELIMITER = "\\Z";
-    private final static String FEATURE_NAME_DELIMITER = ":";
+    private static final String CONFIG_FILE_NAME = "config.json";
+    private static final String LIBRARY_EXTENSION = "jar";
+    private static final String PLUGIN_LOADER_KEY = "plugin loader";
+    private static final String CONFIGURATION_OBJECT_KEY = "configuration object";
+    private static final String END_OF_INPUT_DELIMITER = "\\Z";
+    private static final String FEATURE_NAME_DELIMITER = ":";
 
     /**
      * Default constructor

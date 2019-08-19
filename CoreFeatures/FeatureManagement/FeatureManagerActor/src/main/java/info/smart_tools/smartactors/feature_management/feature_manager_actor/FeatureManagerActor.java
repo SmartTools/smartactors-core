@@ -28,7 +28,11 @@ import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutio
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -53,15 +57,15 @@ public class FeatureManagerActor {
     private final IFieldName afterFeaturesCallbackQueueFN;
     private final IFieldName startTimeOfLoadingFeatureGroupFN;
 
-    private final static String TASK_QUEUE_IOC_NAME = "task_queue";
-    private final static String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
+    private static final String TASK_QUEUE_IOC_NAME = "task_queue";
+    private static final String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
+    private static final String FIELD_NAME_FACTORY_STARTEGY_NAME =
             "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
-    private final static String MESSAGE_PROCESSOR_SEQUENCE_FACTORY_STRATEGY_NAME =
+    private static final String MESSAGE_PROCESSOR_SEQUENCE_FACTORY_STRATEGY_NAME =
             "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessingSequence";
-    private final static String MESSAGE_PROCESSOR_FACTORY_STRATEGY_NAME =
+    private static final String MESSAGE_PROCESSOR_FACTORY_STRATEGY_NAME =
             "info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor";
-    private final static String FEATURE_NAME_DELIMITER = ":";
+    private static final String FEATURE_NAME_DELIMITER = ":";
 
     /**
      * Default constructor
@@ -152,6 +156,7 @@ public class FeatureManagerActor {
      * @param wrapper the wrapped message for getting needed data and storing result
      * @throws FeatureManagementException if any errors occurred on feature processing
      */
+    @SuppressWarnings("unchecked")
     public void onFeatureLoaded(final OnFeatureLoadedWrapper wrapper)
             throws FeatureManagementException {
         IFeature feature, featureFromMessage;
@@ -159,7 +164,7 @@ public class FeatureManagerActor {
             featureFromMessage = wrapper.getFeature();
             feature = this.featuresInProgress.get(featureFromMessage.getId());
             if (!feature.updateFromClone(featureFromMessage)) {
-                throw new FeatureManagementException("Cannot update feature "+feature.getDisplayName()+" from its clone.");
+                throw new FeatureManagementException("Cannot update feature " + feature.getDisplayName() + " from its clone.");
             }
             this.featuresInProgress.remove(feature.getId());
             if (feature.isFailed()) {
@@ -229,7 +234,7 @@ public class FeatureManagerActor {
         }
         if (!featureFromMessage.updateFromClone(feature)) {
             throw new FeatureManagementException(
-                    "Cannot update feature "+featureFromMessage.getDisplayName()+" from its clone."
+                    "Cannot update feature " + featureFromMessage.getDisplayName() + " from its clone."
             );
         }
     }
@@ -247,7 +252,7 @@ public class FeatureManagerActor {
             featureFromMessage = wrapper.getFeature();
             feature = this.featuresInProgress.get(featureFromMessage.getId());
             if (!feature.updateFromClone(featureFromMessage)) {
-                throw new FeatureManagementException("Cannot update feature "+feature.getDisplayName()+" from its clone.");
+                throw new FeatureManagementException("Cannot update feature " + feature.getDisplayName() + " from its clone.");
             }
 
             checkAndRunConnectedFeatures();
@@ -299,7 +304,7 @@ public class FeatureManagerActor {
         }
         if (!featureFromMessage.updateFromClone(feature)) {
             throw new FeatureManagementException(
-                    "Cannot update feature "+featureFromMessage.getDisplayName()+" from its clone."
+                    "Cannot update feature " + featureFromMessage.getDisplayName() + " from its clone."
             );
         }
     }
@@ -346,7 +351,7 @@ public class FeatureManagerActor {
         Set<String> featureDependencies = feature.getDependencies();
         // check if feature has dependencies and not skipped
         if (null != featureDependencies && null != ModuleManager.getModuleById(feature.getId())) {
-            for (Iterator<String> iterator = featureDependencies.iterator(); iterator.hasNext(); ) {
+            for (Iterator<String> iterator = featureDependencies.iterator(); iterator.hasNext();) {
 
                 String dependency = iterator.next();
 
@@ -368,13 +373,13 @@ public class FeatureManagerActor {
                 if (null != baseFeature) {
                     try {
                         ModuleManager.addModuleDependency(feature.getId(), baseFeature.getId());
-                    } catch(InvalidArgumentException e) {
+                    } catch (InvalidArgumentException e) {
                         throw new FeatureManagementException("Cannot add dependency to module.", e);
                     }
                     if (order == 1) {
                         System.out.println(
-                                "[WARNING] Version of base feature '"+baseFeature.getDisplayName()+
-                                "' is greater than in feature '"+feature.getDisplayName()+"' dependencies."
+                                "[WARNING] Version of base feature '" + baseFeature.getDisplayName() +
+                                "' is greater than in feature '" + feature.getDisplayName() + "' dependencies."
                         );
                     }
                     iterator.remove();
@@ -397,14 +402,14 @@ public class FeatureManagerActor {
                         && minDependencies > 0
         ) {
             Set<String> allUnresolved = new HashSet<>();
-            for(IFeature feature : this.featuresInProgress.values()) {
+            for (IFeature feature : this.featuresInProgress.values()) {
                 if (feature.getDependencies() != null) {
                     allUnresolved.addAll(feature.getDependencies());
                 }
             }
 
             Set<String> unresolved = new HashSet<>(allUnresolved);
-            for(String dependency : allUnresolved) {
+            for (String dependency : allUnresolved) {
                 for (IFeature feature : this.featuresInProgress.values()) {
                     if (compareFeatureToDependency(feature, dependency) >= 0) {
                         unresolved.remove(dependency);
@@ -428,15 +433,15 @@ public class FeatureManagerActor {
         }
     }
 
-    private String emptify(String str) {
+    private String emptify(final String str) {
         return (str == null ? "" : str);
     }
 
-    private int compareFeatureToDependency(IFeature feature, String dependencyName)
+    private int compareFeatureToDependency(final IFeature feature, final String dependencyName)
             throws FeatureManagementException {
         String[] dependency = parseFullName(dependencyName);
         if (!emptify(feature.getGroupId()).equals(dependency[0]) ||
-                !emptify(feature.getName()).equals(dependency[1]) ) {
+                !emptify(feature.getName()).equals(dependency[1])) {
             return -1;
         }
         if (dependency[2].equals("")) {
@@ -446,11 +451,11 @@ public class FeatureManagerActor {
     }
 
     // todo: replace this code by parsing strategy
-    private String[] parseFullName(String fullName)
+    private String[] parseFullName(final String fullName)
             throws FeatureManagementException {
         String[] dependencyNames = fullName.split(FEATURE_NAME_DELIMITER);
         if (dependencyNames.length < 2) {
-            throw new FeatureManagementException("Wrong feature name or dependency format '"+fullName+"'.");
+            throw new FeatureManagementException("Wrong feature name or dependency format '" + fullName + "'.");
         }
         String[] result = {
                 dependencyNames[0],

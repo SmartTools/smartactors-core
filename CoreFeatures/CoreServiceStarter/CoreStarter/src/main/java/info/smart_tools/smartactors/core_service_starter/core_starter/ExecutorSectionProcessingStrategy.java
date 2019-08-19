@@ -35,7 +35,7 @@ public class ExecutorSectionProcessingStrategy implements ISectionStrategy {
     private final IFieldName maxExecutionDelayFieldName;
     private final IFieldName defaultStackDepthFieldName;
 
-    private final int DEFAULT_STACK_DEPTH = 5;
+    private static final int DEFAULT_STACK_DEPTH = 5;
 
     /**
      * The constructor.
@@ -112,22 +112,22 @@ public class ExecutorSectionProcessingStrategy implements ISectionStrategy {
         }
         try {
             IOC.unregister(Keys.getKeyByName("default_stack_depth"));
-        } catch(ResolutionException | DeletionException e) {
+        } catch (ResolutionException | DeletionException e) {
             exception.addSuppressed(e);
         }
         try {
             IOC.unregister(Keys.getKeyByName("thread_pool"));
-        } catch(ResolutionException | DeletionException e) {
+        } catch (ResolutionException | DeletionException e) {
             exception.addSuppressed(e);
         }
         try {
             IOC.unregister(Keys.getKeyByName("task_queue"));
-        } catch(ResolutionException | DeletionException e) {
+        } catch (ResolutionException | DeletionException e) {
             exception.addSuppressed(e);
         }
         try {
             IOC.unregister(Keys.getKeyByName("task_dispatcher"));
-        } catch(ResolutionException | DeletionException e) {
+        } catch (ResolutionException | DeletionException e) {
             exception.addSuppressed(e);
         }
         if (exception.getSuppressed().length > 0) {

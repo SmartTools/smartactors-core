@@ -14,7 +14,7 @@ import info.smart_tools.smartactors.message_processing.constant_chain_choice_str
  * Plugin that registers constant chain choice strategy.
  */
 public class PluginConstantChainChoiceStrategy extends BootstrapPlugin {
-    public PluginConstantChainChoiceStrategy(IBootstrap bootstrap) {
+    public PluginConstantChainChoiceStrategy(final IBootstrap bootstrap) {
         super(bootstrap);
     }
 

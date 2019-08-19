@@ -15,7 +15,7 @@ public interface IStrategyRegistration {
      * @param value {@link IStrategy} object, which should register by the key
      * @throws StrategyRegistrationException if any errors occurred
      */
-    void register(final Object key, final IStrategy value) throws StrategyRegistrationException;
+    void register(Object key, IStrategy value) throws StrategyRegistrationException;
 
     /**
      * Method for unregistering strategy from key
@@ -25,6 +25,6 @@ public interface IStrategyRegistration {
      * @return the previous instance of {@link IStrategy} associated with <tt>key</tt>,
      *         or <tt>null</tt> if there was no association for <tt>key</tt>.
      */
-    IStrategy unregister(final Object key) throws StrategyRegistrationException;
+    IStrategy unregister(Object key) throws StrategyRegistrationException;
 
 }

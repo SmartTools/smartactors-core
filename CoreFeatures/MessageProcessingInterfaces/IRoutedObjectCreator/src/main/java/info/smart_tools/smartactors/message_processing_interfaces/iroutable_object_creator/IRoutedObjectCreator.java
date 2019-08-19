@@ -19,6 +19,6 @@ public interface IRoutedObjectCreator {
      * @throws InvalidArgumentException if {@code router} is {@code null}
      * @throws InvalidArgumentException if {@code description} is {@code null}
      */
-    void createObject(final IRouter router, final IObject description)
+    void createObject(IRouter router, IObject description)
             throws ObjectCreationException, InvalidArgumentException;
 }

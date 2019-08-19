@@ -21,7 +21,9 @@ public class OrderWriter {
      * @param sortMessage - message describing how to order, the ordered list
      * @throws QueryBuildException when something goes wrong
      */
-    public void write(QueryStatement queryStatement, List<IObject> sortMessage) throws QueryBuildException {
+    public void write(
+            final QueryStatement queryStatement, final List<IObject> sortMessage
+    ) throws QueryBuildException {
         try {
             Writer writer = queryStatement.getBodyWriter();
             writer.write("ORDER BY");
@@ -50,7 +52,7 @@ public class OrderWriter {
         }
     }
 
-    private String resolveSortDirection(Object direction) throws QueryBuildException {
+    private String resolveSortDirection(final Object direction) throws QueryBuildException {
         if ("asc".equalsIgnoreCase(String.valueOf(direction))) {
             return "ASC";
         } else if ("desc".equalsIgnoreCase(String.valueOf(direction))) {

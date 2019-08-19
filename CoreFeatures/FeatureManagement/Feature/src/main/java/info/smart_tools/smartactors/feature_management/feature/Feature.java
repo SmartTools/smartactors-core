@@ -20,7 +20,7 @@ public class Feature implements IFeature {
     private Object id;
     private String packageType;
 
-    private final static String FEATURE_NAME_DELIMITER = ":";
+    private static final String FEATURE_NAME_DELIMITER = ":";
 
     /**
      * Creates instance of {@link IFeature} by specific arguments
@@ -53,7 +53,9 @@ public class Feature implements IFeature {
     }
 
     @Override
-    public String getName() { return this.name; }
+    public String getName() {
+        return this.name;
+    }
 
     @Override
     public String getGroupId() {
@@ -66,16 +68,24 @@ public class Feature implements IFeature {
     }
 
     @Override
-    public Set<String> getDependencies() { return this.dependencies; }
+    public Set<String> getDependencies() {
+        return this.dependencies;
+    }
 
     @Override
-    public IPath getLocation() { return this.location; }
+    public IPath getLocation() {
+        return this.location;
+    }
 
     @Override
-    public IPath getDirectory() { return this.directory; }
+    public IPath getDirectory() {
+        return this.directory;
+    }
 
     @Override
-    public Object getId() { return this.id; }
+    public Object getId() {
+        return this.id;
+    }
 
     @Override
     public String getPackageType() {
@@ -92,13 +102,19 @@ public class Feature implements IFeature {
     }
 
     @Override
-    public boolean isFailed() { return this.failed; }
+    public boolean isFailed() {
+        return this.failed;
+    }
 
     @Override
-    public void setFailed(final boolean failed) { this.failed = failed; }
+    public void setFailed(final boolean failed) {
+        this.failed = failed;
+    }
 
     @Override
-    public void setName(final String featureName) { this.name = featureName; }
+    public void setName(final String featureName) {
+        this.name = featureName;
+    }
 
     @Override
     public void setDependencies(final Set<String> dependencies) {
@@ -116,13 +132,19 @@ public class Feature implements IFeature {
     }
 
     @Override
-    public void setGroupId(final String groupId) { this.groupId = groupId; }
+    public void setGroupId(final String groupId) {
+        this.groupId = groupId;
+    }
 
     @Override
-    public void setVersion(final String version) { this.version = version; }
+    public void setVersion(final String version) {
+        this.version = version;
+    }
 
     @Override
-    public void setPackageType(String packageType) { this.packageType = packageType; }
+    public void setPackageType(final String packageType) {
+        this.packageType = packageType;
+    }
 
     @Override
     public IFeature clone() {
@@ -141,7 +163,7 @@ public class Feature implements IFeature {
     }
 
     @Override
-    public boolean updateFromClone(IFeature featureClone) {
+    public boolean updateFromClone(final IFeature featureClone) {
         if (featureClone == null ||
             !(featureClone instanceof Feature ||
             !featureClone.getId().equals(this.id))

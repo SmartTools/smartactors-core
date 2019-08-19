@@ -23,8 +23,8 @@ public class CreateProject implements IAction {
             throws ActionExecutionException, InvalidArgumentException {
         System.out.println("Creating project ...");
         try {
-            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[])o)[0];
-            IProjectResolver pr = (IProjectResolver) ((Object[])o)[1];
+            ICommandLineArgsResolver clar = (ICommandLineArgsResolver) ((Object[]) o)[0];
+            IProjectResolver pr = (IProjectResolver) ((Object[]) o)[1];
             String name = defProjectName;
             String group = defGroupId;
             String version = defVersion;

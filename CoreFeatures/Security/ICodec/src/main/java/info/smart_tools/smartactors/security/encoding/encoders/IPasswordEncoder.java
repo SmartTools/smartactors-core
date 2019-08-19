@@ -14,7 +14,7 @@ public interface IPasswordEncoder {
      * @return encoded string
      * @throws EncodingException if any errors is occurred during encoding
      */
-    String encode(@Nonnull final String password) throws EncodingException;
+    String encode(@Nonnull String password) throws EncodingException;
 
     /**
      * Merges salt and raw password and encodes
@@ -23,11 +23,11 @@ public interface IPasswordEncoder {
      * @return encoded string
      * @throws EncodingException if any errors is occurred during encoding
      */
-    String encode(@Nonnull final String password, @Nonnull final String salt) throws EncodingException;
+    String encode(@Nonnull String password, @Nonnull String salt) throws EncodingException;
 
     /**
      * Setter for encode iterations
      * @param iterations amount
      */
-    void setIterations(final int iterations);
+    void setIterations(int iterations);
 }

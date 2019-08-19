@@ -112,7 +112,7 @@ public class Plugin {
         }
     }
 
-
+    @SuppressWarnings("unchecked")
     public Plugin(final IObject plugin, final Feature feature)
             throws Exception {
         try {
@@ -122,7 +122,7 @@ public class Plugin {
             this.artifactId = (String) plugin.getValue(new FieldName("artifactId"));
 
             List<IObject> repositories = (List<IObject>) plugin.getValue(new FieldName("uploadRepositories"));
-            for(IObject repository : repositories) {
+            for (IObject repository : repositories) {
                 UploadRepository restoredRepository = new UploadRepository(repository);
                 this.uploadRepositories.add(restoredRepository);
             }
@@ -155,7 +155,7 @@ public class Plugin {
         return rawName;
     }
 
-    public void setRawName(String rawName) {
+    public void setRawName(final String rawName) {
         this.rawName = rawName;
     }
 
@@ -163,7 +163,7 @@ public class Plugin {
         return ownerFeature;
     }
 
-    public void setOwnerFeature(Feature ownerFeature) {
+    public void setOwnerFeature(final Feature ownerFeature) {
         this.ownerFeature = ownerFeature;
     }
 
@@ -171,7 +171,7 @@ public class Plugin {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -243,7 +243,7 @@ public class Plugin {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     pluginPomFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(FEATURE_GROUP_ID_TOKEN, featureGroupId);
                         put(FEATURE_NAME_TOKEN, featureName);
                         put(FEATURE_VERSION_TOKEN, featureVersion);
@@ -295,7 +295,7 @@ public class Plugin {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     pluginClassFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PACKAGE_TOKEN, packageName);
                         put(PLUGIN_NAME_TOKEN, pluginName);
                     }}
@@ -346,7 +346,7 @@ public class Plugin {
             FileBuilder.createFileByTemplateWithReplace(
                     file,
                     pluginTestClassFile.toFile(),
-                    new HashMap<String, String>(){{
+                    new HashMap<String, String>() {{
                         put(PACKAGE_TOKEN, packageName);
                         put(PLUGIN_NAME_TOKEN, className + TEST_FILE_POSTFIX);
                     }}
@@ -367,7 +367,7 @@ public class Plugin {
                 featurePomFile.toFile(),
                 START_MODULE_TAG + this.ownerFeature.getName() + DISTRIBUTION_FEATURE_NAME_POSTFIX + END_MODULE_TAG,
                 new File(MODULE_SECTION_TEMPLATE),
-                new HashMap<String, String>(){{
+                new HashMap<String, String>() {{
                     put(MODULE_NAME_TOKEN, moduleName);
                 }}
         );
@@ -380,7 +380,7 @@ public class Plugin {
         PomBuilder.addOrUpdateExecutionSectionToDeployPlugin(
                 new File(DEPLOY_PLUGIN_TEMPLATE),
                 pluginPomFile.toFile(),
-                new HashMap<String, String>(){{
+                new HashMap<String, String>() {{
                     put(DEPLOY_REPOSITORY_ID_TOKEN, repId);
                     put(DEPLOY_REPOSITORY_URL_TOKEN, repUrl);
                 }}

@@ -78,30 +78,31 @@ public class MessageBusHandler implements IMessageBusHandler {
     }
 
     @Override
-    public void handle(final IObject message, boolean scopeSwitching)
+    public void handle(final IObject message, final boolean scopeSwitching)
             throws MessageBusHandlerException {
         handle0(message, defaultChainName, scopeSwitching);
     }
 
     @Override
-    public void handle(final IObject message, final Object chainName, boolean scopeSwitching)
+    public void handle(final IObject message, final Object chainName, final boolean scopeSwitching)
             throws MessageBusHandlerException {
         handle0(message, chainName, scopeSwitching);
     }
 
     @Override
-    public void handleForReply(final IObject message, final Object replyToChainName, boolean scopeSwitching)
+    public void handleForReply(final IObject message, final Object replyToChainName, final boolean scopeSwitching)
             throws MessageBusHandlerException {
         handleForReply0(message, defaultChainName, replyToChainName, scopeSwitching);
     }
 
     @Override
-    public void handleForReply(final IObject message, final Object chainName, final Object replyToChainName, boolean scopeSwitching)
-            throws MessageBusHandlerException {
+    public void handleForReply(
+            final IObject message, final Object chainName, final Object replyToChainName, final boolean scopeSwitching
+    ) throws MessageBusHandlerException {
         handleForReply0(message, chainName, replyToChainName, scopeSwitching);
     }
 
-    private void handle0(final IObject message, final Object dstChainName, boolean scopeSwitching)
+    private void handle0(final IObject message, final Object dstChainName, final boolean scopeSwitching)
             throws MessageBusHandlerException {
         try {
             resolveMessageProcessor(dstChainName, message, scopeSwitching)
@@ -111,8 +112,12 @@ public class MessageBusHandler implements IMessageBusHandler {
         }
     }
 
-    private void handleForReply0(final IObject message, final Object dstChainName, final Object replyToChainName, boolean scopeSwitching)
-            throws MessageBusHandlerException {
+    private void handleForReply0(
+            final IObject message,
+            final Object dstChainName,
+            final Object replyToChainName,
+            final boolean scopeSwitching
+    ) throws MessageBusHandlerException {
         try {
             resolveMessageProcessor(dstChainName, message, scopeSwitching)
                     .process(message, resolveReplyContext(replyToChainName));
@@ -121,7 +126,9 @@ public class MessageBusHandler implements IMessageBusHandler {
         }
     }
 
-    private IMessageProcessor resolveMessageProcessor(final Object mpChainName, IObject message, Boolean scopeSwitching) throws ResolutionException {
+    private IMessageProcessor resolveMessageProcessor(
+            final Object mpChainName, final IObject message, final Boolean scopeSwitching
+    ) throws ResolutionException {
         IMessageProcessingSequence processingSequence = IOC.resolve(
                 this.keyIMessageProcessingSequence,
                 this.stackDepth,

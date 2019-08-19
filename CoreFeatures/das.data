@@ -3666,6 +3666,44 @@
   "artifactId" : "remote-management",
   "rawName" : "RemoteManagement",
   "version" : "0.6.0"
+}, {
+  "actors" : [ {
+  "artifactId" : "event-handler",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EventHandler",
+  "version" : "0.6.0"
+} ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "event-handler",
+  "rawName" : "EventHandler",
+  "version" : "0.6.0"
+}, {
+  "actors" : [ {
+  "artifactId" : "event-handler-with-logging-to-file",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "EventHandlerWithLoggingToFile",
+  "version" : "0.6.0"
+} ],
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-features",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-features/"
+} ],
+  "plugins" : [ ],
+  "groupId" : "info.smart_tools.smartactors",
+  "artifactId" : "event-handler-with-logging-to-file",
+  "rawName" : "EventHandlerWithLoggingToFile",
+  "version" : "0.6.0"
 } ],
   "on-actor-creation-upload-repositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-modules",

@@ -20,6 +20,6 @@ public interface ITestRunner {
      * @throws InvalidArgumentException if {@code callback} is {@code null}
      * @throws TestExecutionException if test execution failed
      */
-    void runTest(final IObject description, final IAction<Throwable> callback)
+    void runTest(IObject description, IAction<Throwable> callback)
             throws InvalidArgumentException, TestExecutionException;
 }

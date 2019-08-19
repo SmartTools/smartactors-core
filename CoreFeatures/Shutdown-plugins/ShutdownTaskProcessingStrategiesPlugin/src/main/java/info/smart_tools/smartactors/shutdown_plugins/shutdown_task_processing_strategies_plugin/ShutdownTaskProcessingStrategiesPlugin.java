@@ -16,7 +16,11 @@ import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationExce
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
-import info.smart_tools.smartactors.shutdown.shutdown_task_processing_strategies.*;
+import info.smart_tools.smartactors.shutdown.shutdown_task_processing_strategies.CompositeStrategy;
+import info.smart_tools.smartactors.shutdown.shutdown_task_processing_strategies.ExecuteTaskStrategy;
+import info.smart_tools.smartactors.shutdown.shutdown_task_processing_strategies.IgnoreTaskStrategy;
+import info.smart_tools.smartactors.shutdown.shutdown_task_processing_strategies.LimitTrialCountStrategy;
+import info.smart_tools.smartactors.shutdown.shutdown_task_processing_strategies.NotifyTaskStrategy;
 import info.smart_tools.smartactors.task.interfaces.itask_dispatcher.ITaskDispatcher;
 import info.smart_tools.smartactors.task.itask_preprocess_strategy.ITaskProcessStrategy;
 

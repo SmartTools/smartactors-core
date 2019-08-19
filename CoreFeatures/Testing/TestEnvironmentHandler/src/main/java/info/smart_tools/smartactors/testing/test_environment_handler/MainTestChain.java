@@ -13,7 +13,11 @@ import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageProcessor;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IMessageReceiver;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
-import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.*;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.AsynchronousOperationException;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.ChainChoiceException;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.ChainNotFoundException;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.MessageReceiveException;
+import info.smart_tools.smartactors.message_processing_interfaces.message_processing.exceptions.NestedChainStackOverflowException;
 import info.smart_tools.smartactors.scope.iscope.IScope;
 import info.smart_tools.smartactors.scope.iscope_provider_container.exception.ScopeProviderException;
 
@@ -134,10 +138,14 @@ public class MainTestChain implements IReceiverChain {
     }
 
     @Override
-    public IScope getScope() { return scope; }
+    public IScope getScope() {
+        return scope;
+    }
 
     @Override
-    public IModule getModule() { return module; }
+    public IModule getModule() {
+        return module;
+    }
 
     @Override
     public IObject getExceptionalChainNamesAndEnvironments(final Throwable exception) {
