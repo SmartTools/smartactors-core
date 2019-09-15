@@ -38,8 +38,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -69,7 +68,8 @@ public class PostgresGetByIdTaskTest {
     }
 
     @Before
-    public void setUp() throws QueryBuildException, InvalidArgumentException, ResolutionException, RegistrationException, ReadValueException, StorageException, SQLException {
+    public void setUp() throws QueryBuildException, InvalidArgumentException, ResolutionException,
+            RegistrationException, ReadValueException, StorageException, SQLException {
         resultSet = mock(ResultSet.class);
         sqlStatement = mock(PreparedStatement.class);
         when(sqlStatement.getResultSet()).thenReturn(resultSet);
@@ -101,27 +101,35 @@ public class PostgresGetByIdTaskTest {
     }
 
     @Test
-    public void testGetById() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException {
+    public void testGetById() throws InvalidArgumentException, ReadValueException,
+            TaskPrepareException, TaskSetConnectionException, TaskExecutionException,
+            ChangeValueException, StorageException, SQLException {
         when(message.getId()).thenReturn("123");
+
         final IObject[] result = new IObject[1];
         when(message.getCallback()).thenReturn(doc -> result[0] = doc);
         when(resultSet.next()).thenReturn(true);
-        when(resultSet.getString(1)).thenReturn("{ \"testID\": \"123\", \"test\": \"value\" }");
+        when(resultSet.getString(1)).thenReturn(
+                "{ \"testID\": \"123\", \"test\": \"value\" }"
+        );
 
         task.prepare(null); // the message will be resolved by IOC
         task.execute();
 
         verify(connection).compileQuery(any(QueryStatement.class));
-         verify(sqlStatement).setObject(eq(1), eq("123"));
+        verify(sqlStatement).setObject(eq(1), eq("123"));
         verify(sqlStatement).execute();
         verify(resultSet).next();
         verify(connection).commit();
+
         assertEquals("123", result[0].getValue(idFieldName));
         assertEquals("value", result[0].getValue(new FieldName("test")));
     }
 
     @Test
-    public void testGetByIdFailure() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException {
+    public void testGetByIdFailure() throws InvalidArgumentException, ReadValueException,
+            TaskPrepareException, TaskSetConnectionException, TaskExecutionException,
+            ChangeValueException, StorageException, SQLException {
         when(message.getId()).thenReturn("123");
         IAction<IObject> callback = mock(IAction.class);
         when(message.getCallback()).thenReturn(callback);
@@ -144,27 +152,28 @@ public class PostgresGetByIdTaskTest {
     }
 
     @Test
-    public void testGetByIdNotFound() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException {
+    public void testGetByIdNotFound() throws InvalidArgumentException, ReadValueException,
+            TaskPrepareException, TaskSetConnectionException, TaskExecutionException,
+            ChangeValueException, StorageException, SQLException {
         when(message.getId()).thenReturn("123");
+        when(resultSet.next()).thenReturn(false);
+
         IAction<IObject> callback = mock(IAction.class);
         when(message.getCallback()).thenReturn(callback);
-        when(resultSet.next()).thenReturn(false);
-        when(resultSet.getString(anyInt())).thenThrow(SQLException.class);
 
         task.prepare(null); // the message will be resolved by IOC
         try {
             task.execute();
             fail();
         } catch (TaskExecutionException e) {
-            // pass
+            assertTrue(e.getCause() instanceof DocumentNotFoundException);
         }
 
         verify(connection).compileQuery(any(QueryStatement.class));
-        verify(sqlStatement).setObject(eq(1), eq("123"));
         verify(sqlStatement).execute();
         verify(resultSet).next();
         verify(connection).commit();
         verifyZeroInteractions(callback);
+        verifyZeroInteractions(resultSet);
     }
-
 }
