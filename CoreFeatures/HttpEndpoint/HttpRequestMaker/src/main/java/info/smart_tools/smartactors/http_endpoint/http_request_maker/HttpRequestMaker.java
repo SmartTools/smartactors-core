@@ -75,7 +75,7 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
     /**
      * Default cookie encoder
      */
-    private final String defaultCookieEncoder = "STRICT";
+    private final static String DEFAULT_COOKIE_ENCODER = "STRICT";
 
 // Constructors ------------------------------------------------------------------------------------------------------
 
@@ -298,7 +298,7 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
 
         String encoderType = Optional
                 .ofNullable(request.getValue(cookiesEncoderFN))
-                .orElse(defaultCookieEncoder)
+                .orElse(DEFAULT_COOKIE_ENCODER)
                 .toString()
                 .toUpperCase()
                 .trim();
@@ -322,7 +322,12 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
     ) throws RequestMakerException {
         try {
             FullHttpRequest httpRequest;
-            String path = url.getPath();
+            StringBuilder pathBuilder = new StringBuilder(url.getPath());
+            Optional.ofNullable(url.getQuery()).ifPresent((query) -> {
+                pathBuilder.append("?");
+                pathBuilder.append(query);
+            });
+            String path = pathBuilder.toString();
 
             if (content == null){
                 httpRequest = new DefaultFullHttpRequest(

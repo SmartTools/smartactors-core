@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
@@ -17,22 +18,17 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject.iobject</artifactId>
+            <artifactId>base</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ioc.ioc</artifactId>
+            <artifactId>iobject</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ioc.key-tools</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>endpoint.interfaces.imessage-mapper</artifactId>
+            <artifactId>ioc</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
@@ -59,26 +55,38 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ioc.strategy-container</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
+            <artifactId>feature-loading-system.bootstrap</artifactId>
+            <version>0.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ioc.resolve-by-name-ioc-strategy</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
+            <artifactId>ioc-plugins.ioc-simple-container-plugin</artifactId>
+            <version>0.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>base.strategy.apply-function-to-arguments</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
+            <artifactId>ioc-plugins.ioc-keys-plugin</artifactId>
+            <version>0.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>base.strategy.singleton-strategy</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
+            <artifactId>iobject-plugins.ifieldname-plugin</artifactId>
+            <version>0.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject-plugins.ds-object-plugin</artifactId>
+            <version>0.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>field-plugins.field-plugin</artifactId>
+            <version>0.6.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
