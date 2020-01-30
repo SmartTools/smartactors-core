@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>database-postgresql</artifactId>
-        <version>0.6.2</version>
+        <version>0.6.3</version>
     </parent>
     <artifactId>database-postgresql.postgres-schema</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.3</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>

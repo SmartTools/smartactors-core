@@ -14,7 +14,7 @@ public interface FieldPath {
      * Valid path matches this pattern.
      */
     Pattern VALIDATION_PATTERN =
-            Pattern.compile("^([a-zA-Z_а-яА-Я\\-][a-zA-Z0-9_а-яА-Я\\-]*)((\\.([a-zA-Z_а-яА-Я\\-][a-zA-Z0-9_а-яА-Я\\-]*))|(\\[[0-9]+\\]))*$");
+            Pattern.compile("^([a-zA-Z_а-яА-Я \\-][a-zA-Z0-9_а-яА-Я \\-]*)((\\.([a-zA-Z_а-яА-Я \\-][a-zA-Z0-9_а-яА-Я \\-]*))|(\\[[0-9]+\\]))*$");
 
     /**
      * The path is split to the parts using this pattern.
