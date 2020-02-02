@@ -8,7 +8,7 @@
         <version>0.6.1</version>
     </parent>
     <artifactId>database-postgresql-plugins.postgres-db-tasks-plugin</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
@@ -53,6 +53,11 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>database-postgresql.postgres-search-task</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>database-postgresql.postgres-search-by-limit-and-offset-task</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>

@@ -17,6 +17,7 @@
         <module>PostgresDeleteTask</module>
         <module>PostgresSchema</module>
         <module>PostgresSearchTask</module>
+        <module>PostgresSearchByLimitAndOffsetTask</module>
         <module>PostgresConnection</module>
         <module>PostgresGetByIdTask</module>
         <module>PostgresCreateCollectionTask</module>

@@ -19,6 +19,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.Ge
 import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.PostgresGetByIdTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.InsertMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.PostgresSearchByLimitAndOffsetTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.SearchByLimitAndOffsetMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
@@ -138,6 +140,16 @@ public class PostgresDBTasksPluginTest {
         IAction callback = mock(IAction.class);
         assertTrue(IOC.resolve(Keys.getKeyByName("db.collection.search"), connection, collection, criteria, callback)
                 instanceof PostgresSearchTask);
+    }
+
+    @Test
+    public void testSearchByLimitAndOffsetTaskInitialized() throws ResolutionException {
+        assertTrue(IOC.resolve(Keys.getKeyByName(SearchByLimitAndOffsetMessage.class.getCanonicalName()), message)
+                instanceof SearchByLimitAndOffsetMessage);
+        IObject criteria = mock(IObject.class);
+        IAction callback = mock(IAction.class);
+        assertTrue(IOC.resolve(Keys.getKeyByName("db.collection.search.limit-and-offset"), connection, collection, criteria, callback)
+                instanceof PostgresSearchByLimitAndOffsetTask);
     }
 
     @Test

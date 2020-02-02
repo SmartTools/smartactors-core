@@ -22,6 +22,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.Ge
 import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.PostgresGetByIdTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.InsertMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.PostgresSearchByLimitAndOffsetTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.SearchByLimitAndOffsetMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
@@ -74,6 +76,7 @@ public class PostgresDBTasksPlugin implements IPlugin {
                         registerInsertTask();
                         registerGetByIdTask();
                         registerSearchTask();
+                        registerSearchByLimitAndOffsetTask();
                         registerDeleteTask();
                         registerCountTask();
                     } catch (ResolutionException e) {
@@ -486,6 +489,76 @@ public class PostgresDBTasksPlugin implements IPlugin {
                                 IObject criteria = (IObject) args[2];
                                 IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
                                 IDatabaseTask task = new PostgresSearchTask(connection);
+
+                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                                collectionNameField.out(query, collectionName);
+                                criteriaField.out(query, criteria);
+                                callbackField.out(query, callback);
+
+                                task.prepare(query);
+                                return task;
+                            } catch (Exception e) {
+                                throw new RuntimeException("Can't resolve search db task.", e);
+                            }
+                        }
+                )
+        );
+    }
+
+    private void registerSearchByLimitAndOffsetTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
+        IField collectionNameField = IOC.resolve(
+                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+        IField criteriaField = IOC.resolve(
+                Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
+        IField callbackField = IOC.resolve(
+                Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
+
+        IOC.register(
+                Keys.getKeyByName(SearchByLimitAndOffsetMessage.class.getCanonicalName()),
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -> {
+                            IObject message = (IObject) args[0];
+                            return new SearchByLimitAndOffsetMessage() {
+                                @Override
+                                public CollectionName getCollectionName() throws ReadValueException {
+                                    try {
+                                        return (CollectionName) collectionNameField.in(message);
+                                    } catch (Exception e) {
+                                        throw new ReadValueException(e);
+                                    }
+                                }
+                                @Override
+                                public IObject getCriteria() throws ReadValueException {
+                                    try {
+                                        return criteriaField.in(message);
+                                    } catch (Exception e) {
+                                        throw new ReadValueException(e);
+                                    }
+                                }
+                                @Override
+                                public IAction<IObject[]> getCallback() throws ReadValueException {
+                                    try {
+                                        return (IAction<IObject[]>) callbackField.in(message);
+                                    } catch (Exception e) {
+                                        throw new ReadValueException(e);
+                                    }
+                                }
+                            };
+                        }
+                )
+        );
+        IOC.register(
+                Keys.getKeyByName("db.collection.search.limit-and-offset"),
+                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -> {
+                            try {
+                                IStorageConnection connection = (IStorageConnection) args[0];
+                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                                IObject criteria = (IObject) args[2];
+                                IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
+                                IDatabaseTask task = new PostgresSearchByLimitAndOffsetTask(connection);
 
                                 IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
 

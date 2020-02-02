@@ -64,6 +64,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         when(Keys.getKeyByName(String.class.getCanonicalName() + "convert")).thenReturn(stringConvertKey);
         IKey integerConvertKey = mock(IKey.class);
         when(Keys.getKeyByName(Integer.class.getCanonicalName() + "convert")).thenReturn(integerConvertKey);
+        IKey longClassConvertKey = mock(IKey.class);
+        when(Keys.getKeyByName(Long.class.getCanonicalName() + "convert")).thenReturn(longClassConvertKey);
         IKey bigDecimalConvertKey = mock(IKey.class);
         when(Keys.getKeyByName(BigDecimal.class.getCanonicalName() + "convert")).thenReturn(bigDecimalConvertKey);
         IKey localDateTimeConvertKey = mock(IKey.class);
@@ -76,6 +78,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         when(Keys.getKeyByName(boolean.class.getCanonicalName() + "convert")).thenReturn(booleanConvertKey);
         IKey intConvertKey = mock(IKey.class);
         when(Keys.getKeyByName(int.class.getCanonicalName() + "convert")).thenReturn(intConvertKey);
+        IKey longConvertKey = mock(IKey.class);
+        when(Keys.getKeyByName(long.class.getCanonicalName() + "convert")).thenReturn(longConvertKey);
 
         verify(bootstrap).add(eq(bootstrapItem));
 
@@ -86,6 +90,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         verifyStatic();
         Keys.getKeyByName(Integer.class.getCanonicalName() + "convert");
         verifyStatic();
+        Keys.getKeyByName(Long.class.getCanonicalName() + "convert");
+        verifyStatic();
         Keys.getKeyByName(BigDecimal.class.getCanonicalName() + "convert");
         verifyStatic();
         Keys.getKeyByName(LocalDateTime.class.getCanonicalName() + "convert");
@@ -93,6 +99,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         Keys.getKeyByName(List.class.getCanonicalName() + "convert");
         verifyStatic();
         Keys.getKeyByName(int.class.getCanonicalName() + "convert");
+        verifyStatic();
+        Keys.getKeyByName(long.class.getCanonicalName() + "convert");
         verifyStatic();
         Keys.getKeyByName(boolean.class.getCanonicalName() + "convert");
         verifyStatic();
@@ -103,6 +111,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         verifyStatic();
         IOC.register(eq(integerConvertKey), any(IStrategy.class));
         verifyStatic();
+        IOC.register(eq(longClassConvertKey), any(IStrategy.class));
+        verifyStatic();
         IOC.register(eq(bigDecimalConvertKey), any(IStrategy.class));
         verifyStatic();
         IOC.register(eq(localDateTimeConvertKey), any(IStrategy.class));
@@ -110,6 +120,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         IOC.register(eq(listConvertKey), any(IStrategy.class));
         verifyStatic();
         IOC.register(eq(intConvertKey), any(IStrategy.class));
+        verifyStatic();
+        IOC.register(eq(longConvertKey), any(IStrategy.class));
         verifyStatic();
         IOC.register(eq(booleanConvertKey), any(IStrategy.class));
         verifyStatic();
@@ -122,10 +134,12 @@ public class ResolveStandardTypesStrategiesPluginTest {
 
         assertNull(IOC.unregister(eq(stringConvertKey)));
         assertNull(IOC.unregister(eq(integerConvertKey)));
+        assertNull(IOC.unregister(eq(longClassConvertKey)));
         assertNull(IOC.unregister(eq(bigDecimalConvertKey)));
         assertNull(IOC.unregister(eq(localDateTimeConvertKey)));
         assertNull(IOC.unregister(eq(listConvertKey)));
         assertNull(IOC.unregister(eq(intConvertKey)));
+        assertNull(IOC.unregister(eq(longConvertKey)));
         assertNull(IOC.unregister(eq(booleanConvertKey)));
         assertNull(IOC.unregister(eq(characterConvertKey)));
     }
@@ -143,6 +157,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         when(Keys.getKeyByName(String.class.getCanonicalName() + "convert")).thenReturn(stringConvertKey);
         IKey integerConvertKey = mock(IKey.class);
         when(Keys.getKeyByName(Integer.class.getCanonicalName() + "convert")).thenReturn(integerConvertKey);
+        IKey longClassConvertKey = mock(IKey.class);
+        when(Keys.getKeyByName(Long.class.getCanonicalName() + "convert")).thenReturn(longClassConvertKey);
         IKey bigDecimalConvertKey = mock(IKey.class);
         when(Keys.getKeyByName(BigDecimal.class.getCanonicalName() + "convert")).thenReturn(bigDecimalConvertKey);
         IKey localDateTimeConvertKey = mock(IKey.class);
@@ -155,6 +171,8 @@ public class ResolveStandardTypesStrategiesPluginTest {
         when(Keys.getKeyByName(boolean.class.getCanonicalName() + "convert")).thenReturn(booleanConvertKey);
         IKey intConvertKey = mock(IKey.class);
         when(Keys.getKeyByName(int.class.getCanonicalName() + "convert")).thenReturn(intConvertKey);
+        IKey longConvertKey = mock(IKey.class);
+        when(Keys.getKeyByName(long.class.getCanonicalName() + "convert")).thenReturn(longConvertKey);
 
         doThrow(new DeletionException("TestException")).when(IOC.class);
         IOC.unregister(any());

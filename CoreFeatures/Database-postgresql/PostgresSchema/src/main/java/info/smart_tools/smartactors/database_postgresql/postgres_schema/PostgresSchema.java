@@ -271,6 +271,58 @@ public final class PostgresSchema {
     }
 
     /**
+     * Fills the statement body and it's list of parameter setters with the collection name and WHERE clause
+     * for the SELECT statement to search the document by it's fields.
+     * <p>
+     *     The example of search criteria.
+     *     <pre>
+     *  {
+     *      "filter": {
+     *          "$or": [
+     *              "a": { "$eq": "b" },
+     *              "b": { "$gt": 42 }
+     *          ]
+     *      },
+     *      "page": {
+     *          "limit": 10,
+     *          "offset": 100
+     *      },
+     *      "sort": [
+     *          { "a": "asc" },
+     *          { "b": "desc" }
+     *      ]
+     *  }
+     *     </pre>
+     * </p>
+     * Limit and offset values are integer.
+     * @param statement statement to fill the body and add parameter setters
+     * @param collection collection name to use as the table name
+     * @param criteria complex JSON describing the search criteria
+     * @throws QueryBuildException when something goes wrong
+     */
+    public static void searchByLimitAndOffset(final QueryStatement statement, final CollectionName collection, final IObject criteria)
+            throws QueryBuildException {
+        try {
+            Writer body = statement.getBodyWriter();
+
+            body.write("SELECT ");
+            body.write(DOCUMENT_COLUMN);
+            body.write(" FROM ");
+            body.write(collection.toString());
+
+            if (criteria == null) {
+                SearchClauses.writeDefaultPaging(statement);
+                return;
+            }
+            SearchClauses.writeSearchWhere(statement, criteria);
+            SearchClauses.writeSearchOrder(statement, criteria);
+            SearchClauses.writeSearchPagingByLimitAndOffset(statement, criteria);
+        } catch (Exception e) {
+            throw new QueryBuildException("Failed to build search query", e);
+        }
+    }
+
+    /**
      * Fills the statement body with the collection name for the DELETE statement to delete the document by ID.
      * @param statement statement to fill the body
      * @param collection collection name to use as the table name

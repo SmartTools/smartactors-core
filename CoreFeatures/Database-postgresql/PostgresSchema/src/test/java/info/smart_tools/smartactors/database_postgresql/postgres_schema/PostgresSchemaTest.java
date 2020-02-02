@@ -101,6 +101,28 @@ public class PostgresSchemaTest {
     }
 
     @Test
+    public void testSearchWithPagingByLimitAndOffset() throws InvalidArgumentException, QueryBuildException {
+        IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
+                " \"page\": { \"limit\": 10, \"offset\": 100 } }");
+        PostgresSchema.searchByLimitAndOffset(statement, collection, criteria);
+        assertEquals("SELECT document FROM test_collection " +
+                "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
+                "LIMIT(?)OFFSET(?)", body.toString());
+        verify(statement, times(2)).pushParameterSetter(any());
+    }
+
+    @Test
+    public void testSearchWithPagingByLimitAndDefaultOffset() throws InvalidArgumentException, QueryBuildException {
+        IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
+                " \"page\": { \"limit\": 10 } }");
+        PostgresSchema.searchByLimitAndOffset(statement, collection, criteria);
+        assertEquals("SELECT document FROM test_collection " +
+                "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
+                "LIMIT(?)OFFSET(?)", body.toString());
+        verify(statement, times(2)).pushParameterSetter(any());
+    }
+
+    @Test
     public void testSearchWithSorting() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
                 " \"sort\": [ { \"a\": \"desc\" } ] }");

@@ -74,7 +74,7 @@ final class SearchClauses {
     }
 
     /**
-     * Writes OFFSET and LIMIT clauses of the select statement.
+     * Writes OFFSET and LIMIT clauses of the select statement using page size and number.
      * @param statement statement which body to write and which parameters to set
      * @param criteria search criteria
      * @throws Exception if the clause cannot be written
@@ -98,6 +98,41 @@ final class SearchClauses {
                 IFieldName numberField = IOC.resolve(fieldNameKey, "number");
                 Integer number = (Integer) page.getValue(numberField);
                 paging.write(statement, number, size);
+            } catch (Exception e) {
+                throw new QueryBuildException("wrong page format: " + page.serialize(), e);
+            }
+        } catch (ReadValueException e) {
+            writeDefaultPaging(statement);
+            // no page in the criteria, ignoring
+        }
+    }
+
+    /**
+     * Writes OFFSET and LIMIT clauses of the select statement using limit and offset params.
+     * @param statement statement which body to write and which parameters to set
+     * @param criteria search criteria
+     * @throws Exception if the clause cannot be written
+     */
+    static void writeSearchPagingByLimitAndOffset(final QueryStatement statement, final IObject criteria) throws Exception {
+        IKey fieldNameKey = Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName");
+        Writer body = statement.getBodyWriter();
+        try {
+            IFieldName pageField = IOC.resolve(fieldNameKey, "page");
+            IObject page = (IObject) criteria.getValue(pageField);
+            if (page == null) {
+                writeDefaultPaging(statement);
+                return; // no page in the criteria, ignoring
+            }
+
+            try {
+                body.write(" ");
+                PagingWriter paging = new PagingWriter();
+                IFieldName limitField = IOC.resolve(fieldNameKey, "limit");
+                Integer limit = (Integer) page.getValue(limitField);
+                IFieldName offsetField = IOC.resolve(fieldNameKey, "offset");
+                Object offsetRaw = page.getValue(offsetField);
+                Long offset = (offsetRaw != null) ? ((Number) offsetRaw).longValue() : null;
+                paging.writeByLimitAndOffset(statement, limit, offset);
             } catch (Exception e) {
                 throw new QueryBuildException("wrong page format: " + page.serialize(), e);
             }
