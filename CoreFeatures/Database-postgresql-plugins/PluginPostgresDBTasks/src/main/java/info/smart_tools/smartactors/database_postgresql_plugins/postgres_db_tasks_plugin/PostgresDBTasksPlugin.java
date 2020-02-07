@@ -24,8 +24,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.Ins
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.PostgresSearchByLimitAndOffsetTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.SearchByLimitAndOffsetMessage;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.PostgresSearchByPageSizeAndNumberTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.SearchByPageSizeAndNumberMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.UpsertMessage;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
@@ -75,7 +75,7 @@ public class PostgresDBTasksPlugin implements IPlugin {
                         registerUpsertTask();
                         registerInsertTask();
                         registerGetByIdTask();
-                        registerSearchTask();
+                        registerSearchByPageSizeAndNumberTask();
                         registerSearchByLimitAndOffsetTask();
                         registerDeleteTask();
                         registerCountTask();
@@ -436,7 +436,7 @@ public class PostgresDBTasksPlugin implements IPlugin {
         );
     }
 
-    private void registerSearchTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
+    private void registerSearchByPageSizeAndNumberTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
                 Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField criteriaField = IOC.resolve(
@@ -445,11 +445,11 @@ public class PostgresDBTasksPlugin implements IPlugin {
                 Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
 
         IOC.register(
-                Keys.getKeyByName(SearchMessage.class.getCanonicalName()),
+                Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()),
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -> {
                             IObject message = (IObject) args[0];
-                            return new SearchMessage() {
+                            return new SearchByPageSizeAndNumberMessage() {
                                 @Override
                                 public CollectionName getCollectionName() throws ReadValueException {
                                     try {
@@ -488,7 +488,33 @@ public class PostgresDBTasksPlugin implements IPlugin {
                                 CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
                                 IObject criteria = (IObject) args[2];
                                 IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
-                                IDatabaseTask task = new PostgresSearchTask(connection);
+                                IDatabaseTask task = new PostgresSearchByPageSizeAndNumberTask(connection);
+
+                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                                collectionNameField.out(query, collectionName);
+                                criteriaField.out(query, criteria);
+                                callbackField.out(query, callback);
+
+                                task.prepare(query);
+                                return task;
+                            } catch (Exception e) {
+                                throw new RuntimeException("Can't resolve search db task.", e);
+                            }
+                        }
+                )
+        );
+        IOC.register(
+                Keys.getKeyByName("db.collection.search.page-size-and-number"),
+                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -> {
+                            try {
+                                IStorageConnection connection = (IStorageConnection) args[0];
+                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                                IObject criteria = (IObject) args[2];
+                                IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
+                                IDatabaseTask task = new PostgresSearchByPageSizeAndNumberTask(connection);
 
                                 IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
 

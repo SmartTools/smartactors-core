@@ -21,8 +21,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.Ins
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.PostgresSearchByLimitAndOffsetTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.SearchByLimitAndOffsetMessage;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.PostgresSearchByPageSizeAndNumberTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.SearchByPageSizeAndNumberMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.UpsertMessage;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap.Bootstrap;
@@ -133,13 +133,23 @@ public class PostgresDBTasksPluginTest {
     }
 
     @Test
-    public void testSearchTaskInitialized() throws ResolutionException {
-        assertTrue(IOC.resolve(Keys.getKeyByName(SearchMessage.class.getCanonicalName()), message)
-                instanceof SearchMessage);
+    public void testDefaultSearchTaskInitialized() throws ResolutionException {
+        assertTrue(IOC.resolve(Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()), message)
+                instanceof SearchByPageSizeAndNumberMessage);
         IObject criteria = mock(IObject.class);
         IAction callback = mock(IAction.class);
         assertTrue(IOC.resolve(Keys.getKeyByName("db.collection.search"), connection, collection, criteria, callback)
-                instanceof PostgresSearchTask);
+                instanceof PostgresSearchByPageSizeAndNumberTask);
+    }
+
+    @Test
+    public void testSearchByPageSizeAndNumberTaskInitialized() throws ResolutionException {
+        assertTrue(IOC.resolve(Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()), message)
+                instanceof SearchByPageSizeAndNumberMessage);
+        IObject criteria = mock(IObject.class);
+        IAction callback = mock(IAction.class);
+        assertTrue(IOC.resolve(Keys.getKeyByName("db.collection.search.page-size-and-number"), connection, collection, criteria, callback)
+                instanceof PostgresSearchByPageSizeAndNumberTask);
     }
 
     @Test

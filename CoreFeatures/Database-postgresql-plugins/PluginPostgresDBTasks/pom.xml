@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>database-postgresql.postgres-search-task</artifactId>
+            <artifactId>database-postgresql.postgres-search-by-page-size-and-number-task</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>

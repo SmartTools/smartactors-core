@@ -79,7 +79,7 @@ final class SearchClauses {
      * @param criteria search criteria
      * @throws Exception if the clause cannot be written
      */
-    static void writeSearchPaging(final QueryStatement statement, final IObject criteria) throws Exception {
+    static void writeSearchPagingByPageSizeAndNumber(final QueryStatement statement, final IObject criteria) throws Exception {
         IKey fieldNameKey = Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName");
         Writer body = statement.getBodyWriter();
         try {
@@ -97,7 +97,7 @@ final class SearchClauses {
                 Integer size = (Integer) page.getValue(sizeField);
                 IFieldName numberField = IOC.resolve(fieldNameKey, "number");
                 Integer number = (Integer) page.getValue(numberField);
-                paging.write(statement, number, size);
+                paging.writeByPageSizeAndNumber(statement, number, size);
             } catch (Exception e) {
                 throw new QueryBuildException("wrong page format: " + page.serialize(), e);
             }
@@ -152,7 +152,7 @@ final class SearchClauses {
         Writer body = statement.getBodyWriter();
         body.write(" ");
         PagingWriter paging = new PagingWriter();
-        paging.write(statement, 1, PostgresSchema.DEFAULT_PAGE_SIZE);
+        paging.writeByPageSizeAndNumber(statement, 1, PostgresSchema.DEFAULT_PAGE_SIZE);
     }
 
 }

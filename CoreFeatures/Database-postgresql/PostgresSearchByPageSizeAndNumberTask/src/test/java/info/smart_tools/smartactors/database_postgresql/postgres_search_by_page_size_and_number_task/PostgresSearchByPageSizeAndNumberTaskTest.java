@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.database_postgresql.postgres_search_task;
+package info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task;
 
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
@@ -46,10 +46,10 @@ import static org.mockito.Mockito.*;
 /**
  * Tests for PostgresSearchTask.
  */
-public class PostgresSearchTaskTest {
+public class PostgresSearchByPageSizeAndNumberTaskTest {
 
     private IDatabaseTask task;
-    private SearchMessage message;
+    private SearchByPageSizeAndNumberMessage message;
     private IStorageConnection connection;
     private JDBCCompiledQuery compiledQuery;
     private PreparedStatement sqlStatement;
@@ -78,14 +78,14 @@ public class PostgresSearchTaskTest {
         connection = mock(IStorageConnection.class);
         when(connection.compileQuery(any())).thenReturn(compiledQuery);
 
-        task = new PostgresSearchTask(connection);
+        task = new PostgresSearchByPageSizeAndNumberTask(connection);
 
-        message = mock(SearchMessage.class);
+        message = mock(SearchByPageSizeAndNumberMessage.class);
         when(message.getCollectionName()).thenReturn(CollectionName.fromString("test"));
         when(message.getCriteria()).thenReturn(new DSObject("{ \"filter\": { } }"));
 
         IOC.register(
-                Keys.getKeyByName(SearchMessage.class.getCanonicalName()),
+                Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()),
                 new SingletonStrategy(message)
         );
     }

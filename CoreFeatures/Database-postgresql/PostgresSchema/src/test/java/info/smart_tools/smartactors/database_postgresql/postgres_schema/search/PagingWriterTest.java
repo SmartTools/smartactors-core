@@ -40,7 +40,7 @@ public class PagingWriterTest {
 
     @Test
     public void should_WritesPAGINGClauseIntoQueryStatement() throws QueryBuildException, SQLException {
-        pagingWriter.write(query, 3, 8);
+        pagingWriter.writeByPageSizeAndNumber(query, 3, 8);
         assertEquals("LIMIT(?)OFFSET(?)", body.toString());
         verify(query, times(1)).pushParameterSetter(any());
         for (SQLQueryParameterSetter setter : setters) {

@@ -28,7 +28,7 @@ public class PagingWriter {
      * @param pageSize size of the page or rows
      * @throws QueryBuildException when writing body of query errors
      */
-    public void write(final QueryStatement queryStatement, final int pageNumber, final int pageSize) throws QueryBuildException {
+    public void writeByPageSizeAndNumber(final QueryStatement queryStatement, final int pageNumber, final int pageSize) throws QueryBuildException {
         try {
             queryStatement.getBodyWriter().write("LIMIT(?)OFFSET(?)");
             queryStatement.pushParameterSetter((statement, index) -> {
@@ -50,7 +50,7 @@ public class PagingWriter {
 
     /**
      * Writes a PAGING (LIMIT and OFFSET) clause into the query statement using explicit limit and offset values.
-     * @param queryStatement the statement where to writeByPageNumberAndSize the query body and add parameter setters
+     * @param queryStatement the statement where the query body and add parameter setters
      * @param limit row number limit to extract from database
      * @param offset [optional] number of rows to skip
      * @throws QueryBuildException when writing body of query errors

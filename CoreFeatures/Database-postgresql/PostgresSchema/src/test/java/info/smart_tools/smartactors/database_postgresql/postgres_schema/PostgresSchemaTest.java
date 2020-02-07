@@ -72,7 +72,7 @@ public class PostgresSchemaTest {
     @Test
     public void testSearch() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
                 "LIMIT(?)OFFSET(?)", body.toString());
@@ -82,7 +82,7 @@ public class PostgresSchemaTest {
     @Test
     public void testSearchWithTypeCast() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": { \"value\": \"val\", \"type\": \"decimal\" } } } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE (((((document#>>'{a}')::decimal)=(?::decimal)))) " +
                 "LIMIT(?)OFFSET(?)", body.toString());
@@ -93,7 +93,7 @@ public class PostgresSchemaTest {
     public void testSearchWithPaging() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
                 " \"page\": { \"size\": 10, \"number\": 3 } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
                 "LIMIT(?)OFFSET(?)", body.toString());
@@ -126,7 +126,7 @@ public class PostgresSchemaTest {
     public void testSearchWithSorting() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
                 " \"sort\": [ { \"a\": \"desc\" } ] }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
                 "ORDER BY(document#>'{a}')DESC " +
@@ -138,7 +138,7 @@ public class PostgresSchemaTest {
     public void testSearchWithSortingAndTypeCast() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
                 " \"sort\": [ { \"a\": { \"direction\": \"desc\", \"type\": \"decimal\" }} ] }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
                 "ORDER BY((document#>>'{a}')::decimal)DESC " +
@@ -151,7 +151,7 @@ public class PostgresSchemaTest {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
                 " \"page\": { \"size\": 10, \"number\": 3 }, " +
                 " \"sort\": [ { \"a\": \"desc\" } ] }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
                 "ORDER BY(document#>'{a}')DESC " +
@@ -163,7 +163,7 @@ public class PostgresSchemaTest {
     @Test
     public void testSearchWithEmptyFilter() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection WHERE (TRUE) LIMIT(?)OFFSET(?)", body.toString());
         verify(statement, times(1)).pushParameterSetter(any());
     }
@@ -171,14 +171,14 @@ public class PostgresSchemaTest {
     @Test
     public void testSearchWithEmptyCriteria() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection LIMIT(?)OFFSET(?)", body.toString());
         verify(statement, times(1)).pushParameterSetter(any());
     }
 
     @Test
     public void testSearchWithNullCriteria() throws InvalidArgumentException, QueryBuildException {
-        PostgresSchema.search(statement, collection, null);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, null);
         assertEquals("SELECT document FROM test_collection LIMIT(?)OFFSET(?)", body.toString());
         verify(statement, times(1)).pushParameterSetter(any());
     }
@@ -417,7 +417,7 @@ public class PostgresSchemaTest {
     @Test
     public void testSearchWithNot() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"$not\": { \"a\": { \"$eq\": \"b\" }, \"c\": { \"$eq\": \"d\" } } } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((NOT((((document#>'{a}')=to_json(?)::jsonb))AND(((document#>'{c}')=to_json(?)::jsonb))))) " +
                 "LIMIT(?)OFFSET(?)", body.toString());
@@ -427,7 +427,7 @@ public class PostgresSchemaTest {
     @Test
     public void testSearchWithFulltext() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"$fulltext\": \"term1 term2\" } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection WHERE " +
                 "(fulltext_english@@(to_tsquery(?,?))) LIMIT(?)OFFSET(?)", body.toString());
         verify(statement, times(2)).pushParameterSetter(any());
@@ -436,7 +436,7 @@ public class PostgresSchemaTest {
     @Test
     public void testSearchWithFulltextWithLanguage() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"$fulltext\": { \"query\":\"term1 term2\", \"language\":\"russian\" } } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
         assertEquals("SELECT document FROM test_collection WHERE " +
                 "(fulltext_russian@@(to_tsquery(?,?))) LIMIT(?)OFFSET(?)", body.toString());
         verify(statement, times(2)).pushParameterSetter(any());
@@ -445,6 +445,6 @@ public class PostgresSchemaTest {
     @Test(expected = QueryBuildException.class)
     public void testSearchWithFulltextComplex() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"$fulltext\": { \"query\":{ \"$or\": [ \"term1\", \"term2\" ] }, \"language\":\"russian\" } } }");
-        PostgresSchema.search(statement, collection, criteria);
+        PostgresSchema.searchByPageSizeAndNumber(statement, collection, criteria);
     }
 }

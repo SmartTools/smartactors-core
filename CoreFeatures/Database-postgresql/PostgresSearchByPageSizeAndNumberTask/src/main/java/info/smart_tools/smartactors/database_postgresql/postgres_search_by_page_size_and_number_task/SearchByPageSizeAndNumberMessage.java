@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.database_postgresql.postgres_search_task;
+package info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task;
 
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
 import info.smart_tools.smartactors.database.database_storage.utils.CollectionName;
@@ -6,9 +6,9 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 
 /**
- * A query message to be passed to {@link PostgresSearchTask#prepare(IObject)}.
+ * A query message to be passed to {@link PostgresSearchByPageSizeAndNumberTask#prepare(IObject)}.
  */
-public interface SearchMessage {
+public interface SearchByPageSizeAndNumberMessage {
 
     /**
      * Returns the collection name where to search the document

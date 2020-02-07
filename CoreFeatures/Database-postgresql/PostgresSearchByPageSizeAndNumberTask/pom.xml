@@ -7,7 +7,7 @@
         <artifactId>database-postgresql</artifactId>
         <version>0.6.3</version>
     </parent>
-    <artifactId>database-postgresql.postgres-search-task</artifactId>
+    <artifactId>database-postgresql.postgres-search-by-page-size-and-number-task</artifactId>
     <version>0.6.3</version>
     <dependencies>
         <dependency>
