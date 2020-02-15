@@ -9,7 +9,7 @@
     </parent>
     <groupId>info.smart_tools.smartactors</groupId>
     <artifactId>database-postgresql</artifactId>
-    <version>0.6.3</version>
+    <version>0.6.4</version>
     <packaging>pom</packaging>
     <modules>
         <module>PostgresCountTask</module>
@@ -23,6 +23,7 @@
         <module>PostgresAddIndexesTask</module>
         <module>PostgresDropIndexesTask</module>
         <module>PostgresUpsertTask</module>
+        <module>PostgresPercentileSearchTask</module>
         <module>Database-postgresqlDistribution</module>
     </modules>
     <build>

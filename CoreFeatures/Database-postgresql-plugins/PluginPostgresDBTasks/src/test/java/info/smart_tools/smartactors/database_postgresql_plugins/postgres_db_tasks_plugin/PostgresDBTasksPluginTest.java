@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.database_postgresql_plugins.postgres_db_tasks_plugin;
 
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
 import info.smart_tools.smartactors.database.database_storage.exceptions.QueryBuildException;
 import info.smart_tools.smartactors.database.database_storage.utils.CollectionName;
@@ -19,6 +20,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.Ge
 import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.PostgresGetByIdTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.InsertMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_percentile_search_task.PercentileSearchMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_percentile_search_task.PostgresPercentileSearchTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
@@ -27,16 +30,21 @@ import info.smart_tools.smartactors.feature_loading_system.bootstrap.Bootstrap;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.ProcessExecutionException;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.field_plugins.ifield_plugin.IFieldPlugin;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject_plugins.dsobject_plugin.PluginDSObject;
 import info.smart_tools.smartactors.iobject_plugins.ifieldname_plugin.IFieldNamePlugin;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.ioc_plugins.ioc_keys_plugin.PluginIOCKeys;
 import info.smart_tools.smartactors.ioc_plugins.ioc_simple_container_plugin.PluginIOCSimpleContainer;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -138,6 +146,43 @@ public class PostgresDBTasksPluginTest {
         IAction callback = mock(IAction.class);
         assertTrue(IOC.resolve(Keys.getKeyByName("db.collection.search"), connection, collection, criteria, callback)
                 instanceof PostgresSearchTask);
+    }
+
+    @Test
+    public void testPercentileSearchTaskInitialized() throws ResolutionException, ChangeValueException, InvalidArgumentException {
+        assertTrue(
+                IOC.resolve(Keys.getKeyByName(PercentileSearchMessage.class.getCanonicalName()), message)
+                instanceof PercentileSearchMessage
+        );
+        IKey fieldNameKey = Keys.getKeyByName(IFieldName.class.getCanonicalName());
+
+        IObject criteria = mock(IObject.class);
+        IObject percentileCriteria = IOC.resolve(Keys.getKeyByName(IObject.class.getCanonicalName()));
+        percentileCriteria.setValue(IOC.resolve(fieldNameKey, "field"), "value");
+        percentileCriteria.setValue(IOC.resolve(fieldNameKey, "values"), new ArrayList<>());
+        IAction callback = mock(IAction.class);
+        assertTrue(
+                IOC.resolve(
+                        Keys.getKeyByName("db.collection.percentileSearch"),
+                        connection, collection, criteria, percentileCriteria, callback
+                ) instanceof PostgresPercentileSearchTask
+        );
+    }
+
+    @Test(expected = ResolutionException.class)
+    public void testPercentileSearchTaskEmptyPercentileCriteria() throws ResolutionException {
+        assertTrue(
+                IOC.resolve(Keys.getKeyByName(PercentileSearchMessage.class.getCanonicalName()), message)
+                        instanceof PercentileSearchMessage
+        );
+
+        IObject criteria = mock(IObject.class);
+        IObject percentileCriteria = mock(IObject.class);
+        IAction callback = mock(IAction.class);
+        IOC.resolve(
+                Keys.getKeyByName("db.collection.percentileSearch"),
+                connection, collection, criteria, percentileCriteria, callback
+        );
     }
 
     @Test

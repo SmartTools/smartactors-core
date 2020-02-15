@@ -221,7 +221,7 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "database-postgresql-plugins",
   "rawName" : "Database-postgresql-plugins",
-  "version" : "0.6.0"
+  "version" : "0.6.2"
 }, {
   "actors" : [ {
   "artifactId" : "scheduler-plugins.scheduling-strategies-plugin",
@@ -852,6 +852,14 @@
 } ],
   "rawName" : "PostgresUpsertTask",
   "version" : "0.6.0"
+}, {
+  "artifactId" : "postgres-percentile-search-task",
+  "uploadRepositories" : [ {
+  "uploadRepositoryId" : "archiva.smartactors-modules",
+  "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
+} ],
+  "rawName" : "PostgresPercentileSearchTask",
+  "version" : "0.6.0"
 } ],
   "uploadRepositories" : [ {
   "uploadRepositoryId" : "archiva.smartactors-features",
@@ -861,7 +869,7 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "database-postgresql",
   "rawName" : "Database-postgresql",
-  "version" : "0.6.0"
+  "version" : "0.6.4"
 }, {
   "actors" : [ {
   "artifactId" : "iobject-extension-plugins.configuration-object-plugin",

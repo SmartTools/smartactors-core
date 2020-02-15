@@ -3,9 +3,12 @@ package info.smart_tools.smartactors.database_postgresql_plugins.postgres_db_tas
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
 import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecutionException;
+import info.smart_tools.smartactors.base.interfaces.iaction.exception.FunctionExecutionException;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
+import info.smart_tools.smartactors.database.database_storage.exceptions.QueryBuildException;
 import info.smart_tools.smartactors.database.database_storage.utils.CollectionName;
 import info.smart_tools.smartactors.database.interfaces.idatabase_task.IDatabaseTask;
+import info.smart_tools.smartactors.database.interfaces.idatabase_task.exception.TaskPrepareException;
 import info.smart_tools.smartactors.database.interfaces.istorage_connection.IStorageConnection;
 import info.smart_tools.smartactors.database_postgresql.postgres_add_indexes_task.PostgresAddIndexesSafeTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_count_task.CountMessage;
@@ -22,6 +25,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.Ge
 import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.PostgresGetByIdTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.InsertMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_percentile_search_task.PercentileSearchMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_percentile_search_task.PostgresPercentileSearchTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
@@ -33,6 +38,7 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IP
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.iobject.ifield.IField;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
 import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
@@ -74,6 +80,7 @@ public class PostgresDBTasksPlugin implements IPlugin {
                         registerInsertTask();
                         registerGetByIdTask();
                         registerSearchTask();
+                        registerPercentileSearchTask();
                         registerDeleteTask();
                         registerCountTask();
                     } catch (ResolutionException e) {
@@ -497,6 +504,94 @@ public class PostgresDBTasksPlugin implements IPlugin {
                                 return task;
                             } catch (Exception e) {
                                 throw new RuntimeException("Can't resolve search db task.", e);
+                            }
+                        }
+                )
+        );
+    }
+
+    private void registerPercentileSearchTask() throws ResolutionException, InvalidArgumentException, RegistrationException {
+        IField collectionNameField = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+        IField criteriaField = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
+        IField percentileCriteriaField = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "percentileCriteria");
+        IField callbackField = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
+
+        IOC.register(
+                Keys.getKeyByName(PercentileSearchMessage.class.getCanonicalName()),
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -> {
+                            IObject message = (IObject) args[0];
+
+                            return new PercentileSearchMessage() {
+                                @Override
+                                public CollectionName getCollectionName() throws ReadValueException {
+                                    try {
+                                        return (CollectionName) collectionNameField.in(message);
+                                    } catch (InvalidArgumentException e) {
+                                        throw new ReadValueException("Failed to get collection name from the message", e);
+                                    }
+                                }
+
+                                @Override
+                                public IObject getCriteria() throws ReadValueException {
+                                    try {
+                                        return criteriaField.in(message);
+                                    } catch (InvalidArgumentException e) {
+                                        throw new ReadValueException("Failed to get search criteria from the message", e);
+                                    }
+                                }
+
+                                @Override
+                                public IObject getPercentileCriteria() throws ReadValueException {
+                                    try {
+                                        return percentileCriteriaField.in(message);
+                                    } catch (InvalidArgumentException e) {
+                                        throw new ReadValueException("Failed to get percentile search criteria from the message", e);
+                                    }
+                                }
+
+                                @Override
+                                public IAction<Number[]> getCallback() throws ReadValueException {
+                                    try {
+                                        return (IAction<Number[]>) callbackField.in(message);
+                                    } catch (InvalidArgumentException e) {
+                                        throw new ReadValueException("Failed to get callback from the message", e);
+                                    }
+                                }
+                            };
+                        }
+                )
+        );
+        IOC.register(
+                Keys.getKeyByName("db.collection.percentileSearch"),
+                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+                new ApplyFunctionToArgumentsStrategy(
+                        (args) -> {
+                            try {
+                                IStorageConnection connection = (IStorageConnection) args[0];
+                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                                IObject criteria = (IObject) args[2];
+                                IObject percentileCriteria = (IObject) args[3];
+                                IAction<IObject[]> callback = (IAction<IObject[]>) args[4];
+                                IDatabaseTask task = new PostgresPercentileSearchTask(connection);
+
+                                IObject query = IOC.resolve(Keys.getKeyByName(IObject.class.getCanonicalName()));
+
+                                collectionNameField.out(query, collectionName);
+                                criteriaField.out(query, criteria);
+                                percentileCriteriaField.out(query, percentileCriteria);
+                                callbackField.out(query, callback);
+
+                                task.prepare(query);
+                                return task;
+                            } catch (ResolutionException e) {
+                                throw new FunctionExecutionException("Failed to resolve value from IOC", e);
+                            } catch (TaskPrepareException e) {
+                                throw new FunctionExecutionException("Failed to prepare database task for execution", e);
+                            } catch (QueryBuildException e) {
+                                throw new FunctionExecutionException("Failed to build query", e);
+                            } catch (ChangeValueException e) {
+                                throw new FunctionExecutionException("Failed to set value to IObject", e);
                             }
                         }
                 )

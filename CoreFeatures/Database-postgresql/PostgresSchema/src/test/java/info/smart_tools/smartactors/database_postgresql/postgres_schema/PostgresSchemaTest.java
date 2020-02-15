@@ -425,4 +425,63 @@ public class PostgresSchemaTest {
         IObject criteria = new DSObject("{ \"filter\": { \"$fulltext\": { \"query\":{ \"$or\": [ \"term1\", \"term2\" ] }, \"language\":\"russian\" } } }");
         PostgresSchema.search(statement, collection, criteria);
     }
+
+    @Test
+    public void testPercentileSearchSingleQuantileNoCriteria() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0.5]}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, null);
+        assertEquals(
+                "SELECT percentile_disc(array[0.5]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection",
+                body.toString()
+        );
+    }
+
+    @Test
+    public void testPercentileSearchMultipleQuantilesNoCriteria() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0, 0.5, 1]}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, null);
+        assertEquals(
+                "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection",
+                body.toString()
+        );
+    }
+
+    @Test
+    public void testPercentileSearchMultipleQuantilesWithCriteriaNoPaging() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0, 0.5, 1]}");
+        IObject criteria = new DSObject("{\"filter\":{\"$and\":[{\"a\":{\"$eq\":\"value\"}}," +
+                "{\"receivedAt\":{\"$date-from\":\"2019-09-01T00:00:00.000Z\",\"$date-to\":\"2019-09-30T23:59:59.999Z\"}}]}}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, criteria);
+        assertEquals(
+                "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection " +
+                        "WHERE ((((((document#>'{a}')=to_json(?)::jsonb)))" +
+                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamp)" +
+                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamp)))))",
+                body.toString()
+        );
+        verify(statement, times(3)).pushParameterSetter(any());
+    }
+
+    @Test
+    public void testPercentileSearchMultipleQuantilesWithCriteriaWithPaging() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0, 0.5, 1]}");
+        IObject criteria = new DSObject("{\"filter\":{\"$and\":[{\"a\":{\"$eq\":\"value\"}}," +
+                "{\"receivedAt\":{\"$date-from\":\"2019-09-01T00:00:00.000Z\",\"$date-to\":\"2019-09-30T23:59:59.999Z\"}}]}," +
+                "\"page\":{\"size\":100,\"number\":1}}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, criteria);
+        assertEquals(
+                "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection " +
+                        "WHERE ((((((document#>'{a}')=to_json(?)::jsonb)))" +
+                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamp)" +
+                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamp))))) " +
+                        "LIMIT(?)OFFSET(?)",
+                body.toString()
+        );
+        verify(statement, times(4)).pushParameterSetter(any());
+    }
+
+    @Test(expected = QueryBuildException.class)
+    public void testPercentileSearchMissingQuantiles() throws QueryBuildException {
+        PostgresSchema.percentileSearch(statement, collection, null, null);
+    }
 }

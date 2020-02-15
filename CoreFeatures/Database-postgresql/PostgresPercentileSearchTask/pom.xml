@@ -7,8 +7,8 @@
         <artifactId>database-postgresql</artifactId>
         <version>0.6.4</version>
     </parent>
-    <artifactId>database-postgresql.postgres-insert-task</artifactId>
-    <version>0.6.1</version>
+    <artifactId>database-postgresql.postgres-percentile-search-task</artifactId>
+    <version>0.6.4</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
@@ -59,13 +59,37 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>ioc.strategy-container</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>ioc.resolve-by-name-ioc-with-lambda-strategy</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>base.strategy.singleton-strategy</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>feature-loading-system.bootstrap</artifactId>
+            <artifactId>base.strategy.create-new-instance-strategy</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject.field-name</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>iobject.ds-object</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>test</scope>
         </dependency>
@@ -89,13 +113,13 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject-plugins.ds-object-plugin</artifactId>
+            <artifactId>feature-loading-system.bootstrap</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ioc-strategy-pack.uuid-nextid-strategy</artifactId>
+            <artifactId>iobject-plugins.ds-object-plugin</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>test</scope>
         </dependency>
