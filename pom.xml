@@ -22,6 +22,7 @@
         <module>SystemActors</module>
         <module>das</module>
         <module>Features</module>
+        <module>SystemFeatures</module>
     </modules>
 
     <build>

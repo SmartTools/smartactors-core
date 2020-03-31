@@ -1,0 +1,8 @@
+{
+  "featureName":"info.smart_tools.smartactors:timer",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:timer-interfaces",
+    "info.smart_tools.smartactors:ioc",
+    "info.smart_tools.smartactors:module-manager"
+  ]
+}
