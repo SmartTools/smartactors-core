@@ -1,0 +1,9 @@
+{
+  "featureName":"info.smart_tools.smartactors:message-bus",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:message-bus-interfaces",
+    "info.smart_tools.smartactors:ioc",
+    "info.smart_tools.smartactors:message-processing-interfaces",
+    "info.smart_tools.smartactors:task-interfaces"
+  ]
+}

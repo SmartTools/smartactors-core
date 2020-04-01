@@ -1,0 +1,8 @@
+{
+  "featureName":"info.smart_tools.smartactors:scheduler-interface",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:iobject-interfaces",
+    "info.smart_tools.smartactors:service-interfaces",
+    "info.smart_tools.smartactors:timer-interfaces"
+  ]
+}

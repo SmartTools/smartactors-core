@@ -1,0 +1,8 @@
+{
+  "featureName":"info.smart_tools.smartactors:scheduler",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:scheduler-interface",
+    "info.smart_tools.smartactors:base-pool",
+    "info.smart_tools.smartactors:message-bus"
+  ]
+}

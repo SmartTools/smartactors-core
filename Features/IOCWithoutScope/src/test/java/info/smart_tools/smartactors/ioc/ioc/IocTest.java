@@ -18,9 +18,6 @@ import static org.mockito.Mockito.*;
  */
 public class IocTest {
 
-    private static IStrategyContainer sc = new StrategyContainer();
-
-
     @Test(expected = ResolutionException.class)
     public void checkRegistrationResolutionAndDeletion()
             throws Exception {

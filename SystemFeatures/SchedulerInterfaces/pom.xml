@@ -3,15 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>OnFeatureLoadingServiceStarter</artifactId>
+    <artifactId>SchedulerInterfaces</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
-        <!--<license>-->
-            <!--<name></name>-->
-            <!--<url></url>-->
-        <!--</license>-->
+    <!--<license>-->
+    <!--<name></name>-->
+    <!--<url></url>-->
+    <!--</license>-->
     <!--</licenses>-->
 
     <properties>
@@ -30,49 +29,33 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IOCWithScope</artifactId>
+            <artifactId>IObjectInterfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystemInterfaces</artifactId>
+            <artifactId>ServiceInterfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ConfigurationManagerInterfaces</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>MessageProcessingInterfaces</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>TaskInterfaces</artifactId>
+            <artifactId>TimerInterfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
 
         <!-- Tests -->
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>Helpers</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>junit</groupId>-->
+        <!--            <artifactId>junit</artifactId>-->
+        <!--            <version>4.12</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mockito</groupId>-->
+        <!--            <artifactId>mockito-all</artifactId>-->
+        <!--            <version>1.10.19</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -135,29 +118,29 @@
             <!-- Add needed dependencies to assembly -->
 
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-dependency-plugin</artifactId>-->
-                <!--<version>3.1.1</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>unpack</id>-->
-                        <!--<phase>prepare-package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>unpack</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<artifactItems>-->
-                                <!--<artifactItem>-->
-                                    <!--<groupId>dependency group id</groupId>-->
-                                    <!--<artifactId>dependency artifact id</artifactId>-->
-                                    <!--<version>dependency version</version>-->
-                                    <!--<outputDirectory>${basedir}/target/classes</outputDirectory>-->
-                                    <!--<excludes>META-INF/**</excludes>-->
-                                <!--</artifactItem>-->
-                            <!--</artifactItems>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-dependency-plugin</artifactId>-->
+            <!--<version>3.1.1</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>unpack</id>-->
+            <!--<phase>prepare-package</phase>-->
+            <!--<goals>-->
+            <!--<goal>unpack</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<artifactItems>-->
+            <!--<artifactItem>-->
+            <!--<groupId>dependency group id</groupId>-->
+            <!--<artifactId>dependency artifact id</artifactId>-->
+            <!--<version>dependency version</version>-->
+            <!--<outputDirectory>${basedir}/target/classes</outputDirectory>-->
+            <!--<excludes>META-INF/**</excludes>-->
+            <!--</artifactItem>-->
+            <!--</artifactItems>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
             <!--</plugin>-->
 
 

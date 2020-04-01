@@ -12,5 +12,13 @@
         <module>TimerInterfaces</module>
         <module>TimerWithScopeAndModuleManager</module>
         <module>TimerWithScopeAndModuleManagerPlugins</module>
+        <module>MessageBusInterfaces</module>
+        <module>MessageBus</module>
+        <module>MessageBusPlugins</module>
+        <module>MessageBusServiceStarter</module>
+        <module>MessageBusServiceStarterPlugins</module>
+        <module>SchedulerInterfaces</module>
+        <module>Scheduler</module>
+        <module>SchedulerPlugins</module>
     </modules>
 </project>

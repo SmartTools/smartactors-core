@@ -1,0 +1,7 @@
+{
+  "featureName":"info.smart_tools.smartactors:message-bus-service-starter",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:message-bus",
+    "info.smart_tools.smartactors:configuration-manager-interfaces"
+  ]
+}
