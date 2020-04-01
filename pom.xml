@@ -23,6 +23,7 @@
         <module>das</module>
         <module>Features</module>
         <module>SystemFeatures</module>
+        <module>SchedulerAutoStartup</module>
     </modules>
 
     <build>

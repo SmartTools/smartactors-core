@@ -20,5 +20,9 @@
         <module>SchedulerInterfaces</module>
         <module>Scheduler</module>
         <module>SchedulerPlugins</module>
+        <module>SchedulerAutoStartup</module>
+        <module>CheckpointInterfaces</module>
+        <module>Checkpoint</module>
+        <module>CheckpointPlugins</module>
     </modules>
 </project>

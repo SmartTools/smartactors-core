@@ -1,0 +1,6 @@
+{
+  "featureName":"info.smart_tools.smartactors:checkpoint-interfaces",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:message-processing-interfaces"
+  ]
+}

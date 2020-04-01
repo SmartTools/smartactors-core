@@ -1,0 +1,9 @@
+{
+  "featureName":"info.smart_tools.smartactors:checkpoint",
+  "afterFeatures": [
+    "info.smart_tools.smartactors:configuration-manager-interfaces",
+    "info.smart_tools.smartactors:scheduler-interface",
+    "info.smart_tools.smartactors:checkpoint-interfaces",
+    "info.smart_tools.smartactors:message-bus"
+  ]
+}

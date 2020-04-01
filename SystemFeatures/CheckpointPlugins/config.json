@@ -1,0 +1,17 @@
+{
+  "featureName":"info.smart_tools.smartactors:checkpoint-plugins",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:feature-loading-system",
+    "info.smart_tools.smartactors:checkpoint"
+  ],
+  "objects_example":[
+    {
+      "connectionOptionsDependency":"checkpoint connection options",
+      "connectionPoolDependency":"checkpoint connection pool",
+      "dependency":"checkpoint actor",
+      "kind":"stateless_actor",
+      "name":"checkpoint",
+      "collectionName":"checkpoint_collection"
+    }
+  ]
+}
