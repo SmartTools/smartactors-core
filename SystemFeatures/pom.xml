@@ -25,5 +25,8 @@
         <module>Checkpoint</module>
         <module>CheckpointPlugins</module>
         <module>CheckpointAutoStartup</module>
+        <module>DebuggerInterfaces</module>
+        <module>Debugger</module>
+        <module>DebuggerPlugins</module>
     </modules>
 </project>

@@ -1,0 +1,7 @@
+{
+  "featureName":"info.smart_tools.smartactors:debugger",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:ioc",
+    "info.smart_tools.smartactors:debugger-interfaces"
+  ]
+}
