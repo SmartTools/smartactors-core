@@ -30,5 +30,6 @@
         <module>DebuggerPlugins</module>
         <module>MorphExpressionInterfaces</module>
         <module>MorphExpressions</module>
+        <module>RemoteManagement</module>
     </modules>
 </project>
