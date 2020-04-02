@@ -1,0 +1,7 @@
+{
+  "featureName":"info.smart_tools.smartactors:global-constants-service-starter",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:configuration-manager-interfaces",
+    "info.smart_tools.smartactors:ioc"
+  ]
+}

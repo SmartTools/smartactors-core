@@ -31,5 +31,7 @@
         <module>MorphExpressionInterfaces</module>
         <module>MorphExpressions</module>
         <module>RemoteManagement</module>
+        <module>GlobalConstantsServiceStarter</module>
+        <module>GlobalConstantsServiceStarterPlugins</module>
     </modules>
 </project>
