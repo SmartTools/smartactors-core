@@ -28,5 +28,7 @@
         <module>DebuggerInterfaces</module>
         <module>Debugger</module>
         <module>DebuggerPlugins</module>
+        <module>MorphExpressionInterfaces</module>
+        <module>MorphExpressions</module>
     </modules>
 </project>

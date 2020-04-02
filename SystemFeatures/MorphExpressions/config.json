@@ -1,0 +1,6 @@
+{
+  "featureName":"info.smart_tools.smartactors:morph-expressions",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:morph-expression-interfaces"
+  ]
+}
