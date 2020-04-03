@@ -42,5 +42,7 @@
         <module>DatabaseInMemoryPlugins</module>
         <module>DatabaseInMemoryServiceStarter</module>
         <module>DatabaseInMemoryServiceStarterPlugins</module>
+        <module>DatabasePostgresql</module>
+        <module>DatabasePostgresqlPlugins</module>
     </modules>
 </project>

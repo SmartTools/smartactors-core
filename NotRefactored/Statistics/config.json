@@ -1,0 +1,4 @@
+{
+  "featureName": "info.smart_tools.smartactors:statistics",
+  "afterFeatures": ["info.smart_tools.smartactors:scheduler"]
+}

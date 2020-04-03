@@ -37,6 +37,7 @@
             <artifactId>Checkpoint</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
+
         <!-- Tests -->
         <!--        <dependency>-->
         <!--            <groupId>junit</groupId>-->
