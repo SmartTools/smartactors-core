@@ -1,0 +1,8 @@
+{
+  "featureName":"info.smart_tools.smartactors:in-memory-database-service-starter-plugins",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:feature-loading-system",
+    "info.smart_tools.smartactors:iobjects",
+    "info.smart_tools.smartactors:in-memory-database-service-starter"
+  ]
+}

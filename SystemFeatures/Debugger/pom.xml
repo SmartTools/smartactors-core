@@ -28,7 +28,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
+        <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>DebuggerInterfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>

@@ -33,5 +33,14 @@
         <module>RemoteManagement</module>
         <module>GlobalConstantsServiceStarter</module>
         <module>GlobalConstantsServiceStarterPlugins</module>
+        <module>DatabaseInterfaces</module>
+        <module>Database</module>
+        <module>DatabasePlugins</module>
+        <module>DatabaseServiceStarter</module>
+        <module>DatabaseServiceStarterPlugins</module>
+        <module>DatabaseInMemory</module>
+        <module>DatabaseInMemoryPlugins</module>
+        <module>DatabaseInMemoryServiceStarter</module>
+        <module>DatabaseInMemoryServiceStarterPlugins</module>
     </modules>
 </project>

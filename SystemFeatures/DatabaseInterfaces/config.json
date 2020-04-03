@@ -1,0 +1,7 @@
+{
+  "featureName": "info.smart_tools.smartactors:database-interfaces",
+  "afterFeatures": [
+    "info.smart_tools.smartactors:iobject-interfaces",
+    "info.smart_tools.smartactors:task-interfaces"
+  ]
+}
