@@ -50,5 +50,9 @@
         <module>EndpointPlugins</module>
         <module>EndpointServiceStarter</module>
         <module>EndpointServiceStarterPlugins</module>
+        <module>HttpEndpoint</module>
+        <module>HttpEndpointPlugins</module>
+        <module>HttpsEndpoint</module>
+        <module>HttpsEndpointPlugins</module>
     </modules>
 </project>

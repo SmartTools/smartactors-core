@@ -1,0 +1,8 @@
+{
+  "featureName":"info.smart_tools.smartactors:http-endpoint-plugins",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:feature-loading-system",
+    "info.smart_tools.smartactors:ioc-strategy-pack",
+    "info.smart_tools.smartactors:http-endpoint"
+  ]
+}

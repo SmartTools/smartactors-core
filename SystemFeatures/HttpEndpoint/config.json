@@ -1,0 +1,9 @@
+{
+  "featureName":"info.smart_tools.smartactors:http-endpoint",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:action-interfaces",
+    "info.smart_tools.smartactors:message-bus",
+    "info.smart_tools.smartactors:endpoint-plugins",
+    "info.smart_tools.smartactors:timer-plugins"
+  ]
+}
