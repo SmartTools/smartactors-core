@@ -1,0 +1,9 @@
+{
+  "featureName":"info.smart_tools.smartactors:endpoint",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:task-interfaces",
+    "info.smart_tools.smartactors:ioc",
+    "info.smart_tools.smartactors:module-manager",
+    "info.smart_tools.smartactors:endpoint-interfaces"
+  ]
+}

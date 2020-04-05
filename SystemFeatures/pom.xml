@@ -45,5 +45,10 @@
         <module>DatabasePostgresql</module>
         <module>DatabasePostgresqlPlugins</module>
         <module>DatabasePostgresqlCreateCollectionIfNotExists</module>
+        <module>EndpointInterfaces</module>
+        <module>Endpoint</module>
+        <module>EndpointPlugins</module>
+        <module>EndpointServiceStarter</module>
+        <module>EndpointServiceStarterPlugins</module>
     </modules>
 </project>

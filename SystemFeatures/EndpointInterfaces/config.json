@@ -1,0 +1,8 @@
+{
+  "featureName":"info.smart_tools.smartactors:endpoint-interfaces",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:message-processing-interfaces",
+    "info.smart_tools.smartactors:ioc-interfaces",
+    "info.smart_tools.smartactors:action-interfaces"
+  ]
+}

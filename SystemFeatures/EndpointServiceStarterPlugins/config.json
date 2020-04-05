@@ -1,0 +1,7 @@
+{
+  "featureName":"info.smart_tools.smartactors:endpoint-service-starter-plugins",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:feature-loading-system",
+    "info.smart_tools.smartactors:endpoint-service-starter"
+  ]
+}

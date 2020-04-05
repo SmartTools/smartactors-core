@@ -1,0 +1,9 @@
+{
+  "featureName":"info.smart_tools.smartactors:endpoint-service-starter",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:configuration-manager-interfaces",
+    "info.smart_tools.smartactors:task-interfaces",
+    "info.smart_tools.smartactors:endpoint-interfaces",
+    "info.smart_tools.smartactors:ioc"
+  ]
+}

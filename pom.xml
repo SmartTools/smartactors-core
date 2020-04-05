@@ -24,6 +24,8 @@
         <module>Features</module>
         <module>SystemFeatures</module>
         <module>SchedulerAutoStartup</module>
+        <module>EndpointServiceStarter</module>
+        <module>EndpointPlugins</module>
     </modules>
 
     <build>
