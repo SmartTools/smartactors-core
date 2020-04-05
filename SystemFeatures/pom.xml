@@ -44,5 +44,6 @@
         <module>DatabaseInMemoryServiceStarterPlugins</module>
         <module>DatabasePostgresql</module>
         <module>DatabasePostgresqlPlugins</module>
+        <module>DatabasePostgresqlCreateCollectionIfNotExists</module>
     </modules>
 </project>
