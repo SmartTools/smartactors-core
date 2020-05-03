@@ -455,8 +455,8 @@ public class PostgresSchemaTest {
         assertEquals(
                 "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection " +
                         "WHERE ((((((document#>'{a}')=to_json(?)::jsonb)))" +
-                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamp)" +
-                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamp)))))",
+                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamptz)" +
+                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamptz)))))",
                 body.toString()
         );
         verify(statement, times(3)).pushParameterSetter(any());
@@ -472,8 +472,8 @@ public class PostgresSchemaTest {
         assertEquals(
                 "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection " +
                         "WHERE ((((((document#>'{a}')=to_json(?)::jsonb)))" +
-                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamp)" +
-                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamp))))) " +
+                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamptz)" +
+                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamptz))))) " +
                         "LIMIT(?)OFFSET(?)",
                 body.toString()
         );
