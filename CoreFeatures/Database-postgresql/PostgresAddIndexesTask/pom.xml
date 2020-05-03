@@ -5,7 +5,7 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>database-postgresql</artifactId>
-        <version>0.6.4</version>
+        <version>0.6.5</version>
     </parent>
     <artifactId>database-postgresql.postgres-add-indexes-task</artifactId>
     <version>0.6.2</version>

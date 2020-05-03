@@ -811,7 +811,7 @@
   "uploadRepositoryUrl" : "http://archiva.smart-tools.info/repository/smartactors-modules/"
 } ],
   "rawName" : "PostgresSchema",
-  "version" : "0.6.0"
+  "version" : "0.6.4"
 }, {
   "artifactId" : "database-postgresql.postgres-search-task",
   "uploadRepositories" : [ {
@@ -869,7 +869,7 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "database-postgresql",
   "rawName" : "Database-postgresql",
-  "version" : "0.6.4"
+  "version" : "0.6.5"
 }, {
   "actors" : [ {
   "artifactId" : "iobject-extension-plugins.configuration-object-plugin",
