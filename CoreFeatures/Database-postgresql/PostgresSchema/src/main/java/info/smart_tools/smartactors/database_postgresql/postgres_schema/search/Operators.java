@@ -46,8 +46,8 @@ final class Operators {
 
         // ISO 8601 date/time operators
         /*TODO: Find a way to build an index on date/time field.*/
-        resolver.addQueryWriter("$date-from", formattedCheckWriter("(parse_timestamp_immutable(%s)>=(?)::timestamp)"));
-        resolver.addQueryWriter("$date-to", formattedCheckWriter("(parse_timestamp_immutable(%s)<=(?)::timestamp)"));
+        resolver.addQueryWriter("$date-from", formattedCheckWriter("(parse_timestamp_immutable(%s)>=(?)::timestamptz)"));
+        resolver.addQueryWriter("$date-to", formattedCheckWriter("(parse_timestamp_immutable(%s)<=(?)::timestamptz)"));
 
         // Value in list check
         resolver.addQueryWriter("$in", Operators::writeFieldInArrayCheckCondition);
