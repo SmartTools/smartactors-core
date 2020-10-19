@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>http-endpoint</artifactId>
-        <version>0.6.3</version>
+        <version>0.6.4</version>
     </parent>
     <artifactId>http-endpoint.strategy.get-header-from-request</artifactId>
-    <version>0.6.3</version>
+    <version>0.6.4</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>

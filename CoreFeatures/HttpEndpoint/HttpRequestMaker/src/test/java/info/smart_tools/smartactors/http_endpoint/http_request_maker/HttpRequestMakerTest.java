@@ -137,7 +137,7 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                EMPTY_PATH,
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
@@ -229,12 +229,13 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                EMPTY_PATH,
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
         List<IObject> expectedHeaders = new ArrayList<>(requestHeaders);
         expectedHeaders.addAll(this.getRequiredCommonHeaders());
+        expectedHeaders.add(createKeyValue(HttpHeaderNames.CONTENT_LENGTH.toString(), 0));
 
         for (IObject header: expectedHeaders) {
             String expectedValue = header.getValue(valueFN).toString();
@@ -281,7 +282,7 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                EMPTY_PATH,
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
@@ -334,7 +335,7 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                EMPTY_PATH,
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
