@@ -54,7 +54,7 @@ To cancel (delete) specific entry send message to `deleteEntry` handler.
 The arguments object may be (and will be) used as a state object for scheduler entry so modification of this object after creation of the entry is highly not recommended.
 ## `repeat continuously scheduling strategy`
 
-This strategy will send the message with configured interval, entry will be saved to the database on creation and will not be updated. Requires the following additional arguments (in `IObject` returned by `getEntryArguments` method).
+This strategy will send the message with configured interval, entry will be saved to the database on creation and will not be updated. Requires the following additional arguments (in `IObject` returned by `getEntryArguments` method):
 - `"start"` -- date and time (in [ISO 8601 local datetime](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE_TIME) format). If this time is in the past then the actions that had to be executed before current time wil be skipped. If `null` then the current time is used.
 - `"interval"` -- interval in ISO 8601 interval format (see [`Duration#parse`](https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-)).
 ## `do once scheduling strategy`
