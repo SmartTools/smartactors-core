@@ -5,7 +5,7 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>database-postgresql-plugins</artifactId>
-        <version>0.6.2</version>
+        <version>0.6.3</version>
     </parent>
     <artifactId>database-postgresql-plugins.postgres-db-tasks-plugin</artifactId>
     <version>0.6.1</version>
