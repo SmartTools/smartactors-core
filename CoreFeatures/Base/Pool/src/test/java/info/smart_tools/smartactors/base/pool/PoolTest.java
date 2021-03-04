@@ -94,4 +94,14 @@ public class PoolTest {
         pool.onAvailable(pAction);
         verify(pAction).execute();
     }
+
+    @Test
+    public void Should_returnNewItemIfItsInvalid() throws Exception {
+        Pool pool = new Pool(1, Object::new, (item) -> false);
+        Object obj1 = pool.get();
+        pool.put(obj1);
+        Object obj2 = pool.get();
+
+        assertNotEquals(obj1, obj2);
+    }
 }

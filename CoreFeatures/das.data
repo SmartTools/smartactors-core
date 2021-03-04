@@ -221,7 +221,7 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "database-postgresql-plugins",
   "rawName" : "Database-postgresql-plugins",
-  "version" : "0.6.2"
+  "version" : "0.6.3"
 }, {
   "actors" : [ {
   "artifactId" : "scheduler-plugins.scheduling-strategies-plugin",
@@ -727,7 +727,7 @@
   "groupId" : "info.smart_tools.smartactors",
   "artifactId" : "base",
   "rawName" : "Base",
-  "version" : "0.6.1"
+  "version" : "0.6.2"
 }, {
   "actors" : [ {
   "artifactId" : "checkpoint.scheduling-strategies",
