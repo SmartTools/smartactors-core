@@ -5,7 +5,7 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>endpoint</artifactId>
-        <version>0.6.1</version>
+        <version>0.6.2</version>
     </parent>
     <artifactId>endpoint-distribution</artifactId>
     <packaging>pom</packaging>

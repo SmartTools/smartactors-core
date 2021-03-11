@@ -43,6 +43,7 @@ import java.util.List;
  *                     "secure": true,
  *                     "httpOnly": true
  *                 }
+ *                 "externalConfigurationReader": "endpoint external configuration file reader"
  *                 // . . .
  *             },
  *             {

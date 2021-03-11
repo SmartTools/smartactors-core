@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>endpoint</artifactId>
-        <version>0.6.1</version>
+        <version>0.6.2</version>
     </parent>
     <artifactId>endpoint.interfaces.iadd-request-parameters-to-iobject</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>

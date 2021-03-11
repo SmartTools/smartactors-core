@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>http-endpoint-plugins</artifactId>
-        <version>0.6.3</version>
+        <version>0.6.4</version>
     </parent>
     <artifactId>http-endpoint-plugins.http-client-plugin</artifactId>
-    <version>0.6.3</version>
+    <version>0.6.4</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
@@ -23,11 +23,6 @@
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>http-endpoint.http-client-handler</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>base.strategy.apply-function-to-arguments</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>

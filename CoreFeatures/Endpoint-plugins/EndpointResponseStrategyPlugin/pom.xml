@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>endpoint-plugins</artifactId>
-        <version>0.6.0</version>
+        <version>0.6.1</version>
     </parent>
     <artifactId>endpoint-plugins.endpoint-response-strategy-plugin</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
