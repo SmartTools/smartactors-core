@@ -69,14 +69,25 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
                                         return IOC.resolve(poolKey);
                                     } catch (ResolutionException re) {      // pool not found
                                         try {
-                                            IPool pool = new Pool(connectionOptions.getMaxConnections(), () -> {
-                                                try {
-                                                    return new PostgresConnection(connectionOptions);
-                                                } catch (StorageException se) {
-                                                    throw new RuntimeException(
-                                                            "Cannot create PostgresConnection: poolKey = " + poolKey, se);
+                                            IPool pool = new Pool(
+                                                connectionOptions.getMaxConnections(),
+                                                () -> {
+                                                    try {
+                                                        return new PostgresConnection(connectionOptions);
+                                                    } catch (StorageException se) {
+                                                        throw new RuntimeException(
+                                                                "Cannot create PostgresConnection: poolKey = " + poolKey, se);
+                                                    }
+                                                },
+                                                (connection) -> {
+                                                    try {
+                                                        return ((PostgresConnection) connection).validate();
+                                                    } catch (StorageException se) {
+                                                        throw new RuntimeException(
+                                                                "Cannot validate PostgresConnection: poolKey = " + poolKey, se);
+                                                    }
                                                 }
-                                            });
+                                            );
                                             IOC.register(poolKey, new SingletonStrategy(pool));
                                             return pool;
                                         } catch (Exception e) {

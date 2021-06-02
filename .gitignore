@@ -19,6 +19,12 @@ hs_err_pid*
 .idea/
 *.iml
 
+#Eclipse
+.classpath
+.project
+.settings
+.factorypath
+
 #Maven
 targer/
 **/target/
