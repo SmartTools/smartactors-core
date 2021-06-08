@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>FeatureManagement</artifactId>
+    <artifactId>LauncherInterfaces</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
@@ -28,81 +28,12 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>MessageProcessingInterfaces</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>TaskInterfaces</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IOCWithScope</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ModuleManager</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>BaseFileSystemComponents</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystemInterfaces</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ConfigurationManagerInterfaces</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-
-        <!-- Third-party dependencies -->
-        <dependency>
-            <groupId>net.lingala.zip4j</groupId>
-            <artifactId>zip4j</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-aether</artifactId>
-            <version>0.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.sonatype.aether</groupId>
-            <artifactId>aether-api</artifactId>
-            <version>1.13.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>3.0.3</version>
-        </dependency>
 
         <!-- Tests -->
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>Helpers</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -127,16 +58,16 @@
 
             <!-- Disable Maven Resource Plugin -->
 
-<!--            <plugin>-->
-<!--                <artifactId>maven-resources-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>default-testResources</id>-->
-<!--                        <phase>none</phase>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>default-testResources</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
 
 
             <!-- Compile plugin -->
@@ -166,51 +97,31 @@
 
             <!-- Add needed dependencies to assembly -->
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <excludeGroupIds>
-                                info.smart_tools.smartactors,
-                                org.hibernate,
-                                org.springframework,
-                                com.amazonaws,
-                                org.kuali.common,
-                                org.jboss.logging,
-                                org.apache.commons,
-                                commons-lang,
-                                commons-io,
-                                commons-codec,
-                                com.fasterxml,
-                                org.eclipse.aether,
-                                junit,
-                                org.mockito,
-                                org.apache.httpcomponents,
-                                org.hamcrest
-                            </excludeGroupIds>
-                            <excludeArtifactIds>
-                                sisu-inject-bean,
-                                sisu-guice,
-                                plexus-classworlds,
-                                plexus-cipher,
-                                plexus-component-annotations,
-                                plexus-sec-dispatcher,
-                                jcl-over-slf4j
-                            </excludeArtifactIds>
-                            <includes>**/*.class,**/*.xml</includes>
-                            <outputDirectory>${basedir}/target/classes</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-dependency-plugin</artifactId>-->
+            <!--<version>3.1.1</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>unpack</id>-->
+            <!--<phase>prepare-package</phase>-->
+            <!--<goals>-->
+            <!--<goal>unpack</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<artifactItems>-->
+            <!--<artifactItem>-->
+            <!--<groupId>dependency group id</groupId>-->
+            <!--<artifactId>dependency artifact id</artifactId>-->
+            <!--<version>dependency version</version>-->
+            <!--<outputDirectory>${basedir}/target/classes</outputDirectory>-->
+            <!--<excludes>META-INF/**</excludes>-->
+            <!--</artifactItem>-->
+            <!--</artifactItems>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
 
 
             <!-- Exclude generated pom.xml from assembly -->
@@ -380,5 +291,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

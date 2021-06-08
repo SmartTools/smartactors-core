@@ -109,7 +109,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>info.smart_tools.smartactors.servers.server_with_features.ServerWithFeatures</mainClass>
+                            <mainClass>info.smart_tools.smartactors.launcher.server_with_features.ServerWithFeatures</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
