@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>http-endpoint-plugins</artifactId>
-        <version>0.6.3</version>
+        <version>0.6.4</version>
     </parent>
     <artifactId>http-endpoint-plugins.http-endpoint-plugin</artifactId>
-    <version>0.6.3</version>
+    <version>0.6.4</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
@@ -156,6 +156,12 @@
             <artifactId>http-endpoint-plugins.endpoint-plugin</artifactId>
             <version>[0.0.1, 1.0.0)</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>endpoint.iendpoint-external-configuration-reader</artifactId>
+            <version>[0.0.1, 1.0.0)</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
