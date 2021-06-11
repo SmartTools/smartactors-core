@@ -28,11 +28,12 @@ public class EndpointExternalConfigurationFileReader implements IEndpointExterna
      * @throws EndpointExternalConfigurationReaderException if something went wrong while loading
      */
     public EndpointExternalConfigurationFileReader(final IObject configuration) throws EndpointExternalConfigurationReaderException {
-        try {
-            IKey fieldNameKey = Keys.getKeyByName(IFieldName.class.getCanonicalName());
-            IFieldName pathToExternalConfigurationFN = IOC.resolve(fieldNameKey, "pathToExternalConfiguration");
-
-            FileReader propsReader = new FileReader((String) configuration.getValue(pathToExternalConfigurationFN));
+        try (FileReader propsReader = new FileReader((String) configuration.getValue(
+                IOC.resolve(
+                    Keys.getKeyByName(IFieldName.class.getCanonicalName()),
+                    "pathToExternalConfiguration"
+                )
+        ))) {
             props = new Properties();
             props.load(propsReader);
         } catch (FileNotFoundException e) {
