@@ -156,6 +156,7 @@
                             <goal>jar-no-fork</goal>
                         </goals>
                         <configuration>
+                            <attach>false</attach>
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                             </archive>
@@ -178,6 +179,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
+                            <attach>false</attach>
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                             </archive>
@@ -199,6 +201,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <attach>false</attach>
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>${basedir}/target</outputDirectory>
                             <finalName>${project.artifactId}-${project.version}</finalName>
@@ -220,6 +223,25 @@
                         <id>default-deploy</id>
                         <phase>none</phase>
                     </execution>
+                    <!-- Deploy config.json file -->
+                    <execution>
+                        <id>deploy-config</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>false</generatePom>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <groupId>${project.groupId}</groupId>
+                            <version>${project.version}</version>
+                            <generatePom>true</generatePom>
+                            <repositoryId>${repositoryId}</repositoryId>
+                            <url>${repositoryUrl}/${repositoryId}</url>
+                            <file>target/classes/config.json</file>
+                            <description>This archive contains ...</description>
+                        </configuration>
+                    </execution>
                     <!-- Deploy jar file -->
                     <execution>
                         <id>deploy-jar</id>
@@ -228,11 +250,12 @@
                             <goal>deploy-file</goal>
                         </goals>
                         <configuration>
+                            <generatePom>false</generatePom>
                             <artifactId>${project.artifactId}</artifactId>
                             <groupId>${project.groupId}</groupId>
                             <version>${project.version}</version>
                             <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
+                            <url>${repositoryUrl}/${repositoryId}</url>
                             <file>target/${project.artifactId}-${project.version}.jar</file>
                             <description>This archive contains ...</description>
                         </configuration>
@@ -245,12 +268,13 @@
                             <goal>deploy-file</goal>
                         </goals>
                         <configuration>
+                            <generatePom>false</generatePom>
                             <artifactId>${project.artifactId}</artifactId>
                             <groupId>${project.groupId}</groupId>
                             <version>${project.version}</version>
                             <generatePom>false</generatePom>
                             <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
+                            <url>${repositoryUrl}/${repositoryId}</url>
                             <file>target/${project.artifactId}-${project.version}.zip</file>
                             <description>This archive contains ...</description>
                         </configuration>
@@ -263,12 +287,13 @@
                             <goal>deploy-file</goal>
                         </goals>
                         <configuration>
+                            <generatePom>false</generatePom>
                             <artifactId>${project.artifactId}</artifactId>
                             <groupId>${project.groupId}</groupId>
                             <version>${project.version}</version>
                             <generatePom>false</generatePom>
                             <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
+                            <url>${repositoryUrl}/${repositoryId}</url>
                             <classifier>sources</classifier>
                             <file>target/${project.artifactId}-${project.version}-sources.jar</file>
                             <description>This archive contains ...</description>
@@ -282,12 +307,13 @@
                             <goal>deploy-file</goal>
                         </goals>
                         <configuration>
+                            <generatePom>false</generatePom>
                             <artifactId>${project.artifactId}</artifactId>
                             <groupId>${project.groupId}</groupId>
                             <version>${project.version}</version>
                             <generatePom>false</generatePom>
                             <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
+                            <url>${repositoryUrl}/${repositoryId}</url>
                             <classifier>javadoc</classifier>
                             <file>target/${project.artifactId}-${project.version}-javadoc.jar</file>
                             <description>This archive contains ...</description>
