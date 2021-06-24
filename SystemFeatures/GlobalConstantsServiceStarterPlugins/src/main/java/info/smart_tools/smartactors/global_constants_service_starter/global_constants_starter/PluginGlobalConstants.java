@@ -44,7 +44,9 @@ public class PluginGlobalConstants implements IPlugin {
 //            constantsObjectItem.after("IOC");
 //            constantsObjectItem.before("starter");
 //            constantsObjectItem.after("iobject");
-            constantsObjectItem.process(() -> {
+            constantsObjectItem
+                    .after("core")
+                    .process(() -> {
                 try {
                     IObject obj = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
                     IOC.register(Keys.getKeyByName("global constants"), new SingletonStrategy(obj));

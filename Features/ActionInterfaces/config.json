@@ -1,6 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:action-interfaces",
+  "featureName":"info.smart_tools.smartactors:action-interfaces:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:base-exceptions"
+    "info.smart_tools.smartactors:base-exceptions:0.7.0"
   ]
 }

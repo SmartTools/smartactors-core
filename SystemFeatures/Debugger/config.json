@@ -1,7 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:debugger",
+  "featureName":"info.smart_tools.smartactors:debugger:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:ioc",
-    "info.smart_tools.smartactors:debugger-interfaces"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:debugger-interfaces:0.7.0"
   ]
 }

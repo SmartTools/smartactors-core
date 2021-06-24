@@ -23,7 +23,10 @@ public class ResponseSenderReceiverPlugin extends BootstrapPlugin {
     }
 
     @Item("send_response_action")
-    @After({"IOC", "IFieldNamePlugin"})
+    @After({
+            "IOC",
+            "IFieldNamePlugin"
+    })
     public void registerResponseAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("send response action"), new SingletonStrategy(new ResponseSenderAction()));

@@ -52,6 +52,38 @@ public class Feature implements IFeature {
         this.failed = false;
     }
 
+    /**
+     * Creates instance of {@link IFeature} by specific arguments
+     * @param id the feature id
+     * @param name the feature name
+     * @param groupId the feature group id
+     * @param version the feature version
+     * @param dependencies the feature dependencies
+     * @param location the feature location
+     * @param directory the feature directory
+     * @param packageType the feature package type
+     */
+    public Feature(
+            final Object id,
+            final String groupId,
+            final String name,
+            final String version,
+            final Set<String> dependencies,
+            final IPath location,
+            final IPath directory,
+            final String packageType
+    ) {
+        this.name = name;
+        this.groupId = groupId;
+        this.version = version;
+        this.dependencies = dependencies;
+        this.location = location;
+        this.directory = directory;
+        this.packageType = packageType;
+        this.id = id;
+        this.failed = false;
+    }
+
     @Override
     public String getName() { return this.name; }
 

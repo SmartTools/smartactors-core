@@ -1,6 +1,7 @@
 {
-  "featureName":"info.smart_tools.smartactors:https-endpoint",
+  "featureName":"info.smart_tools.smartactors:https-endpoint:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:http-endpoint"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:http-endpoint:0.7.0"
   ]
 }

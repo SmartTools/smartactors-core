@@ -28,7 +28,9 @@ public class ChainModificationStrategiesPlugin extends BootstrapPlugin {
      * @throws RegistrationException if error occurs registering the strategy
      */
     @Item("chain_modification_strategies:replace_receivers")
-    @After({"IFieldNamePlugin"})
+    @After({
+            "IFieldNamePlugin",
+    })
     public void registerReceiverReplaceModification()
             throws ResolutionException, RegistrationException {
         IOC.register(Keys.getKeyByName("chain modification: replace receivers"), new ReplaceReceiversChainModificationStrategy());

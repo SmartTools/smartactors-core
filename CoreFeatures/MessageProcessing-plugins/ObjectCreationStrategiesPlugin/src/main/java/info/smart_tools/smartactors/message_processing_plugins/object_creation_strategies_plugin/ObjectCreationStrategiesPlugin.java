@@ -194,7 +194,7 @@ public class ObjectCreationStrategiesPlugin extends BootstrapPlugin {
     @Item("invoker_receiver_creation_strategy")
     @After({
         "wrapper_resolution_strategies_for_invokers",
-        "IFieldNamePlugin",
+//        "IFieldNamePlugin",
         "InitializeReceiverGenerator",
     })
     @Before({

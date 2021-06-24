@@ -36,6 +36,7 @@ public class PluginHttpRequestSenderActor implements IPlugin {
             IBootstrapItem<String> requestSenderItem = new BootstrapItem("actor:http_request_sender");
 
             requestSenderItem
+                    .after("core")
 //                    .after("IOC")
 //                    .before("starter")
                     .process(() -> {

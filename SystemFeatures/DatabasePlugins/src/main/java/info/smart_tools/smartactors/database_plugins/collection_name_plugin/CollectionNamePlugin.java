@@ -37,6 +37,7 @@ public class CollectionNamePlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CollectionNamePlugin");
             item
+                .after("core")
 //                .after("IOC")
 //                .before("starter")
                 .process(() -> {

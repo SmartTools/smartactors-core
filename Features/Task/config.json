@@ -1,8 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:task",
+  "featureName":"info.smart_tools.smartactors:task:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:task-interfaces",
-    "info.smart_tools.smartactors:scope-provider",
-    "info.smart_tools.smartactors:module-manager"
+    "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:scope-provider:0.7.0",
+    "info.smart_tools.smartactors:module-manager:0.7.0"
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "featureName":"info.smart_tools.smartactors:base-strategies",
+  "featureName":"info.smart_tools.smartactors:base-strategies:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:strategy-interfaces",
-    "info.smart_tools.smartactors:action-interfaces"
+    "info.smart_tools.smartactors:strategy-interfaces:0.7.0",
+    "info.smart_tools.smartactors:action-interfaces:0.7.0"
   ]
 }

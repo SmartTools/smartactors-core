@@ -26,8 +26,13 @@ public class PluginConstantChainChoiceStrategy extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link SingletonStrategy} doesn't like our arguments
      */
     @Item("constant_chain_choice_strategy")
-    @After({"IOC", "IFieldNamePlugin"})
-    @Before({"ChainCallReceiver"})
+    @After({
+            "IOC",
+            "IFieldNamePlugin",
+    })
+    @Before({
+            "ChainCallReceiver",
+    })
     public void item()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("constant chain choice strategy"), new SingletonStrategy(new ConstantChainChoiceStrategy()));

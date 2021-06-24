@@ -1,8 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:endpoint-interfaces",
+  "featureName":"info.smart_tools.smartactors:endpoint-interfaces:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:message-processing-interfaces",
-    "info.smart_tools.smartactors:ioc-interfaces",
-    "info.smart_tools.smartactors:action-interfaces"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
+    "info.smart_tools.smartactors:ioc-interfaces:0.7.0",
+    "info.smart_tools.smartactors:action-interfaces:0.7.0"
   ]
 }

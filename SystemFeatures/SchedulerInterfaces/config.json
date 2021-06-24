@@ -1,8 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:scheduler-interface",
+  "featureName":"info.smart_tools.smartactors:scheduler-interface:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:iobject-interfaces",
-    "info.smart_tools.smartactors:service-interfaces",
-    "info.smart_tools.smartactors:timer-interfaces"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:iobject-interfaces:0.7.0",
+    "info.smart_tools.smartactors:service-interfaces:0.7.0",
+    "info.smart_tools.smartactors:timer-interfaces:0.7.0"
   ]
 }

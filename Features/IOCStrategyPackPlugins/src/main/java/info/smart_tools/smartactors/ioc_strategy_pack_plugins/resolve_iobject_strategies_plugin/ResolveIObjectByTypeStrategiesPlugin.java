@@ -49,6 +49,7 @@ public class ResolveIObjectByTypeStrategiesPlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("ResolveIObjectByTypeStrategiesPlugin");
             item
+                .before("read_initial_config")
                 .after("IOC")
                 .process(() -> {
                     try {

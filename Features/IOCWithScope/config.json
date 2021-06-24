@@ -1,7 +1,7 @@
 {
-  "featureName":"info.smart_tools.smartactors:ioc",
+  "featureName":"info.smart_tools.smartactors:ioc:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:ioc-interfaces",
-    "info.smart_tools.smartactors:scope-provider"
+    "info.smart_tools.smartactors:ioc-interfaces:0.7.0",
+    "info.smart_tools.smartactors:scope-provider:0.7.0"
   ]
 }

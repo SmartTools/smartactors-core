@@ -42,6 +42,7 @@ public class InitializeReceiverGenerator implements IPlugin {
             IBootstrapItem<String> item = new BootstrapItem("InitializeReceiverGenerator");
             item
                     .after("IOC")
+                    .after("class_generator")
                     .process(
                             () -> {
                                 try {

@@ -1,38 +1,44 @@
 package info.smart_tools.smartactors.launcher;
 
-import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
-import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecutionException;
-import info.smart_tools.smartactors.base.interfaces.ipath.IPath;
-import info.smart_tools.smartactors.base.path.Path;
 import info.smart_tools.smartactors.class_management.interfaces.ismartactors_class_loader.ISmartactorsClassLoader;
 import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
-import info.smart_tools.smartactors.feature_loading_system.bootstrap.Bootstrap;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.ProcessExecutionException;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.RevertProcessExecutionException;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IPlugin;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin_creator.IPluginCreator;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin_creator.exception.PluginCreationException;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin_loader.IPluginLoader;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin_loader.exception.PluginLoaderException;
-import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin_loader_visitor.IPluginLoaderVisitor;
-import info.smart_tools.smartactors.feature_loading_system.plugin_creator.PluginCreator;
-import info.smart_tools.smartactors.feature_loading_system.plugin_loader_from_jar.PluginLoader;
-import info.smart_tools.smartactors.feature_loading_system.plugin_loader_visitor_empty_implementation.PluginLoaderVisitor;
+import info.smart_tools.smartactors.launcher.bootstrap.BootstrapWrapper;
+import info.smart_tools.smartactors.launcher.classloader.SmartactorsClassLoaderWrapper;
+import info.smart_tools.smartactors.launcher.feature.FeatureReader;
+import info.smart_tools.smartactors.launcher.feature.FeatureSorting;
+import info.smart_tools.smartactors.launcher.interfaces.IClassLoaderWrapper;
 import info.smart_tools.smartactors.launcher.interfaces.ILauncher;
+import info.smart_tools.smartactors.launcher.interfaces.IObjectMapper;
+import info.smart_tools.smartactors.launcher.interfaces.IPath;
 import info.smart_tools.smartactors.launcher.interfaces.exception.LauncherExecutionException;
-import info.smart_tools.smartactors.launcher.interfaces.exception.LauncherInitializeException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.ibootstrapwrapper.BootstrapWrapperInitException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.ifeature.FeatureReaderException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.ifeature.FeatureSortingException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginCreatorInitException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginLoaderException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginLoaderInitException;
+import info.smart_tools.smartactors.launcher.interfaces.ibootstrapwrapper.IBootstrapWrapper;
+import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeature;
+import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeatureReader;
+import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeatureSorting;
+import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginCreator;
+import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginLoader;
+import info.smart_tools.smartactors.launcher.objectmapper.ObjectMapper;
+import info.smart_tools.smartactors.launcher.path.Path;
+import info.smart_tools.smartactors.launcher.plugin.PluginCreator;
+import info.smart_tools.smartactors.launcher.plugin.PluginLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,41 +46,42 @@ import java.util.List;
  *
  */
 public class Launcher implements ILauncher {
-    private IPluginLoaderVisitor<String> pluginLoaderVisitor = new PluginLoaderVisitor<>();
-    private IPluginCreator pluginCreator = new PluginCreator();
+    /**
+     * Runs the server.
+     *
+     * @param args command line arguments
+     * @throws Exception if any error occurs
+     */
+    public static void main(final String[] args) throws Exception {
+        System.out.println("Initializing launcher...");
+        Thread.sleep(5000);
+        ILauncher launcher = new Launcher();
+        launcher.initialize();
+        launcher.start();
+    }
 
-//    /**
-//     * Runs the server.
-//     *
-//     * @param args    command line arguments
-//     * @throws Exception if any error occurs
-//     */
-//    public static void main(final String[] args)
-//            throws Exception {
-//        Thread.sleep(5000);
-//        ILauncher launcher = new Launcher();
-//        launcher.initialize();
-//        launcher.start();
-//    }
-
-    public void initialize()
-            throws LauncherInitializeException {
+    public void initialize() {
         Thread.currentThread().setName("BaseThread");
         ModuleManager.setCurrentModule(ModuleManager.getModuleById(ModuleManager.coreId));
     }
 
-    public void start()
-            throws LauncherExecutionException {
-        loadCore();
+    public void start() throws LauncherExecutionException {
+        try {
+            loadCore();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void loadCore()
-            throws LauncherExecutionException {
+    private void loadCore() throws LauncherExecutionException {
         try {
+            System.out.println("[OK] Starting to load core 1");
             LocalTime start = LocalTime.now();
             DateTimeFormatter df = DateTimeFormatter.ISO_LOCAL_TIME;
+
             File coreDir = new File("core");
             List<IPath> jars = new ArrayList<>();
+            // TODO: handle null pointer
             for (File file : coreDir.listFiles()) {
                 if (file.isDirectory()) {
                     jars.addAll(getListOfJars(file));
@@ -82,25 +89,40 @@ public class Launcher implements ILauncher {
                     jars.add(new Path(file));
                 }
             }
-            loadPlugins(jars);
+
+            File dependencies = new File("./launcher/launcher_dependencies.jar");
+
+            ClassLoader jcl = URLClassLoader.newInstance(new URL[]{
+                    dependencies.toURI().toURL()
+            });
+            ISmartactorsClassLoader cl = ModuleManager.getCurrentClassLoader();
+            IObjectMapper objectMapper = ObjectMapper.newInstance(jcl);
+            IClassLoaderWrapper classLoader = SmartactorsClassLoaderWrapper.newInstance(cl);
+            System.out.println("[OK] Initialized class loader and object mapper");
+
+            loadDependencies(jars, classLoader);
+            loadPlugins(jars, classLoader, objectMapper);
+
             Duration elapsedTime = Duration.between(start, LocalTime.now());
             LocalTime elapsedTimeToLocalTime = LocalTime.ofNanoOfDay(elapsedTime.toNanos());
+
             System.out.println("\n\n");
-            System.out.println("[OK] Stage 1: server core has been loaded successful.");
+            System.out.println("[OK] Stage 1: server core 1 has been loaded successful.");
             System.out.println("[OK] Stage 1: elapsed time - " + elapsedTimeToLocalTime.format(df) + ".");
             System.out.println("\n\n");
-        } catch (IOException | InvalidArgumentException | PluginLoaderException | ProcessExecutionException e) {
+        } catch (Exception e) {
             throw new LauncherExecutionException(e);
         }
     }
 
-    private List<IPath> getListOfJars(final File directory)
-            throws IOException {
+    private List<IPath> getListOfJars(final File directory) throws IOException {
         if (!directory.isDirectory()) {
             throw new IOException(MessageFormat.format("File ''{0}'' is not a directory.", directory.getAbsolutePath()));
         }
+
         File[] files = directory.listFiles(this::isJAR);
         List<IPath> paths = new LinkedList<>();
+        // TODO: handle null pointer
         for (File file : files) {
             paths.add(new Path(file));
         }
@@ -108,33 +130,54 @@ public class Launcher implements ILauncher {
         return paths;
     }
 
-    private void loadPlugins(final List<IPath> jars)
-            throws InvalidArgumentException, PluginLoaderException, ProcessExecutionException {
-        IBootstrap bootstrap = new Bootstrap();
-        IPluginLoader<Collection<IPath>> pluginLoader = new PluginLoader(
-                (ISmartactorsClassLoader) this.getClass().getClassLoader(),//ModuleManager.getCurrentClassLoader(),
-                clz -> {
-                    try {
-                        if (Modifier.isAbstract(clz.getModifiers())) {
-                            return;
-                        }
-                        IPlugin plugin = pluginCreator.create(clz, bootstrap);
-                        plugin.load();
-                    } catch (PluginCreationException | PluginException e) {
-                        throw new ActionExecutionException(e);
-                    }
-                },
-                pluginLoaderVisitor);
-        pluginLoader.loadPlugins(jars);
+    private void loadDependencies(
+            final List<IPath> jars,
+            final IClassLoaderWrapper classLoader
+    ) throws MalformedURLException {
+        for (IPath file : jars) {
+            URL url = new URL("jar:file:" + file.getPath() + "!/");
+            classLoader.addURL(url);
+        }
+    }
+
+    private void loadPlugins(
+            final List<IPath> jars,
+            final IClassLoaderWrapper classLoader,
+            final IObjectMapper objectMapper
+    ) throws PluginLoaderInitException,
+            PluginLoaderException,
+            FeatureReaderException,
+            FeatureSortingException,
+            BootstrapWrapperInitException,
+            PluginCreatorInitException
+    {
+        IBootstrapWrapper bootstrap = new BootstrapWrapper(classLoader);
+        IPluginCreator pluginCreator = new PluginCreator(classLoader);
+        IFeatureReader featureReader = new FeatureReader(objectMapper);
+        IFeatureSorting featureSorting = new FeatureSorting();
+        IPluginLoader<List<IFeature>> pluginLoader = new PluginLoader(
+                classLoader,
+                bootstrap,
+                pluginCreator
+        );
+
+        // TODO: perform check on possibly empty list
+        List<IFeature> features = featureReader.readFeatures(jars);
+        List<IFeature> sortedFeatures = featureSorting.sortFeatures(features);
+
+        pluginLoader.loadPlugins(sortedFeatures, objectMapper);
+
         try {
+            System.out.println("[OK] Starting bootstrap...");
             bootstrap.start();
-        } catch (ProcessExecutionException e) {
+        } catch (Exception e) {
             try {
+//                System.out.println("\n\n[ERROR] Failed to load feature \"" + feature.getName() + "\", reason: " + e.getCause().getCause().getLocalizedMessage() + "\n\n");
+                System.out.println("[ERROR] Failed to start bootstrap, reverting... Error: " + e.getCause().getCause().getCause().getLocalizedMessage());
                 bootstrap.revert();
-            } catch (RevertProcessExecutionException ee) {
+            } catch (Exception ee) {
                 e.addSuppressed(ee);
             }
-            throw e;
         }
     }
 

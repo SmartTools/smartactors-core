@@ -1,11 +1,14 @@
 {
-  "featureName":"info.smart_tools.smartactors:core-service-starter",
+  "featureName":"info.smart_tools.smartactors:core-service-starter:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:configuration-manager-interfaces",
-    "info.smart_tools.smartactors:task-interfaces",
-    "info.smart_tools.smartactors:service-interfaces",
-    "info.smart_tools.smartactors:message-processing-interfaces",
-    "info.smart_tools.smartactors:feature-loading-system-interfaces",
-    "info.smart_tools.smartactors:ioc"
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:service-interfaces:0.7.0",
+    "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system-interfaces:0.7.0",
+    "info.smart_tools.smartactors:iobject-extension-plugins:0.7.0",
+    "info.smart_tools.smartactors:iobject-plugins:0.7.0",
+    "info.smart_tools.smartactors:field-plugins:0.7.0",
+    "info.smart_tools.smartactors:ioc-plugins:0.7.0"
   ]
 }

@@ -33,7 +33,9 @@ public class ShutdownTaskProcessingStrategiesPlugin extends BootstrapPlugin {
     }
 
     @Item("shutdown_task_process_strategies")
-    @After({"IOC"})
+    @After({
+            "IOC",
+    })
     public void registerStrategies()
             throws ResolutionException, InvalidArgumentException, RegistrationException {
         IOC.register(Keys.getKeyByName("ignore task processing strategy"),

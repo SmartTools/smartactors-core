@@ -32,7 +32,11 @@ public class PluginDebuggerSession extends BootstrapPlugin {
      * @throws InvalidArgumentException if strategy does not accept the function
      */
     @Item("debugger:session")
-    @After({"debugger:sequence", "debugger:breakpoint_storage"})
+    @After({
+            "debugger:sequence",
+            "debugger:breakpoint_storage",
+            "core"
+    })
     public void registerSessionStrategy()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("debugger session"), new ApplyFunctionToArgumentsStrategy(args -> {

@@ -1,9 +1,10 @@
 {
-  "featureName":"info.smart_tools.smartactors:checkpoint",
+  "featureName":"info.smart_tools.smartactors:checkpoint:0.7.0",
   "afterFeatures": [
-    "info.smart_tools.smartactors:configuration-manager-interfaces",
-    "info.smart_tools.smartactors:scheduler-interface",
-    "info.smart_tools.smartactors:checkpoint-interfaces",
-    "info.smart_tools.smartactors:message-bus"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:scheduler-interface:0.7.0",
+    "info.smart_tools.smartactors:checkpoint-interfaces:0.7.0",
+    "info.smart_tools.smartactors:message-bus:0.7.0"
   ]
 }

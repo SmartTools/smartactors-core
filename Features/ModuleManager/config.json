@@ -1,7 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:module-manager",
+  "featureName":"info.smart_tools.smartactors:module-manager:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:module-interfaces",
-    "info.smart_tools.smartactors:classloaders"
+    "info.smart_tools.smartactors:module-interfaces:0.7.0"
   ]
 }

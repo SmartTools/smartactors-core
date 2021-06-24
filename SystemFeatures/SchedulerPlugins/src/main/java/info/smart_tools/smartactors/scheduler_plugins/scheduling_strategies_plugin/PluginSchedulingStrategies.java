@@ -33,6 +33,9 @@ public class PluginSchedulingStrategies extends BootstrapPlugin {
      *                                  info.smart_tools.smartactors.scheduler.interfaces.ISchedulingStrategy scheduling strategies}
      */
     @Item("scheduling_strategies")
+    @After({
+            "core",
+    })
     @Before({"scheduler_actor"})
     public void registerSchedulingStrategies()
             throws ResolutionException, RegistrationException, InvalidArgumentException {

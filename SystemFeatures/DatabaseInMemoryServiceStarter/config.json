@@ -1,8 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:in-memory-database-service-starter",
+  "featureName":"info.smart_tools.smartactors:in-memory-database-service-starter:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:configuration-manager-interfaces",
-    "info.smart_tools.smartactors:ioc",
-    "info.smart_tools.smartactors:database-in-memory"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:database-in-memory:0.7.0"
   ]
 }

@@ -63,7 +63,9 @@ public class HttpsEndpointPlugin implements IPlugin {
     public void load() throws PluginException {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CreateHttpsEndpoint");
-            item.process(() -> {
+            item
+                    .after("core")
+                    .process(() -> {
                 try {
                     initializeFieldNames();
                     IOC.register(Keys.getKeyByName(ISslEngineProvider.class.getCanonicalName()),

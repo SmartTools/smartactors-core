@@ -1,6 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:base-service-components",
+  "featureName":"info.smart_tools.smartactors:base-service-components:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:service-interfaces"
+    "info.smart_tools.smartactors:service-interfaces:0.7.0"
   ]
 }

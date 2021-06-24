@@ -1,7 +1,7 @@
 {
-  "featureName":"info.smart_tools.smartactors:message-processing-interfaces",
+  "featureName":"info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:iobject-interfaces",
-    "info.smart_tools.smartactors:strategy-interfaces"
+    "info.smart_tools.smartactors:iobject-interfaces:0.7.0",
+    "info.smart_tools.smartactors:strategy-interfaces:0.7.0"
   ]
 }

@@ -29,6 +29,9 @@ public class ConnectionOptionsPlugin extends BootstrapPlugin {
     }
 
     @Item("PostgresConnectionOptionsPlugin")
+    @After({
+            "core"
+    })
     public void registerCanonizationStrategies()
             throws ResolutionException, InvalidArgumentException,RegistrationException {
         IField urlF = IOC.resolve(Keys.getKeyByName(IField.class.getCanonicalName()), "url");

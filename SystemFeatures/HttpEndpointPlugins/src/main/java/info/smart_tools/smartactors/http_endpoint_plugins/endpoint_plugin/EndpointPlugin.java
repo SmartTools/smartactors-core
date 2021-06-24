@@ -43,6 +43,7 @@ public class EndpointPlugin implements IPlugin {
 //                    .after("IOC")
 //                    .after("message_processor")
 //                    .after("message_processing_sequence")
+                    .after("core")
                     .after("response")
                     .after("response_content_strategy")
 //                    .after("FieldNamePlugin")

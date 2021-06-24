@@ -30,9 +30,14 @@ public class PluginConditionChainChoiceStrategy extends BootstrapPlugin {
      * @throws RegistrationException if error occurs registering the strategy
      * @throws InvalidArgumentException if {@link SingletonStrategy} doesn't like our arguments
      */
-    @BootstrapPlugin.Item("condition_chain_choice_strategy")
-    @BootstrapPlugin.After({"IOC", "IFieldNamePlugin"})
-    @BootstrapPlugin.Before({"ChainCallReceiver"})
+    @Item("condition_chain_choice_strategy")
+    @After({
+            "IOC",
+            "IFieldNamePlugin",
+    })
+    @Before({
+            "ChainCallReceiver",
+    })
     public void item()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("condition chain choice strategy"), new SingletonStrategy(new ConditionChainChoiceStrategy()));
@@ -41,7 +46,7 @@ public class PluginConditionChainChoiceStrategy extends BootstrapPlugin {
     /**
      * Unregisters condition chain choice strategy.
      */
-    @BootstrapPlugin.Item("condition_chain_choice_strategy")
+    @ItemRevert("condition_chain_choice_strategy")
     public void revertItem() {
         String[] keyNames = { "condition chain choice strategy" };
         Keys.unregisterByNames(keyNames);

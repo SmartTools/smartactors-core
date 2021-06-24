@@ -1,6 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:base-pool",
+  "featureName":"info.smart_tools.smartactors:base-pool:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:pool-interfaces"
+    "info.smart_tools.smartactors:pool-interfaces:0.7.0"
   ]
 }

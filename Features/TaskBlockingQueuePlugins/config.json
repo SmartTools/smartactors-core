@@ -1,9 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:task-plugins.blocking-queue",
+  "featureName":"info.smart_tools.smartactors:task-plugins.blocking-queue:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:feature-loading-system",
-    "info.smart_tools.smartactors:task",
-    "info.smart_tools.smartactors:ioc",
-    "info.smart_tools.smartactors:iobject-interfaces"
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:task:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:iobject-interfaces:0.7.0"
   ]
 }

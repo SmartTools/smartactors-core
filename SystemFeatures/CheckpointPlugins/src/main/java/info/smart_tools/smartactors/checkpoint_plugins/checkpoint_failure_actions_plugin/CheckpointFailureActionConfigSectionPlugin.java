@@ -30,7 +30,10 @@ public class CheckpointFailureActionConfigSectionPlugin extends BootstrapPlugin 
      */
     @Item("config_section:checkpoint_failure_action")
     @Before({"checkpoint_actor"})
-    @After({"checkpoint_failure_action_default"})
+    @After({
+            "checkpoint_failure_action_default",
+            "core"
+    })
     public void registerSectionStrategy()
             throws ResolutionException, InvalidArgumentException {
         IConfigurationManager configurationManager = IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));

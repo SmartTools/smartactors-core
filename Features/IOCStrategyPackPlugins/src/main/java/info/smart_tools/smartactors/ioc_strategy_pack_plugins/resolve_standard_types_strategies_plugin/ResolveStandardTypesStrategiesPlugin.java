@@ -75,6 +75,7 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("ResolveStandardTypesStrategiesPlugin");
             item
+                    .before("read_initial_config")
                     .after("IOC")
                     .process(() -> {
                         try {

@@ -33,6 +33,9 @@ public class PluginDebuggerSequence extends BootstrapPlugin {
      * @throws InvalidArgumentException if strategy does not accept the function
      */
     @Item("debugger:sequence")
+    @After({
+            "core"
+    })
     public void registerSequence()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("new debugger sequence"), new ApplyFunctionToArgumentsStrategy(args -> {

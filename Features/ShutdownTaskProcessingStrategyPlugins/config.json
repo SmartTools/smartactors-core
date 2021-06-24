@@ -1,10 +1,11 @@
 {
-  "featureName":"info.smart_tools.smartactors:shutdown-task-processing-strategy-plugins",
+  "featureName":"info.smart_tools.smartactors:shutdown-task-processing-strategy-plugins:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:feature-loading-system",
-    "info.smart_tools.smartactors:shutdown-task-processing-strategies",
-    "info.smart_tools.smartactors:configuration-manager-interfaces",
-    "info.smart_tools.smartactors:message-processing-interfaces",
-    "info.smart_tools.smartactors:base-service-components"
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:shutdown-task-processing-strategies:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
+    "info.smart_tools.smartactors:base-service-components:0.7.0"
   ]
 }

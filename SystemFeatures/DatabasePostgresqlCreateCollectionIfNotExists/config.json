@@ -1,9 +1,10 @@
 {
-  "featureName": "info.smart_tools.smartactors:database-postgresql-create-collection-if-not-exists",
+  "featureName": "info.smart_tools.smartactors:database-postgresql-create-collection-if-not-exists:0.7.0",
   "afterFeatures": [
-    "info.smart_tools.smartactors:feature-loading-system",
-    "info.smart_tools.smartactors:base-pool",
-    "info.smart_tools.smartactors:database-postgresql-plugins"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:base-pool:0.7.0",
+    "info.smart_tools.smartactors:database-postgresql-plugins:0.7.0"
   ],
   "objects": [
     {

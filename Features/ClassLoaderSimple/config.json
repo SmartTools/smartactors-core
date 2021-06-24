@@ -1,6 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:classloader",
+  "featureName":"info.smart_tools.smartactors:classloader:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:classloader-interfaces"
+    "info.smart_tools.smartactors:classloader-interfaces:0.7.0"
   ]
 }

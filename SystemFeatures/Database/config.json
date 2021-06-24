@@ -1,9 +1,10 @@
 {
-  "featureName": "info.smart_tools.smartactors:database",
+  "featureName": "info.smart_tools.smartactors:database:0.7.0",
   "afterFeatures": [
-    "info.smart_tools.smartactors:database-service-starter",
-    "info.smart_tools.smartactors:database-interfaces",
-    "info.smart_tools.smartactors:base-pool",
-    "info.smart_tools.smartactors:fields"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:database-service-starter:0.7.0",
+    "info.smart_tools.smartactors:database-interfaces:0.7.0",
+    "info.smart_tools.smartactors:base-pool:0.7.0",
+    "info.smart_tools.smartactors:fields:0.7.0"
   ]
 }

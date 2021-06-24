@@ -1,6 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:ioc-interfaces",
+  "featureName":"info.smart_tools.smartactors:ioc-interfaces:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:strategy-interfaces"
+    "info.smart_tools.smartactors:strategy-interfaces:0.7.0"
   ]
 }

@@ -1,9 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:feature-management",
+  "featureName":"info.smart_tools.smartactors:feature-management:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:message-processing",
-    "info.smart_tools.smartactors:base-file-system-components",
-    "info.smart_tools.smartactors:configuration-manager-interfaces",
-    "info.smart_tools.smartactors:feature-loading-system-interfaces"
+    "info.smart_tools.smartactors:message-processing:0.7.0",
+    "info.smart_tools.smartactors:base-file-system-components:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system-interfaces:0.7.0"
   ]
 }

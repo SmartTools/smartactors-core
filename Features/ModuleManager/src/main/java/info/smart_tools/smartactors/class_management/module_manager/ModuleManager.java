@@ -23,6 +23,8 @@ public final class ModuleManager {
 
     private static Map<Object, IModule> modules = new ConcurrentHashMap<>();
 
+    private static int getLimit = 0;
+
     static {
         try {
             addModule(coreId, coreName, coreVersion);
@@ -33,6 +35,15 @@ public final class ModuleManager {
     }
 
     private ModuleManager() {}
+
+    public static Map<Object, IModule> getModules() {
+        if (getLimit > 0) {
+            throw new RuntimeException("Unable to get modules more than once");
+        }
+
+        getLimit++;
+        return modules;
+    }
 
     public static void addModule(final Object moduleId, final String moduleName, final String moduleVersion)
             throws InvalidArgumentException, ModuleManagerException {

@@ -23,6 +23,14 @@ class Module implements IModule {
         this.classLoader = SmartactorsClassLoader.newInstance(name, version);
     }
 
+    Module(Object id, String name, String version, ISmartactorsClassLoader smartactorsClassLoader) {
+        this.name = name;
+        this.version = version;
+        this.id = id;
+        this.dependencies = new /*CopyOnWrite*/ArrayList<>();
+        this.classLoader = smartactorsClassLoader;
+    }
+
     @Override
     public String getName() { return name; }
 

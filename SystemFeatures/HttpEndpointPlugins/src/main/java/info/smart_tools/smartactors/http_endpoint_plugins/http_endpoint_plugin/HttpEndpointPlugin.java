@@ -80,6 +80,7 @@ public class HttpEndpointPlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CreateHttpEndpoint");
             item
+                    .after("core")
                     .after("EndpointPlugin")
                     .after("response")
                     .after("response_content_strategy")

@@ -39,6 +39,9 @@ public class CheckpointActorPlugin extends BootstrapPlugin {
      * @throws InvalidArgumentException if unexpected error occurs
      */
     @Item("checkpoint_actor")
+    @After({
+            "core"
+    })
     public void registerCheckpointActorStub()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("checkpoint actor"), new ApplyFunctionToArgumentsStrategy(a -> {
@@ -58,6 +61,9 @@ public class CheckpointActorPlugin extends BootstrapPlugin {
      * @throws InvalidArgumentException i unexpected error occurs
      */
     @Item("checkpoint_scheduler_action")
+    @After({
+            "core"
+    })
     @Before({"checkpoint_actor"})
     public void registerSchedulerAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
@@ -77,6 +83,9 @@ public class CheckpointActorPlugin extends BootstrapPlugin {
      * @throws InvalidArgumentException if unexpected error occurs
      */
     @Item("checkpoint_failure_action_default")
+    @After({
+            "core"
+    })
     @Before({"checkpoint_actor"})
     public void registerDefaultFailureAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
@@ -99,6 +108,9 @@ public class CheckpointActorPlugin extends BootstrapPlugin {
      * @throws InvalidArgumentException if unexpected error occurs
      */
     @Item("default_scheduler_activation_action_for_checkpoint_actor")
+    @After({
+            "core"
+    })
     @Before({
         "checkpoint_actor"
     })

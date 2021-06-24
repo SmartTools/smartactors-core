@@ -1,8 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:timer",
+  "featureName":"info.smart_tools.smartactors:timer:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:timer-interfaces",
-    "info.smart_tools.smartactors:ioc",
-    "info.smart_tools.smartactors:module-manager"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:timer-interfaces:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:module-manager:0.7.0"
   ]
 }

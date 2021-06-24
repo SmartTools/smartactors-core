@@ -38,6 +38,7 @@ public class PluginDateTimeFormatter implements IPlugin {
             IBootstrapItem<String> bootstrapItem = new BootstrapItem("datetime_formatter_plugin");
 
             bootstrapItem
+                .before("read_initial_config")
                 .after("IOC")
                 .process(() -> {
                     try {

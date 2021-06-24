@@ -33,6 +33,7 @@ public class GetHeaderFromRequestRulePlugin implements IPlugin {
             IBootstrapItem<String> item = new BootstrapItem("GetHeaderFromRequestRulePlugin");
 
             item
+                    .after("core")
 //                .after("IOC")
 //                .after("wds_object")
 //                .before("starter")

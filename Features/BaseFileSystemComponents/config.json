@@ -1,6 +1,6 @@
 {
-  "featureName":"info.smart_tools.smartactors:base-file-system-components",
+  "featureName":"info.smart_tools.smartactors:base-file-system-components:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:file-system-interfaces"
+    "info.smart_tools.smartactors:file-system-interfaces:0.7.0"
   ]
 }

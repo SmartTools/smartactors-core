@@ -1,7 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:global-constants-service-starter",
+  "featureName":"info.smart_tools.smartactors:global-constants-service-starter:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:configuration-manager-interfaces",
-    "info.smart_tools.smartactors:ioc"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0"
   ]
 }

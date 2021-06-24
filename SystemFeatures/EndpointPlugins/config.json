@@ -1,7 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:endpoint-plugins",
+  "featureName":"info.smart_tools.smartactors:endpoint-plugins:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:feature-loading-system",
-    "info.smart_tools.smartactors:endpoint"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:endpoint:0.7.0"
   ]
 }

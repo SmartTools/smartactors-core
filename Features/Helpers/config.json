@@ -1,8 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:helpers",
+  "featureName":"info.smart_tools.smartactors:helpers:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:scope-interfaces",
-    "info.smart_tools.smartactors:ioc",
-    "info.smart_tools.smartactors:iobjects"
+    "info.smart_tools.smartactors:scope-interfaces:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:iobjects:0.7.0"
   ]
 }

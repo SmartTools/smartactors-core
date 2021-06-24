@@ -38,7 +38,9 @@ public class PluginTimer implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("timer");
 
-            item.process(() -> {
+            item
+                    .after("core")
+                    .process(() -> {
                 try {
                     IOC.register(Keys.getKeyByName("timer"), new SingletonStrategy(
                             new TimerImpl(new Timer("Smart actors system timer", true))));
@@ -55,7 +57,9 @@ public class PluginTimer implements IPlugin {
 
             item = new BootstrapItem("time");
 
-            item.process(() -> {
+            item
+                    .after("core")
+                    .process(() -> {
                 try {
                     IOC.register(Keys.getKeyByName("time"), new SingletonStrategy(new SystemTimeImpl()));
                 } catch (ResolutionException | RegistrationException | InvalidArgumentException e) {

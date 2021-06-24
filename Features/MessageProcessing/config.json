@@ -1,12 +1,12 @@
 {
-  "featureName":"info.smart_tools.smartactors:message-processing",
+  "featureName":"info.smart_tools.smartactors:message-processing:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:message-processing-interfaces",
-    "info.smart_tools.smartactors:task-interfaces",
-    "info.smart_tools.smartactors:pool-interfaces",
-    "info.smart_tools.smartactors:ioc",
-    "info.smart_tools.smartactors:service-interfaces",
-    "info.smart_tools.smartactors:class-generators",
-    "info.smart_tools.smartactors:module-manager"
+    "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
+    "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:pool-interfaces:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:service-interfaces:0.7.0",
+    "info.smart_tools.smartactors:class-generators:0.7.0",
+    "info.smart_tools.smartactors:module-manager:0.7.0"
   ]
 }

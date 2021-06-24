@@ -30,7 +30,10 @@ public class WrapperCreatorReceiverDecoratorPlugin extends BootstrapPlugin {
     }
 
     @Item("wrapper_creator_receiver_decorator_map_strategies")
-    @After({"IOC", "IFieldNamePlugin"})
+    @After({
+            "IOC",
+            "IFieldNamePlugin",
+    })
     public void registerMapStrategies()
             throws RegistrationException, ResolutionException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("wrapper creator receiver decorator non thread safe map"),

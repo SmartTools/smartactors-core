@@ -37,6 +37,9 @@ public class PluginWDSObject extends BootstrapPlugin {
     }
 
     @Item("wds_object_field_set_map_strategies")
+    @After({
+            "IOC"
+    })
     public void registerFieldSetDependencies()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(
@@ -61,6 +64,9 @@ public class PluginWDSObject extends BootstrapPlugin {
     }
 
     @Item("wds_object_rules_strategy")
+    @After({
+            "IOC"
+    })
     public void registerRulesStrategy()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(

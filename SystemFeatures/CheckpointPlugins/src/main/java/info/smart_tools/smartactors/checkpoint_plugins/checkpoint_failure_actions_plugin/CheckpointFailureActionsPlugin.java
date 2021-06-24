@@ -37,7 +37,10 @@ public class CheckpointFailureActionsPlugin extends BootstrapPlugin {
      * @throws InvalidArgumentException i unexpected error occurs
      */
     @Item("checkpoint_failure_action_send_envelope")
-    @After({"checkpoint_failure_action_default"})
+    @After({
+            "checkpoint_failure_action_default",
+            "core"
+    })
     @Before({"checkpoint_actor"})
     public void registerSendEnvelopeAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {

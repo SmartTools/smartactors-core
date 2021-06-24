@@ -60,7 +60,9 @@ public class HttpsClientPlugin implements IPlugin {
     public void load() throws PluginException {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CreateHttpsClient");
-            item.process(() -> {
+            item
+                    .after("core")
+                    .process(() -> {
                 try {
                     registerFieldNames();
                     IOC.register(

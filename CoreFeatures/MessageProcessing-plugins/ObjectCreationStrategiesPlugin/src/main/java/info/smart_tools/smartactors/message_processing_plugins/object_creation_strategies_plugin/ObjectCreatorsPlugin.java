@@ -101,8 +101,8 @@ public class ObjectCreatorsPlugin extends BootstrapPlugin {
     @After({
             "basic_receiver_strategies",            // for HandlerRouterReceiverCreator and PerReceiverActorSynchronizationReceiverCreator
             "invoker_receiver_creation_strategy",   // required for UserObjectMethodInvokerReceiverCreator
-            "iobject",
-            "IFieldNamePlugin",
+//            "iobject",
+//            "IFieldNamePlugin",
             "wrapper_creator_receiver_decorator",
     })
     @Before({

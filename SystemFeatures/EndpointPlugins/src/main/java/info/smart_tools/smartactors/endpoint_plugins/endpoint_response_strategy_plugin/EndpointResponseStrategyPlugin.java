@@ -22,6 +22,9 @@ public class EndpointResponseStrategyPlugin extends BootstrapPlugin {
     }
 
     @Item("http_response_strategy")
+    @After({
+            "core"
+    })
     public void registerHttpResponseStrategy()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(
