@@ -6,5 +6,12 @@
     "info.smart_tools.smartactors:ioc:0.7.0",
     "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
     "info.smart_tools.smartactors:task-interfaces:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "plugins": [
+    "info.smart_tools.smartactors:message-bus-plugins:0.7.0"
   ]
 }

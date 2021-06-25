@@ -5,5 +5,12 @@
     "info.smart_tools.smartactors:scheduler-interface:0.7.0",
     "info.smart_tools.smartactors:base-pool:0.7.0",
     "info.smart_tools.smartactors:message-bus:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "plugins": [
+    "info.smart_tools.smartactors:scheduler-plugins:0.7.0"
   ]
 }

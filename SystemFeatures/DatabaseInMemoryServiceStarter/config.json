@@ -5,5 +5,12 @@
     "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
     "info.smart_tools.smartactors:ioc:0.7.0",
     "info.smart_tools.smartactors:database-in-memory:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "plugins": [
+    "info.smart_tools.smartactors:in-memory-database-service-starter-plugins:0.7.0"
   ]
 }
