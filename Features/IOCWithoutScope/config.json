@@ -2,5 +2,12 @@
   "featureName":"info.smart_tools.smartactors:ioc:0.7.0",
   "afterFeatures":[
     "info.smart_tools.smartactors:ioc-interfaces:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "plugins": [
+    "info.smart_tools.smartactors:ioc-plugins:0.7.0"
   ]
 }
