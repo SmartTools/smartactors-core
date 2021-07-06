@@ -1,7 +1,7 @@
 {
-  "featureName":"info.smart_tools.smartactors:base-pool:0.7.0",
+  "featureName":"info.smart_tools.smartactors:BasePool:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:pool-interfaces:0.7.0"
+    "info.smart_tools.smartactors:PoolInterfaces:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",

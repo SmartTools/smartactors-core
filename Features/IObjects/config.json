@@ -1,13 +1,13 @@
 {
-  "featureName":"info.smart_tools.smartactors:iobjects:0.7.0",
+  "featureName":"info.smart_tools.smartactors:IObjects:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:iobject-interfaces:0.7.0"
+    "info.smart_tools.smartactors:IObjectInterfaces:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
   },
   "plugins": [
-    "info.smart_tools.smartactors:iobject-plugins:0.7.0"
+    "info.smart_tools.smartactors:IObjectPlugins:0.7.0"
   ]
 }

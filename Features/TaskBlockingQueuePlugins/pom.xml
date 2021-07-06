@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IOCWithScope</artifactId>
+            <artifactId>IOC</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>

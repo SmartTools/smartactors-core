@@ -23,8 +23,8 @@
         <module>ScopeProvider</module>
         <module>ClassLoaderInterfaces</module>
         <module>ClassLoaderHierarchical</module>
-        <module>ClassLoaderAdvanced</module>
-        <module>ClassLoaderSimple</module>
+<!--        <module>ClassLoaderAdvanced</module>-->
+<!--        <module>ClassLoaderSimple</module>-->
         <module>ClassGenerators</module>
         <module>ModuleInterfaces</module>
         <module>ModuleManager</module>
@@ -34,7 +34,7 @@
         <module>FeatureLoadingSystem</module>
         <module>IOCInterfaces</module>
         <module>IOCWithScope</module>
-        <module>IOCWithoutScope</module>
+<!--        <module>IOCWithoutScope</module>-->
         <module>IOCStrategyPack</module>
         <module>Fields</module>
         <module>MessageProcessingInterfaces</module>

@@ -30,7 +30,7 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ClassLoaderHierarchical</artifactId>
+            <artifactId>ClassLoader</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>

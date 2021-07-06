@@ -1,9 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:helpers:0.7.0",
+  "featureName":"info.smart_tools.smartactors:Helpers:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:scope-interfaces:0.7.0",
-    "info.smart_tools.smartactors:ioc:0.7.0",
-    "info.smart_tools.smartactors:iobjects:0.7.0"
+    "info.smart_tools.smartactors:ScopeInterfaces:0.7.0",
+    "info.smart_tools.smartactors:IOC:0.7.0",
+    "info.smart_tools.smartactors:IObjects:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",

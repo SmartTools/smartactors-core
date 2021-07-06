@@ -1,9 +1,9 @@
 {
-  "featureName":"info.smart_tools.smartactors:field-plugins:0.7.0",
+  "featureName":"info.smart_tools.smartactors:FieldPlugins:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
-    "info.smart_tools.smartactors:fields:0.7.0",
-    "info.smart_tools.smartactors:ioc:0.7.0"
+    "info.smart_tools.smartactors:FeatureLoadingSystem:0.7.0",
+    "info.smart_tools.smartactors:Fields:0.7.0",
+    "info.smart_tools.smartactors:IOC:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
