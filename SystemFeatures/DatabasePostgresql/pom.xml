@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>DatabasePostgresql</artifactId>
+    <artifactId>database-postgresql</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
@@ -29,7 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>Database</artifactId>
+            <artifactId>database</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
@@ -53,13 +53,13 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>Helpers</artifactId>
+            <artifactId>helpers</artifactId>
             <version>[0.7.0, 1.0.0)</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IOCStrategyPack</artifactId>
+            <artifactId>ioc-strategy-pack</artifactId>
             <version>[0.7.0, 1.0.0)</version>
             <scope>test</scope>
         </dependency>

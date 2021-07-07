@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>DatabaseInMemoryServiceStarterPlugins</artifactId>
+    <artifactId>database-in-memory-service-starter-plugins</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
@@ -29,17 +29,17 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystem</artifactId>
+            <artifactId>feature-loading-system</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IObjects</artifactId>
+            <artifactId>iobjects</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>DatabaseInMemoryServiceStarter</artifactId>
+            <artifactId>database-in-memory-service-starter</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
 

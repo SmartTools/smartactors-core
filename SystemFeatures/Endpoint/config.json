@@ -1,7 +1,7 @@
 {
   "featureName":"info.smart_tools.smartactors:endpoint:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:core-service-starter:0.7.0",
     "info.smart_tools.smartactors:task-interfaces:0.7.0",
     "info.smart_tools.smartactors:ioc:0.7.0",
     "info.smart_tools.smartactors:module-manager:0.7.0",

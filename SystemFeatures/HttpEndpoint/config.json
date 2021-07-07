@@ -1,11 +1,11 @@
 {
   "featureName":"info.smart_tools.smartactors:http-endpoint:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
+    "info.smart_tools.smartactors:core-service-starter:0.7.0",
     "info.smart_tools.smartactors:action-interfaces:0.7.0",
     "info.smart_tools.smartactors:message-bus:0.7.0",
-    "info.smart_tools.smartactors:endpoint-plugins:0.7.0",
-    "info.smart_tools.smartactors:timer-plugins:0.7.0"
+    "info.smart_tools.smartactors:endpoint:0.7.0",
+    "info.smart_tools.smartactors:timer:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
