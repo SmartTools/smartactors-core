@@ -1,7 +1,7 @@
 {
-  "featureName":"info.smart_tools.smartactors:BaseServiceComponents:0.7.0",
+  "featureName":"info.smart_tools.smartactors:base-service-components:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:ServiceInterfaces:0.7.0"
+    "info.smart_tools.smartactors:service-interfaces:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",

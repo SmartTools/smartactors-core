@@ -1,8 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:CoreServiceStarterPlugins:0.7.0",
+  "featureName":"info.smart_tools.smartactors:core-service-starter-plugins:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:FeatureLoadingSystem:0.7.0",
-    "info.smart_tools.smartactors:CoreServiceStarter:0.7.0"
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:core-service-starter:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",

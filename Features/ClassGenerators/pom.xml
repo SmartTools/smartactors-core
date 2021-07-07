@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ClassGenerators</artifactId>
+    <artifactId>class-generators</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
@@ -30,14 +30,14 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ClassLoaderInterfaces</artifactId>
+            <artifactId>class-loader-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
 
         <!-- Tests -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ModuleManager</artifactId>
+            <artifactId>module-manager</artifactId>
             <version>[0.7.0, 1.0.0)</version>
             <scope>test</scope>
         </dependency>

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ShutdownTaskProcessingStrategyPlugins</artifactId>
+    <artifactId>shutdown-task-processing-strategy-plugins</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
@@ -30,27 +30,27 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystem</artifactId>
+            <artifactId>feature-loading-system</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ShutdownTaskProcessingStrategies</artifactId>
+            <artifactId>shutdown-task-processing-strategies</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ConfigurationManagerInterfaces</artifactId>
+            <artifactId>configuration-manager-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>MessageProcessingInterfaces</artifactId>
+            <artifactId>message-processing-interfaces</artifactId>
             <version>0.7.0</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>BaseServiceComponents</artifactId>
+            <artifactId>base-service-components</artifactId>
             <version>0.7.0</version>
         </dependency>
 

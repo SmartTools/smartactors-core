@@ -30,17 +30,17 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystem</artifactId>
+            <artifactId>feature-loading-system</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>Task</artifactId>
+            <artifactId>task</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IOC</artifactId>
+            <artifactId>ioc</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
 

@@ -1,21 +1,21 @@
 {
-  "featureName":"info.smart_tools.smartactors:CoreServiceStarter:0.7.0",
+  "featureName":"info.smart_tools.smartactors:core-service-starter:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:ConfigurationManagerInterfaces:0.7.0",
-    "info.smart_tools.smartactors:TaskInterfaces:0.7.0",
-    "info.smart_tools.smartactors:ServiceInterfaces:0.7.0",
-    "info.smart_tools.smartactors:MessageProcessingInterfaces:0.7.0",
-    "info.smart_tools.smartactors:FeatureLoadingSystemInterfaces:0.7.0",
-    "info.smart_tools.smartactors:IObjectExtension:0.7.0",
-    "info.smart_tools.smartactors:IObjects:0.7.0",
-    "info.smart_tools.smartactors:Fields:0.7.0",
-    "info.smart_tools.smartactors:IOC:0.7.0"
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:service-interfaces:0.7.0",
+    "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system-interfaces:0.7.0",
+    "info.smart_tools.smartactors:iobject-extension:0.7.0",
+    "info.smart_tools.smartactors:iobjects:0.7.0",
+    "info.smart_tools.smartactors:fields:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
   },
   "plugins": [
-    "info.smart_tools.smartactors:CoreServiceStarterPlugins:0.7.0"
+    "info.smart_tools.smartactors:core-service-starter-plugins:0.7.0"
   ]
 }

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>FeatureManagement</artifactId>
+    <artifactId>feature-management</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
@@ -30,37 +30,37 @@
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>MessageProcessingInterfaces</artifactId>
+            <artifactId>message-processing-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>TaskInterfaces</artifactId>
+            <artifactId>task-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>IOC</artifactId>
+            <artifactId>ioc</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ModuleManager</artifactId>
+            <artifactId>module-manager</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>BaseFileSystemComponents</artifactId>
+            <artifactId>base-file-system-components</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystemInterfaces</artifactId>
+            <artifactId>feature-loading-system-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>ConfigurationManagerInterfaces</artifactId>
+            <artifactId>configuration-manager-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
 
@@ -89,7 +89,7 @@
         <!-- Tests -->
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>Helpers</artifactId>
+            <artifactId>helpers</artifactId>
             <version>[0.7.0, 1.0.0)</version>
             <scope>test</scope>
         </dependency>

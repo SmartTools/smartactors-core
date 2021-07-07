@@ -1,13 +1,13 @@
 {
-  "featureName":"info.smart_tools.smartactors:ScopeProvider:0.7.0",
+  "featureName":"info.smart_tools.smartactors:scope-provider:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:ScopeInterfaces:0.7.0"
+    "info.smart_tools.smartactors:scope-interfaces:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
   },
   "plugins": [
-    "info.smart_tools.smartactors:ScopePlugins:0.7.0"
+    "info.smart_tools.smartactors:scope-plugins:0.7.0"
   ]
 }

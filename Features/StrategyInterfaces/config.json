@@ -1,5 +1,5 @@
 {
-  "featureName":"info.smart_tools.smartactors:StrategyInterfaces:0.7.0",
+  "featureName":"info.smart_tools.smartactors:strategy-interfaces:0.7.0",
   "afterFeatures":[],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",

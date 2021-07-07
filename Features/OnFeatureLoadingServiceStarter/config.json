@@ -1,17 +1,17 @@
 {
-  "featureName":"info.smart_tools.smartactors:OnFeatureLoadingServiceStarter:0.7.0",
+  "featureName":"info.smart_tools.smartactors:on-feature-loading-service-starter:0.7.0",
   "afterFeatures":[
-    "info.smart_tools.smartactors:IOC:0.7.0",
-    "info.smart_tools.smartactors:FeatureLoadingSystemInterfaces:0.7.0",
-    "info.smart_tools.smartactors:ConfigurationManagerInterfaces:0.7.0",
-    "info.smart_tools.smartactors:MessageProcessingInterfaces:0.7.0",
-    "info.smart_tools.smartactors:TaskInterfaces:0.7.0"
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system-interfaces:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:message-processing-interfaces:0.7.0",
+    "info.smart_tools.smartactors:task-interfaces:0.7.0"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
   },
   "plugins": [
-    "info.smart_tools.smartactors:OnFeatureLoadingServiceStarterPlugins:0.7.0"
+    "info.smart_tools.smartactors:on-feature-loading-service-starter-plugins:0.7.0"
   ]
 }
