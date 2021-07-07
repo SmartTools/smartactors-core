@@ -43,8 +43,9 @@ public class PostgresGetByIdTask implements IDatabaseTask {
     private QueryStatement preparedQuery;
 
     /**
-     * Creates the task
-     * @param connection the database connection where to perform upserts
+     * Create the task
+     *
+     * @param connection the database connection where to perform searching document
      */
     public PostgresGetByIdTask(final IStorageConnection connection) {
         this.connection = connection;
@@ -53,7 +54,10 @@ public class PostgresGetByIdTask implements IDatabaseTask {
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-            GetByIdMessage message = IOC.resolve(Keys.getKeyByName(GetByIdMessage.class.getCanonicalName()), query);
+            final GetByIdMessage message = IOC.resolve(
+                    Keys.getKeyByName(GetByIdMessage.class.getCanonicalName()),
+                    query
+            );
             collection = message.getCollectionName();
             id = message.getId();
             callback = message.getCallback();
@@ -72,22 +76,25 @@ public class PostgresGetByIdTask implements IDatabaseTask {
     @Override
     public void execute() throws TaskExecutionException {
         try {
-            JDBCCompiledQuery compiledQuery = (JDBCCompiledQuery) connection.compileQuery(preparedQuery);
-            PreparedStatement statement = compiledQuery.getPreparedStatement();
+            final JDBCCompiledQuery compiledQuery = (JDBCCompiledQuery) connection.compileQuery(preparedQuery);
+            final PreparedStatement statement = compiledQuery.getPreparedStatement();
             statement.execute();
 
-            ResultSet resultSet = statement.getResultSet();
+            final ResultSet resultSet = statement.getResultSet();
             if (resultSet.next()) {
-                String sqlDoc = resultSet.getString(1);
-                IObject document = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"), sqlDoc);
+                final String sqlDoc = resultSet.getString(1);
+                final IObject document = IOC.resolve(
+                        Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"),
+                        sqlDoc
+                );
                 callback.execute(document);
                 connection.commit();
             } else {
                 connection.commit();
-                throw new TaskExecutionException("Not found in " + collection + ": id = " + id);
+                throw new DocumentNotFoundException("Not found in " + collection + ": id = " + id);
             }
-        } catch (TaskExecutionException te) {
-            throw te;
+        } catch (DocumentNotFoundException ex) {
+            throw new TaskExecutionException(ex);
         } catch (Exception e) {
             try {
                 connection.rollback();
