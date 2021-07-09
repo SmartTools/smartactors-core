@@ -4,7 +4,7 @@ package info.smart_tools.smartactors.launcher.plugin;
 import info.smart_tools.smartactors.launcher.interfaces.IClassLoaderWrapper;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginCreationException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginCreatorInitException;
-import info.smart_tools.smartactors.launcher.interfaces.ibootstrapwrapper.IBootstrapWrapper;
+import info.smart_tools.smartactors.launcher.interfaces.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginCreator;
 
 import java.lang.reflect.Method;
@@ -32,7 +32,7 @@ public class PluginCreator implements IPluginCreator {
     @Override
     public Object create(
             final Class<?> clz,
-            final IBootstrapWrapper bootstrapWrapper
+            final IBootstrap bootstrapWrapper
     ) throws PluginCreationException {
         try {
             Object bootstrap = bootstrapWrapper.getInstance();

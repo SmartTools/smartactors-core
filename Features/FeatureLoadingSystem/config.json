@@ -8,8 +8,5 @@
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
-  },
-  "plugins": [
-    "info.smart_tools.smartactors:feature-loading-system-plugins:0.7.0"
-  ]
+  }
 }

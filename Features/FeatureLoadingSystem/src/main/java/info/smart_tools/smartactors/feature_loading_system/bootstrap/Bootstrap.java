@@ -1,16 +1,25 @@
 package info.smart_tools.smartactors.feature_loading_system.bootstrap;
 
 
+import info.smart_tools.smartactors.base.interfaces.iaction.IActionNoArgs;
+import info.smart_tools.smartactors.class_management.interfaces.imodule.IModule;
+import info.smart_tools.smartactors.class_management.interfaces.ismartactors_class_loader.ISmartactorsClassLoader;
+import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
+import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.BootstrapPlugin;
+import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.MethodBootstrapItem;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.ProcessExecutionException;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.RevertProcessExecutionException;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap_item.IBootstrapItem;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +29,7 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
 
     private List<IBootstrapItem<String>> itemStorage = new ArrayList<>();
     private List<IBootstrapItem<String>> doneItems = new ArrayList<>();
+
     /**
      * Default constructor.
      */
@@ -52,8 +62,29 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
             TopologicalSort ts = new TopologicalSort(itemStorage);
             List<IBootstrapItem<String>> orderedItems = ts.getOrderedList(false);
             List<IBootstrapItem<String>> failedItems = new ArrayList<>(0);
+
+            IModule currentModule = ModuleManager.getCurrentModule();
+
             for (IBootstrapItem<String> item : orderedItems) {
                 try {
+                    // absolute clusterfuck of a code
+                    ISmartactorsClassLoader classLoader;
+                    if (item instanceof MethodBootstrapItem) {
+                        Field field = item.getClass().getDeclaredField("method1");
+                        field.setAccessible(true);
+                        Method itemCore = (Method) field.get(item);
+                        classLoader = (ISmartactorsClassLoader) itemCore.getDeclaringClass().getClassLoader();
+                    } else {
+                        Field field = item.getClass().getDeclaredField("item");
+                        field.setAccessible(true);
+                        Object itemCore = field.get(item);
+                        Field field2 = itemCore.getClass().getDeclaredField("process");
+                        field2.setAccessible(true);
+                        Object process = field2.get(itemCore);
+                        classLoader = (ISmartactorsClassLoader) process.getClass().getClassLoader();
+                    }
+                    ModuleManager.setCurrentModuleByClassLoader(classLoader);
+
                     item.executeProcess();
                     doneItems.add(item);
                     System.out.println("[OK] Initial load of plugin \"" + item.getItemName() + "\" done.");
@@ -64,6 +95,8 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
                     failedItems.add(item);
                 }
             }
+
+            ModuleManager.setCurrentModule(currentModule);
 
             List<IBootstrapItem<String>> retryDoneItems = new ArrayList<>(0);
             do {
@@ -76,14 +109,14 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
                         item.executeProcess();
                         doneItems.add(item);
                         retryDoneItems.add(item);
-                        System.out.println("[OK] "+Thread.currentThread().getName()+" Load retry of plugin \""+item.getItemName()+"\" done.");
+                        System.out.println("[OK] " + Thread.currentThread().getName() + " Load retry of plugin \"" + item.getItemName() + "\" done.");
                     } catch (Throwable ex) {
                         ex.printStackTrace();
-                        System.out.println("[WARNING] "+Thread.currentThread().getName()+" Load retry of plugin \""+item.getItemName()+"\" failed.");
+                        System.out.println("[WARNING] " + Thread.currentThread().getName() + " Load retry of plugin \"" + item.getItemName() + "\" failed.");
                         item.executeRevertProcess();
                     }
                 }
-            } while ( retryDoneItems.size() > 0 );
+            } while (retryDoneItems.size() > 0);
             if (failedItems.size() > 0) {
                 throw new ProcessExecutionException(
                         MessageFormat.format(
@@ -110,15 +143,15 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
             throw new RevertProcessExecutionException("Can't revert bootstrap if no bootstrap items started.");
         }
         ListIterator<IBootstrapItem<String>> i = doneItems.listIterator(doneItems.size());
-        while(i.hasPrevious()) {
+        while (i.hasPrevious()) {
             IBootstrapItem<String> item = i.previous();
             try {
                 item.executeRevertProcess();
                 i.remove();
-                System.out.println("[OK] "+Thread.currentThread().getName()+" Revert of plugin \""+item.getItemName()+"\" done.");
+                System.out.println("[OK] " + Thread.currentThread().getName() + " Revert of plugin \"" + item.getItemName() + "\" done.");
             } catch (Throwable e) {
                 exception.addSuppressed(e);
-                System.out.println("[WARNING] "+Thread.currentThread().getName()+" Revert of plugin \""+item.getItemName()+"\" failed.");
+                System.out.println("[WARNING] " + Thread.currentThread().getName() + " Revert of plugin \"" + item.getItemName() + "\" failed.");
             }
         }
         if (exception.getSuppressed().length > 0) {

@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>message-processing-interfaces</artifactId>
+            <artifactId>message-processing</artifactId>
             <version>0.7.0</version>
         </dependency>
         <dependency>

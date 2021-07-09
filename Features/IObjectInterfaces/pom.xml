@@ -33,6 +33,11 @@
             <artifactId>base-exceptions</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>field-name-interfaces</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
 
         <!-- Tests -->
         <dependency>

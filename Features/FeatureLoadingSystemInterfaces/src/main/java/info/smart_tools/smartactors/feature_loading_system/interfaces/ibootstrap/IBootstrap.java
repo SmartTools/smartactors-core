@@ -4,6 +4,7 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.exception.RevertProcessExecutionException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * IBootstrap

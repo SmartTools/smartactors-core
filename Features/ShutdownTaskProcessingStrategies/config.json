@@ -3,6 +3,7 @@
   "afterFeatures":[
     "info.smart_tools.smartactors:service-interfaces:0.7.0",
     "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager:0.7.0",
     "info.smart_tools.smartactors:ioc:0.7.0"
   ],
   "repository":{

@@ -12,7 +12,10 @@ import java.text.MessageFormat;
 /**
  * Bootstrap item created from a plugin method.
  */
-class MethodBootstrapItem extends BootstrapItem {
+public class MethodBootstrapItem extends BootstrapItem {
+
+    //TODO: why the fuck we need it
+    private final Method method1;
 
     /**
      * The constructor.
@@ -35,6 +38,7 @@ class MethodBootstrapItem extends BootstrapItem {
                             method1.getAnnotation(BootstrapPlugin.Item.class).value()));
         }
 
+        this.method1 = method1;
         BootstrapPlugin.After after = method1.getAnnotation(BootstrapPlugin.After.class);
 
         if (null != after) {

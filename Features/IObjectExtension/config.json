@@ -1,7 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:iobjectExtension:0.7.0",
+  "featureName":"info.smart_tools.smartactors:iobject-extension:0.7.0",
   "afterFeatures":[
     "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:field-name:0.7.0",
     "info.smart_tools.smartactors:iobject-interfaces:0.7.0"
   ],
   "repository":{

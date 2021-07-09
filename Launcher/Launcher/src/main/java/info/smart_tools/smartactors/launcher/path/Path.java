@@ -4,6 +4,7 @@ package info.smart_tools.smartactors.launcher.path;
 import info.smart_tools.smartactors.launcher.interfaces.IPath;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * Implementation of IPath.
@@ -52,7 +53,7 @@ public class Path implements IPath {
             return false;
         }
         Path path1 = (Path) o;
-        return path != null ? path.equals(path1.path) : path1.path == null;
+        return Objects.equals(path, path1.path);
     }
 
     @Override

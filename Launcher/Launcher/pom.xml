@@ -35,22 +35,12 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>BaseFileSystemComponents</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>FeatureLoadingSystemInterfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>FeatureLoadingSystem</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>FeatureLoadingSystemPlugins</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
         <dependency>
@@ -111,6 +101,11 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>info.smart_tools.smartactors.launcher.Application</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
                 <executions>
                     <execution>

@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception;
 
+import info.smart_tools.smartactors.launcher.interfaces.exception.launcher.LauncherInitializeException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

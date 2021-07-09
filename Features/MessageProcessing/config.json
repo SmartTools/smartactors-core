@@ -7,6 +7,9 @@
     "info.smart_tools.smartactors:ioc:0.7.0",
     "info.smart_tools.smartactors:service-interfaces:0.7.0",
     "info.smart_tools.smartactors:class-generators:0.7.0",
+    "info.smart_tools.smartactors:fields:0.7.0",
+    "info.smart_tools.smartactors:iobjects:0.7.0",
+    "info.smart_tools.smartactors:iobject-extension:0.7.0",
     "info.smart_tools.smartactors:module-manager:0.7.0"
   ],
   "repository":{

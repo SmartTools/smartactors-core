@@ -74,6 +74,13 @@ public final class ModuleManager {
         modules.get(dependentModuleId).addDependency(modules.get(baseModuleId));
     }
 
+    public static void setCurrentModuleByClassLoader(
+            final ISmartactorsClassLoader classLoader
+    ) {
+        IModule module = modules.values().stream().filter(it -> it.getClassLoader().equals(classLoader)).findFirst().orElse(null);
+        setCurrentModule(module);
+    }
+
     public static void finalizeModuleDependencies(Object moduleId)
             throws InvalidArgumentException {
         if (moduleId == null) {

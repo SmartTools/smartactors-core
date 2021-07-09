@@ -1,9 +1,10 @@
 package info.smart_tools.smartactors.iobject_extension_plugins.configuration_object_plugin;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
-import info.smart_tools.smartactors.base.interfaces.istrategy_registration.IStrategyRegistration;
 import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecutionException;
 import info.smart_tools.smartactors.base.interfaces.istrategy.IStrategy;
+import info.smart_tools.smartactors.base.interfaces.istrategy_registration.IStrategyRegistration;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
@@ -11,10 +12,13 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IPlugin;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.iobject.field_name.FieldName;
 import info.smart_tools.smartactors.iobject_extension.configuration_object.CObjectStrategy;
 import info.smart_tools.smartactors.iobject_extension.configuration_object.ConfigurationObject;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
+
+import java.util.Map;
 
 /**
  * creates and register some strategies for correct work of
@@ -47,6 +51,11 @@ public class InitializeConfigurationObjectStrategies implements IPlugin {
                     .before("configuration_manager")
                     .process( () -> {
                             try {
+                                IOC.register(
+                                        Keys.getKeyByName("Map<IFieldName,Object> typeReferenceExt"),
+                                        new SingletonStrategy(new TypeReference<Map<FieldName, Object>>(){})
+                                );
+
                                 IOC.register(
                                         IOC.resolve(
                                                 IOC.getKeyForKeyByNameStrategy(), "configuration object"

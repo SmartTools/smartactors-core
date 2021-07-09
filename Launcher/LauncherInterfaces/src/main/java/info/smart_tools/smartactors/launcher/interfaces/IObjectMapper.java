@@ -1,7 +1,6 @@
 package info.smart_tools.smartactors.launcher.interfaces;
 
-import info.smart_tools.smartactors.launcher.interfaces.exception.ReadJsonException;
-import info.smart_tools.smartactors.launcher.model.FeatureConfig;
+import info.smart_tools.smartactors.launcher.interfaces.exception.iobject_mapper.ReadJsonException;
 
 public interface IObjectMapper {
 

@@ -18,7 +18,7 @@ public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
 
     public static SmartactorsClassLoaderWrapper newInstance(
             final ISmartactorsClassLoader classLoader
-    ) throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    ) {
         return new SmartactorsClassLoaderWrapper(classLoader);
     }
 

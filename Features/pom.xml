@@ -26,6 +26,9 @@
 <!--        <module>ClassLoaderAdvanced</module>-->
 <!--        <module>ClassLoaderSimple</module>-->
         <module>ClassGenerators</module>
+        <module>FieldNameInterfaces</module>
+        <module>FieldName</module>
+        <module>FieldNamePlugins</module>
         <module>ModuleInterfaces</module>
         <module>ModuleManager</module>
         <module>IObjectInterfaces</module>
@@ -49,16 +52,16 @@
         <module>FeatureManagement</module>
         <module>CoreServiceStarter</module>
         <module>VersionManagement</module>
-        <module>FeatureLoadingSystemPlugins</module>
+<!--        <module>FeatureLoadingSystemPlugins</module>-->
         <module>OnFeatureLoadingServiceStarter</module>
-        <module>ScopePlugins</module>
+<!--        <module>ScopePlugins</module>-->
         <module>IOCStrategyPackPlugins</module>
         <module>IOCPlugins</module>
         <module>FieldPlugins</module>
         <module>IObjectPlugins</module>
         <module>IObjectExtensionPlugins</module>
         <module>ConfigurationManagerPlugins</module>
-        <module>TaskBlockingQueuePlugins</module>
+<!--        <module>TaskBlockingQueuePlugins</module>-->
         <module>TaskNonBlockingQueuePlugins</module>
         <module>TaskPlugins</module>
         <module>ShutdownTaskProcessingStrategyPlugins</module>
@@ -68,6 +71,7 @@
         <module>CoreServiceStarterPlugins</module>
         <module>OnFeatureLoadingServiceStarterPlugins</module>
         <module>ClassGeneratorPlugins</module>
+        <module>UpCounterPlugin</module>
     </modules>
 
     <build>

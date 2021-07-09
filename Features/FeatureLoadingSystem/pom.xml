@@ -35,6 +35,11 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>module-manager</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
             <artifactId>class-loader-interfaces</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
@@ -55,12 +60,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>module-manager</artifactId>
-            <version>[0.7.0, 1.0.0)</version>
             <scope>test</scope>
         </dependency>
         <dependency>

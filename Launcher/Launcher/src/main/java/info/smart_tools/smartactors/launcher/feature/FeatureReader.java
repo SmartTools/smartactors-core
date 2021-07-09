@@ -4,8 +4,10 @@ import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeature;
 import info.smart_tools.smartactors.launcher.interfaces.IObjectMapper;
 import info.smart_tools.smartactors.launcher.interfaces.IPath;
 import info.smart_tools.smartactors.launcher.interfaces.exception.ifeature.FeatureReaderException;
-import info.smart_tools.smartactors.launcher.interfaces.exception.ReadJsonException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.iobject_mapper.ReadJsonException;
 import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeatureReader;
+import info.smart_tools.smartactors.launcher.interfaces.ilogger.ILogger;
+import info.smart_tools.smartactors.launcher.logger.LoggerFactory;
 import info.smart_tools.smartactors.launcher.model.FeatureConfig;
 
 import java.io.BufferedReader;
@@ -20,6 +22,9 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 public class FeatureReader implements IFeatureReader {
+
+    private static final ILogger log = LoggerFactory.getLogger();
+    private static final String CONFIG_FILENAME = "config.json";
 
     private final IObjectMapper objectMapper;
 
@@ -45,29 +50,34 @@ public class FeatureReader implements IFeatureReader {
 
                 while (iterator.hasMoreElements()) {
                     JarEntry je = iterator.nextElement();
-                    if (je.isDirectory() || !je.getName().equals("config.json")) {
+                    if (je.isDirectory() || !je.getName().equals(CONFIG_FILENAME)) {
                         continue;
                     }
 
-                    InputStream jarInputStream = jarFile.getInputStream(je);
-                    // TODO: close stream?
-                    String configRaw = new BufferedReader(new InputStreamReader(jarInputStream))
-                            .lines()
-                            .collect(Collectors.joining("\n"));
+                    try (
+                            InputStream inputStream = jarFile.getInputStream(je);
+                            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader)
+                    ) {
+                        String configRaw = bufferedReader
+                                .lines()
+                                .collect(Collectors.joining("\n"));
 
-                    FeatureConfig featureConfig = objectMapper.readJson(configRaw, FeatureConfig.class);
-//                    System.out.println("[DEBUG] Loaded config.json for feature \"" + featureConfig.getFeatureName() + "\"");
+                        FeatureConfig featureConfig = objectMapper.readJson(configRaw, FeatureConfig.class);
+                        log.debug("Loaded config.json for feature {0}", featureConfig.getFeatureName());
 
-                    Feature feature = new Feature(
-                            UUID.randomUUID(),
-                            pathToJar,
-                            featureConfig.getFeatureName(),
-                            featureConfig.getAfterFeatures()
-                    );
-                    features.add(feature);
+                        Feature feature = new Feature(
+                                UUID.randomUUID(),
+                                pathToJar,
+                                featureConfig.getFeatureName(),
+                                featureConfig.getAfterFeatures(),
+                                featureConfig.getPlugins()
+                        );
+                        features.add(feature);
+                    }
                 }
             } catch (ReadJsonException e) {
-                System.out.println("[ERROR] Failed to load config.json for " + jarFileName);
+                log.error("Failed to load config.json for {0}", jarFileName);
             } catch (Throwable e) {
                 throw new FeatureReaderException("Plugin loading failed: " + pathToJar, e);
             }
