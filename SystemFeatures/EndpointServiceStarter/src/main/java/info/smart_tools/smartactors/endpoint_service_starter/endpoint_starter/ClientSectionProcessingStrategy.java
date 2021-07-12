@@ -37,7 +37,7 @@ public class ClientSectionProcessingStrategy implements ISectionStrategy {
      *
      * @throws ResolutionException if there are problems on resolving IFieldName
      */
-    ClientSectionProcessingStrategy() throws ResolutionException {
+    public ClientSectionProcessingStrategy() throws ResolutionException {
         this.name = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "client");
         this.startChainNameFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "startChain");
         this.queueFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "queue");

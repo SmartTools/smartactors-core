@@ -38,7 +38,7 @@ public class CheckpointConfigCanonizationStrategyPlugin extends BootstrapPlugin 
     public void registerCanonizationStrategies()
             throws ResolutionException, RegistrationException, InvalidArgumentException, StrategyRegistrationException {
 
-        try (Scanner scanner = new Scanner(getClass().getResourceAsStream("checkpoint_wrapper_config.json"))) {
+        try (Scanner scanner = new Scanner(getClass().getClassLoader().getResourceAsStream("checkpoint_wrapper_config.json"))) {
             checkpointWrapperConfig = scanner.useDelimiter("\\Z").next();
         }
 
