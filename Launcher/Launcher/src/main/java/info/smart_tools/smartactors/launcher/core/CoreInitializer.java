@@ -114,13 +114,6 @@ public class CoreInitializer implements ICoreInitializer  {
         List<IFeature> features = featureReader.readFeatures(jars);
         List<IFeature> sortedRawFeatures = featureSorting.sortFeatures(features);
         dependencyReplacer.replaceDependencies(sortedRawFeatures);
-        // TODO: temporary
-        System.out.println("\n\n");
-        sortedRawFeatures.stream()
-                .map(it -> MessageFormat.format("{0}/{1}", it.getName(), it.getAfterFeatures()))
-                .collect(Collectors.toList())
-                .forEach(System.out::println);
-        System.out.println("\n\n");
         List<IFeature> sortedFeatures = featureSorting.sortFeatures(sortedRawFeatures);
 
         pluginLoader.loadPlugins(sortedFeatures, objectMapper);
