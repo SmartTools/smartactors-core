@@ -13,8 +13,6 @@ import java.util.List;
 
 public class CoreLoader implements ICoreLoader {
 
-    private static final String JAR_FILE_EXT = ".jar";
-
     @Override
     public List<IPath> loadCoreFeature(
             final String coreFeaturesPath
@@ -61,6 +59,6 @@ public class CoreLoader implements ICoreLoader {
     }
 
     private boolean isJar(final File file) {
-        return file.isFile() && file.getName().endsWith(JAR_FILE_EXT);
+        return file.isFile() && file.getName().endsWith(".jar");
     }
 }

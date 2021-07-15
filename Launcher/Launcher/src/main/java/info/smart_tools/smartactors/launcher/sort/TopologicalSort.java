@@ -82,6 +82,7 @@ public class TopologicalSort<D extends IFeature> {
         }
     }
 
+    // TODO: if graph cycle has occurred, then need to show where it happened
     private boolean topologicalSort()
             throws Exception {
         boolean cycle;

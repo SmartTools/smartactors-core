@@ -8,9 +8,6 @@ import info.smart_tools.smartactors.launcher.interfaces.ibootstrap.IBootstrap;
 
 import java.lang.reflect.Method;
 
-/**
- * Implementation of {@link IBootstrapWrapper}
- */
 public class Bootstrap implements IBootstrap {
 
     private final Class<?> bootstrapCls;

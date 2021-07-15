@@ -27,7 +27,7 @@ import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeatureSorting
 import info.smart_tools.smartactors.launcher.interfaces.ilogger.ILogger;
 import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginCreator;
 import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginLoader;
-import info.smart_tools.smartactors.launcher.logger.LoggerFactory;
+import info.smart_tools.smartactors.launcher.logger.Logger;
 import info.smart_tools.smartactors.launcher.objectmapper.ObjectMapper;
 import info.smart_tools.smartactors.launcher.plugin.PluginCreator;
 import info.smart_tools.smartactors.launcher.plugin.PluginLoader;
@@ -36,19 +36,18 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CoreInitializer implements ICoreInitializer  {
 
-    private static final ILogger log = LoggerFactory.getLogger();
+    private final ILogger log;
 
     private final String dependenciesPath;
 
     public CoreInitializer(
             final String dependenciesPath
     ) {
+        this.log = new Logger();
         this.dependenciesPath = dependenciesPath;
     }
 
@@ -63,8 +62,8 @@ public class CoreInitializer implements ICoreInitializer  {
                     dependencies.toURI().toURL()
             });
             ISmartactorsClassLoader cl = ModuleManager.getCurrentClassLoader();
-            IObjectMapper objectMapper = ObjectMapper.newInstance(jcl);
-            IClassLoaderWrapper classLoader = SmartactorsClassLoaderWrapper.newInstance(cl);
+            IObjectMapper objectMapper = new ObjectMapper(jcl);
+            IClassLoaderWrapper classLoader = new SmartactorsClassLoaderWrapper(cl);
             log.info("Initialized class loader and object mapper");
 
             loadPlugins(coreFeatures, classLoader, objectMapper);
@@ -105,7 +104,6 @@ public class CoreInitializer implements ICoreInitializer  {
         IDependencyReplacer dependencyReplacer = new DependencyReplacer();
         IFeatureSorting featureSorting = new FeatureSorting();
         IPluginLoader<List<IFeature>> pluginLoader = new PluginLoader(
-                classLoader,
                 dependencyLoader,
                 bootstrap,
                 pluginCreator

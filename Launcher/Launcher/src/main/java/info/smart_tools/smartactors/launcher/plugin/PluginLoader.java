@@ -14,7 +14,7 @@ import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeature;
 import info.smart_tools.smartactors.launcher.interfaces.ilogger.ILogger;
 import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginCreator;
 import info.smart_tools.smartactors.launcher.interfaces.iplugin.IPluginLoader;
-import info.smart_tools.smartactors.launcher.logger.LoggerFactory;
+import info.smart_tools.smartactors.launcher.logger.Logger;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -27,30 +27,23 @@ import java.util.stream.Collectors;
 
 public class PluginLoader implements IPluginLoader<List<IFeature>> {
 
-    private static final ILogger log = LoggerFactory.getLogger();
+    private final ILogger log;
 
-    private static final String FEATURE_NAME_DELIMITER = ":";
-    private static final String CLASS_EXTENSION = ".class";
-
-    /**
-     * ClassLoader for load classes
-     */
-    private final IClassLoaderWrapper classLoader;
     private final IDependencyLoader dependencyLoader;
     private final IBootstrap bootstrap;
     private final IPluginCreator pluginCreator;
 
     public PluginLoader(
-            final IClassLoaderWrapper classLoader,
             final IDependencyLoader dependencyLoader,
             final IBootstrap bootstrap,
             final IPluginCreator pluginCreator
     ) throws PluginLoaderInitException {
-        if (null == classLoader) {
+        if (null == dependencyLoader || null == bootstrap || null == pluginCreator) {
             throw new PluginLoaderInitException("Incoming argument should not be null.");
         }
 
-        this.classLoader = classLoader;
+        this.log = new Logger();
+
         this.dependencyLoader = dependencyLoader;
         this.bootstrap = bootstrap;
         this.pluginCreator = pluginCreator;
@@ -79,29 +72,19 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
                     List<IFeature> dependencies = sortedFeatures.stream()
                             .filter(it -> feature.getAfterFeatures().contains(it.getName()))
                             .collect(Collectors.toList());
-//                    log.debug("Loading dependencies for feature \"{0}\"", feature.getName());
                     for (IFeature dependency : dependencies) {
-//                        log.debug("Adding dependency ID \"{0}\", name \"{1}\"", dependency.getId(), dependency.getName());
                         ModuleManager.addModuleDependency(feature.getId(), dependency.getId());
                     }
                     ModuleManager.finalizeModuleDependencies(featureId);
                 }
 
-                log.debug(
-                        "'{'\"featureState\": \"LOADING_INITIALIZED\", \"featureName\": \"{0}\", \"timestamp\": \"{1}\"'}'",
-                        feature.getName(),
-                        Instant.now().toString()
-                );
+                logState(feature.getName(), "LOADING_INITIALIZED", null, null);
 
                 ModuleManager.setCurrentModule(ModuleManager.getModuleById(featureId));
-                IClassLoaderWrapper moduleClassLoader = SmartactorsClassLoaderWrapper.newInstance(ModuleManager.getCurrentClassLoader());
+                IClassLoaderWrapper moduleClassLoader = new SmartactorsClassLoaderWrapper(ModuleManager.getCurrentClassLoader());
                 Class<?> pluginClass = moduleClassLoader.loadClass("info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IPlugin");
 
-                log.debug(
-                        "'{'\"featureState\": \"READING_JARS\", \"featureName\": \"{0}\", \"timestamp\": \"{1}\"'}'",
-                        feature.getName(),
-                        Instant.now().toString()
-                );
+                logState(feature.getName(), "READING_JARS", null, null);
                 dependencyLoader.load(
                         moduleClassLoader,
                         sortedFeatures.stream()
@@ -109,91 +92,41 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
                                 .map(IFeature::getPath)
                                 .collect(Collectors.toList())
                 );
-                log.debug(
-                        "'{'\"featureState\": \"JARS_LOADED\", \"featureName\": \"{0}\", \"timestamp\": \"{1}\"'}'",
-                        feature.getName(),
-                        Instant.now().toString()
-                );
+                logState(feature.getName(), "JARS_LOADED", null, null);
 
                 while (iterator.hasMoreElements()) {
-                    log.debug(
-                            "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"DETECTING\", \"featureName\": \"{0}\", \"timestamp\": \"{1}\"'}'",
-                            feature.getName(),
-                            Instant.now().toString()
-                    );
+                    logState(feature.getName(), "LOADING_CLASSES", null, "DETECTING");
                     JarEntry je = iterator.nextElement();
-                    if (je.isDirectory() || !je.getName().endsWith(CLASS_EXTENSION)) {
-                        log.debug(
-                                "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"NOT_CLASS_FOUND\", \"className\": \"{0}\", \"featureName\": \"{1}\", \"timestamp\": \"{2}\"'}'",
-                                je.getName(),
-                                feature.getName(),
-                                Instant.now().toString()
-                        );
+                    String classExtension = ".class";
+
+                    if (je.isDirectory() || !je.getName().endsWith(classExtension)) {
+                        logState(feature.getName(), "LOADING_CLASSES", je.getName(), "NOT_CLASS_FOUND");
                         continue;
                     }
 
-                    String className = je.getName().substring(0, je.getName().length() - CLASS_EXTENSION.length());
+                    String className = je.getName().substring(0, je.getName().length() - classExtension.length());
                     className = className.replace('/', '.');
 
                     Class<?> clazz;
                     try {
-//                        log.debug("Loading class \"{0}\" for feature \"{1}\"", className, feature.getName());
-                        log.debug(
-                                "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"LOADING\", \"className\": \"{0}\", \"featureName\": \"{1}\", \"timestamp\": \"{2}\"'}'",
-                                className,
-                                feature.getName(),
-                                Instant.now().toString()
-                        );
+                        logState(feature.getName(), "LOADING_CLASSES", className, "LOADING");
                         clazz = moduleClassLoader.loadClass(className);
                     } catch (Throwable e) {
                         // ignoring, because the plugin which class cannot be loaded cannot be loaded
-                        log.debug(
-                                "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"LOADING_FAILED\", \"className\": \"{0}\", \"featureName\": \"{1}\", \"timestamp\": \"{2}\"'}'",
-                                className,
-                                feature.getName(),
-                                Instant.now().toString()
-                        );
-//                        System.out.println("[WARNING] Class " + className + " loading failed.");
+                        logState(feature.getName(), "LOADING_CLASSES", className, "LOADING_FAILED");
                         continue;
                     }
 
                     if (pluginClass.isAssignableFrom(clazz) && clazz != pluginClass) {
-                        log.debug(
-                                "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"PLUGIN_DETECTED\", \"className\": \"{0}\", \"featureName\": \"{1}\", \"timestamp\": \"{2}\"'}'",
-                                className,
-                                feature.getName(),
-                                Instant.now().toString()
-                        );
-//                        log.debug("Class \"{0}\" is plugin, initializing plugin load", className);
+                        logState(feature.getName(), "LOADING_CLASSES", className, "PLUGIN_DETECTED");
                         loadPlugin(clazz);
-                        log.debug(
-                                "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"PLUGIN_LOADED\", \"className\": \"{0}\", \"featureName\": \"{1}\", \"timestamp\": \"{2}\"'}'",
-                                className,
-                                feature.getName(),
-                                Instant.now().toString()
-                        );
+                        logState(feature.getName(), "LOADING_CLASSES", className, "PLUGIN_LOADED");
                     }
-                    log.debug(
-                            "'{'\"featureState\": \"LOADING_CLASSES\", \"classState\": \"LOADING_COMPLETE\", \"className\": \"{0}\", \"featureName\": \"{1}\", \"timestamp\": \"{2}\"'}'",
-                            className,
-                            feature.getName(),
-                            Instant.now().toString()
-                    );
-//                    log.debug("Class \"{0}\" was loaded for feature \"{1}\"", className, feature.getName());
+                    logState(feature.getName(), "LOADING_CLASSES", className, "LOADING_COMPLETE");
                 }
 
-                log.debug(
-                        "'{'\"featureState\": \"LOADING_COMPLETE\", \"featureName\": \"{0}\", \"timestamp\": \"{1}\"'}'",
-                        feature.getName(),
-                        Instant.now().toString()
-                );
-//                log.debug("Loaded feature \"{0}\"", feature.getName());
+                logState(feature.getName(), "LOADING_COMPLETE", null, null);
             } catch (Throwable e) {
-                log.debug(
-                        "'{'\"featureState\": \"LOADING_FAILED\", \"featureName\": \"{0}\", \"timestamp\": \"{1}\"'}'",
-                        feature.getName(),
-                        Instant.now().toString()
-                );
                 throw new PluginLoaderException("Plugin loading failed: " + pathToJar, e);
             }
         }
@@ -202,11 +135,10 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
     }
 
     private String[] parseFullName(String fullName)
-            throws RuntimeException {
-        String[] dependencyNames = fullName.split(FEATURE_NAME_DELIMITER);
+            throws PluginLoaderException {
+        String[] dependencyNames = fullName.split(":");
         if (dependencyNames.length < 2) {
-            //TODO: replace exception
-            throw new RuntimeException("Wrong feature name or dependency format '"+fullName+"'.");
+            throw new PluginLoaderException("Wrong feature name or dependency format '" + fullName + "'.");
         }
         return new String[]{
                 dependencyNames[0],
@@ -229,6 +161,22 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
         } catch (Exception e) {
             throw new ActionExecutionException(e);
         }
+    }
+
+    private void logState(
+            final String featureName,
+            final String featureState,
+            final String className,
+            final String classState
+    ) {
+        log.debug(
+                "'{'\"featureName\": \"{0}\", \"featureState\": \"{1}\", \"className\": \"{2}\", \"classState\": \"{3}\", \"timestamp\": \"{4}\"'}'",
+                featureName,
+                featureState,
+                className,
+                classState,
+                Instant.now().toString()
+        );
     }
 }
 

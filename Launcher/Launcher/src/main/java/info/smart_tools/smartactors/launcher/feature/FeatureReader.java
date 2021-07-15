@@ -1,13 +1,13 @@
 package info.smart_tools.smartactors.launcher.feature;
 
-import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeature;
 import info.smart_tools.smartactors.launcher.interfaces.IObjectMapper;
 import info.smart_tools.smartactors.launcher.interfaces.IPath;
 import info.smart_tools.smartactors.launcher.interfaces.exception.ifeature.FeatureReaderException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iobject_mapper.ReadJsonException;
+import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeature;
 import info.smart_tools.smartactors.launcher.interfaces.ifeature.IFeatureReader;
 import info.smart_tools.smartactors.launcher.interfaces.ilogger.ILogger;
-import info.smart_tools.smartactors.launcher.logger.LoggerFactory;
+import info.smart_tools.smartactors.launcher.logger.Logger;
 import info.smart_tools.smartactors.launcher.model.FeatureConfig;
 
 import java.io.BufferedReader;
@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 
 public class FeatureReader implements IFeatureReader {
 
-    private static final ILogger log = LoggerFactory.getLogger();
-    private static final String CONFIG_FILENAME = "config.json";
+    private final ILogger log;
 
     private final IObjectMapper objectMapper;
 
     public FeatureReader(
             final IObjectMapper objectMapper
     ) {
+        this.log = new Logger();
         this.objectMapper = objectMapper;
     }
 
@@ -50,6 +50,7 @@ public class FeatureReader implements IFeatureReader {
 
                 while (iterator.hasMoreElements()) {
                     JarEntry je = iterator.nextElement();
+                    String CONFIG_FILENAME = "config.json";
                     if (je.isDirectory() || !je.getName().equals(CONFIG_FILENAME)) {
                         continue;
                     }

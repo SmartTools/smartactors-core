@@ -10,16 +10,10 @@ public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
 
     private final ISmartactorsClassLoader classLoader;
 
-    private SmartactorsClassLoaderWrapper(
+    public SmartactorsClassLoaderWrapper(
             final ISmartactorsClassLoader classLoader
     ) {
         this.classLoader = classLoader;
-    }
-
-    public static SmartactorsClassLoaderWrapper newInstance(
-            final ISmartactorsClassLoader classLoader
-    ) {
-        return new SmartactorsClassLoaderWrapper(classLoader);
     }
 
     @Override

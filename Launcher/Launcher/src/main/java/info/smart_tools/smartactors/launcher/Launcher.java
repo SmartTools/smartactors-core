@@ -14,7 +14,7 @@ import info.smart_tools.smartactors.launcher.interfaces.exception.launcher.Launc
 import info.smart_tools.smartactors.launcher.interfaces.exception.launcher.LauncherInitializeException;
 import info.smart_tools.smartactors.launcher.interfaces.ilogger.ILogger;
 import info.smart_tools.smartactors.launcher.interfaces.iproperties_reader.IPropertiesReader;
-import info.smart_tools.smartactors.launcher.logger.LoggerFactory;
+import info.smart_tools.smartactors.launcher.logger.Logger;
 import info.smart_tools.smartactors.launcher.properties_reader.PropertiesReader;
 
 import java.time.Duration;
@@ -25,22 +25,23 @@ import java.util.Map;
 
 public class Launcher implements ILauncher {
 
-    private static final ILogger log = LoggerFactory.getLogger();
-
-    private static final String BASE_THREAD_NAME = "BaseThread";
-    private static final String PROPERTIES_PATH = "./launcher.properties";
+    private final ILogger log;
 
     private ICoreLoader coreLoader;
     private ICoreInitializer coreInitializer;
 
     private Map<Object, Object> properties;
 
+    public Launcher() {
+        this.log = new Logger();
+    }
+
     public void initialize() throws LauncherInitializeException {
         try {
-            Thread.currentThread().setName(BASE_THREAD_NAME);
+            Thread.currentThread().setName("BaseThread");
             ModuleManager.setCurrentModule(ModuleManager.getModuleById(ModuleManager.coreId));
 
-            IPropertiesReader propertiesReader = new PropertiesReader(PROPERTIES_PATH);
+            IPropertiesReader propertiesReader = new PropertiesReader("./launcher.properties");
             this.properties = propertiesReader.readProperties();
 
             this.coreLoader = new CoreLoader();

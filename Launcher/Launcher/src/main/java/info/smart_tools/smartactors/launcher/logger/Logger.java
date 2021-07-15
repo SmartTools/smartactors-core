@@ -8,10 +8,8 @@ public class Logger implements ILogger {
 
     private final boolean isDebug;
 
-    public Logger(
-            boolean isDebug
-    ) {
-        this.isDebug = isDebug;
+    public Logger() {
+        this.isDebug = Boolean.parseBoolean(System.getProperty("launcher.debug"));
     }
 
     @Override
@@ -21,8 +19,7 @@ public class Logger implements ILogger {
     ) {
         String formattedMessage = formatMessage(message, args);
         if (isDebug) {
-//            System.out.println("[DEBUG] " + formattedMessage);
-            System.out.println(formattedMessage);
+            System.out.println("[DEBUG] " + formattedMessage);
         }
     }
 

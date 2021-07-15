@@ -14,15 +14,7 @@ public class ObjectMapper implements IObjectMapper {
 
     private final Method readValue;
 
-    private ObjectMapper(
-            final Object objectMapper,
-            final Method readValue
-    ) {
-        this.objectMapper = objectMapper;
-        this.readValue = readValue;
-    }
-
-    public static ObjectMapper newInstance(
+    public ObjectMapper(
             final ClassLoader classLoader
     ) throws ObjectMapperInstanceException {
         try {
@@ -33,13 +25,14 @@ public class ObjectMapper implements IObjectMapper {
             Method readValue = clazz.getDeclaredMethod("readValue", String.class, Class.class);
 
             Object objectMapper = clazz.newInstance();
-            // TODO: properly handle possible missing enum value
             Object failOnUnknownProperties = Arrays.stream(deserializationFeature.getEnumConstants())
                     .filter(it -> it.toString().equals("FAIL_ON_UNKNOWN_PROPERTIES"))
                     .findFirst()
-                    .get();
+                    .orElseThrow(() -> new ObjectMapperInstanceException("Failed to find property \"FAIL_ON_UNKNOWN_PROPERTIES\""));
             configure.invoke(objectMapper, failOnUnknownProperties, false);
-            return new ObjectMapper(objectMapper, readValue);
+
+            this.objectMapper = objectMapper;
+            this.readValue = readValue;
         } catch (ClassNotFoundException e) {
             throw new ObjectMapperInstanceException("Failed to find class in class loader", e);
         } catch (InvocationTargetException e) {

@@ -10,7 +10,7 @@ import java.util.List;
 public class FeatureSorting implements IFeatureSorting {
 
     @Override
-    public List<IFeature> sortFeatures(List<IFeature> features) throws FeatureSortingException {
+    public List<IFeature> sortFeatures(final List<IFeature> features) throws FeatureSortingException {
         try {
             TopologicalSort<IFeature> ts = new TopologicalSort<>(features);
             return ts.getOrderedList(false);
