@@ -1,12 +1,11 @@
-package info.smart_tools.smartactors.launcher.interfaces.exception;
+package info.smart_tools.smartactors.launcher.interfaces.exception.launcher;
 
-import info.smart_tools.smartactors.launcher.interfaces.exception.launcher.LauncherExecutionException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for ScopeException
+ * Tests for {@link LauncherExecutionException}
  */
 public class LauncherExecutionExceptionTest {
     @Test(expected = LauncherExecutionException.class)
