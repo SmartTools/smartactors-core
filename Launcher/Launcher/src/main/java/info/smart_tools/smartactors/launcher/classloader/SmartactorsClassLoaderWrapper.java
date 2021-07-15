@@ -17,29 +17,9 @@ public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
     }
 
     @Override
-    public void setDefault() {
-        try {
-            classLoader.setDefault();
-        } catch (Exception e) {
-            // TODO: handle exception in more appropriate way
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public void addURL(URL url) {
         try {
             classLoader.addURL(url);
-        } catch (Exception e) {
-            // TODO: handle exception in more appropriate way
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public URL[] getURLsFromDependencies() {
-        try {
-            return classLoader.getURLsFromDependencies();
         } catch (Exception e) {
             // TODO: handle exception in more appropriate way
             throw new RuntimeException(e);
@@ -52,29 +32,6 @@ public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
     ) throws ClassNotFoundException {
         try {
             return classLoader.loadClass(className);
-        } catch (Exception e) {
-            // TODO: handle exception in more appropriate way
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Class<?> addClass(
-            final String className,
-            final byte[] classByteCode
-    ) {
-        try {
-            return classLoader.addClass(className, classByteCode);
-        } catch (Exception e) {
-            // TODO: handle exception in more appropriate way
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public ClassLoader getCompilationClassLoader() {
-        try {
-            return classLoader.getCompilationClassLoader();
         } catch (Exception e) {
             // TODO: handle exception in more appropriate way
             throw new RuntimeException(e);

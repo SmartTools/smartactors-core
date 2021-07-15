@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.iobject_mapper;
 
+/**
+ * Exception thrown while reading JSON
+ */
 public class ReadJsonException extends Exception {
 
     /**

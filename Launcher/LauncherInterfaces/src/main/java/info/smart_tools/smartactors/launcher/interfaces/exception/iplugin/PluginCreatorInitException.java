@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.iplugin;
 
+/**
+ * Exception thrown on plugin creator initialization
+ */
 public class PluginCreatorInitException extends Exception {
 
     /**

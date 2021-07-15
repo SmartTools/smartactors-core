@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.core;
 
+/**
+ * Exception thrown on core initialization
+ */
 public class CoreInitializerException extends Exception {
 
     /**

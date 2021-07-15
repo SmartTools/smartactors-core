@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.iobject_mapper;
 
+/**
+ * Exception thrown on object mapper initialization
+ */
 public class ObjectMapperInstanceException extends Exception {
 
     /**

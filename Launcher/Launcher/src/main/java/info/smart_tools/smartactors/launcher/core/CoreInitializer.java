@@ -13,7 +13,7 @@ import info.smart_tools.smartactors.launcher.interfaces.core.ICoreInitializer;
 import info.smart_tools.smartactors.launcher.interfaces.core.IDependencyLoader;
 import info.smart_tools.smartactors.launcher.interfaces.core.IDependencyReplacer;
 import info.smart_tools.smartactors.launcher.interfaces.exception.core.CoreInitializerException;
-import info.smart_tools.smartactors.launcher.interfaces.exception.ibootstrapwrapper.BootstrapWrapperInitException;
+import info.smart_tools.smartactors.launcher.interfaces.exception.ibootstrap.BootstrapInitException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.ifeature.FeatureReaderException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.ifeature.FeatureSortingException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iobject_mapper.ObjectMapperInstanceException;
@@ -79,7 +79,7 @@ public class CoreInitializer implements ICoreInitializer  {
             throw new CoreInitializerException("Failed to read features from jar files", e);
         } catch (PluginLoaderException e) {
             throw new CoreInitializerException("Failed to load plugins in features", e);
-        } catch (BootstrapWrapperInitException e) {
+        } catch (BootstrapInitException e) {
             throw new CoreInitializerException("Failed to initialize bootstrap wrapper", e);
         } catch (ObjectMapperInstanceException e) {
             throw new CoreInitializerException("Failed to create ObjectMapper instance", e);
@@ -94,7 +94,7 @@ public class CoreInitializer implements ICoreInitializer  {
             PluginLoaderException,
             FeatureReaderException,
             FeatureSortingException,
-            BootstrapWrapperInitException,
+            BootstrapInitException,
             PluginCreatorInitException
     {
         IDependencyLoader dependencyLoader = new DependencyLoader();

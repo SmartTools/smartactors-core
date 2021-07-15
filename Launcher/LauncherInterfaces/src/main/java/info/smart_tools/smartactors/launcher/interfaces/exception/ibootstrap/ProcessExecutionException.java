@@ -1,5 +1,8 @@
-package info.smart_tools.smartactors.launcher.interfaces.exception.ibootstrapwrapper;
+package info.smart_tools.smartactors.launcher.interfaces.exception.ibootstrap;
 
+/**
+ * Exception thrown during process execution
+ */
 public class ProcessExecutionException extends Exception {
 
     /**

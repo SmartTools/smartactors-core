@@ -1,12 +1,15 @@
-package info.smart_tools.smartactors.launcher.interfaces.exception.iaction;
+package info.smart_tools.smartactors.launcher.interfaces.exception.ibootstrap;
 
-public class FunctionExecutionException extends Exception {
+/**
+ * Exception thrown on initialization of bootstrap wrapper
+ */
+public class BootstrapInitException extends Exception {
 
     /**
      * Constructor with specific error message as argument
      * @param message specific error message
      */
-    public FunctionExecutionException(final String message) {
+    public BootstrapInitException(final String message) {
         super(message);
     }
 
@@ -16,7 +19,7 @@ public class FunctionExecutionException extends Exception {
      * @param cause specific cause
      */
 
-    public FunctionExecutionException(final String message, final Throwable cause) {
+    public BootstrapInitException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -24,7 +27,7 @@ public class FunctionExecutionException extends Exception {
      * Constructor with specific cause as argument
      * @param cause specific cause
      */
-    public FunctionExecutionException(final Throwable cause) {
+    public BootstrapInitException(final Throwable cause) {
         super(cause);
     }
 }

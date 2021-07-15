@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.ifeature;
 
+/**
+ * Exception thrown by feature reader
+ */
 public class FeatureReaderException extends Exception {
 
     /**

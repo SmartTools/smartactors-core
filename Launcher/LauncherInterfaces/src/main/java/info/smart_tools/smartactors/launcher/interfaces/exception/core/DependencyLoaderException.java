@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.core;
 
+/**
+ * Exception thrown on loading dependencies
+ */
 public class DependencyLoaderException extends Exception {
 
     /**

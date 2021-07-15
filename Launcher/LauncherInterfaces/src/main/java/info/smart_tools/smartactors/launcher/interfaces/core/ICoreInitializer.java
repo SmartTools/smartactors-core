@@ -5,7 +5,16 @@ import info.smart_tools.smartactors.launcher.interfaces.exception.core.CoreIniti
 
 import java.util.List;
 
+/**
+ * Interface ICoreInitializer
+ */
 public interface ICoreInitializer {
 
+    /**
+     * Initialize loaded core features
+     *
+     * @param coreFeatures paths to loaded core features
+     * @throws CoreInitializerException if failed to initialize core features
+     */
     void initializeCoreFeatures(List<IPath> coreFeatures) throws CoreInitializerException;
 }

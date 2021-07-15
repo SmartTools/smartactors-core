@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.core;
 
+/**
+ * Exception thrown on loading launcher core
+ */
 public class CoreLoaderException extends Exception {
 
     /**

@@ -1,5 +1,4 @@
 /**
- * Contains interface for realize different server.
- * Each IServer implementation can use specific pack of core interfaces.
+ * Contains base interfaces for launcher to implement
  */
 package info.smart_tools.smartactors.launcher.interfaces;

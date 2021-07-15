@@ -1,5 +1,8 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.iproperties_reader;
 
+/**
+ * Exception thrown when reading properties
+ */
 public class PropertiesReaderException extends Exception {
 
     /**

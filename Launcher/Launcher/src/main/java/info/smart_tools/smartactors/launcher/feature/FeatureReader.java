@@ -36,11 +36,11 @@ public class FeatureReader implements IFeatureReader {
 
     @Override
     public List<IFeature> readFeatures(
-            final List<IPath> jars
+            final List<IPath> paths
     ) throws FeatureReaderException {
         List<IFeature> features = new ArrayList<>();
 
-        for (IPath file : jars) {
+        for (IPath file : paths) {
             String pathToJar = file.getPath();
             String jarFileName = null;
 

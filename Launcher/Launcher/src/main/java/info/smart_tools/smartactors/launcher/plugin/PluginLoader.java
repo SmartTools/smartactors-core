@@ -6,7 +6,6 @@ import info.smart_tools.smartactors.launcher.classloader.SmartactorsClassLoaderW
 import info.smart_tools.smartactors.launcher.interfaces.IClassLoaderWrapper;
 import info.smart_tools.smartactors.launcher.interfaces.IObjectMapper;
 import info.smart_tools.smartactors.launcher.interfaces.core.IDependencyLoader;
-import info.smart_tools.smartactors.launcher.interfaces.exception.iaction.ActionExecutionException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginLoaderException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginLoaderInitException;
 import info.smart_tools.smartactors.launcher.interfaces.ibootstrap.IBootstrap;
@@ -149,7 +148,7 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
 
     private void loadPlugin(
             final Class<?> clz
-    ) throws ActionExecutionException {
+    ) throws PluginLoaderException {
         try {
             if (Modifier.isAbstract(clz.getModifiers())) {
                 return;
@@ -159,7 +158,7 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
             Method loadPlugin = plugin.getClass().getMethod("load");
             loadPlugin.invoke(plugin);
         } catch (Exception e) {
-            throw new ActionExecutionException(e);
+            throw new PluginLoaderException(e);
         }
     }
 

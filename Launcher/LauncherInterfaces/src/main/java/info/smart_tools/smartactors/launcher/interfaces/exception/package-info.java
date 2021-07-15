@@ -1,4 +1,4 @@
 /**
- * Package contains exceptions for {@link info.smart_tools.smartactors.launcher.interfaces.ILauncher} methods
+ * Package contains exceptions for launcher interfaces
  */
 package info.smart_tools.smartactors.launcher.interfaces.exception;
