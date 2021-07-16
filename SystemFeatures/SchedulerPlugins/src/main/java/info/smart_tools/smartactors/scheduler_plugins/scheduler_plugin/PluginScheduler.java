@@ -54,9 +54,6 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
      */
     @Item("scheduler_default_action")
-    @After({
-            "core",
-    })
     public void registerDefaultAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IStrategy nonBlockingMessageActionS = new SingletonStrategy(new DefaultSchedulerAction());
@@ -84,9 +81,6 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
      */
     @Item("scheduler_entry_strategies")
-    @After({
-            "core",
-    })
     public void registerEntry()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(
@@ -128,9 +122,6 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link SingletonStrategy} does not accept default values
      */
     @Item("scheduler_storage_refresh_parameters:default")
-    @After({
-            "core",
-    })
     public void registerDefaultRefreshIntervals()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         // RRI = BASE_INTERVAL sec
@@ -194,9 +185,6 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link ApplyFunctionToArgumentsStrategy} does not like our function
      */
     @Item("timer_service")
-    @After({
-            "core",
-    })
     public void registerTimerService()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("new timer service"), new ApplyFunctionToArgumentsStrategy(args -> {
@@ -260,9 +248,6 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link SingletonStrategy} does not like our function
      */
     @Item("default_scheduler_actor_service_activation_action")
-    @After({
-            "core",
-    })
     public void registerDefaultActivationAction()
             throws ResolutionException, RegistrationException, InvalidArgumentException {
         IOC.register(Keys.getKeyByName("scheduler service activation action for scheduler actor"),
@@ -278,9 +263,6 @@ public class PluginScheduler extends BootstrapPlugin {
      * @throws InvalidArgumentException if {@link SingletonStrategy} does not like our function
      */
     @Item("scheduler_pre_shutdown_mode_entry_filter")
-    @After({
-            "core",
-    })
     public void registerPreShutdownModeEntryFilter()
             throws ResolutionException, InvalidArgumentException, RegistrationException {
         IOC.register(Keys.getKeyByName("pre shutdown mode entry filter"),

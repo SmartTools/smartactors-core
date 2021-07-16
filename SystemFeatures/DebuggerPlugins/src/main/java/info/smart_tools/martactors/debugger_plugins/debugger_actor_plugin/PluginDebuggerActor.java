@@ -33,7 +33,6 @@ public class PluginDebuggerActor extends BootstrapPlugin {
     @Item("debugger:actor")
     @After({
             "debugger:session",
-            "core"
     })
     public void registerActor()
             throws ResolutionException, RegistrationException, InvalidArgumentException {

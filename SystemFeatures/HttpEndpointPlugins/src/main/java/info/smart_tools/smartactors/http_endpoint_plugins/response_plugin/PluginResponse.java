@@ -35,7 +35,6 @@ public class PluginResponse implements IPlugin {
             IBootstrapItem<String> item = new BootstrapItem("response");
 
             item
-                    .after("core")
                     .process(() -> {
                         try {
                             IOC.register(

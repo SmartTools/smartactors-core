@@ -64,7 +64,6 @@ public class HttpsEndpointPlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CreateHttpsEndpoint");
             item
-                    .after("core")
                     .process(() -> {
                 try {
                     initializeFieldNames();

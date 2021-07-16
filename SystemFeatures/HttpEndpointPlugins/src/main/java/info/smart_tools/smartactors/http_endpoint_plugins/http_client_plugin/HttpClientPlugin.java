@@ -67,7 +67,6 @@ public class HttpClientPlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CreateHttpClient");
             item
-                    .after("core")
                     .after("response")
                     .after("response_content_strategy")
                     .process(() -> {

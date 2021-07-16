@@ -39,7 +39,6 @@ public class CheckpointFailureActionsPlugin extends BootstrapPlugin {
     @Item("checkpoint_failure_action_send_envelope")
     @After({
             "checkpoint_failure_action_default",
-            "core"
     })
     @Before({"checkpoint_actor"})
     public void registerSendEnvelopeAction()

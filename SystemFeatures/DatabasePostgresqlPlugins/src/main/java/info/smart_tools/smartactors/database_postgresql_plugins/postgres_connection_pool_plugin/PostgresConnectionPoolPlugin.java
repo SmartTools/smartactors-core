@@ -49,7 +49,6 @@ public class PostgresConnectionPoolPlugin implements IPlugin {
         try {
             BootstrapItem item = new BootstrapItem("PostgresConnectionPoolPlugin");
             item
-                .after("core")
 //                .after("IOC")
 //                .after("ioc_keys")
                 .before("CreateCachedCollectionPlugin")

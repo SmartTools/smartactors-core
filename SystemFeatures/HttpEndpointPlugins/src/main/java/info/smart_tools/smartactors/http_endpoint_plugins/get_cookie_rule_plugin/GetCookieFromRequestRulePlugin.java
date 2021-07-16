@@ -33,7 +33,6 @@ public class GetCookieFromRequestRulePlugin implements IPlugin {
             IBootstrapItem<String> item = new BootstrapItem("GetCookieFromRequestRulePlugin");
 
             item
-                    .after("core")
 //                    .after("IOC")
 //                    .after("wds_object")
 //                    .before("starter")

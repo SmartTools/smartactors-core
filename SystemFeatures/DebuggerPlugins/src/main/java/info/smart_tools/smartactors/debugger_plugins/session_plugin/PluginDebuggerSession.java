@@ -35,7 +35,6 @@ public class PluginDebuggerSession extends BootstrapPlugin {
     @After({
             "debugger:sequence",
             "debugger:breakpoint_storage",
-            "core"
     })
     public void registerSessionStrategy()
             throws ResolutionException, RegistrationException, InvalidArgumentException {

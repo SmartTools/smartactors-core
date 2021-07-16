@@ -61,7 +61,6 @@ public class HttpsClientPlugin implements IPlugin {
         try {
             IBootstrapItem<String> item = new BootstrapItem("CreateHttpsClient");
             item
-                    .after("core")
                     .process(() -> {
                 try {
                     registerFieldNames();

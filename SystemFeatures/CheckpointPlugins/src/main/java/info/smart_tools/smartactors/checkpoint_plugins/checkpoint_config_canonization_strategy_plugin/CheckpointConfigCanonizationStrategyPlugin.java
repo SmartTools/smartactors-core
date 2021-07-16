@@ -32,9 +32,6 @@ public class CheckpointConfigCanonizationStrategyPlugin extends BootstrapPlugin 
     }
 
     @Item("checkpoint_config_canonization_strategies")
-    @After({
-            "core"
-    })
     public void registerCanonizationStrategies()
             throws ResolutionException, RegistrationException, InvalidArgumentException, StrategyRegistrationException {
 

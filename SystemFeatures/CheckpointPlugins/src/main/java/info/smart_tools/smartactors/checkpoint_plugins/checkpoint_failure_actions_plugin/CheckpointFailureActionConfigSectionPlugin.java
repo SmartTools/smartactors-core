@@ -32,7 +32,6 @@ public class CheckpointFailureActionConfigSectionPlugin extends BootstrapPlugin 
     @Before({"checkpoint_actor"})
     @After({
             "checkpoint_failure_action_default",
-            "core"
     })
     public void registerSectionStrategy()
             throws ResolutionException, InvalidArgumentException {

@@ -20,9 +20,6 @@ public class PluginDatabaseConfigSection extends BootstrapPlugin {
     }
 
     @Item("config_section:database")
-    @After({
-            "core"
-    })
 //    @Before({"config_section:objects"})
     public void registerCanonizationStrategies()
             throws ResolutionException, InvalidArgumentException {

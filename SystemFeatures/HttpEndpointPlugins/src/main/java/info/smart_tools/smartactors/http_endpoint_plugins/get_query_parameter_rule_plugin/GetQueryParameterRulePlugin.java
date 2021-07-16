@@ -33,7 +33,6 @@ public class GetQueryParameterRulePlugin implements IPlugin {
             IBootstrapItem<String> item = new BootstrapItem("GetQueryParameterFromRequestRulePlugin");
 
             item
-                    .after("core")
 //                    .after("IOC")
 //                    .after("wds_object")
 //                    .before("starter")
