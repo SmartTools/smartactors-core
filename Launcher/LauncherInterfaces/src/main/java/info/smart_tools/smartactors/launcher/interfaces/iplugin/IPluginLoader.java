@@ -12,8 +12,7 @@ public interface IPluginLoader<T> {
     /**
      * Load plugin to the system
      * @param plugin plugin package (for example, jar file)
-     * @param objectMapper object mapper to read json configs stored in feature
      * @throws PluginLoaderException if any errors occurred
      */
-    void loadPlugins(T plugin, IObjectMapper objectMapper) throws PluginLoaderException;
+    void loadPlugins(T plugin) throws PluginLoaderException;
 }

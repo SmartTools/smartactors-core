@@ -1,7 +1,7 @@
 package info.smart_tools.smartactors.launcher.properties_reader;
 
 import info.smart_tools.smartactors.launcher.interfaces.exception.iproperties_reader.PropertiesReaderException;
-import info.smart_tools.smartactors.launcher.interfaces.iproperties_reader.IPropertiesReader;
+import info.smart_tools.smartactors.launcher.interfaces.iproperties_reader.IPropertiesLoader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,18 +12,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class PropertiesReader implements IPropertiesReader {
+public class PropertiesLoader implements IPropertiesLoader {
 
     private final String propertiesPath;
 
-    public PropertiesReader(
+    public PropertiesLoader(
             final String propertiesPath
     ) {
         this.propertiesPath = propertiesPath;
     }
 
     @Override
-    public Map<Object, Object> readProperties() throws PropertiesReaderException {
+    public Map<Object, Object> loadProperties() throws PropertiesReaderException {
         try (Reader reader = new FileReader(propertiesPath)) {
             Properties properties = new Properties();
             properties.load(reader);

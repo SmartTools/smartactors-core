@@ -1,15 +1,15 @@
 package info.smart_tools.smartactors.launcher.interfaces.exception.core;
 
 /**
- * Exception thrown on loading launcher core
+ * Exception thrown on core initialization
  */
-public class CoreLoaderException extends Exception {
+public class ServerStarterException extends Exception {
 
     /**
      * Constructor with specific error message as argument
      * @param message specific error message
      */
-    public CoreLoaderException(final String message) {
+    public ServerStarterException(final String message) {
         super(message);
     }
 
@@ -19,7 +19,7 @@ public class CoreLoaderException extends Exception {
      * @param cause specific cause
      */
 
-    public CoreLoaderException(final String message, final Throwable cause) {
+    public ServerStarterException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -27,7 +27,7 @@ public class CoreLoaderException extends Exception {
      * Constructor with specific cause as argument
      * @param cause specific cause
      */
-    public CoreLoaderException(final Throwable cause) {
+    public ServerStarterException(final Throwable cause) {
         super(cause);
     }
 }

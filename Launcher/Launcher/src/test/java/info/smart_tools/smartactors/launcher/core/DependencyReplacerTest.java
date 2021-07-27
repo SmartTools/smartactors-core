@@ -76,4 +76,40 @@ public class DependencyReplacerTest {
         assertEquals(Arrays.asList("feature2"), feature2Plugin1.getAfterFeatures());
         assertEquals(Arrays.asList("feature2", "feature1-plugin"), feature2Plugin2.getAfterFeatures());
     }
+
+    @Test
+    public void testDoNotReplaceDependencyIfFeatureIsInPlugins() {
+        IFeature feature1 = new Feature(
+                UUID.randomUUID(),
+                "feature1.jar",
+                "feature1",
+                new ArrayList<>(),
+                new ArrayList<>(Arrays.asList("feature1-plugin"))
+        );
+        IFeature feature1Plugin = new Feature(
+                UUID.randomUUID(),
+                "feature1-plugin.jar",
+                "feature1-plugin",
+                new ArrayList<>(Arrays.asList("feature1")),
+                new ArrayList<>()
+        );
+        IFeature feature2 = new Feature(
+                UUID.randomUUID(),
+                "feature2.jar",
+                "feature2",
+                new ArrayList<>(Arrays.asList("feature1")),
+                new ArrayList<>(Arrays.asList("feature1"))
+        );
+
+        List<IFeature> features = Arrays.asList(
+                feature1,
+                feature1Plugin,
+                feature2
+        );
+        dependencyReplacer.replaceDependencies(features);
+
+        assertEquals(new ArrayList<>(), feature1.getAfterFeatures());
+        assertEquals(Arrays.asList("feature1"), feature1Plugin.getAfterFeatures());
+        assertEquals(Arrays.asList("feature1"), feature2.getAfterFeatures());
+    }
 }

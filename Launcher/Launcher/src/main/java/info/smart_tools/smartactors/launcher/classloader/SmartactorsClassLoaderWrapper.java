@@ -3,7 +3,6 @@ package info.smart_tools.smartactors.launcher.classloader;
 import info.smart_tools.smartactors.class_management.interfaces.ismartactors_class_loader.ISmartactorsClassLoader;
 import info.smart_tools.smartactors.launcher.interfaces.IClassLoaderWrapper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
@@ -18,12 +17,7 @@ public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
 
     @Override
     public void addURL(URL url) {
-        try {
-            classLoader.addURL(url);
-        } catch (Exception e) {
-            // TODO: handle exception in more appropriate way
-            throw new RuntimeException(e);
-        }
+        classLoader.addURL(url);
     }
 
     @Override
@@ -33,8 +27,7 @@ public class SmartactorsClassLoaderWrapper implements IClassLoaderWrapper {
         try {
             return classLoader.loadClass(className);
         } catch (Exception e) {
-            // TODO: handle exception in more appropriate way
-            throw new RuntimeException(e);
+            throw new ClassNotFoundException("Failed to add class to class loader", e);
         }
     }
 }

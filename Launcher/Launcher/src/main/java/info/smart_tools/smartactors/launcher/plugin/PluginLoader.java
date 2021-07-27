@@ -4,7 +4,6 @@ import info.smart_tools.smartactors.class_management.interfaces.imodule.IModule;
 import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
 import info.smart_tools.smartactors.launcher.classloader.SmartactorsClassLoaderWrapper;
 import info.smart_tools.smartactors.launcher.interfaces.IClassLoaderWrapper;
-import info.smart_tools.smartactors.launcher.interfaces.IObjectMapper;
 import info.smart_tools.smartactors.launcher.interfaces.core.IDependencyLoader;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginLoaderException;
 import info.smart_tools.smartactors.launcher.interfaces.exception.iplugin.PluginLoaderInitException;
@@ -50,8 +49,7 @@ public class PluginLoader implements IPluginLoader<List<IFeature>> {
 
     @Override
     public void loadPlugins(
-            final List<IFeature> sortedFeatures,
-            final IObjectMapper objectMapper
+            final List<IFeature> sortedFeatures
     ) throws PluginLoaderException {
         IModule currentModule = ModuleManager.getCurrentModule();
 

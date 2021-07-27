@@ -5,35 +5,35 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for {@link CoreLoaderException}
+ * Tests for {@link FeatureLoaderException}
  */
-public class CoreLoaderExceptionTest {
-    @Test(expected = CoreLoaderException.class)
+public class FeatureLoaderExceptionTest {
+    @Test(expected = FeatureLoaderException.class)
     public void checkMessageMethod()
-            throws CoreLoaderException {
+            throws FeatureLoaderException {
         String str = "test";
-        CoreLoaderException exception = new CoreLoaderException(str);
+        FeatureLoaderException exception = new FeatureLoaderException(str);
         assertEquals(exception.getMessage(), str);
         throw exception;
     }
 
-    @Test(expected = CoreLoaderException.class)
+    @Test(expected = FeatureLoaderException.class)
     public void checkCauseMethod()
-            throws CoreLoaderException {
+            throws FeatureLoaderException {
         String internalMessage = "Internal message";
         Throwable cause = new Throwable(internalMessage);
-        CoreLoaderException exception = new CoreLoaderException(cause);
+        FeatureLoaderException exception = new FeatureLoaderException(cause);
         assertEquals(cause, exception.getCause());
         throw exception;
     }
 
-    @Test (expected = CoreLoaderException.class)
+    @Test (expected = FeatureLoaderException.class)
     public void checkMessageAndCauseMethod()
-            throws CoreLoaderException {
+            throws FeatureLoaderException {
         String str = "test";
         String internalMessage = "Internal message";
         Throwable cause = new Throwable(internalMessage);
-        CoreLoaderException exception = new CoreLoaderException(str, cause);
+        FeatureLoaderException exception = new FeatureLoaderException(str, cause);
         assertEquals(exception.getMessage(), str);
         assertEquals(exception.getCause(), cause);
         throw exception;

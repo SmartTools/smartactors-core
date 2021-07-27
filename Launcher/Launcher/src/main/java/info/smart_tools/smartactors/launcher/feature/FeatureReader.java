@@ -28,9 +28,10 @@ public class FeatureReader implements IFeatureReader {
     private final IObjectMapper objectMapper;
 
     public FeatureReader(
+            final ILogger log,
             final IObjectMapper objectMapper
     ) {
-        this.log = new Logger();
+        this.log = log;
         this.objectMapper = objectMapper;
     }
 

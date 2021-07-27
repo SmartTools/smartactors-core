@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * Reads Java properties
  */
-public interface IPropertiesReader {
+public interface IPropertiesLoader {
 
     /**
      * Read properties and return them as a {@link Map}
@@ -17,5 +17,5 @@ public interface IPropertiesReader {
      * @return loaded properties
      * @throws PropertiesReaderException if failed to read properties
      */
-    Map<Object, Object> readProperties() throws PropertiesReaderException;
+    Map<Object, Object> loadProperties() throws PropertiesReaderException;
 }
