@@ -67,22 +67,7 @@ public class Bootstrap implements IBootstrap<IBootstrapItem<String>> {
 
             for (IBootstrapItem<String> item : orderedItems) {
                 try {
-                    // absolute clusterfuck of a code
-                    ISmartactorsClassLoader classLoader;
-                    if (item instanceof MethodBootstrapItem) {
-                        Field field = item.getClass().getDeclaredField("method1");
-                        field.setAccessible(true);
-                        Method itemCore = (Method) field.get(item);
-                        classLoader = (ISmartactorsClassLoader) itemCore.getDeclaringClass().getClassLoader();
-                    } else {
-                        Field field = item.getClass().getDeclaredField("item");
-                        field.setAccessible(true);
-                        Object itemCore = field.get(item);
-                        Field field2 = itemCore.getClass().getDeclaredField("process");
-                        field2.setAccessible(true);
-                        Object process = field2.get(itemCore);
-                        classLoader = (ISmartactorsClassLoader) process.getClass().getClassLoader();
-                    }
+                    ISmartactorsClassLoader classLoader = new ClassLoaderGetter().getClassLoader(item);
                     ModuleManager.setCurrentModuleByClassLoader(classLoader);
 
                     item.executeProcess();
