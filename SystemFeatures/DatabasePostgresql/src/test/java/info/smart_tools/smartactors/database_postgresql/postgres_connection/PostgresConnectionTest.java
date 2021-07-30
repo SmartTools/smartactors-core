@@ -6,6 +6,7 @@ import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -20,6 +21,7 @@ import static org.powermock.api.mockito.PowerMockito.*;
 
 @PrepareForTest({PostgresConnection.class, DriverManager.class, Class.class})
 @RunWith(PowerMockRunner.class)
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class PostgresConnectionTest {
 
     private Connection connection;

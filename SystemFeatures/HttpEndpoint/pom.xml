@@ -233,6 +233,7 @@
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                             </archive>
+                            <source>8</source>
                         </configuration>
                     </execution>
                 </executions>

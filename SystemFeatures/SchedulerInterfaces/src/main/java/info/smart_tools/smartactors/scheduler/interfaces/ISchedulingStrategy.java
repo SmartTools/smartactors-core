@@ -4,6 +4,7 @@ import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.scheduler.interfaces.exceptions.SchedulingStrategyExecutionException;
 
 /**
+ * <h2>ISchedulingStrategy</h2>
  * Interface for a strategy defining when to execute tasks associated with scheduler entries.
  *
  * <h3>About pause handling</h3>
