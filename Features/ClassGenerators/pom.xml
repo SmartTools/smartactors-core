@@ -108,6 +108,9 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <parallel>methods</parallel>
                     <threadCount>8</threadCount>
+                    <includes>
+                        <include>TestInterface.java</include>
+                    </includes>
                 </configuration>
             </plugin>
 
@@ -194,6 +197,7 @@
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                             </archive>
+                            <source>8</source>
                         </configuration>
                     </execution>
                 </executions>

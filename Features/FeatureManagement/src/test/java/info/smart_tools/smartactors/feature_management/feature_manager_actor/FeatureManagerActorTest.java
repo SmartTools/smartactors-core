@@ -4,6 +4,7 @@ import info.smart_tools.smartactors.base.exception.invalid_argument_exception.In
 import info.smart_tools.smartactors.base.interfaces.istrategy.IStrategy;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
+import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
 import info.smart_tools.smartactors.feature_management.feature_manager_actor.exception.FeatureManagementException;
 import info.smart_tools.smartactors.feature_management.feature_manager_actor.wrapper.AddFeatureWrapper;
 import info.smart_tools.smartactors.feature_management.feature_manager_actor.wrapper.FeatureManagerStateWrapper;
@@ -32,6 +33,11 @@ import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.*;
 
@@ -42,6 +48,9 @@ import static org.mockito.Mockito.*;
 /**
  * Created by sevenbits on 12/21/16.
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ModuleManager.class})
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class FeatureManagerActorTest extends IOCInitializer {
 
     @Override
@@ -65,6 +74,9 @@ public class FeatureManagerActorTest extends IOCInitializer {
     @Before
     public void init()
             throws Exception {
+        PowerMockito.spy(ModuleManager.class);
+        PowerMockito.doReturn(new HashMap<>()).when(ModuleManager.class, "getModules");
+
         IOC.register(
                 Keys.getKeyByName("task_queue"), new SingletonStrategy(this.queue)
         );

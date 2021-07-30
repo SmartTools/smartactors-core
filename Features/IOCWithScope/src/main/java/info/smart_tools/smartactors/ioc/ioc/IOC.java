@@ -87,8 +87,8 @@ public final class IOC {
      * Unregister dependency with given key
      * @param key instance of {@link IKey}
      * @throws DeletionException if any errors occurred
-     * @return the previous instance of {@link IStrategy} associated with <tt>key</tt>,
-     *         or <tt>null</tt> if there was no association for <tt>key</tt>.
+     * @return the previous instance of {@link IStrategy} associated with {@code key},
+     *         or {@code null} if there was no association for {@code key}.
      */
     public static IStrategy unregister(final IKey key)
             throws DeletionException {

@@ -12,6 +12,7 @@ import info.smart_tools.smartactors.message_processing_interfaces.message_proces
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.*;
 /**
  * Test for {@link RetryingToTakeResourceExceptionHandler}.
  */
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class RetryingToTakeResourceExceptionHandlerTest extends ExceptionHandlingReceiverTest {
     private OutOfResourceException outOfResourceExceptionMock;
     private IResourceSource resourceSourceMock;

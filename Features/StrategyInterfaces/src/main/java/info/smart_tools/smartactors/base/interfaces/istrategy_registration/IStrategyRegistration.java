@@ -22,8 +22,8 @@ public interface IStrategyRegistration {
      *
      * @param key key of the unregistering strategy
      * @throws StrategyRegistrationException if any errors occurred
-     * @return the previous instance of {@link IStrategy} associated with <tt>key</tt>,
-     *         or <tt>null</tt> if there was no association for <tt>key</tt>.
+     * @return the previous instance of {@link IStrategy} associated with {@code key},
+     *         or {@code null} if there was no association for {@code key}.
      */
     IStrategy unregister(final Object key) throws StrategyRegistrationException;
 

@@ -11,8 +11,9 @@ import info.smart_tools.smartactors.task.itask_preprocess_strategy.exceptions.Ta
  */
 public interface ITaskProcessStrategy {
     /**
+     * Process task
      *
-     * @param state
+     * @param state current state of the task
      * @throws TaskExecutionException if error occurs executing the task
      * @throws InvalidArgumentException if the task being executed is not acceptable for this strategy
      * @throws TaskProcessException if any other error occurs

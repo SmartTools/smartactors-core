@@ -167,6 +167,15 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <parallel>methods</parallel>
                     <threadCount>8</threadCount>
+                    <includes>
+                        <include>CustomActoR.jar</include>
+                        <include>ISampleWrapper.jar</include>
+                        <include>ISampleWrapper.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>ISampleWrapperImpl.java</exclude>
+                        <exclude>FieldTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
@@ -253,6 +262,7 @@
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                             </archive>
+                            <source>8</source>
                         </configuration>
                     </execution>
                 </executions>

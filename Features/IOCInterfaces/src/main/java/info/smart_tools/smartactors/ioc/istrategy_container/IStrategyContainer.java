@@ -33,8 +33,8 @@ public interface IStrategyContainer {
      * Remove existing dependency of {@link IStrategy} by unique object identifier.
      * @param key unique object identifier
      * @throws StrategyContainerException  if any error occurred
-     * @return the previous instance of {@link IStrategy} associated with <tt>key</tt>,
-     *         or <tt>null</tt> if there was no association for <tt>key</tt>.
+     * @return the previous instance of {@link IStrategy} associated with {@code key},
+     *         or {@code null} if there was no association for {@code key}.
      */
     IStrategy unregister(final Object key)
             throws StrategyContainerException;
