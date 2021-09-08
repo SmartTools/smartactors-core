@@ -1,15 +1,12 @@
-package info.smart_tools.smartactors.downloader;
+package info.smart_tools.smartactors.downloader.features;
 
-public class FeatureNameSpace {
+public class FeatureNamespace {
 
-    private String name;
-    private String group;
-    private String version;
+    private final String name;
+    private final String group;
+    private final String version;
 
-    private FeatureNameSpace() {
-    }
-
-    public FeatureNameSpace(final String featureName) throws Exception {
+    public FeatureNamespace(final String featureName) throws Exception {
         if (null != featureName ) {
             String[] parts = featureName.split(":");
             if (parts.length == 3) {
@@ -20,7 +17,7 @@ public class FeatureNameSpace {
                 throw new Exception("Could not parse feature full name - " + featureName + ".");
             }
         } else {
-            throw new Exception("Feature full name colud not be null.");
+            throw new Exception("Feature full name could not be null.");
         }
     }
 

@@ -1,4 +1,6 @@
-package info.smart_tools.smartactors.downloader;
+package info.smart_tools.smartactors.downloader.features;
+
+import info.smart_tools.smartactors.downloader.Repository;
 
 import java.util.List;
 
@@ -8,6 +10,12 @@ public class Feature {
     private Repository repository;
     private List<String> plugins;
 
+    public Feature() {
+    }
+
+    public Feature(String featureName) {
+        this.featureName = featureName;
+    }
 
     public String getFeatureName() {
         return featureName;
@@ -40,16 +48,4 @@ public class Feature {
     public void setPlugins(List<String> plugins) {
         this.plugins = plugins;
     }
-//
-//    public String getName() {
-//        return this.featureName.split(":")[1];
-//    }
-//
-//    public String getGroup() {
-//        return this.featureName.split(":")[0];
-//    }
-//
-//    public String getVersion() {
-//        return this.featureName.split(":")[2];
-//    }
 }
