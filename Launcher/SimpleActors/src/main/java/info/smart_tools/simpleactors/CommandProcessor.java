@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Processes commands from CLI with requested routing slip
+ */
 public class CommandProcessor {
 
     private final Map<String, IRoutingSlip> slips = new HashMap<>();
@@ -24,6 +27,12 @@ public class CommandProcessor {
     private final ObjectMapper objectMapper;
     private final Map<String, IActor> actors;
 
+    /**
+     * Create new instance of {@link CommandProcessor} and load all routing slips from {@code src/resources/routing_slips}
+     *
+     * @param mapper JSON mapper used for loading routing slips
+     * @param actors actors that were registered during starter initialization
+     */
     public CommandProcessor(final ObjectMapper mapper, final Map<String, IActor> actors) {
         this.objectMapper = mapper;
         this.actors = actors;
@@ -52,6 +61,12 @@ public class CommandProcessor {
         }
     }
 
+    /**
+     * Process provided arguments with requested routing slip
+     *
+     * @param arguments arguments from CLi
+     * @throws ProcessExecutionException if failed to load routing slip or actor
+     */
     public void process(final IArguments arguments) throws ProcessExecutionException {
         IRoutingSlip slip = this.slips.get(arguments.getCommand());
         IMessage message = Message

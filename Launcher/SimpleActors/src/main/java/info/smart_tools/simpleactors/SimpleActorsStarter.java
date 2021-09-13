@@ -14,6 +14,9 @@ import info.smart_tools.simpleactors.commons.json.deserializers.IStepDeserialize
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Starter for SimpleActors
+ */
 public class SimpleActorsStarter {
 
     private final static ObjectMapper mapper;
@@ -28,11 +31,24 @@ public class SimpleActorsStarter {
         mapper.registerModule(module);
     }
 
+    /**
+     * Register new actor in SimpleActors
+     *
+     * @param name name of the actor used in routing slips
+     * @param actor instance of actor
+     * @return current instance of {@link SimpleActorsStarter}
+     */
     public SimpleActorsStarter addActor(final String name, final IActor actor) {
         this.actors.put(name, actor);
         return this;
     }
 
+    /**
+     * Start processing arguments from CLI
+     *
+     * @param arguments CLI arguments
+     * @throws SimpleActorsStartException if failed to start SimpleActors instance
+     */
     public void start(final IArguments arguments) throws SimpleActorsStartException {
         try {
             CommandProcessor cp = new CommandProcessor(mapper, actors);
