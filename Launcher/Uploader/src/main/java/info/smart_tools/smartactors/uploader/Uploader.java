@@ -41,16 +41,17 @@ public class Uploader {
 
     private static void run(final Arguments arguments) throws DeploymentException {
         String featurePath = arguments.getFeaturePath();
+        String username = arguments.getUsername();
+        String password = arguments.getPassword();
 
         File featureFile = new File(featurePath);
         // TODO: add artifact name
         Artifact artifact = new DefaultArtifact("")
                 .setFile(featureFile);
 
-        // TODO: add credentials
         Authentication authentication = new AuthenticationBuilder()
-                .addUsername("")
-                .addPassword("")
+                .addUsername(username)
+                .addPassword(password)
                 .build();
 
         // TODO: add url and id for remote repository
