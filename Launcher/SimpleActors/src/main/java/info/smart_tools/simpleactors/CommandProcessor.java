@@ -48,18 +48,14 @@ public class CommandProcessor {
                 FileSystem zipfs = initFileSystem(url.toURI());
                 Stream<Path> paths = Files.walk(Paths.get(url.toURI()))
         ) {
-//        try (
-//                Stream<Path> paths = Files
-//                        .walk(Paths.get(this.getClass().getClassLoader().getResource("routing_slips").toURI()))
-//        ) {
             paths
                     .filter(Files::isRegularFile)
                     .forEach(
                             f -> {
                                 try {
                                     this.slips.put(
-                                            f.toFile().getName().split("\\.")[0],
-                                            this.objectMapper.readValue(f.toFile(), IRoutingSlip.class)
+                                            f.getFileName().toString().split("\\.")[0],
+                                            this.objectMapper.readValue(Files.newInputStream(f), IRoutingSlip.class)
                                     );
                                 } catch (Exception e) {
                                     throw new RuntimeException("Could not parse json file - " + f.getFileName(), e);
@@ -107,7 +103,6 @@ public class CommandProcessor {
     }
 
     private FileSystem initFileSystem(URI uri) throws IOException {
-        System.out.println(uri.toString());
         return FileSystems.newFileSystem(uri, Collections.emptyMap(), this.getClass().getClassLoader());
     }
 }
