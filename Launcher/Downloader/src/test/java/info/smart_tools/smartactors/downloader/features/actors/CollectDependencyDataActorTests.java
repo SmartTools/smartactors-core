@@ -1,6 +1,6 @@
-package info.smart_tools.simpleactors.features.actors;
+package info.smart_tools.smartactors.features.actors;
 
-import info.smart_tools.smartactors.downloader.commons.actors.ConditionalInterface;
+import info.smart_tools.simpleactors.commons.actors.ConditionalInterface;
 import info.smart_tools.smartactors.downloader.features.Feature;
 import info.smart_tools.smartactors.downloader.features.actors.CollectDependencyDataActor;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package info.smart_tools.simpleactors.files;
+package info.smart_tools.smartactors.downloader.files;
 
 import info.smart_tools.smartactors.downloader.files.actors.FileOperationsActor;
 import org.junit.Before;

@@ -1,15 +1,14 @@
-package info.smart_tools.simpleactors.features.actors;
+package info.smart_tools.smartactors.downloader.features.actors;
 
+import info.smart_tools.simpleactors.commons.CommonParameters;
+import info.smart_tools.simpleactors.commons.IMessage;
+import info.smart_tools.simpleactors.commons.Message;
+import info.smart_tools.simpleactors.commons.MethodParameters;
 import info.smart_tools.smartactors.downloader.Params__DownloadFeature;
 import info.smart_tools.smartactors.downloader.Repository;
-import info.smart_tools.smartactors.downloader.commons.CommonParameters;
-import info.smart_tools.smartactors.downloader.commons.IMessage;
-import info.smart_tools.smartactors.downloader.commons.Message;
-import info.smart_tools.smartactors.downloader.commons.MethodParameters;
 import info.smart_tools.smartactors.downloader.feature_downloader.IFeatureDownloader;
 import info.smart_tools.smartactors.downloader.features.Feature;
 import info.smart_tools.smartactors.downloader.features.FeatureNamespace;
-import info.smart_tools.smartactors.downloader.features.actors.DownloadFeatureActor;
 import org.junit.Test;
 
 import java.io.File;
@@ -58,13 +57,13 @@ public class DownloadFeatureActorTests {
         String directoryParamName = "directory";
 
         List<String> argumentPaths = Arrays.asList(
-                featureParamName, CommonParameters.REPOSITORIES, featureTypeParamName, directoryParamName
+                featureParamName, Params__DownloadFeature.REPOSITORIES, featureTypeParamName, directoryParamName
         );
         MethodParameters parameters = new MethodParameters(argumentPaths, CommonParameters.SPLIT_RESPONSE);
 
         message.put(featureParamName, feature);
         message.put(featureTypeParamName, featureType);
-        message.put(CommonParameters.REPOSITORIES, repositories);
+        message.put(Params__DownloadFeature.REPOSITORIES, repositories);
         message.put(directoryParamName, dir);
         message.put(CommonParameters.METHOD_PARAMS, parameters);
 

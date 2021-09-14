@@ -1,8 +1,6 @@
-package info.smart_tools.simpleactors.features;
+package info.smart_tools.smartactors.downloader.features;
 
 import info.smart_tools.smartactors.downloader.Repository;
-import info.smart_tools.smartactors.downloader.features.FeatureList;
-import info.smart_tools.smartactors.downloader.features.FeatureNamespace;
 import org.junit.Test;
 
 import java.util.ArrayList;

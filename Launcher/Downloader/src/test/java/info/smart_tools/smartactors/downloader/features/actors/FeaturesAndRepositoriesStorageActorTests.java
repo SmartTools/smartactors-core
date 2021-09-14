@@ -1,12 +1,12 @@
-package info.smart_tools.simpleactors.features.actors;
+package info.smart_tools.smartactors.downloader.features.actors;
 
+import info.smart_tools.simpleactors.commons.CommonParameters;
+import info.smart_tools.simpleactors.commons.IMessage;
+import info.smart_tools.simpleactors.commons.Message;
+import info.smart_tools.simpleactors.commons.MethodParameters;
+import info.smart_tools.smartactors.downloader.Params__DownloadFeature;
 import info.smart_tools.smartactors.downloader.Repository;
-import info.smart_tools.smartactors.downloader.commons.CommonParameters;
-import info.smart_tools.smartactors.downloader.commons.IMessage;
-import info.smart_tools.smartactors.downloader.commons.Message;
-import info.smart_tools.smartactors.downloader.commons.MethodParameters;
 import info.smart_tools.smartactors.downloader.features.Feature;
-import info.smart_tools.smartactors.downloader.features.actors.FeaturesAndRepositoriesStorageActor;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class FeaturesAndRepositoriesStorageActorTests {
                 .add(CommonParameters.METHOD_PARAMS, methodParameters)
                 .build();
         actor.execute("configure", message);
-        assertNotNull(message.get(CommonParameters.FEATURES));
-        assertNotNull(message.get(CommonParameters.REPOSITORIES));
+        assertNotNull(message.get(Params__DownloadFeature.FEATURES));
+        assertNotNull(message.get(Params__DownloadFeature.REPOSITORIES));
     }
 
     @Test

@@ -1,8 +1,7 @@
-package info.smart_tools.simpleactors.features.actors;
+package info.smart_tools.smartactors.downloader.features.actors;
 
 import info.smart_tools.smartactors.downloader.Repository;
 import info.smart_tools.smartactors.downloader.features.Feature;
-import info.smart_tools.smartactors.downloader.features.actors.ReadFeatureConfigActor;
 import org.junit.Test;
 
 import java.io.File;

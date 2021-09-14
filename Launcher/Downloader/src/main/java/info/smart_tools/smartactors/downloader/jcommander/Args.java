@@ -1,8 +1,9 @@
 package info.smart_tools.smartactors.downloader.jcommander;
 
 import com.beust.jcommander.Parameter;
+import info.smart_tools.simpleactors.commons.IArguments;
 
-public class Args {
+public class Args implements IArguments {
 
     @Parameter(
             names = {"file", "f", "-file", "-f"},

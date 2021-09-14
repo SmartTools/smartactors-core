@@ -10,9 +10,15 @@ import info.smart_tools.simpleactors.commons.IStep;
 import info.smart_tools.simpleactors.commons.Message;
 import info.smart_tools.simpleactors.commons.exception.ProcessExecutionException;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -37,10 +43,15 @@ public class CommandProcessor {
         this.objectMapper = mapper;
         this.actors = actors;
 
+        URL url = this.getClass().getClassLoader().getResource("routing_slips");
         try (
-                Stream<Path> paths = Files
-                        .walk(Paths.get(this.getClass().getClassLoader().getResource("routing_slips").toURI()))
+                FileSystem zipfs = initFileSystem(url.toURI());
+                Stream<Path> paths = Files.walk(Paths.get(url.toURI()))
         ) {
+//        try (
+//                Stream<Path> paths = Files
+//                        .walk(Paths.get(this.getClass().getClassLoader().getResource("routing_slips").toURI()))
+//        ) {
             paths
                     .filter(Files::isRegularFile)
                     .forEach(
@@ -56,8 +67,7 @@ public class CommandProcessor {
                             }
                     );
         } catch (Exception e) {
-            System.err.println("Could not read routing slips.");
-            e.printStackTrace();
+            throw new RuntimeException("Could not read routing slips.", e);
         }
     }
 
@@ -94,5 +104,10 @@ public class CommandProcessor {
         } else {
             throw new ProcessExecutionException(String.format("Routing slip \"%s\" not found.", arguments.getCommand()));
         }
+    }
+
+    private FileSystem initFileSystem(URI uri) throws IOException {
+        System.out.println(uri.toString());
+        return FileSystems.newFileSystem(uri, Collections.emptyMap(), this.getClass().getClassLoader());
     }
 }

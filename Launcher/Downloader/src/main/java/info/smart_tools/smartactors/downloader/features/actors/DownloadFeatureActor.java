@@ -1,9 +1,9 @@
 package info.smart_tools.smartactors.downloader.features.actors;
 
+import info.smart_tools.simpleactors.commons.StatelessActor;
+import info.smart_tools.simpleactors.commons.annotations.Executable;
 import info.smart_tools.smartactors.downloader.Params__DownloadFeature;
 import info.smart_tools.smartactors.downloader.Repository;
-import info.smart_tools.smartactors.downloader.commons.Executable;
-import info.smart_tools.smartactors.downloader.commons.StatelessActor;
 import info.smart_tools.smartactors.downloader.feature_downloader.IFeatureDownloader;
 import info.smart_tools.smartactors.downloader.features.Feature;
 import info.smart_tools.smartactors.downloader.features.FeatureNamespace;

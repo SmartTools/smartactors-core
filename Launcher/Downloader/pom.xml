@@ -32,6 +32,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>info.smart_tools</groupId>
+            <artifactId>simpleactors</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-api</artifactId>
             <version>${version.shrinkwrap.resolvers}</version>

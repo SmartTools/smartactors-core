@@ -1,9 +1,9 @@
 package info.smart_tools.smartactors.downloader.features.actors;
 
+import info.smart_tools.simpleactors.commons.StatelessActor;
+import info.smart_tools.simpleactors.commons.annotations.Executable;
+import info.smart_tools.smartactors.downloader.Params__DownloadFeature;
 import info.smart_tools.smartactors.downloader.Repository;
-import info.smart_tools.smartactors.downloader.commons.CommonParameters;
-import info.smart_tools.smartactors.downloader.commons.Executable;
-import info.smart_tools.smartactors.downloader.commons.StatelessActor;
 import info.smart_tools.smartactors.downloader.features.Feature;
 
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ public class FeaturesAndRepositoriesStorageActor extends StatelessActor {
     @Executable
     public Map<String, Object> configure() {
         Map<String, Object> response = new HashMap();
-        response.put(CommonParameters.REPOSITORIES, new ArrayList<Repository>());
-        response.put(CommonParameters.FEATURES, new ArrayList<Feature>());
+        response.put(Params__DownloadFeature.REPOSITORIES, new ArrayList<Repository>());
+        response.put(Params__DownloadFeature.FEATURES, new ArrayList<Feature>());
         return response;
     }
 

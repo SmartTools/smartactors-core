@@ -1,8 +1,8 @@
 package info.smart_tools.smartactors.downloader.jcommander.actors;
 
+import info.smart_tools.simpleactors.commons.StatelessActor;
+import info.smart_tools.simpleactors.commons.annotations.Executable;
 import info.smart_tools.smartactors.downloader.Params__MoveArgsToMessage;
-import info.smart_tools.smartactors.downloader.commons.Executable;
-import info.smart_tools.smartactors.downloader.commons.StatelessActor;
 import info.smart_tools.smartactors.downloader.jcommander.Args;
 
 import java.io.File;

@@ -1,8 +1,8 @@
 package info.smart_tools.smartactors.downloader.features.actors;
 
-import info.smart_tools.smartactors.downloader.commons.Executable;
-import info.smart_tools.smartactors.downloader.commons.StatelessActor;
-import info.smart_tools.smartactors.downloader.commons.actors.ConditionalInterface;
+import info.smart_tools.simpleactors.commons.StatelessActor;
+import info.smart_tools.simpleactors.commons.actors.ConditionalInterface;
+import info.smart_tools.simpleactors.commons.annotations.Executable;
 import info.smart_tools.smartactors.downloader.features.Feature;
 
 import java.util.ArrayList;
