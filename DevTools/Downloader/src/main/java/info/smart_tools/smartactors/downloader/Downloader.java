@@ -17,7 +17,6 @@ import info.smart_tools.smartactors.downloader.jcommander.actors.ArgsToMessageAc
 public class Downloader {
 
     public static void main(final String[] args) throws Exception {
-        Thread.sleep(5000);
         SimpleActorsStarter starter = new SimpleActorsStarter()
             .addActor("fileOperationActor", new FileOperationsActor())
             .addActor("readFeatureConfigActor", new ReadFeatureConfigActor())

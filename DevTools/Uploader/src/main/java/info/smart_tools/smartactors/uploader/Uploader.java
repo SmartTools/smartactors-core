@@ -24,8 +24,6 @@ public class Uploader {
                 .addActor("RepositoryUploadActor", new RepositoryUploadActor(new MavenFeatureUploader()))
                 .addActor("ArgsToMessageActor", new ArgsToMessageActor());
 
-        Thread.sleep(5500);
-
         Arguments arguments = new Arguments();
         JCommander.newBuilder()
                 .addObject(arguments)
