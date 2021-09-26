@@ -26,7 +26,7 @@ public class FileOperationsActor extends StatelessActor {
     @Executable()
     public Path copyFile(final Path source, final Path target) {
         try {
-            if (source.toFile().exists() && null != target) {
+            if (null != source && source.toFile().exists() && null != target) {
                 Files.copy(source, target);
             }
 
