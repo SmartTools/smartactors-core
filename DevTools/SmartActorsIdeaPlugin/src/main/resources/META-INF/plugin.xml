@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>info.smart_tools.smartactors.SmartActorsIdeaPlugin</id>
+    <name>SmartActors Development Tools</name>
+    <!-- TODO: add an actual email    -->
+    <vendor email="help@smarttools.info" url="https://smarttools.info">SmartTools</vendor>
+
+    <description><![CDATA[
+        Development Tools intended for use with SmartActors framework
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.java-capable</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="NewSmartActorsFeature" class="info.smart_tools.smartactors.devtools.action.CreateSmartActorsFeatureAction"
+                text="SmartActors Feature">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
