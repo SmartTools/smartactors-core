@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.features.actors;
+package info.smart_tools.smartactors.downloader.features.actors;
 
 import info.smart_tools.simpleactors.commons.actors.ConditionalInterface;
 import info.smart_tools.smartactors.downloader.features.Feature;

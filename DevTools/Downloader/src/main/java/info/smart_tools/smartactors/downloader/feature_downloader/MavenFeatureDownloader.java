@@ -3,7 +3,6 @@ package info.smart_tools.smartactors.downloader.feature_downloader;
 import info.smart_tools.smartactors.downloader.Repository;
 import info.smart_tools.smartactors.downloader.features.FeatureNamespace;
 import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 import java.io.File;
 import java.util.Arrays;
@@ -18,7 +17,7 @@ public class MavenFeatureDownloader implements IFeatureDownloader {
 
     @Override
     public void initialize(final Object object) {
-        this.downloaderSystem = Maven.configureResolver();
+        this.downloaderSystem = (ConfigurableMavenResolverSystem) object;
     }
 
     @Override
@@ -42,7 +41,7 @@ public class MavenFeatureDownloader implements IFeatureDownloader {
     @Override
     public List<File> download(final FeatureNamespace featureNamespace, final String featureType) {
         return
-                null != this.downloaderSystem ?
+                null != this.downloaderSystem && null != featureNamespace && null != featureType ?
                 Arrays.asList(
                         this.downloaderSystem
                                 .resolve(
