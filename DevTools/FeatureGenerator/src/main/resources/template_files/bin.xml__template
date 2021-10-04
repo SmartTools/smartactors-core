@@ -12,5 +12,8 @@
         <file>
             <source>${basedir}/target/${project.artifactId}-${project.version}.jar</source>
         </file>
+        <file>
+            <source>${basedir}/config.json</source>
+        </file>
     </files>
 </assembly>
