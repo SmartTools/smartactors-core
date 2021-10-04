@@ -17,9 +17,16 @@
     </extensions>
 
     <actions>
-        <action id="NewSmartActorsFeature" class="info.smart_tools.smartactors.devtools.action.CreateSmartActorsFeatureAction"
+        <action id="SmartActors.NewFeature" class="info.smart_tools.smartactors.devtools.action.CreateSmartActorsFeatureAction"
                 text="SmartActors Feature">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
+
+        <group id="SmartActors.Utilities" text="SmartActors" popup="true">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="WeighingNewGroup"/>
+            <action id="SmartActors.Utilities.Upload" class="info.smart_tools.smartactors.devtools.action.UploadSmartActorsFeatureAction"
+                    text="Upload Feature">
+            </action>
+        </group>
     </actions>
 </idea-plugin>
