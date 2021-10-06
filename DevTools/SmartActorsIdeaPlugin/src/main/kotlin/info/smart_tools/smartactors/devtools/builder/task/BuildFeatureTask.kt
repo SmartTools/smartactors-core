@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.task
+package info.smart_tools.smartactors.devtools.builder.task
 
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationGroupManager
@@ -6,7 +6,7 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
-import info.smart_tools.smartactors.devtools.utilities.builder.buildFeature
+import info.smart_tools.smartactors.devtools.builder.tool.buildFeature
 
 enum class BuilderNotificationGroup(val id: String, val type: NotificationType) {
     SUCCESS("SmartActors.Notification.BuildFeature.Success", NotificationType.INFORMATION),

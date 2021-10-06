@@ -1,10 +1,9 @@
-package info.smart_tools.smartactors.devtools.action
+package info.smart_tools.smartactors.devtools.builder.action
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.psi.PsiDirectory
-import info.smart_tools.smartactors.devtools.indicator.FeatureBuildingIndicator
-import info.smart_tools.smartactors.devtools.task.BuildFeatureTask
+import info.smart_tools.smartactors.devtools.builder.task.BuildFeatureTask
 
 class BuildSmartActorsFeatureAction : AnAction() {
 

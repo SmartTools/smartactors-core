@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.feature
+package info.smart_tools.smartactors.devtools.common.feature
 
 data class Repository(val id: String, val url: String)
 

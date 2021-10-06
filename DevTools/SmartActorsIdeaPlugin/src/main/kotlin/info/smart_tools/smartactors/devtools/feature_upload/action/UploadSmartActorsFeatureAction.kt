@@ -1,12 +1,12 @@
-package info.smart_tools.smartactors.devtools.action
+package info.smart_tools.smartactors.devtools.feature_upload.action
 
 import com.intellij.json.psi.JsonFile
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.ui.MessageDialogBuilder
 import com.intellij.psi.PsiDirectory
-import info.smart_tools.smartactors.devtools.dialog.UploadSmartActorsFeatureDialog
-import info.smart_tools.smartactors.devtools.feature.parseFeature
+import info.smart_tools.smartactors.devtools.feature_upload.dialog.UploadSmartActorsFeatureDialog
+import info.smart_tools.smartactors.devtools.common.feature.parseFeature
 
 class UploadSmartActorsFeatureAction : AnAction() {
 

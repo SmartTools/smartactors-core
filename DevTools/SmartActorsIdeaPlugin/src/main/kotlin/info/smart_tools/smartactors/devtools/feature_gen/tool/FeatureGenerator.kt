@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.utilities.feature_gen
+package info.smart_tools.smartactors.devtools.feature_gen.tool
 
 import info.smart_tools.smartactors.feature_generator.FeatureGenerator
 import kotlin.system.measureTimeMillis

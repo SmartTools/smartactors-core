@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.utilities.feature_upload
+package info.smart_tools.smartactors.devtools.feature_upload.tool
 
 data class Arguments(
     val featurePath: String,

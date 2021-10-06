@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.utilities.feature_gen
+package info.smart_tools.smartactors.devtools.feature_gen.tool
 
 data class Arguments(
     val groupId: String,

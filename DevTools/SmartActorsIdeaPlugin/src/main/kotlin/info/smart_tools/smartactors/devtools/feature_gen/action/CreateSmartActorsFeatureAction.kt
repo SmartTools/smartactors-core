@@ -1,9 +1,9 @@
-package info.smart_tools.smartactors.devtools.action
+package info.smart_tools.smartactors.devtools.feature_gen.action
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.psi.PsiDirectory
-import info.smart_tools.smartactors.devtools.dialog.NewSmartActorsFeatureDialog
+import info.smart_tools.smartactors.devtools.feature_gen.dialog.NewSmartActorsFeatureDialog
 
 class CreateSmartActorsFeatureAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {

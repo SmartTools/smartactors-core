@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.dialog
+package info.smart_tools.smartactors.devtools.feature_gen.dialog
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComponentValidator
@@ -9,7 +9,8 @@ import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.ui.DocumentAdapter
 import com.intellij.util.ui.FormBuilder
-import info.smart_tools.smartactors.devtools.utilities.feature_gen.createFeature
+import info.smart_tools.smartactors.devtools.common.dialog.ValidatorData
+import info.smart_tools.smartactors.devtools.feature_gen.tool.createFeature
 import java.awt.Dimension
 import java.awt.GridLayout
 import javax.swing.*

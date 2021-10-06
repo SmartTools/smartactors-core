@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.feature
+package info.smart_tools.smartactors.devtools.common.feature
 
 import com.intellij.json.psi.JsonArray
 import com.intellij.json.psi.JsonFile

@@ -18,17 +18,17 @@
     </extensions>
 
     <actions>
-        <action id="SmartActors.NewFeature" class="info.smart_tools.smartactors.devtools.action.CreateSmartActorsFeatureAction"
+        <action id="SmartActors.NewFeature" class="info.smart_tools.smartactors.devtools.feature_gen.action.CreateSmartActorsFeatureAction"
                 text="SmartActors Feature">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
 
         <group id="SmartActors.Utilities" text="SmartActors" popup="true">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="WeighingNewGroup"/>
-            <action id="SmartActors.Utilities.Build" class="info.smart_tools.smartactors.devtools.action.BuildSmartActorsFeatureAction"
+            <action id="SmartActors.Utilities.Build" class="info.smart_tools.smartactors.devtools.builder.action.BuildSmartActorsFeatureAction"
                     text="Build Feature">
             </action>
-            <action id="SmartActors.Utilities.Upload" class="info.smart_tools.smartactors.devtools.action.UploadSmartActorsFeatureAction"
+            <action id="SmartActors.Utilities.Upload" class="info.smart_tools.smartactors.devtools.feature_upload.action.UploadSmartActorsFeatureAction"
                     text="Upload Feature">
             </action>
         </group>

@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.dialog
+package info.smart_tools.smartactors.devtools.feature_upload.dialog
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComponentValidator
@@ -7,9 +7,10 @@ import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.ui.DocumentAdapter
 import com.intellij.util.ui.FormBuilder
-import info.smart_tools.smartactors.devtools.feature.Feature
-import info.smart_tools.smartactors.devtools.feature.Repository
-import info.smart_tools.smartactors.devtools.utilities.feature_upload.upload
+import info.smart_tools.smartactors.devtools.common.dialog.ValidatorData
+import info.smart_tools.smartactors.devtools.common.feature.Feature
+import info.smart_tools.smartactors.devtools.common.feature.Repository
+import info.smart_tools.smartactors.devtools.feature_upload.tool.upload
 import java.awt.Dimension
 import javax.swing.JComponent
 import javax.swing.JPasswordField

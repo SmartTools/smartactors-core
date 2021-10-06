@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.utilities.builder
+package info.smart_tools.smartactors.devtools.builder.tool
 
 import info.smart_tools.smartactors.builder.Builder
 
