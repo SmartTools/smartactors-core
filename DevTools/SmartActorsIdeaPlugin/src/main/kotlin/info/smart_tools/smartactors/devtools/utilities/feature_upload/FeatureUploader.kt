@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.devtools.feature_upload
+package info.smart_tools.smartactors.devtools.utilities.feature_upload
 
 import info.smart_tools.smartactors.devtools.feature.Repository
 import info.smart_tools.smartactors.uploader.Uploader

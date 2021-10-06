@@ -13,7 +13,8 @@
     <depends>com.intellij.modules.java-capable</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.BuildFeature.Success"/>
+        <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.BuildFeature.Fail"/>
     </extensions>
 
     <actions>
@@ -24,6 +25,9 @@
 
         <group id="SmartActors.Utilities" text="SmartActors" popup="true">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="WeighingNewGroup"/>
+            <action id="SmartActors.Utilities.Build" class="info.smart_tools.smartactors.devtools.action.BuildSmartActorsFeatureAction"
+                    text="Build Feature">
+            </action>
             <action id="SmartActors.Utilities.Upload" class="info.smart_tools.smartactors.devtools.action.UploadSmartActorsFeatureAction"
                     text="Upload Feature">
             </action>

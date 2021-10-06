@@ -9,9 +9,8 @@ import com.intellij.ui.DocumentAdapter
 import com.intellij.util.ui.FormBuilder
 import info.smart_tools.smartactors.devtools.feature.Feature
 import info.smart_tools.smartactors.devtools.feature.Repository
-import info.smart_tools.smartactors.devtools.feature_upload.upload
+import info.smart_tools.smartactors.devtools.utilities.feature_upload.upload
 import java.awt.Dimension
-import javax.swing.JCheckBox
 import javax.swing.JComponent
 import javax.swing.JPasswordField
 import javax.swing.JTextField
