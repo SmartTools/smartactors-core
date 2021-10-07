@@ -4,16 +4,15 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComponentValidator
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
-import com.intellij.openapi.ui.popup.JBPopup
-import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.ui.DocumentAdapter
 import com.intellij.util.ui.FormBuilder
 import info.smart_tools.smartactors.devtools.common.dialog.ValidatorData
-import info.smart_tools.smartactors.devtools.feature_gen.tool.createFeature
+import info.smart_tools.smartactors.devtools.common.feature.FeatureName
+import info.smart_tools.smartactors.devtools.feature_gen.task.CreateFeatureTask
 import java.awt.Dimension
-import java.awt.GridLayout
-import javax.swing.*
+import javax.swing.JComponent
+import javax.swing.JTextField
 import javax.swing.event.DocumentEvent
 
 class NewSmartActorsFeatureDialog(val project: Project, val actionPath: String) : DialogWrapper(true) {
@@ -27,8 +26,6 @@ class NewSmartActorsFeatureDialog(val project: Project, val actionPath: String) 
     private lateinit var featureNameTextField: JTextField
     private lateinit var versionTextField: JTextField
 
-    private lateinit var loadingPopup: JBPopup
-
     init {
         title = "New SmartActors Feature"
         init()
@@ -36,12 +33,7 @@ class NewSmartActorsFeatureDialog(val project: Project, val actionPath: String) 
 
     override fun createCenterPanel(): JComponent {
         setResizable(false)
-        val popupFactory = JBPopupFactory.getInstance()
 
-        loadingPopup = popupFactory.createComponentPopupBuilder(createLoadingThingy(), null)
-            .setMovable(true)
-            .setProject(project)
-            .createPopup()
         groupIdTextField = buildTextField(
             validatorData = ValidatorData(javaPackageRegexp, groupIdErrorMessage)
         )
@@ -60,15 +52,20 @@ class NewSmartActorsFeatureDialog(val project: Project, val actionPath: String) 
     }
 
     override fun doOKAction() {
-        loadingPopup.showCenteredInCurrentWindow(project)
-        createFeature(
-            groupId = groupIdTextField.text,
-            featureName = featureNameTextField.text,
-            version = versionTextField.text.orEmpty(),
+        CreateFeatureTask(
+            ideaProject = project,
+            featureName = getFeatureName(),
             path = actionPath
-        )
-        loadingPopup.cancel()
+        ).queue()
         super.doOKAction()
+    }
+
+    private fun getFeatureName(): FeatureName {
+        return FeatureName(
+            groupId = groupIdTextField.text,
+            name = featureNameTextField.text,
+            version = versionTextField.text
+        )
     }
 
     private fun buildTextField(
@@ -103,21 +100,5 @@ class NewSmartActorsFeatureDialog(val project: Project, val actionPath: String) 
         }
 
         return textField
-    }
-
-    private fun createLoadingThingy(): JComponent {
-        val layout = GridLayout(2, 1)
-        layout.vgap = 10
-        val panel = JPanel(layout)
-
-        val label = JLabel("Creating new SmartActors feature...")
-        val progressBar = JProgressBar()
-        progressBar.preferredSize = Dimension(350, 5)
-        progressBar.isIndeterminate = true
-
-        panel.add(label)
-        panel.add(progressBar)
-
-        return panel
     }
 }

@@ -1,35 +1,27 @@
 package info.smart_tools.smartactors.devtools.builder.task
 
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import info.smart_tools.smartactors.devtools.builder.tool.buildFeature
+import info.smart_tools.smartactors.devtools.common.notification.NotificationConfig
+import info.smart_tools.smartactors.devtools.common.notification.buildNotification
 
-enum class BuilderNotificationGroup(val id: String, val type: NotificationType) {
-    SUCCESS("SmartActors.Notification.BuildFeature.Success", NotificationType.INFORMATION),
-    FAIL("SmartActors.Notification.BuildFeature.Fail", NotificationType.ERROR),
-}
-
-data class BuilderNotificationParams(
-    val properties: BuilderNotificationGroup,
-    val content: String
-)
-
-fun buildNotification(params: BuilderNotificationParams): Notification {
-    return NotificationGroupManager.getInstance().getNotificationGroup(params.properties.id)
-        .createNotification(content = params.content, params.properties.type)
-        .setTitle("SmartActors")
-}
-
-fun build(featurePath: String): BuilderNotificationParams {
+fun build(featurePath: String): NotificationConfig {
     val result = buildFeature(featurePath);
     return if (result) {
-        BuilderNotificationParams(BuilderNotificationGroup.SUCCESS, "Feature has been built")
+        NotificationConfig(
+            "SmartActors.Notification.BuildFeature.Success",
+            NotificationType.INFORMATION,
+            "Feature has been built"
+        )
     } else {
-        BuilderNotificationParams(BuilderNotificationGroup.FAIL, "Failed to build feature")
+        NotificationConfig(
+            "SmartActors.Notification.BuildFeature.Fail",
+            NotificationType.ERROR,
+            "Failed to build feature"
+        )
     }
 }
 
