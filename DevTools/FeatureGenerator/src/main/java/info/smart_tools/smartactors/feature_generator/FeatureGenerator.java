@@ -25,6 +25,6 @@ public class FeatureGenerator {
                 .build()
                 .parse(args);
 
-        starter.start(arguments);
+        starter.start("feature_gen", arguments);
     }
 }

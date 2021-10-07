@@ -14,9 +14,9 @@ repositories {
 
 dependencies {
     compile 'com.intellij:forms_rt:7.0.3'
-    implementation "info.smart_tools.smartactors:FeatureGenerator:0.1.1"
-    implementation "info.smart_tools.smartactors:Uploader:0.1.0"
-    implementation "info.smart_tools.smartactors:Builder:0.1.0"
+    implementation "info.smart_tools.smartactors:feature-generator:0.1.2"
+    implementation "info.smart_tools.smartactors:uploader:0.1.1"
+    implementation "info.smart_tools.smartactors:builder:0.1.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'

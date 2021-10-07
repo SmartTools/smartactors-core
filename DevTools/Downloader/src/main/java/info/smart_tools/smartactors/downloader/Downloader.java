@@ -39,6 +39,6 @@ public class Downloader {
                 .build()
                 .parse(args);
 
-        starter.start(arguments);
+        starter.start("downloader", arguments);
     }
 }

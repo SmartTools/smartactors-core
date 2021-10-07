@@ -21,6 +21,6 @@ public class Builder {
                 .build()
                 .parse(args);
 
-        starter.start(arguments);
+        starter.start("builder", arguments);
     }
 }

@@ -30,6 +30,6 @@ public class Uploader {
                 .build()
                 .parse(args);
 
-        starter.start(arguments);
+        starter.start("uploader", arguments);
     }
 }
