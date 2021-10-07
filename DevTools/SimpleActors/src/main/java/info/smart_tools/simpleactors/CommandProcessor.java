@@ -39,11 +39,11 @@ public class CommandProcessor {
      * @param mapper JSON mapper used for loading routing slips
      * @param actors actors that were registered during starter initialization
      */
-    public CommandProcessor(final ObjectMapper mapper, final Map<String, IActor> actors) {
+    public CommandProcessor(final String toolName, final ObjectMapper mapper, final Map<String, IActor> actors) {
         this.objectMapper = mapper;
         this.actors = actors;
 
-        URL url = this.getClass().getClassLoader().getResource("routing_slips");
+        URL url = this.getClass().getClassLoader().getResource(toolName + "_routing_slips");
         try (
                 FileSystem zipfs = initFileSystem(url.toURI());
                 Stream<Path> paths = Files.walk(Paths.get(url.toURI()))

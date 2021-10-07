@@ -49,9 +49,9 @@ public class SimpleActorsStarter {
      * @param arguments CLI arguments
      * @throws SimpleActorsStartException if failed to start SimpleActors instance
      */
-    public void start(final IArguments arguments) throws SimpleActorsStartException {
+    public void start(final String toolName, final IArguments arguments) throws SimpleActorsStartException {
         try {
-            CommandProcessor cp = new CommandProcessor(mapper, actors);
+            CommandProcessor cp = new CommandProcessor(toolName, mapper, actors);
             cp.process(arguments);
         } catch (ProcessExecutionException e) {
             throw new SimpleActorsStartException("Failed to start command processor", e);

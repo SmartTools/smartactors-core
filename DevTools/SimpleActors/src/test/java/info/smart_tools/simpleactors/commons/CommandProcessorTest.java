@@ -47,7 +47,7 @@ public class CommandProcessorTest {
         actors.put("stringGetterActor", new ExampleActor1());
         actors.put("upperCaseStringActor", new ExampleActor2());
 
-        CommandProcessor cp = new CommandProcessor(mapper, actors);
+        CommandProcessor cp = new CommandProcessor("test", mapper, actors);
         IArguments arguments = new IArguments() {
             @Override
             public String getCommand() {
@@ -71,7 +71,7 @@ public class CommandProcessorTest {
         actors.put("stringGetterActor", new ExampleActor1());
         actors.put("upperCaseStringActor", new ExampleActor2());
 
-        CommandProcessor cp = new CommandProcessor(mapper, actors);
+        CommandProcessor cp = new CommandProcessor("test", mapper, actors);
         IArguments arguments = new IArguments() {
             @Override
             public String getCommand() {
@@ -94,7 +94,7 @@ public class CommandProcessorTest {
         Map<String, IActor> actors = new HashMap<>();
         actors.put("upperCaseStringActor", new ExampleActor2());
 
-        CommandProcessor cp = new CommandProcessor(mapper, actors);
+        CommandProcessor cp = new CommandProcessor("test", mapper, actors);
         IArguments arguments = new IArguments() {
             @Override
             public String getCommand() {

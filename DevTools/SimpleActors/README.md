@@ -50,7 +50,7 @@ public class Application {
 ```
 
 ### Routing slips
-Routing slips are located in `src/resrouces/routing_slips` folder. They have the following structure:
+Routing slips are located in `src/resrouces/{tool_name}_routing_slips` folder. They have the following structure:
 
 ```json
 {
@@ -75,6 +75,8 @@ Routing slips are located in `src/resrouces/routing_slips` folder. They have the
   ]
 }
 ```
+
+`{tool_name}` variable is passed to `SimpleActorsStarter.start()` as an argument.
 
 #### Slip step structure
 * `actorName` - name of the actor. Note that the name used here is the same name that's passed as key value in `addActor()` method
