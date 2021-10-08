@@ -14,6 +14,7 @@ class BuildSmartActorsFeatureAction : AnAction() {
     }
 
     private fun getActionPath(e: AnActionEvent): String {
+        // TODO: NPE is thrown when using this action from toolbar
         val directory = e.dataContext.getData("psi.Element") as PsiDirectory
         return directory.virtualFile.path
     }

@@ -8,23 +8,6 @@ import info.smart_tools.smartactors.devtools.builder.tool.buildFeature
 import info.smart_tools.smartactors.devtools.common.notification.NotificationConfig
 import info.smart_tools.smartactors.devtools.common.notification.buildNotification
 
-fun build(featurePath: String): NotificationConfig {
-    val result = buildFeature(featurePath);
-    return if (result) {
-        NotificationConfig(
-            "SmartActors.Notification.BuildFeature.Success",
-            NotificationType.INFORMATION,
-            "Feature has been built"
-        )
-    } else {
-        NotificationConfig(
-            "SmartActors.Notification.BuildFeature.Fail",
-            NotificationType.ERROR,
-            "Failed to build feature"
-        )
-    }
-}
-
 class BuildFeatureTask(
     private val ideaProject: Project?,
     private val featurePath: String
@@ -34,5 +17,22 @@ class BuildFeatureTask(
 
         val notificationParams = build(featurePath)
         buildNotification(notificationParams).notify(ideaProject)
+    }
+
+    private fun build(featurePath: String): NotificationConfig {
+        val result = buildFeature(featurePath);
+        return if (result) {
+            NotificationConfig(
+                "SmartActors.Notification.BuildFeature.Success",
+                NotificationType.INFORMATION,
+                "Feature has been built"
+            )
+        } else {
+            NotificationConfig(
+                "SmartActors.Notification.BuildFeature.Fail",
+                NotificationType.ERROR,
+                "Failed to build feature"
+            )
+        }
     }
 }

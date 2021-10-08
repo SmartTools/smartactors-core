@@ -12,10 +12,10 @@ import javax.swing.JTextField
 
 class NewSmartActorsFeatureDialog(private val project: Project, private val actionPath: String) : DialogWrapper(true) {
     private val javaPackageRegexp = "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+[0-9a-z_]\$".toRegex()
-    private val featureNameRegexp = "^[a-zA-Z]+_[a-zA-Z]+\$".toRegex()
+    private val featureNameRegexp = "^[a-zA-Z_]+\$".toRegex()
 
     private val groupIdErrorMessage = "Group ID must comply to Java package naming convention"
-    private val featureNameErrorMessage = "Feature name may only contain characters and underscore"
+    private val featureNameErrorMessage = "Feature name may contain only characters and underscore"
 
     private lateinit var groupIdTextField: JTextField
     private lateinit var featureNameTextField: JTextField
