@@ -13,8 +13,12 @@
     <depends>com.intellij.modules.java-capable</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.UploadFeature.Success"/>
+        <notificationGroup displayType="BALLOON" id="SmartActors.Notification.UploadFeature.Fail"/>
+
         <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.CreateFeature.Success"/>
         <notificationGroup displayType="BALLOON" id="SmartActors.Notification.CreateFeature.Fail"/>
+
         <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.BuildFeature.Success"/>
         <notificationGroup displayType="BALLOON" id="SmartActors.Notification.BuildFeature.Fail"/>
     </extensions>

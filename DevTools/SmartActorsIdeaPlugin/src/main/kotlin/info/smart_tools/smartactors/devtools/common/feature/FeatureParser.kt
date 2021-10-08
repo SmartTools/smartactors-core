@@ -5,6 +5,15 @@ import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
 import com.intellij.json.psi.JsonValue
 
+fun Feature.parseFeatureName(): FeatureName {
+    val splitFeature = featureName.split(":")
+
+    return FeatureName(
+        groupId = splitFeature[0],
+        name = splitFeature[1],
+        version = splitFeature.getOrNull(2))
+}
+
 fun JsonFile.parseFeature(): Feature {
     val root = this.topLevelValue as JsonObject?
 

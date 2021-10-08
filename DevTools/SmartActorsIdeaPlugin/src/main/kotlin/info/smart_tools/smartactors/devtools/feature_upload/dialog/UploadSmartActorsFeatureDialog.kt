@@ -1,26 +1,21 @@
 package info.smart_tools.smartactors.devtools.feature_upload.dialog
 
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.ComponentValidator
 import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.openapi.ui.ValidationInfo
-import com.intellij.openapi.util.text.StringUtil
-import com.intellij.ui.DocumentAdapter
 import com.intellij.util.ui.FormBuilder
-import info.smart_tools.smartactors.devtools.common.dialog.ValidatorData
+import info.smart_tools.smartactors.devtools.common.dialog.TextFieldBuilder
 import info.smart_tools.smartactors.devtools.common.feature.Feature
 import info.smart_tools.smartactors.devtools.common.feature.Repository
-import info.smart_tools.smartactors.devtools.feature_upload.tool.upload
-import java.awt.Dimension
+import info.smart_tools.smartactors.devtools.common.feature.parseFeatureName
+import info.smart_tools.smartactors.devtools.common.model.Credentials
+import info.smart_tools.smartactors.devtools.feature_upload.task.UploadFeatureTask
 import javax.swing.JComponent
-import javax.swing.JPasswordField
 import javax.swing.JTextField
-import javax.swing.event.DocumentEvent
 
 class UploadSmartActorsFeatureDialog(
     private val project: Project,
     private val feature: Feature,
-    private val actionPath: String
+    private val featurePath: String
 ) : DialogWrapper(true) {
 
     private lateinit var usernameTextField: JTextField
@@ -38,10 +33,10 @@ class UploadSmartActorsFeatureDialog(
         title = "Upload Feature"
 
         val repository = feature.repository
-        usernameTextField = buildTextField()
-        passwordTextField = buildTextField(password = true)
-        repositoryIdTextField = buildTextField(placeholder = repository.id)
-        repositoryUrlTextField = buildTextField(placeholder = repository.url)
+        usernameTextField = TextFieldBuilder().newTextField().build()
+        passwordTextField = TextFieldBuilder().newTextField(password = true).build()
+        repositoryIdTextField = TextFieldBuilder().newTextField(initialValue = repository.id).build()
+        repositoryUrlTextField = TextFieldBuilder().newTextField(initialValue = repository.url).build()
 
         return FormBuilder.createFormBuilder()
             .addLabeledComponent("Username: ", usernameTextField)
@@ -54,47 +49,11 @@ class UploadSmartActorsFeatureDialog(
     }
 
     override fun doOKAction() {
-        upload(
-            featurePath = actionPath,
-            username = usernameTextField.text,
-            password = passwordTextField.text,
-            repository = Repository(repositoryIdTextField.text, repositoryUrlTextField.text)
-        )
+        val credentials = Credentials(usernameTextField.text, passwordTextField.text)
+        val repository = Repository(repositoryIdTextField.text, repositoryUrlTextField.text)
+
+        UploadFeatureTask(project, feature.parseFeatureName(), credentials, repository, featurePath).queue()
+
         super.doOKAction()
-    }
-
-    private fun buildTextField(
-        placeholder: String = "",
-        password: Boolean = false,
-        validatorData: ValidatorData? = null
-    ): JTextField {
-        val textField = if (!password) JTextField(placeholder) else JPasswordField(placeholder)
-        textField.preferredSize = Dimension(300, 30)
-
-        if (validatorData != null) {
-            val validator: () -> ValidationInfo? = {
-                val textInput = textField.text
-                if (StringUtil.isNotEmpty(textInput)) {
-                    if (!textInput.matches(validatorData.regex)) {
-                        ValidationInfo(validatorData.errorMessage, textField)
-                    } else {
-                        null
-                    }
-                } else {
-                    null
-                }
-            }
-            ComponentValidator(project).withValidator(validator).andStartOnFocusLost().installOn(textField)
-
-            textField.document.addDocumentListener(object : DocumentAdapter() {
-                override fun textChanged(e: DocumentEvent) {
-                    ComponentValidator.getInstance(textField).ifPresent {
-                        it.revalidate()
-                    }
-                }
-            })
-        }
-
-        return textField
     }
 }
