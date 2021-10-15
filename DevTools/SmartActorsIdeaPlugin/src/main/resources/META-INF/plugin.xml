@@ -13,6 +13,7 @@
     <depends>com.intellij.modules.java-capable</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!--    Notifications    -->
         <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.UploadFeature.Success"/>
         <notificationGroup displayType="BALLOON" id="SmartActors.Notification.UploadFeature.Fail"/>
 
@@ -21,6 +22,10 @@
 
         <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.BuildFeature.Success"/>
         <notificationGroup displayType="BALLOON" id="SmartActors.Notification.BuildFeature.Fail"/>
+
+        <!--    Tool Windows    -->
+        <toolWindow factoryClass="info.smart_tools.smartactors.devtools.ioc_viewer.tool_window.IocViewerFactory"
+                    id="IOC Viewer" anchor="right"/>
     </extensions>
 
     <actions>
