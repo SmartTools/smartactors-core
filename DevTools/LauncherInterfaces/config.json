@@ -1,4 +1,5 @@
 {
   "featureName":"info.smart_tools.smartactors:launcher-interfaces",
-  "afterFeatures":[]
+  "afterFeatures":[],
+  "dependencyRepositories": []
 }

@@ -11,6 +11,7 @@
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
   },
+  "dependencyRepositories": [],
   "plugins": [
     "info.smart_tools.smartactors:database-plugins:0.7.0"
   ]
