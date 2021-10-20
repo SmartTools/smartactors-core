@@ -39,6 +39,20 @@
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
 
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>ioc-viewer-interfaces</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/lib/tools.jar</systemPath>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>junit</groupId>
@@ -112,31 +126,31 @@
 
             <!-- Add needed dependencies to assembly -->
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-dependency-plugin</artifactId>-->
-                <!--<version>3.1.1</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>unpack</id>-->
-                        <!--<phase>prepare-package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>unpack</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<artifactItems>-->
-                                <!--<artifactItem>-->
-                                    <!--<groupId>dependency group id</groupId>-->
-                                    <!--<artifactId>dependency artifact id</artifactId>-->
-                                    <!--<version>dependency version</version>-->
-                                    <!--<outputDirectory>${basedir}/target/classes</outputDirectory>-->
-                                    <!--<excludes>META-INF/**</excludes>-->
-                                <!--</artifactItem>-->
-                            <!--</artifactItems>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>info.smart_tools.smartactors</groupId>
+                                    <artifactId>ioc-viewer-interfaces</artifactId>
+                                    <version>0.1.0</version>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <excludes>META-INF/**</excludes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
 
             <!-- Exclude generated pom.xml from assembly -->

@@ -17,4 +17,8 @@ public class VMBreakpoint {
     public void enable() {
         breakpoint.enable();
     }
+
+    public void disable() {
+        breakpoint.disable();
+    }
 }

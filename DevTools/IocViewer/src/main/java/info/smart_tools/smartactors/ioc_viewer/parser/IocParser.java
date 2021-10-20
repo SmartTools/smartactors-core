@@ -1,6 +1,5 @@
 package info.smart_tools.smartactors.ioc_viewer.parser;
 
-import info.smart_tools.smartactors.ioc_viewer.common.MapNode;
 import info.smart_tools.smartactors.ioc_viewer.vm.VMObject;
 import info.smart_tools.smartactors.ioc_viewer.vm.VMValue;
 
@@ -9,37 +8,25 @@ import java.util.stream.Collectors;
 
 public class IocParser {
 
-    public static MapNode<List<IocDependency>> parseDependencyData(final MapNode<VMValue> node) {
-        VMValue depValue = node.getValue();
-        VMObject depHashMap = depValue.toObject();
-        VMValue depTableValue = depHashMap.getFieldValue("table");
-        List<VMValue> depTable = depTableValue.castTo(List.class);
+    public static ParsedIocValue parseIocValue(final VMValue value) {
+        VMObject iocValueObject = value.toObject();
 
-        List<IocDependency> dependencies = depTable.stream()
-                .map(IocParser::mapDependency)
+        String iocKey = iocValueObject.getFieldValue("key").castTo(String.class);
+        List<VMValue> iocDependencies = iocValueObject.getFieldValue("dependencies").castTo(List.class);
+
+        List<ParsedIocDependency> parsedDependencies = iocDependencies.stream()
+                .map(IocParser::parseDependency)
                 .collect(Collectors.toList());
 
-        return new MapNode<>(node.getKey(), dependencies);
+        return new ParsedIocValue(iocKey, parsedDependencies);
     }
 
-    private static IocDependency mapDependency(final VMValue value) {
-        try {
-            VMObject object = value.toObject();
+    private static ParsedIocDependency parseDependency(final VMValue dependencyValue) {
+        VMObject dependencyObject = dependencyValue.toObject();
 
-            VMValue keyModule = object.getFieldValue("key");
-            VMValue valueStrategy = object.getFieldValue("val");
-            VMObject objectModule = keyModule.toObject();
+        String dependencyName = dependencyObject.getFieldValue("name").castTo(String.class);
+        String dependencyVersion = dependencyObject.getFieldValue("version").castTo(String.class);
 
-            VMValue valueName = objectModule.getFieldValue("name");
-            VMValue valueVersion = objectModule.getFieldValue("version");
-
-            return new IocDependency(
-                    valueName.castTo(String.class),
-                    valueVersion.castTo(String.class),
-                    valueStrategy.getValue()
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse " + value.getValue() + " as IOC dependency.", e);
-        }
+        return new ParsedIocDependency(dependencyName, dependencyVersion, null);
     }
 }
