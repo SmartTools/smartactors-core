@@ -5,18 +5,18 @@ import java.util.List;
 public class ParsedIocValue {
 
     private final String key;
-    private final List<ParsedIocDependency> dependencies;
+    private final List<ParsedIocStrategy> strategies;
 
-    public ParsedIocValue(final String key, final List<ParsedIocDependency> dependencies) {
+    public ParsedIocValue(final String key, final List<ParsedIocStrategy> strategies) {
         this.key = key;
-        this.dependencies = dependencies;
+        this.strategies = strategies;
     }
 
     public String getKey() {
         return key;
     }
 
-    public List<ParsedIocDependency> getDependencies() {
-        return dependencies;
+    public List<ParsedIocStrategy> getDependencies() {
+        return strategies;
     }
 }

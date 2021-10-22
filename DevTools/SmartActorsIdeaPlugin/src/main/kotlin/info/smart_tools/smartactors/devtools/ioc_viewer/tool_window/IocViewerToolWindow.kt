@@ -43,19 +43,21 @@ class IocViewerToolWindow(toolWindow: ToolWindow) {
 }
 
 fun parseIocValue(value: IocValue): MutableTreeNode {
-    val dependency = DefaultMutableTreeNode(value.key)
-    value.dependencies.forEach { dep ->
-        val name = DefaultMutableTreeNode("Name: " + dep.name)
-        val version = DefaultMutableTreeNode("Version: " + dep.version)
+    val iocValueNode = DefaultMutableTreeNode(value.key)
 
-        val dependencyNode = DefaultMutableTreeNode(dep.name)
-        dependencyNode.add(name)
-        dependencyNode.add(version)
+    value.strategies.forEach { strategy ->
+        val module = strategy.module
+        val strategyName = strategy.strategy
 
-        dependency.add(dependencyNode)
+        val moduleNode = DefaultMutableTreeNode(module.name)
+        moduleNode.add(DefaultMutableTreeNode("Name: " + module.name))
+        moduleNode.add(DefaultMutableTreeNode("Version: " + module.version))
+        moduleNode.add(DefaultMutableTreeNode("Strategy Type: $strategyName"))
+
+        iocValueNode.add(moduleNode)
     }
 
-    return dependency
+    return iocValueNode
 }
 
 class IocValueCellRenderer : NodeRenderer() {

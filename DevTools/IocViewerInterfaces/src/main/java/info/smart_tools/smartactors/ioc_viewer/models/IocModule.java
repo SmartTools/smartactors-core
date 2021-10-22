@@ -2,12 +2,12 @@ package info.smart_tools.smartactors.ioc_viewer.models;
 
 import java.util.Objects;
 
-public class IocDependency {
+public class IocModule {
 
     private final String name;
     private final String version;
 
-    public IocDependency(final String name, final String version) {
+    public IocModule(final String name, final String version) {
         this.name = name;
         this.version = version;
     }
@@ -24,8 +24,8 @@ public class IocDependency {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IocDependency that = (IocDependency) o;
-        return Objects.equals(name, that.name) && Objects.equals(version, that.version);
+        IocModule iocModule = (IocModule) o;
+        return Objects.equals(name, iocModule.name) && Objects.equals(version, iocModule.version);
     }
 
     @Override

@@ -12,12 +12,12 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.ex
 import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.istrategy_container.IStrategyContainer;
-import info.smart_tools.smartactors.ioc_viewer.models.IocDependency;
+import info.smart_tools.smartactors.ioc_viewer.models.IocModule;
+import info.smart_tools.smartactors.ioc_viewer.models.IocStrategy;
 import info.smart_tools.smartactors.ioc_viewer.models.IocValue;
 import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
 
 import java.lang.reflect.Field;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -101,23 +101,21 @@ public class IocViewerPlugin implements IPlugin {
         private IocValue parseDependency(final Map.Entry<Object, Map<IModule, IStrategy>> dependency) {
             String key = dependency.getKey().toString();
 
-            Set<IocDependency> modules = new HashSet<>();
-            dependency.getValue().forEach((module, strategy) -> {
-                IocDependency parsedModule = this.parseModule(module);
-                List<IocDependency> dependenciesToAdd = module.getDependencies()
-                        .stream()
-                        .map(this::parseModule)
-                        .collect(Collectors.toList());
-                dependenciesToAdd.add(parsedModule);
+            List<IocStrategy> strategies = new ArrayList<>();
 
-                modules.addAll(dependenciesToAdd);
+            dependency.getValue().forEach((module, strategy) -> {
+                IocModule parsedModule = this.parseModule(module);
+                // TODO: set an actual strategy, instead of class name
+                IocStrategy parsedStrategy = new IocStrategy(parsedModule, strategy.getClass().getSimpleName());
+
+                strategies.add(parsedStrategy);
             });
 
-            return new IocValue(key, new ArrayList<>(modules));
+            return new IocValue(key, strategies);
         }
 
-        private IocDependency parseModule(final IModule module) {
-            return new IocDependency(module.getName(), module.getVersion());
+        private IocModule parseModule(final IModule module) {
+            return new IocModule(module.getName(), module.getVersion());
         }
     }
 }

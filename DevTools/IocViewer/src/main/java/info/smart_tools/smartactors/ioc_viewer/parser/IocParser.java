@@ -12,21 +12,32 @@ public class IocParser {
         VMObject iocValueObject = value.toObject();
 
         String iocKey = iocValueObject.getFieldValue("key").castTo(String.class);
-        List<VMValue> iocDependencies = iocValueObject.getFieldValue("dependencies").castTo(List.class);
+        List<VMValue> iocStrategies = iocValueObject.getFieldValue("strategy").castTo(List.class);
 
-        List<ParsedIocDependency> parsedDependencies = iocDependencies.stream()
-                .map(IocParser::parseDependency)
+        List<ParsedIocStrategy> parsedStrategies = iocStrategies.stream()
+                .map(IocParser::parseStrategy)
                 .collect(Collectors.toList());
 
-        return new ParsedIocValue(iocKey, parsedDependencies);
+        return new ParsedIocValue(iocKey, parsedStrategies);
     }
 
-    private static ParsedIocDependency parseDependency(final VMValue dependencyValue) {
-        VMObject dependencyObject = dependencyValue.toObject();
+    private static ParsedIocStrategy parseStrategy(final VMValue strategyValue) {
+        VMObject strategyObject = strategyValue.toObject();
 
-        String dependencyName = dependencyObject.getFieldValue("name").castTo(String.class);
-        String dependencyVersion = dependencyObject.getFieldValue("version").castTo(String.class);
+        VMValue moduleValue = strategyObject.getFieldValue("module");
+        ParsedIocModule module = parseModule(moduleValue);
+        // TODO: temporary cast to string, should be an actual strategy
+        String strategyName = strategyObject.getFieldValue("strategy").castTo(String.class);
 
-        return new ParsedIocDependency(dependencyName, dependencyVersion, null);
+        return new ParsedIocStrategy(module, strategyName);
+    }
+
+    private static ParsedIocModule parseModule(final VMValue moduleValue) {
+        VMObject moduleObject = moduleValue.toObject();
+
+        String name = moduleObject.getFieldValue("name").castTo(String.class);
+        String version = moduleObject.getFieldValue("version").castTo(String.class);
+
+        return new ParsedIocModule(name, version);
     }
 }

@@ -45,14 +45,6 @@
             <version>0.1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>tools</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/lib/tools.jar</systemPath>
-        </dependency>
-
         <!-- Tests -->
         <dependency>
             <groupId>junit</groupId>

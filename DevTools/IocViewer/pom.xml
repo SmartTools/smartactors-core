@@ -28,6 +28,15 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <!-- TODO: parametrize path to tools.jar           -->
+            <systemPath>/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/lib/tools.jar</systemPath>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>junit</groupId>
