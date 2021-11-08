@@ -36,6 +36,20 @@ public class FeaturesAndRepositoriesStorageActor extends StatelessActor {
                     repositories.add(feature.getRepository());
                 }
             }
+            if (null != feature.getDependencyRepositories() && !feature.getDependencyRepositories().isEmpty() && null != repositories) {
+                feature.getDependencyRepositories().forEach(
+                        dr -> {
+                            if (
+                                    !repositories
+                                            .stream()
+                                            .map(Repository::getId)
+                                            .collect(Collectors.toList()).contains(dr.getId())
+                            ) {
+                                repositories.add(dr);
+                            }
+                        }
+                );
+            }
         }
     }
 }

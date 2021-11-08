@@ -42,7 +42,12 @@ public class ReadFeatureConfigActorTests {
         Repository repository = feature.getRepository();
         assertEquals("id", repository.getId());
         assertEquals("https://smartactors.com", repository.getUrl().toString());
-
+        List<Repository> depReps = feature.getDependencyRepositories();
+        assertEquals(2, depReps.size());
+        assertEquals("id1", depReps.get(0).getId());
+        assertEquals("https://smartactors1.com", depReps.get(0).getUrl().toString());
+        assertEquals("id2", depReps.get(1).getId());
+        assertEquals("https://smartactors2.com", depReps.get(1).getUrl().toString());
         actor.readFeatureConfig(file.toPath().toAbsolutePath());
     }
 
