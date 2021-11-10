@@ -55,7 +55,7 @@ public class ChainStorage implements IChainStorage {
     private IChainState resolveState(final Object chainId) throws ChainNotFoundException {
         IChainState state = chainStates.get(chainId);
 
-з        if (null == state) {
+        if (null == state) {
             throw new ChainNotFoundException(chainId);
         }
 
