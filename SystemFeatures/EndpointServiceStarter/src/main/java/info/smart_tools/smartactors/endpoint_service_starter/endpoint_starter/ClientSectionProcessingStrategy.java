@@ -30,18 +30,21 @@ import info.smart_tools.smartactors.task.interfaces.itask.ITask;
  */
 public class ClientSectionProcessingStrategy implements ISectionStrategy {
 
-    private IFieldName name, startChainNameFieldName, queueFieldName, stackDepthFieldName;
+    private final IFieldName name, startChainNameFieldName, queueFieldName, stackDepthFieldName;
+    private final String schema;
 
     /**
      * Constructor
      *
      * @throws ResolutionException if there are problems on resolving IFieldName
      */
-    public ClientSectionProcessingStrategy() throws ResolutionException {
+    public ClientSectionProcessingStrategy(final IFieldName sectionName, final String sectionSchema) throws ResolutionException {
         this.name = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "client");
         this.startChainNameFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "startChain");
         this.queueFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "queue");
         this.stackDepthFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "stackDepth");
+
+        this.schema = sectionSchema;
     }
 
     @Override
@@ -78,6 +81,6 @@ public class ClientSectionProcessingStrategy implements ISectionStrategy {
 
     @Override
     public String getSectionSchema() {
-        return null;
+        return schema;
     }
 }

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$schema": "http://json-schema.org/draft-04/schema",
   "type": "array",
   "items": {
     "type": "object",
@@ -19,6 +19,7 @@
         "description": "Name of the strategy for creating object in IOC.",
         "smartActors:type": "iocStrategy"
       }
-    }
+    },
+    "required": ["name", "kind", "dependency"]
   }
 }

@@ -8,9 +8,17 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IPlugin;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -54,7 +62,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 
             bootstrap.add(endpointsSectionItem);
 
-             /* "client" section */
+            /* "client" section */
             IBootstrapItem<String> clientSectionItem = new BootstrapItem("config_section:client");
 
             clientSectionItem
@@ -64,12 +72,24 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 //                    .after("IFieldNamePlugin")
 //                    .before("starter")
                     .process(() -> {
-                        try {
-                            IConfigurationManager configurationManager =
-                                    IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
+                        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("client_section_schema.json")) {
+                            if (stream == null) {
+                                throw new ActionExecutionException("Schema for section \"client\" not found in resources.");
+                            }
 
-                            configurationManager.addSectionStrategy(new ClientSectionProcessingStrategy());
-                        } catch (ResolutionException | InvalidArgumentException e) {
+                            IConfigurationManager configurationManager = IOC.resolve(
+                                    Keys.getKeyByName(IConfigurationManager.class.getCanonicalName())
+                            );
+                            IFieldName clientSectionName = IOC.resolve(
+                                    Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
+                                    "client"
+                            );
+                            String schema = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+                                    .lines()
+                                    .collect(Collectors.joining("\n"));
+
+                            configurationManager.addSectionStrategy(new ClientSectionProcessingStrategy(clientSectionName, schema));
+                        } catch (ResolutionException | InvalidArgumentException | IOException e) {
                             throw new ActionExecutionException(e);
                         }
                     });
