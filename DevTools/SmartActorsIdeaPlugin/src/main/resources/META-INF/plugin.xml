@@ -13,6 +13,8 @@
     <depends>com.intellij.modules.java-capable</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="info.smart_tools.smartactors.devtools.completion.SmartActorsPluginStartup"/>
+
         <!--    Notifications    -->
         <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.UploadFeature.Success"/>
         <notificationGroup displayType="BALLOON" id="SmartActors.Notification.UploadFeature.Fail"/>
@@ -26,6 +28,16 @@
         <!--    Tool Windows    -->
         <toolWindow factoryClass="info.smart_tools.smartactors.devtools.ioc_viewer.tool_window.IocViewerFactory"
                     id="IOC Viewer" anchor="right"/>
+
+        <!--    Code Completion    -->
+<!--        <completion.contributor language="JSON"-->
+<!--                                implementationClass="info.smart_tools.smartactors.devtools.completion.SampleCompletionContributor"/>-->
+
+        <localInspection language="JSON"
+                         displayName="Missing property"
+                         groupName="SmartActors"
+                         enabledByDefault="true"
+                         implementationClass="info.smart_tools.smartactors.devtools.completion.SmartActorsConfigInspectionTool"/>
     </extensions>
 
     <actions>

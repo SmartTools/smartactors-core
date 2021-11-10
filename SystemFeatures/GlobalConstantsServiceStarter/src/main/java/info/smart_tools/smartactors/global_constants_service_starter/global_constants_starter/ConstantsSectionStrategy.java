@@ -95,4 +95,9 @@ public class ConstantsSectionStrategy implements ISectionStrategy {
     public IFieldName getSectionName() {
         return sectionFieldName;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

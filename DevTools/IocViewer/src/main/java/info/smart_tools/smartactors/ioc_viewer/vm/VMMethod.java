@@ -5,6 +5,7 @@ import com.sun.jdi.ObjectReference;
 import com.sun.jdi.Value;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VMMethod {
 
@@ -24,9 +25,11 @@ public class VMMethod {
         return method;
     }
 
-    public VMValue invoke(final VMThread thread, final List<? extends Value> arguments, int options) {
+    public VMValue invoke(final VMThread thread, final List<VMValue> arguments, int options) {
         try {
-            Value value = objectReference.invokeMethod(thread.getThreadReference(), method, arguments, options);
+            List<? extends Value> args = arguments.stream().map(VMValue::getValue).collect(Collectors.toList());
+
+            Value value = objectReference.invokeMethod(thread.getThreadReference(), method, args, options);
 
             return new VMValue(value);
         } catch (Exception e) {

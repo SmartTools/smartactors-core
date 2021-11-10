@@ -32,4 +32,6 @@ public interface ISectionStrategy {
      * @return name of the configuration section
      */
     IFieldName getSectionName();
+
+    String getSectionSchema();
 }

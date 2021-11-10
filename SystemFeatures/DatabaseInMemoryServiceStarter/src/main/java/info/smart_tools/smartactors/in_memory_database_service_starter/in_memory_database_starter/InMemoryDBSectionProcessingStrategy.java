@@ -88,4 +88,9 @@ public class InMemoryDBSectionProcessingStrategy implements ISectionStrategy {
     public IFieldName getSectionName() {
         return name;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

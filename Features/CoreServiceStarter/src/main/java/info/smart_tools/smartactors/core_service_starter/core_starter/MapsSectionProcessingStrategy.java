@@ -103,4 +103,9 @@ public class MapsSectionProcessingStrategy implements ISectionStrategy {
     public IFieldName getSectionName() {
         return name;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

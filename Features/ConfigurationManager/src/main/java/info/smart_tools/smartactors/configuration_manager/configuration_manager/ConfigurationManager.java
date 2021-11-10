@@ -18,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * Implementation of {@link IConfigurationManager}
  */
+// TODO: registered sections do not depend on module structure, may result in errors during config processing
 public class ConfigurationManager implements IConfigurationManager {
     private final List<ISectionStrategy> sectionStrategies;
     private final Set<IFieldName> registeredSections;

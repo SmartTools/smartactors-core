@@ -195,4 +195,9 @@ public class OnFeatureLoadingSectionProcessingStrategy implements ISectionStrate
     public IFieldName getSectionName() {
         return this.sectionNameFieldName;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

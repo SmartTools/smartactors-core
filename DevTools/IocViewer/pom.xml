@@ -110,7 +110,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>info.smart_tools.smartactors.launcher.Application</mainClass>
+                            <mainClass>info.smart_tools.smartactors.ioc_viewer.IocViewer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

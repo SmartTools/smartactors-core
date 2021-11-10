@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.ioc_viewer.models;
+package info.smart_tools.smartactors.ioc_viewer.models.ioc;
 
 import java.util.List;
 

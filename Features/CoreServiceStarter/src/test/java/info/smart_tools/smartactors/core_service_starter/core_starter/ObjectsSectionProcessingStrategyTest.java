@@ -4,6 +4,7 @@ import info.smart_tools.smartactors.base.interfaces.istrategy.IStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.exceptions.ConfigurationProcessingException;
 import info.smart_tools.smartactors.helpers.IOCInitializer.IOCInitializer;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
@@ -74,7 +75,9 @@ public class ObjectsSectionProcessingStrategyTest extends IOCInitializer {
     @Test
     public void Should_createObjects()
             throws Exception {
-        new ObjectsSectionProcessingStrategy().onLoadConfig(configMock);
+        IFieldName sectionName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+
+        new ObjectsSectionProcessingStrategy(sectionName, "schema").onLoadConfig(configMock);
 
         for (int i = 0; i < creatorMocks.length; i++) {
             verify(creatorMocks[i]).create(same(listenerMock), same(objectConfigMocks[i]), any());
@@ -84,24 +87,30 @@ public class ObjectsSectionProcessingStrategyTest extends IOCInitializer {
     @Test
     public void Should_storeSectionName()
             throws Exception {
+        IFieldName sectionName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+
         assertEquals(
                 IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects"),
-                new ObjectsSectionProcessingStrategy().getSectionName()
+                new ObjectsSectionProcessingStrategy(sectionName, "schema").getSectionName()
         );
     }
 
     @Test(expected = ConfigurationProcessingException.class)
     public void Should_wrapCreationExceptions()
             throws Exception {
+        IFieldName sectionName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+
         doThrow(ReceiverObjectCreatorException.class).when(creatorMocks[0]).create(any(), any(), any());
 
-        new ObjectsSectionProcessingStrategy().onLoadConfig(configMock);
+        new ObjectsSectionProcessingStrategy(sectionName, "schema").onLoadConfig(configMock);
     }
 
     @Test
     public void Should_disposeObjects()
             throws Exception {
-        ObjectsSectionProcessingStrategy strategy = new ObjectsSectionProcessingStrategy();
+        IFieldName sectionName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+
+        ObjectsSectionProcessingStrategy strategy = new ObjectsSectionProcessingStrategy(sectionName, "schema");
         strategy.onLoadConfig(configMock);
 
         for (int i = 0; i < creatorMocks.length; i++) {
@@ -114,7 +123,9 @@ public class ObjectsSectionProcessingStrategyTest extends IOCInitializer {
     @Test
     public void Should_throwExceptions()
             throws Exception {
-        ObjectsSectionProcessingStrategy strategy = new ObjectsSectionProcessingStrategy();
+        IFieldName sectionName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+
+        ObjectsSectionProcessingStrategy strategy = new ObjectsSectionProcessingStrategy(sectionName, "schema");
         strategy.onLoadConfig(configMock);
 
         for (int i = 1; i < creatorMocks.length; i++) {

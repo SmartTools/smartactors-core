@@ -18,8 +18,14 @@ import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,20 +56,33 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                     .before("starter")
                     .after("object_creation_strategies:done")
                     .process(() -> {
-                        try {
+                        try(InputStream stream = getClass().getClassLoader().getResourceAsStream("objects_section_schema.json")) {
+                            if (stream == null) {
+                                throw new ActionExecutionException("Schema for section \"objects\" not found in resources.");
+                            }
+
+                            IFieldName sectionNameFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+                            String schema = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+                                    .lines()
+                                    .collect(Collectors.joining("\n"));
+
                             IConfigurationManager configurationManager =
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
-                            configurationManager.addSectionStrategy(new ObjectsSectionProcessingStrategy());
-                        } catch (ResolutionException | InvalidArgumentException e) {
+                            configurationManager.addSectionStrategy(new ObjectsSectionProcessingStrategy(
+                                    sectionNameFieldName,
+                                    schema
+                            ));
+                        } catch (ResolutionException | InvalidArgumentException | IOException e) {
                             throw new ActionExecutionException(e);
                         }
                     })
                     .revertProcess(() -> {
                         try {
+                            IFieldName sectionNameFieldName = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+
                             IConfigurationManager configurationManager =
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
-                            ISectionStrategy sectionStrategy = new ObjectsSectionProcessingStrategy();
-                            configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
+                            configurationManager.removeSectionStrategy(sectionNameFieldName);
                         } catch (InvalidArgumentException e) {
                             System.out.println("[WARNING] Deregistration of \"ObjectsSectionProcessingStrategy\" has failed while reverting \"config_section:objects\" plugin.");
                         } catch (ResolutionException e) {

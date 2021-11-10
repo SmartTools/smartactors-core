@@ -140,4 +140,9 @@ public class EndpointsSectionProcessingStrategy implements ISectionStrategy {
     public IFieldName getSectionName() {
         return name;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

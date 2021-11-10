@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Name of the object to be used in message maps. Must be unique."
+      },
+      "kind": {
+        "type": "string",
+        "description": "Strategy used for resolving object from IOC.",
+        "smartActors:type": "iocEnum",
+        "smartActors:iocPrefix": "object kind filter sequence#"
+      },
+      "dependency": {
+        "type": "string",
+        "description": "Name of the strategy for creating object in IOC.",
+        "smartActors:type": "iocStrategy"
+      }
+    }
+  }
+}

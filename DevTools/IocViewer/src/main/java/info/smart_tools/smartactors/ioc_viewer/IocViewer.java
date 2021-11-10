@@ -1,7 +1,9 @@
 package info.smart_tools.smartactors.ioc_viewer;
 
-import info.smart_tools.smartactors.ioc_viewer.parser.IocParser;
-import info.smart_tools.smartactors.ioc_viewer.parser.ParsedIocValue;
+import info.smart_tools.smartactors.ioc_viewer.parser.config.ConfigParser;
+import info.smart_tools.smartactors.ioc_viewer.parser.config.ParsedConfigData;
+import info.smart_tools.smartactors.ioc_viewer.parser.ioc.IocParser;
+import info.smart_tools.smartactors.ioc_viewer.parser.ioc.ParsedIocValue;
 import info.smart_tools.smartactors.ioc_viewer.vm.VM;
 import info.smart_tools.smartactors.ioc_viewer.vm.VMBreakpoint;
 import info.smart_tools.smartactors.ioc_viewer.vm.VMFrame;
@@ -38,6 +40,14 @@ public class IocViewer {
 
         List<ParsedIocValue> ioc = iocValues.stream()
                 .map(IocParser::parseIocValue)
+                .collect(Collectors.toList());
+
+        VMMethod parseConfigMethod = frameObject.getMethod("getConfigSections");
+        List<VMValue> configValues = parseConfigMethod.invoke(viewerThread, new ArrayList<>(), 0).castTo(List.class);
+
+
+        List<ParsedConfigData> configs = configValues.stream()
+                .map(ConfigParser::parseConfigData)
                 .collect(Collectors.toList());
 
         System.out.println(ioc.size());

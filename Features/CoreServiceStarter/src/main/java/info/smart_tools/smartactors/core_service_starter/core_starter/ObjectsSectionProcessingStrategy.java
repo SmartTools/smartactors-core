@@ -47,14 +47,18 @@ import java.util.ListIterator;
 public class ObjectsSectionProcessingStrategy implements ISectionStrategy {
     private final IFieldName name;
 
+    private final String sectionSchema;
+
     /**
      * The constructor.
      *
      * @throws ResolutionException if fails to resolve any dependencies
      */
-    public ObjectsSectionProcessingStrategy()
+    public ObjectsSectionProcessingStrategy(final IFieldName sectionName, final String sectionSchema)
             throws ResolutionException {
-        this.name = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+//        this.name = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "objects");
+        this.name = sectionName;
+        this.sectionSchema = sectionSchema;
     }
 
     @Override
@@ -105,5 +109,10 @@ public class ObjectsSectionProcessingStrategy implements ISectionStrategy {
     @Override
     public IFieldName getSectionName() {
         return name;
+    }
+
+    @Override
+    public String getSectionSchema() {
+        return sectionSchema;
     }
 }

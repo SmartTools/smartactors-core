@@ -117,4 +117,9 @@ public class OnShutdownRequestConfigurationSectionStrategy implements ISectionSt
     public IFieldName getSectionName() {
         return sectionNameFieldName;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

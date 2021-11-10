@@ -64,4 +64,8 @@ public class VM {
     private void setConnector(AttachingConnector connector) {
         this.connector = connector;
     }
+
+    public void disconnect() {
+        virtualMachine.dispose();
+    }
 }

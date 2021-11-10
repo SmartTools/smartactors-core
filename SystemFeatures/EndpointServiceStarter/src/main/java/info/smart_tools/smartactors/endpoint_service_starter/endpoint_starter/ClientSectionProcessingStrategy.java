@@ -75,4 +75,9 @@ public class ClientSectionProcessingStrategy implements ISectionStrategy {
     public IFieldName getSectionName() {
         return name;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

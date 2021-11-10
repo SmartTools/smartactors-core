@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.ioc_viewer.parser;
+package info.smart_tools.smartactors.ioc_viewer.parser.ioc;
 
 public class ParsedIocModule {
 

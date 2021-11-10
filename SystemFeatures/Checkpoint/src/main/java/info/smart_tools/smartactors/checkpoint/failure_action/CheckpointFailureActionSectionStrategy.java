@@ -80,4 +80,9 @@ public class CheckpointFailureActionSectionStrategy implements ISectionStrategy 
     public IFieldName getSectionName() {
         return sectionName;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

@@ -88,4 +88,9 @@ public class DatabaseSectionStrategy implements ISectionStrategy {
     public IFieldName getSectionName() {
         return sectionFN;
     }
+
+    @Override
+    public String getSectionSchema() {
+        return null;
+    }
 }

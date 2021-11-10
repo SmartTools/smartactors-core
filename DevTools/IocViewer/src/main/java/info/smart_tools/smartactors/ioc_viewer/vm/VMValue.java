@@ -28,6 +28,9 @@ public class VMValue {
     }
 
     public <T> T castTo(Class<?> clazz) {
+        if (value == null) {
+            return null;
+        }
         return Formatter.format(this, clazz);
     }
 }
