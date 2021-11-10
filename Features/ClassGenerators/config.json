@@ -7,6 +7,7 @@
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
   },
+  "dependencyRepositories": [],
   "plugins": [
     "info.smart_tools.smartactors:class-generator-plugins:0.7.0"
   ]

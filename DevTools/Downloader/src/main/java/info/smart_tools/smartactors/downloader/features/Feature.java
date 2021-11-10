@@ -8,6 +8,7 @@ public class Feature {
     private String featureName;
     private List<String> afterFeatures;
     private Repository repository;
+    private List<Repository> dependencyRepositories;
     private List<String> plugins;
 
     public Feature() {
@@ -47,5 +48,13 @@ public class Feature {
 
     public void setPlugins(List<String> plugins) {
         this.plugins = plugins;
+    }
+
+    public List<Repository> getDependencyRepositories() {
+        return dependencyRepositories;
+    }
+
+    public void setDependencyRepositories(List<Repository> dependencyRepositories) {
+        this.dependencyRepositories = dependencyRepositories;
     }
 }

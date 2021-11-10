@@ -9,5 +9,6 @@
   "repository":{
     "id": "smartactors_core_and_core_features_dev",
     "url": "https://repository.smart-tools.info/artifactory"
-  }
+  },
+  "dependencyRepositories": []
 }

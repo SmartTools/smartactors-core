@@ -7,6 +7,16 @@
     "id": "id",
     "url": "https://smartactors.com"
   },
+  "dependencyRepositories":[
+    {
+      "id": "id1",
+      "url": "https://smartactors1.com"
+    },
+    {
+      "id": "id2",
+      "url": "https://smartactors2.com"
+    }
+  ],
   "plugins": [
     "info.smart_tools.smartactors:TestFeature1Plugin:0.7.0"
   ]
