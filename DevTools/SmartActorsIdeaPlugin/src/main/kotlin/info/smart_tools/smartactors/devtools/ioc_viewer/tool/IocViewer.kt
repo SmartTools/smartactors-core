@@ -1,9 +1,9 @@
 package info.smart_tools.smartactors.devtools.ioc_viewer.tool
 
 import info.smart_tools.smartactors.devtools.common.State
-import info.smart_tools.smartactors.ioc_viewer.parser.ioc.ParsedIocModule
-import info.smart_tools.smartactors.ioc_viewer.parser.ioc.ParsedIocStrategy
-import info.smart_tools.smartactors.ioc_viewer.parser.ioc.ParsedIocValue
+import info.smart_tools.smartactors.remote_debug_viewer.parser.ioc.ParsedIocModule
+import info.smart_tools.smartactors.remote_debug_viewer.parser.ioc.ParsedIocStrategy
+import info.smart_tools.smartactors.remote_debug_viewer.parser.ioc.ParsedIocValue
 
 class IocViewer {
 

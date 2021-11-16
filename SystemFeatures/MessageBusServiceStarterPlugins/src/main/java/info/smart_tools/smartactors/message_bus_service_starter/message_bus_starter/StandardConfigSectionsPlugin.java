@@ -8,9 +8,17 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap_item.IBootstrapItem;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IPlugin;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -41,12 +49,24 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 //                    .after("IFieldNamePlugin")
 //                    .before("starter")
                     .process(() -> {
-                        try {
+                        try(InputStream stream = getClass().getClassLoader().getResourceAsStream("message_bus_section_schema.json")) {
+                            if (stream == null) {
+                                throw new ActionExecutionException("Schema for section \"messageBus\" not found in resources.");
+                            }
+
+                            IFieldName sectionNameFieldName = IOC.resolve(
+                                    Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
+                                    "messageBus"
+                            );
+                            String schema = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+                                    .lines()
+                                    .collect(Collectors.joining("\n"));
+
                             IConfigurationManager configurationManager =
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
 
-                            configurationManager.addSectionStrategy(new MessageBusSectionProcessingStrategy());
-                        } catch (ResolutionException | InvalidArgumentException e) {
+                            configurationManager.addSectionStrategy(new MessageBusSectionProcessingStrategy(sectionNameFieldName, schema));
+                        } catch (ResolutionException | InvalidArgumentException | IOException e) {
                             throw new ActionExecutionException(e);
                         }
                     });

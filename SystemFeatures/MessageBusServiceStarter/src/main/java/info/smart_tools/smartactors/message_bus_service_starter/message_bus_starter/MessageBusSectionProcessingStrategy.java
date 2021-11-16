@@ -39,17 +39,18 @@ public class MessageBusSectionProcessingStrategy implements ISectionStrategy {
     private final IFieldName startChainNameFieldName;
     private final IFieldName stackDepthFieldName;
 
+    private final String schema;
+
     /**
      * The constructor.
      *
      * @throws ResolutionException if fails to resolve any dependencies
+     * @param sectionName section name in config
+     * @param schema JSON schema describing section
      */
-    public MessageBusSectionProcessingStrategy()
+    public MessageBusSectionProcessingStrategy(IFieldName sectionName, String schema)
             throws ResolutionException {
-        this.name = IOC.resolve(
-                IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
-                "messageBus"
-        );
+        this.name = sectionName;
         this.startChainNameFieldName = IOC.resolve(
                 IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
                 "routingChain"
@@ -58,6 +59,8 @@ public class MessageBusSectionProcessingStrategy implements ISectionStrategy {
                 IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
                 "stackDepth"
         );
+
+        this.schema = schema;
     }
 
     @Override
@@ -99,6 +102,6 @@ public class MessageBusSectionProcessingStrategy implements ISectionStrategy {
 
     @Override
     public String getSectionSchema() {
-        return null;
+        return schema;
     }
 }

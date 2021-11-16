@@ -1,11 +1,13 @@
 package info.smart_tools.smartactors.devtools.common
 
 import com.intellij.openapi.project.Project
-import info.smart_tools.smartactors.ioc_viewer.parser.config.ParsedConfigData
-import info.smart_tools.smartactors.ioc_viewer.parser.ioc.ParsedIocValue
+import info.smart_tools.smartactors.remote_debug_viewer.parser.config.ParsedConfigData
+import info.smart_tools.smartactors.remote_debug_viewer.parser.ioc.ParsedIocValue
+import info.smart_tools.smartactors.remote_debug_viewer.parser.chain.ParsedChainData
 
 object State {
 
+    private var chainData: List<ParsedChainData> = listOf()
     private var ioc: List<ParsedIocValue> = listOf()
     private var configSections: List<ParsedConfigData> = listOf()
 
@@ -17,6 +19,11 @@ object State {
 
     fun getConfigSections(): List<ParsedConfigData> {
         return configSections
+    }
+
+
+    fun getChainData(): List<ParsedChainData> {
+        return chainData
     }
 
     fun getProject(): Project {
@@ -33,5 +40,9 @@ object State {
 
     fun setProject(project: Project) {
         this.project = project
+    }
+
+    fun setChainData(parsedChainData: List<ParsedChainData>) {
+        this.chainData = parsedChainData
     }
 }

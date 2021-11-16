@@ -46,7 +46,7 @@ class SmartActorsConfigInspectionTool : LocalInspectionTool() {
             configuration.addConfiguration(
                 UserDefinedJsonSchemaConfiguration(
                     "SmartActors common schema",
-                    JsonSchemaVersion.SCHEMA_4,
+                    JsonSchemaVersion.SCHEMA_7,
                     schemaFile.path,
                     true, listOf(item)
                 )

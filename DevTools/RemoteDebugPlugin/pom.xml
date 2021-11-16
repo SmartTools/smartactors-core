@@ -3,14 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>message-bus-service-starter-plugins</artifactId>
+
+    <artifactId>remote-debug-plugin</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
     <version>0.7.0</version>
     <!--<licenses>-->
-    <!--<license>-->
-    <!--<name></name>-->
-    <!--<url></url>-->
-    <!--</license>-->
+        <!--<license>-->
+            <!--<name></name>-->
+            <!--<url></url>-->
+        <!--</license>-->
     <!--</licenses>-->
 
     <properties>
@@ -34,22 +35,39 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>message-bus-service-starter</artifactId>
+            <artifactId>ioc</artifactId>
             <version>[0.7.0, 1.0.0)</version>
         </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>configuration-manager-interfaces</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>message-processing</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>remote-debug-interfaces</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
         <!-- Tests -->
-        <!--        <dependency>-->
-        <!--            <groupId>junit</groupId>-->
-        <!--            <artifactId>junit</artifactId>-->
-        <!--            <version>4.12</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.mockito</groupId>-->
-        <!--            <artifactId>mockito-all</artifactId>-->
-        <!--            <version>1.10.19</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -63,13 +81,6 @@
                 <directory>${basedir}</directory>
                 <includes>
                     <include>config.json</include>
-                </includes>
-            </resource>
-
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>*</include>
                 </includes>
             </resource>
         </resources>
@@ -110,39 +121,38 @@
                 <version>3.0.0-M3</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
-                    <parallel>methods</parallel>
-                    <threadCount>8</threadCount>
+                    <!--<parallel>methods</parallel>-->                     <!--<threadCount>8</threadCount>-->
                 </configuration>
             </plugin>
 
 
             <!-- Add needed dependencies to assembly -->
 
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-dependency-plugin</artifactId>-->
-            <!--<version>3.1.1</version>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>unpack</id>-->
-            <!--<phase>prepare-package</phase>-->
-            <!--<goals>-->
-            <!--<goal>unpack</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-            <!--<artifactItems>-->
-            <!--<artifactItem>-->
-            <!--<groupId>dependency group id</groupId>-->
-            <!--<artifactId>dependency artifact id</artifactId>-->
-            <!--<version>dependency version</version>-->
-            <!--<outputDirectory>${basedir}/target/classes</outputDirectory>-->
-            <!--<excludes>META-INF/**</excludes>-->
-            <!--</artifactItem>-->
-            <!--</artifactItems>-->
-            <!--</configuration>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>info.smart_tools.smartactors</groupId>
+                                    <artifactId>remote-debug-interfaces</artifactId>
+                                    <version>0.1.0</version>
+                                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                                    <excludes>META-INF/**</excludes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
 
             <!-- Exclude generated pom.xml from assembly -->
@@ -198,7 +208,6 @@
                             <archive>
                                 <addMavenDescriptor>false</addMavenDescriptor>
                             </archive>
-                            <source>8</source>
                         </configuration>
                     </execution>
                 </executions>

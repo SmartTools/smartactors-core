@@ -17,7 +17,7 @@ dependencies {
     implementation("info.smart_tools.smartactors:feature-generator:0.1.2")
     implementation("info.smart_tools.smartactors:uploader:0.1.1")
     implementation("info.smart_tools.smartactors:builder:0.1.1")
-    implementation("info.smart_tools.smartactors:ioc-viewer:0.1.0")
+    implementation("info.smart_tools.smartactors:remote-debug-viewer:0.1.0")
 
     implementation("com.intellij:forms_rt:7.0.3")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")

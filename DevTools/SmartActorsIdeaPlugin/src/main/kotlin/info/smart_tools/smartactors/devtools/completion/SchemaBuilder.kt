@@ -13,12 +13,13 @@ class SchemaBuilder {
     private val nodeParsers = mapOf<String, NodeParser>(
         Pair("iocEnum", ::parseIocEnum),
         Pair("iocStrategy", ::parseIocStrategy),
+        Pair("chainName", ::parseChainNames)
     )
 
     fun build(configs: List<ConfigData>): String {
         val jsonFactory = JsonNodeFactory.instance
         val rootObject = jsonFactory.objectNode().apply {
-            put("\$schema", "https://json-schema.org/draft/2019-09/schema")
+            put("\$schema", "http://json-schema.org/draft-07/schema")
             put("title", "SmartActors config schema")
             put("type", "object")
         }
@@ -33,7 +34,7 @@ class SchemaBuilder {
 
                 val parser = nodeParsers[nodeType.asText()]
                 if (parser != null) {
-                    parser(nodeToModify, iocData, jsonFactory)
+                    parser(nodeToModify, jsonFactory)
                 }
             }
 

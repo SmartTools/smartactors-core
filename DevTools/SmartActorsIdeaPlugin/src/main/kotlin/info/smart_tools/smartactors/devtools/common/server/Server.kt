@@ -1,6 +1,6 @@
 package info.smart_tools.smartactors.devtools.common.server
 
-import info.smart_tools.smartactors.ioc_viewer.vm.*
+import info.smart_tools.smartactors.remote_debug_viewer.vm.*
 import kotlin.reflect.KClass
 
 class Server(
@@ -14,10 +14,10 @@ class Server(
     private lateinit var frame: VMFrame
 
     init {
-        viewerThread = vm.getThread("ioc-viewer-thread")
+        viewerThread = vm.getThread("remote-debug-thread")
 
         viewerThread.suspend()
-        breakpoint = vm.createBreakpoint(viewerThread, "IocViewerThread")
+        breakpoint = vm.createBreakpoint(viewerThread, "RemoteDebugThread")
         viewerThread.resume()
     }
 
@@ -26,7 +26,7 @@ class Server(
         while (!viewerThread.isRunning) {
 //            println("Waiting for thread \"" + viewerThread.threadName + "\" to be runnable")
         }
-        frame = viewerThread.getFrameByName("IocViewerThread")
+        frame = viewerThread.getFrameByName("RemoteDebugThread")
     }
 
     fun getFrameObject(): VMObject {

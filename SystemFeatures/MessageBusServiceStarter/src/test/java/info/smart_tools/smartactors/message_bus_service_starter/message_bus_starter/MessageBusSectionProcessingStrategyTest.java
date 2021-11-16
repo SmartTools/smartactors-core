@@ -7,6 +7,7 @@ import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.Ap
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.iobject.ds_object.DSObject;
 import info.smart_tools.smartactors.iobject.field_name.FieldName;
+import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.ioc.exception.RegistrationException;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
@@ -39,6 +40,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
+// TODO: refactor with IOCInitializer
 public class MessageBusSectionProcessingStrategyTest {
 
     private IQueue<ITask> taskQueue;
@@ -135,6 +137,7 @@ public class MessageBusSectionProcessingStrategyTest {
                 )
         );
 
+        IFieldName sectionName = new FieldName("messageBus");
         when(chainStorage.resolve(mapId)).thenReturn(receiverChain);
         DSObject config = new DSObject("\n" +
                 "     {\n" +
@@ -145,7 +148,7 @@ public class MessageBusSectionProcessingStrategyTest {
                 "             }\n" +
                 "         \n" +
                 "     }");
-        MessageBusSectionProcessingStrategy strategy = new MessageBusSectionProcessingStrategy();
+        MessageBusSectionProcessingStrategy strategy = new MessageBusSectionProcessingStrategy(sectionName, "schema");
         strategy.onLoadConfig(config);
 
         IMessageProcessingSequence sequence = mock(IMessageProcessingSequence.class);
