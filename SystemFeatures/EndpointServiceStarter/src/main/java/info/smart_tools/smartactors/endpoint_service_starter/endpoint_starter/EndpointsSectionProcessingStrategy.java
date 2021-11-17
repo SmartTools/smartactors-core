@@ -87,14 +87,18 @@ public class EndpointsSectionProcessingStrategy implements ISectionStrategy {
     private final IFieldName endpointNameFieldName;
     private final IFieldName queueFieldName;
 
+    private final String schema;
+
     /**
      * The constructor.
      *
      * @throws ResolutionException if fails to resolve any dependencies
+     * @param sectionName
+     * @param schema
      */
-    public EndpointsSectionProcessingStrategy()
+    public EndpointsSectionProcessingStrategy(final IFieldName sectionName, final String schema)
             throws ResolutionException {
-        this.name = IOC.resolve(IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "endpoints");
+        this.name = sectionName;
         this.typeFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "type");
         this.portFieldName = IOC.resolve(IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "port");
         this.startChainNameFieldName =
@@ -107,6 +111,8 @@ public class EndpointsSectionProcessingStrategy implements ISectionStrategy {
                 IOC.resolve(IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "endpointName");
         this.queueFieldName =
                 IOC.resolve(IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), "queue");
+
+        this.schema = schema;
     }
 
     @Override
@@ -143,6 +149,6 @@ public class EndpointsSectionProcessingStrategy implements ISectionStrategy {
 
     @Override
     public String getSectionSchema() {
-        return null;
+        return schema;
     }
 }

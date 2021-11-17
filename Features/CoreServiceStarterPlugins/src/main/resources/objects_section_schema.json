@@ -12,7 +12,7 @@
         "type": "string",
         "description": "Strategy used for resolving object from IOC.",
         "smartActors:type": "iocEnum",
-        "smartActors:iocPrefix": "object kind filter sequence#"
+        "smartActors:iocPattern": "^object kind filter sequence#(.+)$"
       },
       "dependency": {
         "type": "string",

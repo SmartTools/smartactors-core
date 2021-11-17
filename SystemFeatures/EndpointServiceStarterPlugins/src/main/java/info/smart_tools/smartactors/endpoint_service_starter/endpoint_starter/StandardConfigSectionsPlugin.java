@@ -50,12 +50,24 @@ public class StandardConfigSectionsPlugin implements IPlugin {
 //                    .after("IFieldNamePlugin")
 //                    .before("starter")
                     .process(() -> {
-                        try {
+                        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("endpoints_section_schema.json")) {
+                            if (stream == null) {
+                                throw new ActionExecutionException("Schema for section \"endpoints\" not found in resources.");
+                            }
+
                             IConfigurationManager configurationManager =
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
 
-                            configurationManager.addSectionStrategy(new EndpointsSectionProcessingStrategy());
-                        } catch (ResolutionException | InvalidArgumentException e) {
+                            IFieldName sectionName = IOC.resolve(
+                                    Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
+                                    "endpoints"
+                            );
+                            String schema = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+                                    .lines()
+                                    .collect(Collectors.joining("\n"));
+
+                            configurationManager.addSectionStrategy(new EndpointsSectionProcessingStrategy(sectionName, schema));
+                        } catch (ResolutionException | InvalidArgumentException | IOException e) {
                             throw new ActionExecutionException(e);
                         }
                     });

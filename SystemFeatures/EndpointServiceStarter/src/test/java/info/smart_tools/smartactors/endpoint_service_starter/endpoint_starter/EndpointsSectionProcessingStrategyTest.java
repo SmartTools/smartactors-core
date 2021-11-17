@@ -3,11 +3,8 @@ package info.smart_tools.smartactors.endpoint_service_starter.endpoint_starter;
 import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 //import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 //import info.smart_tools.smartactors.base.iup_counter.exception.UpCounterCallbackExecutionException;
-import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
-import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
 import info.smart_tools.smartactors.configuration_manager.interfaces.iconfiguration_manager.exceptions.ConfigurationProcessingException;
-import info.smart_tools.smartactors.endpoint.interfaces.ienvironment_handler.IEnvironmentHandler;
 import info.smart_tools.smartactors.helpers.IOCInitializer.IOCInitializer;
 //import info.smart_tools.smartactors.http_endpoint.environment_handler.EnvironmentHandler;
 //import info.smart_tools.smartactors.http_endpoint.http_endpoint.HttpEndpoint;
@@ -22,8 +19,6 @@ import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.message_processing_interfaces.ichain_storage.IChainStorage;
 import info.smart_tools.smartactors.message_processing_interfaces.message_processing.IReceiverChain;
-import info.smart_tools.smartactors.scope.iscope_provider_container.exception.ScopeProviderException;
-import info.smart_tools.smartactors.scope.scope_provider.ScopeProvider;
 import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import org.junit.Ignore;
@@ -131,7 +126,7 @@ public class EndpointsSectionProcessingStrategyTest extends IOCInitializer {
                 "             }\n" +
                 "         ]\n" +
                 "     }");
-        EndpointsSectionProcessingStrategy strategy = new EndpointsSectionProcessingStrategy();
+        EndpointsSectionProcessingStrategy strategy = new EndpointsSectionProcessingStrategy(new FieldName("endpoints"), "schema");
         strategy.onLoadConfig(config);
         strategy.getSectionName();
         strategy.onRevertConfig(config);

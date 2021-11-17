@@ -3,17 +3,15 @@ package info.smart_tools.smartactors.devtools.completion
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
-import info.smart_tools.smartactors.devtools.common.State
 
 class SchemaBuilder {
 
-    private val iocData = State.getIocData()
     private val mapper = ObjectMapper()
 
     private val nodeParsers = mapOf<String, NodeParser>(
         Pair("iocEnum", ::parseIocEnum),
         Pair("iocStrategy", ::parseIocStrategy),
-        Pair("chainName", ::parseChainNames)
+        Pair("chainName", ::parseChainNames),
     )
 
     fun build(configs: List<ConfigData>): String {
