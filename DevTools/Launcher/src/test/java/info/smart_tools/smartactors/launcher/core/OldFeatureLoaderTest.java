@@ -10,13 +10,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class FeatureLoaderTest {
+public class OldFeatureLoaderTest {
 
     private IFeatureLoader featureLoader;
 
     @Before
     public void init() {
-        this.featureLoader = new FeatureLoader();
+        this.featureLoader = new OldFeatureLoader();
     }
 
     @Test
