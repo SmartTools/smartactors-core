@@ -8,8 +8,8 @@ import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.Boot
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.RegistrationException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.message_processing.object_creation_strategies.*;
@@ -101,8 +101,8 @@ public class ObjectCreatorsPlugin extends BootstrapPlugin {
     @After({
             "basic_receiver_strategies",            // for HandlerRouterReceiverCreator and PerReceiverActorSynchronizationReceiverCreator
             "invoker_receiver_creation_strategy",   // required for UserObjectMethodInvokerReceiverCreator
-            "iobject",
-            "IFieldNamePlugin",
+//            "iobject",
+//            "IFieldNamePlugin",
             "wrapper_creator_receiver_decorator",
     })
     @Before({

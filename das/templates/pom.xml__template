@@ -80,7 +80,7 @@
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <parallel>methods</parallel>
-                    <threadCount>4</threadCount>
+                    <threadCount>8</threadCount>
                 </configuration>
             </plugin>
 

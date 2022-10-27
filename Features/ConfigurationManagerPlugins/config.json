@@ -1,0 +1,13 @@
+{
+  "featureName":"info.smart_tools.smartactors:configuration-manager-plugins:0.7.0",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "dependencyRepositories": []
+}

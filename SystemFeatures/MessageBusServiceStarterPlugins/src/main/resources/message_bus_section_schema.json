@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Section for configuring message bus. Message bus will be configured for the current scope.",
+  "type": "object",
+  "properties": {
+    "routingChain": {
+      "type": "string",
+      "description": "Name of the chain to go when message is passed into the message bus.",
+      "smartActors:type": "chainName"
+    },
+    "stackDepth": {
+      "type": "number",
+      "description": "Depth of chain stack.",
+      "minimum": 1
+    }
+  },
+  "required": ["routingChain", "stackDepth"]
+}

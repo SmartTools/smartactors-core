@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "description": "Section for configuring HTTP client. Only one 'client' section can be used in runtime.",
+  "properties": {
+    "stackDepth": {
+      "type": "number",
+      "description": "Depth of chain stack.",
+      "minimum": 1
+    }
+  },
+  "required": ["stackDepth"]
+}

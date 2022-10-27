@@ -1,0 +1,21 @@
+{
+  "repositories": [
+    {
+      "repositoryId": "repository1",
+      "type": "default",
+      "url": "info.smart_tools.smartactors"
+    }
+  ],
+  "features": [
+    {
+      "name": "feature1",
+      "group": "info.smart_tools.smartactors",
+      "version": "0.0.0"
+    },
+    {
+      "name": "feature2",
+      "group": "info.smart_tools.smartactors",
+      "version": "0.0.1"
+    }
+  ]
+}
