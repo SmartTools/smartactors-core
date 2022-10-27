@@ -5,6 +5,14 @@
     <groupId>info.smart_tools.smartactors</groupId>
     <artifactId>smartactors-core</artifactId>
     <version>0.6.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <packaging>pom</packaging>
 
@@ -21,6 +29,11 @@
         <module>Servers/Server2</module>
         <module>SystemActors</module>
         <module>das</module>
+        <module>Features</module>
+        <module>SystemFeatures</module>
+        <module>SchedulerAutoStartup</module>
+        <module>EndpointServiceStarter</module>
+        <module>EndpointPlugins</module>
     </modules>
 
     <build>
@@ -40,5 +53,15 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>6</source>
+                    <target>6</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

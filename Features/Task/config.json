@@ -1,0 +1,17 @@
+{
+  "featureName":"info.smart_tools.smartactors:task:0.7.0",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:scope-provider:0.7.0",
+    "info.smart_tools.smartactors:module-manager:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+    "info.smart_tools.smartactors:task-non-blocking-queue-plugins:0.7.0",
+    "info.smart_tools.smartactors:task-plugins:0.7.0"
+  ]
+}

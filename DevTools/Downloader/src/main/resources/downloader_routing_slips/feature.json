@@ -1,0 +1,78 @@
+{
+  "name": "download feature",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "moveArgsToMessage",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "readFeatureConfigActor",
+      "methodName": "readFeatureConfig",
+      "methodParameters": {
+        "argumentPaths": ["source file"],
+        "responsePath": "feature config data"
+      }
+    },
+    {
+      "actorName": "featuresAndRepositoriesStoragesActor",
+      "methodName": "configure",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "featuresAndRepositoriesStoragesActor",
+      "methodName": "updateStorages",
+      "methodParameters": {
+        "argumentPaths": ["feature config data", "features", "repositories"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "downloadFeatureActor",
+      "methodName": "downloadFeature",
+      "methodParameters": {
+        "argumentPaths": ["feature config data", "repositories", "#constant#string:jar", "target feature directory"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "deleteFile",
+      "methodParameters": {
+        "argumentPaths": ["check and delete if exists file path"],
+        "responsePath": "file was deleted"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "createDirectory",
+      "methodParameters": {
+        "argumentPaths": ["target feature directory path"],
+        "responsePath": "directory was created"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "copyFile",
+      "methodParameters": {
+        "argumentPaths": ["downloaded file path", "check and delete if exists file path"],
+        "responsePath": "check and delete if exists file path"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "deleteFile",
+      "methodParameters": {
+        "argumentPaths": ["downloaded file path"],
+        "responsePath": "file was deleted"
+      }
+    }
+  ]
+}
+

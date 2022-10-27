@@ -1,0 +1,21 @@
+{
+  "name": "build feature",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "moveArgsToMessage",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "BuilderActor",
+      "methodName": "buildFeature",
+      "methodParameters": {
+        "argumentPaths": ["path to feature"],
+        "responsePath": null
+      }
+    }
+  ]
+}

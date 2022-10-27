@@ -1,0 +1,78 @@
+{
+  "name": "download features",
+  "steps": [
+    {
+      "actorName": "insertRoutingSlipActor",
+      "methodName": "insertRoutingSlip",
+      "methodParameters": {
+        "argumentPaths": ["#slip", "#constant#string:configs", "#slip_storage"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "downloadFeaturesActor",
+      "methodName": "configure",
+      "methodParameters": {
+        "argumentPaths": ["features"],
+        "responsePath": "download features while condition"
+      }
+    },
+    {
+      "actorName": "downloadFeaturesActor",
+      "methodName": "nextFeature",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "feature config data"
+      }
+    },
+    {
+      "actorName": "downloadFeatureActor",
+      "methodName": "downloadFeature",
+      "methodParameters": {
+        "argumentPaths": ["feature config data", "repositories", "#constant#string:jar", "target feature directory"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "deleteFile",
+      "methodParameters": {
+        "argumentPaths": ["check and delete if exists file path"],
+        "responsePath": "file was deleted"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "createDirectory",
+      "methodParameters": {
+        "argumentPaths": ["target feature directory path"],
+        "responsePath": "directory was created"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "copyFile",
+      "methodParameters": {
+        "argumentPaths": ["downloaded file path", "check and delete if exists file path"],
+        "responsePath": "check and delete if exists file path"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "deleteFile",
+      "methodParameters": {
+        "argumentPaths": ["downloaded file path"],
+        "responsePath": "file was deleted"
+      }
+    },
+    {
+      "actorName": "whileActor",
+      "methodName": "whileReturnByShift",
+      "methodParameters": {
+        "argumentPaths": ["download features while condition", "#constant#int:-7", "#slip"],
+        "responsePath": null
+      }
+    }
+  ]
+}
+

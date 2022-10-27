@@ -1,6 +1,6 @@
 package info.smart_tools.smartactors.ioc.iioccontainer;
 
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

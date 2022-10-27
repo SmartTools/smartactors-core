@@ -7,8 +7,8 @@ import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.Ap
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_plugin.BootstrapPlugin;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.RegistrationException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.message_processing.actor_receiver.ActorReceiver;
@@ -194,7 +194,7 @@ public class ObjectCreationStrategiesPlugin extends BootstrapPlugin {
     @Item("invoker_receiver_creation_strategy")
     @After({
         "wrapper_resolution_strategies_for_invokers",
-        "IFieldNamePlugin",
+//        "IFieldNamePlugin",
         "InitializeReceiverGenerator",
     })
     @Before({

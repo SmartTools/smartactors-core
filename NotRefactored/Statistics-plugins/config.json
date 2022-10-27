@@ -1,0 +1,41 @@
+{
+  "featureName": "info.smart_tools.smartactors:statistics-plugins",
+  "afterFeatures": ["info.smart_tools.smartactors:statistics"],
+  "objects": [
+    {
+      "name": "default_statistics_manager",
+      "kind": "actor",
+      "dependency": "statistics manager actor"
+    },
+    {
+      "kind": "stateless_actor",
+      "dependency": "ResponseSenderActor",
+      "name": "respond"
+    }
+  ],
+
+  "maps": [
+    {
+      "id": "execute_statistics_manager_command",
+      "externalAccess": true,
+      "exceptional": [],
+      "steps": [
+        {
+          "target": "default_statistics_manager",
+          "handler": "executeCommand",
+          "wrapper": {
+            "in_getCommand": "message/command",
+            "in_getCommandArguments": "message/args",
+
+            "out_setCommandResult": "response/result",
+            "out_setException": "response/exception"
+          }
+        },
+        {
+          "target": "respond",
+          "handler": "sendResponse"
+        }
+      ]
+    }
+  ]
+}

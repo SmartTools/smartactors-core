@@ -7,7 +7,7 @@ import info.smart_tools.smartactors.database_postgresql.postgres_connection.wrap
 import info.smart_tools.smartactors.database_postgresql_create_collection_if_not_exists.create_collection_actor.exception.CreateCollectionActorException;
 import info.smart_tools.smartactors.database_postgresql_create_collection_if_not_exists.create_collection_actor.wrapper.CreateCollectionWrapper;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;

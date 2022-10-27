@@ -1,0 +1,17 @@
+{
+  "featureName":"info.smart_tools.smartactors:ioc:0.7.0",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:ioc-interfaces:0.7.0",
+    "info.smart_tools.smartactors:feature-loading-system:0.7.0",
+    "info.smart_tools.smartactors:base-strategies:0.7.0",
+    "info.smart_tools.smartactors:scope-provider:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+    "info.smart_tools.smartactors:ioc-plugins:0.7.0"
+  ]
+}

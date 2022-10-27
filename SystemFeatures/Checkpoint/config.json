@@ -1,0 +1,18 @@
+{
+  "featureName":"info.smart_tools.smartactors:checkpoint:0.7.0",
+  "afterFeatures": [
+    "info.smart_tools.smartactors:core-service-starter:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager-interfaces:0.7.0",
+    "info.smart_tools.smartactors:scheduler-interface:0.7.0",
+    "info.smart_tools.smartactors:checkpoint-interfaces:0.7.0",
+    "info.smart_tools.smartactors:message-bus:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+    "info.smart_tools.smartactors:checkpoint-plugins:0.7.0"
+  ]
+}

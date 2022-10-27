@@ -1,0 +1,59 @@
+<idea-plugin>
+    <id>info.smart_tools.smartactors.SmartActorsIdeaPlugin</id>
+    <name>SmartActors Development Tools</name>
+    <!-- TODO: add an actual email    -->
+    <vendor email="help@smarttools.info" url="https://smarttools.info">SmartTools</vendor>
+
+    <description><![CDATA[
+        Development Tools intended for use with SmartActors framework
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.java-capable</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="info.smart_tools.smartactors.devtools.completion.SmartActorsPluginStartup"/>
+
+        <!--    Notifications    -->
+        <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.UploadFeature.Success"/>
+        <notificationGroup displayType="BALLOON" id="SmartActors.Notification.UploadFeature.Fail"/>
+
+        <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.CreateFeature.Success"/>
+        <notificationGroup displayType="BALLOON" id="SmartActors.Notification.CreateFeature.Fail"/>
+
+        <notificationGroup displayType="TOOL_WINDOW" id="SmartActors.Notification.BuildFeature.Success"/>
+        <notificationGroup displayType="BALLOON" id="SmartActors.Notification.BuildFeature.Fail"/>
+
+        <!--    Tool Windows    -->
+        <toolWindow factoryClass="info.smart_tools.smartactors.devtools.ioc_viewer.tool_window.IocViewerFactory"
+                    id="IOC Viewer" anchor="right"/>
+
+        <!--    Code Completion    -->
+<!--        <completion.contributor language="JSON"-->
+<!--                                implementationClass="info.smart_tools.smartactors.devtools.completion.SampleCompletionContributor"/>-->
+
+        <localInspection language="JSON"
+                         displayName="Missing property"
+                         groupName="SmartActors"
+                         enabledByDefault="true"
+                         implementationClass="info.smart_tools.smartactors.devtools.completion.SmartActorsConfigInspectionTool"/>
+    </extensions>
+
+    <actions>
+        <action id="SmartActors.NewFeature" class="info.smart_tools.smartactors.devtools.feature_gen.action.CreateSmartActorsFeatureAction"
+                text="SmartActors Feature">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+
+        <group id="SmartActors.Utilities" text="SmartActors" popup="true">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="WeighingNewGroup"/>
+            <action id="SmartActors.Utilities.Build" class="info.smart_tools.smartactors.devtools.builder.action.BuildSmartActorsFeatureAction"
+                    text="Build Feature">
+            </action>
+            <action id="SmartActors.Utilities.Upload" class="info.smart_tools.smartactors.devtools.feature_upload.action.UploadSmartActorsFeatureAction"
+                    text="Upload Feature">
+            </action>
+        </group>
+    </actions>
+</idea-plugin>

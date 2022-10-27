@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>task</artifactId>
+    <groupId>info.smart_tools.smartactors</groupId>
+    <version>0.7.0</version>
+    <!--<licenses>-->
+    <!--<license>-->
+    <!--<name></name>-->
+    <!--<url></url>-->
+    <!--</license>-->
+    <!--</licenses>-->
+
+    <properties>
+        <!-- Main repository -->
+        <!--<repositoryUrl>https://repository.smart-tools.info/artifactory</repositoryUrl>-->
+        <!--<repositoryId>smartactors_core_and_core_features</repositoryId>-->
+
+        <!-- Dev repository -->
+        <repositoryUrl>https://repository.smart-tools.info/artifactory</repositoryUrl>
+        <repositoryId>smartactors_core_and_core_features_dev</repositoryId>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>task-interfaces</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>scope-provider</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>info.smart_tools.smartactors</groupId>
+            <artifactId>module-manager</artifactId>
+            <version>[0.7.0, 1.0.0)</version>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+
+        <resources>
+
+            <!-- Add config.json to assembly -->
+
+            <resource>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>config.json</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+
+
+            <!-- Disable Maven Resource Plugin -->
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>default-testResources</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- Compile plugin -->
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+
+            <!-- Test plugin -->
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <parallel>methods</parallel>
+                    <threadCount>8</threadCount>
+                </configuration>
+            </plugin>
+
+
+            <!-- Add needed dependencies to assembly -->
+
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-dependency-plugin</artifactId>-->
+            <!--<version>3.1.1</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>unpack</id>-->
+            <!--<phase>prepare-package</phase>-->
+            <!--<goals>-->
+            <!--<goal>unpack</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<artifactItems>-->
+            <!--<artifactItem>-->
+            <!--<groupId>dependency group id</groupId>-->
+            <!--<artifactId>dependency artifact id</artifactId>-->
+            <!--<version>dependency version</version>-->
+            <!--<outputDirectory>${basedir}/target/classes</outputDirectory>-->
+            <!--<excludes>META-INF/**</excludes>-->
+            <!--</artifactItem>-->
+            <!--</artifactItems>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
+
+
+            <!-- Exclude generated pom.xml from assembly -->
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+
+
+            <!-- Make source jar -->
+
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                        <configuration>
+                            <attach>false</attach>
+                            <archive>
+                                <addMavenDescriptor>false</addMavenDescriptor>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- Make javadoc jar -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <attach>false</attach>
+                            <archive>
+                                <addMavenDescriptor>false</addMavenDescriptor>
+                            </archive>
+                            <source>8</source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- Make zipped feature -->
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <attach>false</attach>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <finalName>${project.artifactId}-${project.version}</finalName>
+                            <descriptors>
+                                <descriptor>bin.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Deploy assembled files -->
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Deploy config.json file -->
+                    <execution>
+                        <id>deploy-config</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>false</generatePom>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <groupId>${project.groupId}</groupId>
+                            <version>${project.version}</version>
+                            <generatePom>true</generatePom>
+                            <repositoryId>${repositoryId}</repositoryId>
+                            <url>${repositoryUrl}/${repositoryId}</url>
+                            <file>target/classes/config.json</file>
+                            <description>This archive contains ...</description>
+                        </configuration>
+                    </execution>
+                    <!-- Deploy jar file -->
+                    <execution>
+                        <id>deploy-jar</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>false</generatePom>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <groupId>${project.groupId}</groupId>
+                            <version>${project.version}</version>
+                            <repositoryId>${repositoryId}</repositoryId>
+                            <url>${repositoryUrl}/${repositoryId}</url>
+                            <file>target/${project.artifactId}-${project.version}.jar</file>
+                            <description>This archive contains ...</description>
+                        </configuration>
+                    </execution>
+                    <!-- Deploy zip file -->
+                    <execution>
+                        <id>deploy-zip</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>false</generatePom>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <groupId>${project.groupId}</groupId>
+                            <version>${project.version}</version>
+                            <generatePom>false</generatePom>
+                            <repositoryId>${repositoryId}</repositoryId>
+                            <url>${repositoryUrl}/${repositoryId}</url>
+                            <file>target/${project.artifactId}-${project.version}.zip</file>
+                            <description>This archive contains ...</description>
+                        </configuration>
+                    </execution>
+                    <!-- Deploy source jar -->
+                    <execution>
+                        <id>deploy-sources</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>false</generatePom>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <groupId>${project.groupId}</groupId>
+                            <version>${project.version}</version>
+                            <generatePom>false</generatePom>
+                            <repositoryId>${repositoryId}</repositoryId>
+                            <url>${repositoryUrl}/${repositoryId}</url>
+                            <classifier>sources</classifier>
+                            <file>target/${project.artifactId}-${project.version}-sources.jar</file>
+                            <description>This archive contains ...</description>
+                        </configuration>
+                    </execution>
+                    <!-- Deploy javadoc jar -->
+                    <execution>
+                        <id>deploy-javadoc</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>false</generatePom>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <groupId>${project.groupId}</groupId>
+                            <version>${project.version}</version>
+                            <generatePom>false</generatePom>
+                            <repositoryId>${repositoryId}</repositoryId>
+                            <url>${repositoryUrl}/${repositoryId}</url>
+                            <classifier>javadoc</classifier>
+                            <file>target/${project.artifactId}-${project.version}-javadoc.jar</file>
+                            <description>This archive contains ...</description>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

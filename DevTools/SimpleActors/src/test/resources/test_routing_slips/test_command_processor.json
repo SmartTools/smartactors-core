@@ -1,0 +1,21 @@
+{
+  "name": "test command processor",
+  "steps": [
+    {
+      "actorName": "stringGetterActor",
+      "methodName": "returnString",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "acquired string"
+      }
+    },
+    {
+      "actorName": "upperCaseStringActor",
+      "methodName": "upperCaseString",
+      "methodParameters": {
+        "argumentPaths": ["acquired string"],
+        "responsePath": "upper case string"
+      }
+    }
+  ]
+}
