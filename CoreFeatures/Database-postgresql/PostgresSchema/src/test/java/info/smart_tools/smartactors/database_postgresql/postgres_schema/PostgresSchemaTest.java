@@ -80,6 +80,16 @@ public class PostgresSchemaTest {
     }
 
     @Test
+    public void testSearchWithTypeCast() throws InvalidArgumentException, QueryBuildException {
+        IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": { \"value\": \"val\", \"type\": \"decimal\" } } } }");
+        PostgresSchema.search(statement, collection, criteria);
+        assertEquals("SELECT document FROM test_collection " +
+                "WHERE (((((document#>>'{a}')::decimal)=(?::decimal)))) " +
+                "LIMIT(?)OFFSET(?)", body.toString());
+        verify(statement, times(2)).pushParameterSetter(any());
+    }
+
+    @Test
     public void testSearchWithPaging() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
                 " \"page\": { \"size\": 10, \"number\": 3 } }");
@@ -98,6 +108,18 @@ public class PostgresSchemaTest {
         assertEquals("SELECT document FROM test_collection " +
                 "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
                 "ORDER BY(document#>'{a}')DESC " +
+                "LIMIT(?)OFFSET(?)", body.toString());
+        verify(statement, times(2)).pushParameterSetter(any());
+    }
+
+    @Test
+    public void testSearchWithSortingAndTypeCast() throws InvalidArgumentException, QueryBuildException {
+        IObject criteria = new DSObject("{ \"filter\": { \"a\": { \"$eq\": \"b\" } }," +
+                " \"sort\": [ { \"a\": { \"direction\": \"desc\", \"type\": \"decimal\" }} ] }");
+        PostgresSchema.search(statement, collection, criteria);
+        assertEquals("SELECT document FROM test_collection " +
+                "WHERE ((((document#>'{a}')=to_json(?)::jsonb))) " +
+                "ORDER BY((document#>>'{a}')::decimal)DESC " +
                 "LIMIT(?)OFFSET(?)", body.toString());
         verify(statement, times(2)).pushParameterSetter(any());
     }
@@ -216,6 +238,69 @@ public class PostgresSchemaTest {
                         "test_collection_fulltext_russian_update_trigger();\n" +
                         "CREATE INDEX test_collection_tags_tags_index ON test_collection USING GIN ((document#>'{tags}'));\n",
                 body.toString());
+    }
+
+    @Test
+    public void testAddSingleIndexWithTypeCast() throws Exception {
+        IObject options = new DSObject("{ " +
+                    "\"ordered\": { " +
+                        "\"fieldName\": \"a\", " +
+                        "\"type\": \"decimal\"" +
+                    "}" +
+                "}");
+        PostgresSchema.addIndexes(statement, collection, options);
+        assertEquals("CREATE INDEX test_collection_a_ordered_index ON test_collection USING BTREE (((document#>>'{a}')::decimal));\n",
+                body.toString());
+    }
+
+    @Test
+    public void testAddMultipleIndexesWithTypeCast() throws Exception {
+        IObject options = new DSObject("{ " +
+                    "\"ordered\": [" +
+                        "{ " +
+                            "\"fieldName\": \"a\", " +
+                            "\"type\": \"decimal\"" +
+                        "}, " +
+                        "{ " +
+                            "\"fieldName\": \"b\", " +
+                            "\"type\": \"int\"" +
+                        "}" +
+                    "]" +
+                "}");
+        PostgresSchema.addIndexes(statement, collection, options);
+        assertEquals(
+                "CREATE INDEX test_collection_a_ordered_index ON test_collection USING BTREE (((document#>>'{a}')::decimal));\n" +
+                        "CREATE INDEX test_collection_b_ordered_index ON test_collection USING BTREE (((document#>>'{b}')::int));\n",
+                body.toString());
+    }
+
+    @Test
+    public void testAddMultipleIndexesWithMixedTypeCast() throws Exception {
+        IObject options = new DSObject("{ " +
+                    "\"ordered\": [" +
+                        "{ " +
+                            "\"fieldName\": \"a\", " +
+                            "\"type\": \"decimal\"" +
+                        "}, " +
+                        "\"b\"" +
+                    "]" +
+                "}");
+        PostgresSchema.addIndexes(statement, collection, options);
+        assertEquals(
+                "CREATE INDEX test_collection_a_ordered_index ON test_collection USING BTREE (((document#>>'{a}')::decimal));\n" +
+                        "CREATE INDEX test_collection_b_ordered_index ON test_collection USING BTREE ((document#>'{b}'));\n",
+                body.toString());
+    }
+
+    @Test(expected = QueryBuildException.class)
+    public void testAddIndexWithTypeCastIncorrectly() throws Exception {
+        IObject options = new DSObject("{" +
+                    "\"ordered\": {" +
+                        "\"badField\": \"bad data\"" +
+                    "}" +
+                "}"
+        );
+        PostgresSchema.addIndexes(statement, collection, options);
     }
 
     @Test
@@ -339,5 +424,64 @@ public class PostgresSchemaTest {
     public void testSearchWithFulltextComplex() throws InvalidArgumentException, QueryBuildException {
         IObject criteria = new DSObject("{ \"filter\": { \"$fulltext\": { \"query\":{ \"$or\": [ \"term1\", \"term2\" ] }, \"language\":\"russian\" } } }");
         PostgresSchema.search(statement, collection, criteria);
+    }
+
+    @Test
+    public void testPercentileSearchSingleQuantileNoCriteria() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0.5]}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, null);
+        assertEquals(
+                "SELECT percentile_disc(array[0.5]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection",
+                body.toString()
+        );
+    }
+
+    @Test
+    public void testPercentileSearchMultipleQuantilesNoCriteria() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0, 0.5, 1]}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, null);
+        assertEquals(
+                "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection",
+                body.toString()
+        );
+    }
+
+    @Test
+    public void testPercentileSearchMultipleQuantilesWithCriteriaNoPaging() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0, 0.5, 1]}");
+        IObject criteria = new DSObject("{\"filter\":{\"$and\":[{\"a\":{\"$eq\":\"value\"}}," +
+                "{\"receivedAt\":{\"$date-from\":\"2019-09-01T00:00:00.000Z\",\"$date-to\":\"2019-09-30T23:59:59.999Z\"}}]}}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, criteria);
+        assertEquals(
+                "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection " +
+                        "WHERE ((((((document#>'{a}')=to_json(?)::jsonb)))" +
+                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamptz)" +
+                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamptz)))))",
+                body.toString()
+        );
+        verify(statement, times(3)).pushParameterSetter(any());
+    }
+
+    @Test
+    public void testPercentileSearchMultipleQuantilesWithCriteriaWithPaging() throws QueryBuildException, InvalidArgumentException {
+        IObject percentileCriteria = new DSObject("{\"field\": \"a\", \"values\": [0, 0.5, 1]}");
+        IObject criteria = new DSObject("{\"filter\":{\"$and\":[{\"a\":{\"$eq\":\"value\"}}," +
+                "{\"receivedAt\":{\"$date-from\":\"2019-09-01T00:00:00.000Z\",\"$date-to\":\"2019-09-30T23:59:59.999Z\"}}]}," +
+                "\"page\":{\"size\":100,\"number\":1}}");
+        PostgresSchema.percentileSearch(statement, collection, percentileCriteria, criteria);
+        assertEquals(
+                "SELECT percentile_disc(array[0,0.5,1]) WITHIN GROUP (ORDER BY (document#>>'{a}')::numeric) FROM test_collection " +
+                        "WHERE ((((((document#>'{a}')=to_json(?)::jsonb)))" +
+                        "AND(((parse_timestamp_immutable(document#>'{receivedAt}')>=(?)::timestamptz)" +
+                        "AND(parse_timestamp_immutable(document#>'{receivedAt}')<=(?)::timestamptz))))) " +
+                        "LIMIT(?)OFFSET(?)",
+                body.toString()
+        );
+        verify(statement, times(4)).pushParameterSetter(any());
+    }
+
+    @Test(expected = QueryBuildException.class)
+    public void testPercentileSearchMissingQuantiles() throws QueryBuildException {
+        PostgresSchema.percentileSearch(statement, collection, null, null);
     }
 }

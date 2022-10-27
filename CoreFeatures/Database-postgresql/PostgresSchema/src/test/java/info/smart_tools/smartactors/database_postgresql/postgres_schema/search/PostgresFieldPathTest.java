@@ -14,6 +14,14 @@ public class PostgresFieldPathTest {
         assertEquals("document#>'{testValidPath}'", fieldPath.toSQL());
     }
 
+    @Test
+    public void should_ResolvesPostgresFieldPathWithTypeCast() throws QueryBuildException {
+        String path = "testValidPath";
+        String type = "int";
+        FieldPath fieldPath = PostgresFieldPath.fromStringAndType(path, type);
+        assertEquals("(document#>>'{testValidPath}')::int", fieldPath.toSQL());
+    }
+
     @Test(expected = QueryBuildException.class)
     public void should_ThrowsException() throws QueryBuildException {
         String path = "tes!t#%Incorrect_Path@#%$";
@@ -28,10 +36,26 @@ public class PostgresFieldPathTest {
     }
 
     @Test
+    public void testComplexPathWithTypeCast() throws QueryBuildException {
+        String path = "a.b.c";
+        String type = "int";
+        FieldPath fieldPath = PostgresFieldPath.fromStringAndType(path, type);
+        assertEquals("(document#>>'{a,b,c}')::int", fieldPath.toSQL());
+    }
+
+    @Test
     public void testArrayPath() throws QueryBuildException {
         String path = "a[1]";
         FieldPath fieldPath = PostgresFieldPath.fromString(path);
         assertEquals("document#>'{a,1}'", fieldPath.toSQL());
+    }
+
+    @Test
+    public void testArrayPathAndTypeCast() throws QueryBuildException {
+        String path = "a[1]";
+        String type = "int";
+        FieldPath fieldPath = PostgresFieldPath.fromStringAndType(path, type);
+        assertEquals("(document#>>'{a,1}')::int", fieldPath.toSQL());
     }
 
 }

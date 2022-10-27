@@ -13,11 +13,11 @@ public interface QueryWriter {
      * Writes the part of the SQL statement body
      * @param query query to which body to write the condition and where to add parameter setters
      * @param resolver the resolver to resolve nested conditions
-     * @param contextFieldPath current document field path
+     * @param contextFieldPath unparsed current document field path
      * @param queryParameter currently processing query parameter
      * @throws QueryBuildException when something goes wrong
      */
-    void write(QueryStatement query, QueryWriterResolver resolver, FieldPath contextFieldPath,
+    void write(QueryStatement query, QueryWriterResolver resolver, String contextFieldPath,
                Object queryParameter) throws QueryBuildException;
 
 }

@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>version-management</artifactId>
-        <version>0.6.1</version>
+        <version>0.6.2</version>
     </parent>
     <artifactId>version-management.chain-version-manager</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

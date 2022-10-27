@@ -33,6 +33,8 @@ import static org.mockito.Mockito.when;
 
 public class HttpRequestMakerTest {
 
+    private static final String EMPTY_PATH = "";
+
     private IRequestMaker<FullHttpRequest> requestMaker;
 
     private final URI uri;
@@ -135,7 +137,7 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                uri.toASCIIString(),
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
@@ -165,6 +167,42 @@ public class HttpRequestMakerTest {
     }
 
     @Test
+    public void should_MakeHttpRequest_WithPort_ParseUriAndHostCorrectly() throws Exception {
+        List<IObject> requestHeaders = this.getCustomHeaders();
+        List<IObject> requestCookies = this.getCustomCookies();
+
+        IObject request = new DSObject();
+        request.setValue(requestMethodFN, HttpMethod.GET.name());
+        request.setValue(requestUriFN, "https://test.com:8080/some/location");
+        request.setValue(requestHeadersFN, requestHeaders);
+        request.setValue(requestCookiesFN, requestCookies);
+
+        FullHttpRequest httpRequest = requestMaker.make(request);
+
+        String host = httpRequest.headers().get("Host");
+        assertEquals("Incorrect HOST header value", "test.com:8080", host);
+        assertEquals("Incorrect URI value", "/some/location", httpRequest.uri());
+    }
+
+    @Test
+    public void should_MakeHttpRequest_WithPortAndRootLocation_ParseUriAndHostCorrectly() throws Exception {
+        List<IObject> requestHeaders = this.getCustomHeaders();
+        List<IObject> requestCookies = this.getCustomCookies();
+
+        IObject request = new DSObject();
+        request.setValue(requestMethodFN, HttpMethod.GET.name());
+        request.setValue(requestUriFN, "https://test.com:8080");
+        request.setValue(requestHeadersFN, requestHeaders);
+        request.setValue(requestCookiesFN, requestCookies);
+
+        FullHttpRequest httpRequest = requestMaker.make(request);
+
+        String host = httpRequest.headers().get("Host");
+        assertEquals("Incorrect HOST header value", "test.com:8080", host);
+        assertEquals("Incorrect URI value", EMPTY_PATH, httpRequest.uri());
+    }
+
+    @Test
     public void should_MakeHttpRequest_WithoutContent_UseDefaultVersionAndCookieEncoder() throws Exception {
         List<IObject> requestHeaders = this.getCustomHeaders();
         List<IObject> requestCookies = this.getCustomCookies();
@@ -191,12 +229,13 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                uri.toASCIIString(),
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
         List<IObject> expectedHeaders = new ArrayList<>(requestHeaders);
         expectedHeaders.addAll(this.getRequiredCommonHeaders());
+        expectedHeaders.add(createKeyValue(HttpHeaderNames.CONTENT_LENGTH.toString(), 0));
 
         for (IObject header: expectedHeaders) {
             String expectedValue = header.getValue(valueFN).toString();
@@ -243,7 +282,7 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                uri.toASCIIString(),
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
@@ -296,7 +335,7 @@ public class HttpRequestMakerTest {
 
         assertEquals(
                 "Invalid request URI",
-                uri.toASCIIString(),
+                this.uri.toURL().getFile(),
                 httpRequest.uri()
         );
 
@@ -406,7 +445,7 @@ public class HttpRequestMakerTest {
 
     private List<IObject> getRequiredCommonHeaders() throws Exception {
         return new ArrayList<IObject>() {{
-           add(createKeyValue(HttpHeaderNames.HOST.toString(), uri.getHost()));
+           add(createKeyValue(HttpHeaderNames.HOST.toString(), uri.getAuthority()));
            add(createKeyValue(HttpHeaderNames.CONNECTION.toString(), HttpHeaderValues.CLOSE.toString()));
         }};
     }

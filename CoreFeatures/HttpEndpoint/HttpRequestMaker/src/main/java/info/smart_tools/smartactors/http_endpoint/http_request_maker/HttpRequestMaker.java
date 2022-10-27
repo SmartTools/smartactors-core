@@ -322,11 +322,13 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
     ) throws RequestMakerException {
         try {
             FullHttpRequest httpRequest;
+            String path = url.getFile();
+
             if (content == null){
                 httpRequest = new DefaultFullHttpRequest(
                         version,
                         method,
-                        url.toString()
+                        path
                 );
             } else {
                 IKey contentMapperKey = Keys.getKeyByName(MessageToBytesMapper.class.getCanonicalName());
@@ -335,7 +337,7 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
                 httpRequest = new DefaultFullHttpRequest(
                         version,
                         method,
-                        url.toString(),
+                        path,
                         Unpooled.copiedBuffer(contentMapper.serialize(content))
                 );
             }
@@ -351,10 +353,15 @@ public class HttpRequestMaker implements IRequestMaker<FullHttpRequest> {
                         HttpHeaderNames.CONTENT_TYPE,
                         "application/json"
                 );
+            } else {
+                httpRequest.headers().set(
+                        HttpHeaderNames.CONTENT_LENGTH,
+                        0
+                );
             }
             httpRequest.headers().set(
                     HttpHeaderNames.HOST,
-                    url.getHost()
+                    url.getAuthority()
             );
             httpRequest.headers().set(
                     HttpHeaderNames.CONNECTION,

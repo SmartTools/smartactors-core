@@ -24,7 +24,7 @@ public class ConditionsTest {
     private QueryStatement query;
     private QueryWriter writer;
     private QueryWriterResolver resolver;
-    private FieldPath fieldPath;
+    private String fieldPath;
     private Object queryParameter;
 
     @Before
@@ -50,8 +50,7 @@ public class ConditionsTest {
         when(resolver.resolve(any())).thenReturn(writer);
         when(resolver.toString()).thenReturn("resolver");
 
-        fieldPath = mock(FieldPath.class);
-        when(fieldPath.toString()).thenReturn("fieldPath");
+        fieldPath = "fieldPath";
     }
 
     @Test

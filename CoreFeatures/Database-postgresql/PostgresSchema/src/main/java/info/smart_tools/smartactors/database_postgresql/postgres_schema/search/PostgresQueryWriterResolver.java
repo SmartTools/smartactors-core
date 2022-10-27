@@ -39,16 +39,6 @@ public class PostgresQueryWriterResolver implements QueryWriterResolver {
         queryWriters.put(name, writer);
     }
 
-    /**
-     * Resolves valid field path in dotted notation ('a.b') to jsonb notation ('document#>{a,b}').
-     * @param name name of field path in dotted notation from the criteria.
-     * @return a FieldPath object with valid field path
-     * @throws QueryBuildException when field path is invalid
-     */
-    public FieldPath resolveFieldName(final String name) throws QueryBuildException {
-        return PostgresFieldPath.fromString(name);
-    }
-
     @Override
     public QueryWriter resolve(final String name) throws QueryBuildException {
         if (name == null) {
@@ -72,13 +62,12 @@ public class PostgresQueryWriterResolver implements QueryWriterResolver {
      */
     private QueryWriter resolveFieldWriter(final String fieldName)
         throws QueryBuildException {
-        final FieldPath path = this.resolveFieldName(fieldName);
 
         return (query, resolver, contextFieldName, queryParameter) -> {
             if (contextFieldName != null) {
                 throw new QueryBuildException("Field names not allowed inside of field context");
             }
-            this.resolve(null).write(query, resolver, path, queryParameter);
+            this.resolve(null).write(query, resolver, fieldName, queryParameter);
         };
     }
 

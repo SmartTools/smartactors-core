@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>message-processing</artifactId>
-        <version>0.6.0</version>
+        <version>0.6.1</version>
     </parent>
     <artifactId>message-processing.actor-receiver</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>

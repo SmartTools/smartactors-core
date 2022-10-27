@@ -80,13 +80,26 @@ final class SearchClauses {
      * @throws Exception if the clause cannot be written
      */
     static void writeSearchPaging(final QueryStatement statement, final IObject criteria) throws Exception {
+        writeSearchPaging(statement, criteria, true);
+    }
+
+    /**
+     * Writes OFFSET and LIMIT clauses of the select statement.
+     * @param statement statement which body to write and which parameters to set
+     * @param criteria search criteria
+     * @param useDefaultPaging should default paging be added if pages section is missing from criteria
+     * @throws Exception if the clause cannot be written
+     */
+    static void writeSearchPaging(final QueryStatement statement, final IObject criteria, final boolean useDefaultPaging) throws Exception {
         IKey fieldNameKey = Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName");
         Writer body = statement.getBodyWriter();
         try {
             IFieldName pageField = IOC.resolve(fieldNameKey, "page");
             IObject page = (IObject) criteria.getValue(pageField);
             if (page == null) {
-                writeDefaultPaging(statement);
+                if (useDefaultPaging) {
+                    writeDefaultPaging(statement);
+                }
                 return; // no page in the criteria, ignoring
             }
 

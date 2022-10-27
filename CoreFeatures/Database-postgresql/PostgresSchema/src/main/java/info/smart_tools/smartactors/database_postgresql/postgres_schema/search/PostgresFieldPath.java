@@ -23,6 +23,14 @@ public class PostgresFieldPath implements FieldPath {
         this.id = String.format("%s_%s", castFunction, column);
     }
 
+    private PostgresFieldPath(final String[] parts, final String typeToCast) {
+        this.path = String.format("(%s#>>\'{%s}\')::%s",
+                "document",
+                String.join(",", parts),
+                typeToCast);
+        this.id = String.join("_", parts);
+    }
+
     /**
      * {@see FieldPath#toSQL()} {@link FieldPath#toSQL()}
      * @return valid representation of field path.
@@ -51,5 +59,14 @@ public class PostgresFieldPath implements FieldPath {
 //        }
 
         return new PostgresFieldPath(FieldPath.splitParts(path));
+    }
+
+    public static PostgresFieldPath fromStringAndType(final String path, final String typeToCast)
+            throws QueryBuildException {
+        if (!FieldPath.isValid(path)) {
+            throw new QueryBuildException("Invalid field path: " + path);
+        }
+
+        return new PostgresFieldPath(FieldPath.splitParts(path), typeToCast);
     }
 }

@@ -5,10 +5,10 @@
     <parent>
         <groupId>info.smart_tools.smartactors</groupId>
         <artifactId>version-management</artifactId>
-        <version>0.6.1</version>
+        <version>0.6.2</version>
     </parent>
     <artifactId>version-management.versioned-map-router</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2</version>
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>

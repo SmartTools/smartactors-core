@@ -271,6 +271,50 @@ public final class PostgresSchema {
     }
 
     /**
+     * Fills the statement body and it's list of parameter setters with the collection name and WHERE clause
+     * for the percentile_disc function to search for the quantiles in the collection for the provided value.
+     * <p>
+     *     While the search criteria is similar to the one in {@link PostgresSchema#search(QueryStatement, CollectionName, IObject)},
+     *     it also contain an additional criteria used for finding quantiles. An example for this criteria is provided here.
+     *     <pre>
+     *  {
+     *      "field": "requiredFieldName",
+     *      "values": [ 0, 0.5, 1 ]
+     *  }
+     *     </pre>
+     * </p>
+     * @param statement statement to fill the body and add parameter setters
+     * @param collection collection name to use as the table name
+     * @param percentileCriteria JSON describing which value's percentiles must be found
+     * @param criteria complex JSON describing the search criteria
+     * @throws QueryBuildException when unable to build percentile search query
+     */
+    public static void percentileSearch(
+            final QueryStatement statement,
+            final CollectionName collection,
+            final IObject percentileCriteria,
+            final IObject criteria
+    ) throws QueryBuildException {
+        try {
+            Writer body = statement.getBodyWriter();
+
+            body.write("SELECT ");
+            PercentileClauses.writePercentileDiscrete(statement, percentileCriteria);
+            body.write(" FROM ");
+            body.write(collection.toString());
+            if (criteria == null) {
+                // no search criteria present, no need for page limitation
+                return;
+            }
+            SearchClauses.writeSearchWhere(statement, criteria);
+            SearchClauses.writeSearchOrder(statement, criteria);
+            SearchClauses.writeSearchPaging(statement, criteria, false);
+        } catch (Exception e) {
+            throw new QueryBuildException("Failed to build percentile search query", e);
+        }
+    }
+
+    /**
      * Fills the statement body with the collection name for the DELETE statement to delete the document by ID.
      * @param statement statement to fill the body
      * @param collection collection name to use as the table name

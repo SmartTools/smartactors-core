@@ -60,6 +60,29 @@ public class IndexCreatorsTest {
     }
 
     @Test
+    public void testOrderedIndexForOneFieldWithTypeCast() throws Exception {
+        IObject options = new DSObject("{ \"ordered\": { \"fieldName\": \"a\", \"type\": \"decimal\" }}");
+        IndexCreators.writeCreateIndexes(body, collection, options);
+        assertEquals("CREATE INDEX test_collection_a_ordered_index ON test_collection USING BTREE (((document#>>'{a}')::decimal));\n",
+                body.toString());
+    }
+
+    @Test
+    public void testOrderedIndexForSeveralFieldsWithTypeCast() throws Exception {
+        IObject options = new DSObject("{ \"ordered\": [ {\"fieldName\": \"a\", \"type\": \"decimal\"}, \"b\" ]}");
+        IndexCreators.writeCreateIndexes(body, collection, options);
+        assertEquals("CREATE INDEX test_collection_a_ordered_index ON test_collection USING BTREE (((document#>>'{a}')::decimal));\n" +
+                        "CREATE INDEX test_collection_b_ordered_index ON test_collection USING BTREE ((document#>'{b}'));\n",
+                body.toString());
+    }
+
+    @Test(expected = QueryBuildException.class)
+    public void testOrderedIndexForOneFieldWithTypeCastFailure() throws Exception {
+        IObject options = new DSObject("{ \"ordered\": { }}");
+        IndexCreators.writeCreateIndexes(body, collection, options);
+    }
+
+    @Test
     public void testDatetimeIndex() throws Exception {
         IObject options = new DSObject("{ \"datetime\": [ \"a\", \"b\" ] }");
         IndexCreators.writeCreateIndexes(body, collection, options);
