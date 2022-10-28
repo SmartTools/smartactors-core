@@ -16,12 +16,12 @@
 
     <properties>
         <!-- Main repository -->
-        <!--<repositoryUrl>https://repository.smart-tools.info/artifactory</repositoryUrl>-->
-        <!--<repositoryId>smartactors_core_and_core_features</repositoryId>-->
+        <!--<repositoryUrl>https://repository.smart-tools.info/artifactory/smartactors_development_tools</repositoryUrl>-->
+        <!--<repositoryId>smartactors_development_tools</repositoryId>-->
 
         <!-- Dev repository -->
-        <repositoryUrl>https://repository.smart-tools.info/artifactory</repositoryUrl>
-        <repositoryId>smartactors_core_and_core_features_dev</repositoryId>
+        <repositoryUrl>https://repository.smart-tools.info/artifactory/smartactors_development_tools_dev</repositoryUrl>
+        <repositoryId>smartactors_development_tools_dev</repositoryId>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

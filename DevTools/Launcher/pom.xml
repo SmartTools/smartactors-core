@@ -16,12 +16,12 @@
 
     <properties>
         <!-- Main repository -->
-        <!--<repositoryUrl>https://repository.smart-tools.info/artifactory</repositoryUrl>-->
-        <!--<repositoryId>smartactors_core_and_core_features</repositoryId>-->
+        <!--<repositoryUrl>https://repository.smart-tools.info/artifactory/smartactors_development_tools</repositoryUrl>-->
+        <!--<repositoryId>smartactors_development_tools</repositoryId>-->
 
         <!-- Dev repository -->
-<!--        <repositoryUrl>https://repository.smart-tools.info/artifactory</repositoryUrl>-->
-<!--        <repositoryId>smartactors_core_and_core_features_dev</repositoryId>-->
+        <repositoryUrl>https://repository.smart-tools.info/artifactory/smartactors_development_tools_dev</repositoryUrl>
+        <repositoryId>smartactors_development_tools_dev</repositoryId>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -155,62 +155,6 @@
                             <repositoryId>${repositoryId}</repositoryId>
                             <url>${repositoryUrl}</url>
                             <file>target/${project.artifactId}-${project.version}.jar</file>
-                            <description>This archive contains ...</description>
-                        </configuration>
-                    </execution>
-                    <!-- Deploy zip file -->
-                    <execution>
-                        <id>deploy-zip</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                        <configuration>
-                            <artifactId>${project.artifactId}</artifactId>
-                            <groupId>${project.groupId}</groupId>
-                            <version>${project.version}</version>
-                            <generatePom>false</generatePom>
-                            <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
-                            <file>target/${project.artifactId}-${project.version}.zip</file>
-                            <description>This archive contains ...</description>
-                        </configuration>
-                    </execution>
-                    <!-- Deploy source jar -->
-                    <execution>
-                        <id>deploy-sources</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                        <configuration>
-                            <artifactId>${project.artifactId}</artifactId>
-                            <groupId>${project.groupId}</groupId>
-                            <version>${project.version}</version>
-                            <generatePom>false</generatePom>
-                            <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
-                            <classifier>sources</classifier>
-                            <file>target/${project.artifactId}-${project.version}-sources.jar</file>
-                            <description>This archive contains ...</description>
-                        </configuration>
-                    </execution>
-                    <!-- Deploy javadoc jar -->
-                    <execution>
-                        <id>deploy-javadoc</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy-file</goal>
-                        </goals>
-                        <configuration>
-                            <artifactId>${project.artifactId}</artifactId>
-                            <groupId>${project.groupId}</groupId>
-                            <version>${project.version}</version>
-                            <generatePom>false</generatePom>
-                            <repositoryId>${repositoryId}</repositoryId>
-                            <url>${repositoryUrl}</url>
-                            <classifier>javadoc</classifier>
-                            <file>target/${project.artifactId}-${project.version}-javadoc.jar</file>
                             <description>This archive contains ...</description>
                         </configuration>
                     </execution>
