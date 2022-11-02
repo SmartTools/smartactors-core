@@ -1,0 +1,12 @@
+{
+  "featureName":"${featureName}",
+  "afterFeatures":[
+  ],
+  "repository":{
+    "id": "",
+    "url": ""
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+  ]
+}

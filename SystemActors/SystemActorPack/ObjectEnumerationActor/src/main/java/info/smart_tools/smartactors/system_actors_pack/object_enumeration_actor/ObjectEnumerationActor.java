@@ -1,7 +1,7 @@
 package info.smart_tools.smartactors.system_actors_pack.object_enumeration_actor;
 
 import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.message_processing_interfaces.ichain_storage.IChainStorage;

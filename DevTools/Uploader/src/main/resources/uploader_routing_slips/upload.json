@@ -1,0 +1,77 @@
+{
+  "name": "upload feature files",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "parseArguments",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "FileLoadingActor",
+      "methodName": "loadFiles",
+      "methodParameters": {
+        "argumentPaths": ["feature path"],
+        "responsePath": "feature files"
+      }
+    },
+    {
+      "actorName": "LoadFeatureConfigActor",
+      "methodName": "loadFeatureConfig",
+      "methodParameters": {
+        "argumentPaths": ["feature files"],
+        "responsePath": "feature"
+      }
+    },
+    {
+      "actorName": "CreateRepositoryConfigActor",
+      "methodName": "createConfig",
+      "methodParameters": {
+        "argumentPaths": ["feature", "repository id", "repository url"],
+        "responsePath": "repository config"
+      }
+    },
+    {
+      "actorName": "CollectFeatureFilesActor",
+      "methodName": "config",
+      "methodParameters": {
+        "argumentPaths": ["feature files"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "CollectFeatureFilesActor",
+      "methodName": "checkRemainingFiles",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "is there any more files to upload"
+      }
+    },
+    {
+      "actorName": "CollectFeatureFilesActor",
+      "methodName": "processNextFile",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "file to upload"
+      }
+    },
+    {
+      "actorName": "RepositoryUploadActor",
+      "methodName": "upload",
+      "methodParameters": {
+        "argumentPaths": ["file to upload", "feature", "repository config", "username", "password"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "WhileActor",
+      "methodName": "whileReturnByShift",
+      "methodParameters": {
+        "argumentPaths": ["is there any more files to upload", "#constant#int:-4", "#slip"],
+        "responsePath": null
+      }
+    }
+  ]
+}

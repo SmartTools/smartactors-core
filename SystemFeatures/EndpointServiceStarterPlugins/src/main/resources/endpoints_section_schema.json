@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "array",
+  "description": "Configurations for HTTP endpoints.",
+  "items": {
+    "type": "object",
+    "description": "HTTP endpoint.",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Name of the HTTP endpoint."
+      },
+      "type": {
+        "type": "string",
+        "description": "Type of the endpoint.",
+        "smartActors:type": "iocEnum",
+        "smartActors:iocPattern": "^(.+)_endpoint$"
+      },
+      "port": {
+        "type": "number",
+        "description": "TCP/IP port to use for this endpoint.",
+        "minimum": 1024,
+        "maximum": 65535
+      },
+      "startChain": {
+        "type": "string",
+        "description": "Name of the chain to go when message is received by the endpoint.",
+        "smartActors:type": "chainName"
+      },
+      "maxContentLength": {
+        "type": "number",
+        "description": "Maximum content length in bytes.",
+        "minimum": 1
+      },
+      "stackDepth": {
+        "type": "number",
+        "description": "Depth of chain stack.",
+        "minimum": 1
+      },
+      "scopeSwitching": {
+        "type": "boolean",
+        "description": "Should scope be switched when 'startChain' is called. Can be used only when scope switching is supported by the server.",
+        "default": true
+      }
+    },
+    "required": ["name", "type", "port", "startChain", "maxContentLength", "stackDepth"]
+  },
+  "minItems": 1
+}

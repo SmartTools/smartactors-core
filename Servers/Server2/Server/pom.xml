@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>server</artifactId>
+    <version>0.7.0</version>
 
     <dependencies>
         <dependency>
@@ -19,32 +20,32 @@
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>feature-loading-system.bootstrap</artifactId>
+            <artifactId>BaseFileSystemComponents</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>base.path</artifactId>
+            <artifactId>FeatureLoadingSystemInterfaces</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>feature-loading-system.plugin-loader-from-jar</artifactId>
+            <artifactId>FeatureLoadingSystem</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>feature-loading-system.plugin-loader-visitor-empty-implementation</artifactId>
+            <artifactId>FeatureLoadingSystemPlugins</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>feature-loading-system.plugin-creator</artifactId>
+            <artifactId>ModuleInterfaces</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>class-management.module-manager</artifactId>
+            <artifactId>ModuleManager</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
 
@@ -80,7 +81,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>info.smart_tools.smartactors.servers.server2.server.Server</mainClass>
+                            <mainClass>info.smart_tools.smartactors.launcher.server2.server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

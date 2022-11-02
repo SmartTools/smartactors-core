@@ -9,8 +9,8 @@ import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.IP
 import info.smart_tools.smartactors.feature_loading_system.interfaces.iplugin.exception.PluginException;
 import info.smart_tools.smartactors.field.field.Field;
 import info.smart_tools.smartactors.iobject.ifield.IField;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.RegistrationException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ikey.IKey;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
@@ -41,15 +41,24 @@ public class IFieldPlugin implements IPlugin {
                 .process(() -> {
                     try {
                         IKey fieldKey = Keys.getKeyByName(IField.class.getCanonicalName());
-                        IOC.register(fieldKey, new ResolveByNameIocStrategy(
-                            (args) -> {
-                                String fieldName = String.valueOf(args[0]);
-                                try {
-                                    return new Field(IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"), fieldName));
-                                } catch (InvalidArgumentException | ResolutionException e) {
-                                    throw new RuntimeException("Can't resolve IField: ", e);
-                                }
-                            }));
+                        IOC.register(
+                                fieldKey,
+                                new ResolveByNameIocStrategy(
+                                        (args) -> {
+                                            String fieldName = String.valueOf(args[0]);
+                                            try {
+                                                return new Field(
+                                                        IOC.resolve(
+                                                                Keys.getKeyByName("info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
+                                                                fieldName
+                                                        )
+                                                );
+                                            } catch (InvalidArgumentException | ResolutionException e) {
+                                                throw new RuntimeException("Can't resolve IField: ", e);
+                                            }
+                                        }
+                                )
+                        );
                     } catch (ResolutionException e) {
                         throw new ActionExecutionException("IField plugin can't load: can't get IField key", e);
                     } catch (InvalidArgumentException e) {

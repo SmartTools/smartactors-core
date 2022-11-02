@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.servers.server_with_features;
+package info.smart_tools.smartactors.launcher.server_with_features;
 
 import info.smart_tools.smartactors.server_development_tools.interfaces.iserver.IServer;
 import info.smart_tools.smartactors.server_development_tools.interfaces.iserver.exception.ServerExecutionException;

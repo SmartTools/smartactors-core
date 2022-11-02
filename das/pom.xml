@@ -7,45 +7,34 @@
     <version>0.6.0</version>
 
     <properties>
-        <feature.rurl>http://archiva.smart-tools.info/repository/server-dev-tools/</feature.rurl>
-        <feature.rid>archiva.server-dev-tools</feature.rid>
-        <module.rurl>${feature.rurl}</module.rurl>
-        <module.rid>${feature.rid}</module.rid>
+        <!--<feature.rurl>http://repository.smart-tools.info/artifactory</feature.rurl>-->
+        <!--<feature.rid>smartactors_core_and_core_features_dev</feature.rid>-->
+        <!--<module.rurl>${feature.rurl}</module.rurl>-->
+        <!--<module.rid>${feature.rid}</module.rid>-->
     </properties>
+
+    <repositories>
+        <repository>
+            <id>smartactors_core_and_core_features_dev</id>
+            <url>https://repository.smart-tools.info/artifactory/smartactors_core_and_core_features_dev</url>
+        </repository>
+        <repository>
+            <id>smartactors_development_tools_dev</id>
+            <url>https://repository.smart-tools.info/artifactory/smartactors_development_tools_dev</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>base.interfaces.iaction</artifactId>
+            <artifactId>base</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
         <dependency>
             <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>base.exception.invalid-argument-exception</artifactId>
+            <artifactId>iobject</artifactId>
             <version>[0.0.1, 1.0.0)</version>
         </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject.iobject</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject.field-name</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-        </dependency>
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject.ifield-name</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-        </dependency>
-
-        <dependency>
-            <groupId>info.smart_tools.smartactors</groupId>
-            <artifactId>iobject.ds-object</artifactId>
-            <version>[0.0.1, 1.0.0)</version>
-        </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -96,13 +85,6 @@
         </dependency>
 
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>${module.rid}</id>
-            <url>${module.rurl}</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>

@@ -1,0 +1,61 @@
+{
+  "name": "create feature",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "parseArguments",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "CreateFoldersActor",
+      "methodName": "createFolders",
+      "methodParameters": {
+        "argumentPaths": ["project path", "group id", "name"],
+        "responsePath": "feature path"
+      }
+    },
+    {
+      "actorName": "ConfigJsonTagMappingActor",
+      "methodName": "mapTags",
+      "methodParameters": {
+        "argumentPaths": ["group id", "name", "version"],
+        "responsePath": "config.json tags"
+      }
+    },
+    {
+      "actorName": "TemplateFileCreatorActor",
+      "methodName": "createFileFromTemplate",
+      "methodParameters": {
+        "argumentPaths": ["#constant#string:config.json", "feature path", "config.json tags"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "PomXmlTagMappingActor",
+      "methodName": "mapTags",
+      "methodParameters": {
+        "argumentPaths": ["group id", "name", "version"],
+        "responsePath": "pom.xml tags"
+      }
+    },
+    {
+      "actorName": "TemplateFileCreatorActor",
+      "methodName": "createFileFromTemplate",
+      "methodParameters": {
+        "argumentPaths": ["#constant#string:pom.xml", "feature path", "pom.xml tags"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "TemplateFileCreatorActor",
+      "methodName": "createFileFromTemplate",
+      "methodParameters": {
+        "argumentPaths": ["#constant#string:bin.xml", "feature path", "no tags"],
+        "responsePath": null
+      }
+    }
+  ]
+}

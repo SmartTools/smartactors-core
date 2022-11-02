@@ -1,0 +1,17 @@
+{
+  "featureName":"info.smart_tools.smartactors:shutdown-task-processing-strategies:0.7.0",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:service-interfaces:0.7.0",
+    "info.smart_tools.smartactors:task-interfaces:0.7.0",
+    "info.smart_tools.smartactors:configuration-manager:0.7.0",
+    "info.smart_tools.smartactors:ioc:0.7.0"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+    "info.smart_tools.smartactors:shutdown-task-processing-strategy-plugins:0.7.0"
+  ]
+}

@@ -2,9 +2,9 @@ package info.smart_tools.smartactors.ioc.iioccontainer;
 
 
 import info.smart_tools.smartactors.base.interfaces.istrategy.IStrategy;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.DeletionException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.RegistrationException;
-import info.smart_tools.smartactors.ioc.iioccontainer.exception.ResolutionException;
+import info.smart_tools.smartactors.ioc.exception.DeletionException;
+import info.smart_tools.smartactors.ioc.exception.RegistrationException;
+import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ikey.IKey;
 
 /**
