@@ -7,6 +7,7 @@ import info.smart_tools.smartactors.downloader.Repository;
 import info.smart_tools.smartactors.downloader.feature_downloader.IFeatureDownloader;
 import info.smart_tools.smartactors.downloader.features.Feature;
 import info.smart_tools.smartactors.downloader.features.FeatureNamespace;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -34,7 +35,7 @@ public class DownloadFeatureActor extends StatelessActor {
                 throw new RuntimeException("Invalid feature type. Should be one of the following: 'jar', 'zip' or 'json'.");
             }
             Map<String, Object> response = new HashMap<>();
-            this.downloader.initialize(null);
+            this.downloader.initialize(Maven.configureResolver());
             this.downloader.addRepositories(repositories);
             FeatureNamespace featureNamespace = new FeatureNamespace(feature.getFeatureName());
             List<File> result = this.downloader.download(featureNamespace, featureType);

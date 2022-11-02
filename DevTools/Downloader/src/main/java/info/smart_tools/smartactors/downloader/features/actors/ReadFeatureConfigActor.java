@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.downloader.features.actors;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.smart_tools.simpleactors.commons.StatelessActor;
 import info.smart_tools.simpleactors.commons.annotations.Executable;
@@ -10,6 +11,10 @@ import java.nio.file.Path;
 public class ReadFeatureConfigActor extends StatelessActor {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public ReadFeatureConfigActor() {
+        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
 
     @Executable()
     public Feature readFeatureConfig(final Path config) {
