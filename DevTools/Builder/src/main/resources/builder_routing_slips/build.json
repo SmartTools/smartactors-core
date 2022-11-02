@@ -10,6 +10,14 @@
       }
     },
     {
+      "actorName": "ValidatorActor",
+      "methodName": "validate",
+      "methodParameters": {
+        "argumentPaths": ["path to feature"],
+        "responsePath": null
+      }
+    },
+    {
       "actorName": "BuilderActor",
       "methodName": "buildFeature",
       "methodParameters": {

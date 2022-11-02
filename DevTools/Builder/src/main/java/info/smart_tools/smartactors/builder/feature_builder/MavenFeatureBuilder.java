@@ -8,6 +8,7 @@ import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class MavenFeatureBuilder implements IFeatureBuilder {
 
         try {
             Invoker invoker = new DefaultInvoker();
-            invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
+            invoker.setMavenHome(new File(System.getenv("M2_HOME")));
             InvocationResult result = invoker.execute(request);
 
             if (result.getExitCode() != 0) {
