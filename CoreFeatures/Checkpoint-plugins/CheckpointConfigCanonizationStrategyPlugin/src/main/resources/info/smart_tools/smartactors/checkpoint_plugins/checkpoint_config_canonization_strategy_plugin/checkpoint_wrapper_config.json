@@ -1,9 +1,0 @@
-{
-  "in_getProcessor":"processor",
-  "in_getMessage":"message",
-  "in_getCheckpointId":"arguments/id",
-  "in_getSchedulingConfiguration":"arguments/scheduling",
-  "in_getRecoverConfiguration":"arguments/recover",
-  "in_getCheckpointStatus":"message/checkpointStatus",
-  "out_setCheckpointStatus":"message/checkpointStatus"
-}

@@ -1,4 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:message-processing",
-  "afterFeatures":["info.smart_tools.smartactors:base","info.smart_tools.smartactors:class-management","info.smart_tools.smartactors:iobject","info.smart_tools.smartactors:ioc","info.smart_tools.smartactors:task","info.smart_tools.smartactors:iobject-extension","info.smart_tools.smartactors:message-processing-interfaces"]
-}

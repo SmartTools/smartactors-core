@@ -22,18 +22,8 @@
     </properties>
 
     <modules>
-        <module>CommonFeatures</module>
-        <module>CoreFeatures</module>
-        <module>ServerDevelopmentTools</module>
-        <module>CorePack</module>
-        <module>Servers/Server2</module>
-        <module>SystemActors</module>
-        <module>das</module>
         <module>Features</module>
         <module>SystemFeatures</module>
-        <module>SchedulerAutoStartup</module>
-        <module>EndpointServiceStarter</module>
-        <module>EndpointPlugins</module>
     </modules>
 
     <build>

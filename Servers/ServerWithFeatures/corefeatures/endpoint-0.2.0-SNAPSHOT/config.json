@@ -1,4 +1,0 @@
-{
-  "featureName": "endpoint",
-  "afterFeatures": ["endpoint-service-starter"]
-}

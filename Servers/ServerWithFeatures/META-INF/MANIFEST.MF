@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: info.smart_tools.smartactors.core.server_with_features.Ser
- verWithFeatures
-

@@ -1,6 +1,0 @@
-{
-  "featureName": "info.smart_tools.smartactors:database",
-  "afterFeatures": [
-    "info.smart_tools.smartactors:database-service-starter"
-  ]
-}

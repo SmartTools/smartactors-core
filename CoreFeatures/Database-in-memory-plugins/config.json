@@ -1,4 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:database-in-memory-plugins",
-  "afterFeatures":["info.smart_tools.smartactors:database-in-memory","info.smart_tools.smartactors:database-plugins"]
-}

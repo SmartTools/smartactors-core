@@ -1,4 +1,0 @@
-{
-  "featureName": "info.smart_tools.smartactors:checkpoint-auto-startup",
-  "afterFeatures": ["info.smart_tools.smartactors:checkpoint-plugins"]
-}

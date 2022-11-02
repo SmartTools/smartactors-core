@@ -1,7 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:scheduler",
-  "afterFeatures":[
-    "info.smart_tools.smartactors:timer-plugins",
-    "info.smart_tools.smartactors:message-bus-plugins"
-  ]
-}

@@ -1,5 +1,0 @@
-/**
- * Contains exceptions for
- * {@link info.smart_tools.smartactors.feature_management.all_in_direcory_feature_tracker.AllInDirectoryFeatureTracker}
- */
-package info.smart_tools.smartactors.feature_management.all_in_direcory_feature_tracker.exception;

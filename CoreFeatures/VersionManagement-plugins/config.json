@@ -1,7 +1,0 @@
-{
-  "featureName": "info.smart_tools.smartactors:version-management-plugins",
-  "afterFeatures": [
-    "info.smart_tools.smartactors:version-management",
-    "info.smart_tools.smartactors:message-processing-plugins"
-  ]
-}
