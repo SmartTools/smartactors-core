@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4-1206-jdbc42</version>
+            <version>42.5.0</version>
         </dependency>
 
         <!-- Tests -->
@@ -155,7 +155,7 @@
                                 <artifactItem>
                                     <groupId>org.postgresql</groupId>
                                     <artifactId>postgresql</artifactId>
-                                    <version>9.4-1206-jdbc42</version>
+                                    <version>42.5.0</version>
                                     <outputDirectory>${basedir}/target/classes</outputDirectory>
                                     <excludes>META-INF/**</excludes>
                                 </artifactItem>
