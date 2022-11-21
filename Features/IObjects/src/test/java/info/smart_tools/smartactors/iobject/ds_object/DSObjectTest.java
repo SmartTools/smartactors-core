@@ -110,7 +110,7 @@ public class DSObjectTest {
         String json = "{\"value\":1,\"string\":\"foo\"}";
         IFieldName fieldName = mock(IFieldName.class);
         IObject obj = new DSObject(json);
-        obj.setValue(fieldName, Thread.currentThread());
+        obj.setValue(fieldName, new Object());
         obj.serialize();
         fail();
     }

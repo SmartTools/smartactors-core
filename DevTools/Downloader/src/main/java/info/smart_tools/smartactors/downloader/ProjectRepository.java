@@ -2,35 +2,35 @@ package info.smart_tools.smartactors.downloader;
 
 import java.net.URL;
 
-public class Repository {
-    private String id;
+public class ProjectRepository {
+    private String repositoryId;
     private URL url;
     private String type;
     private String username;
     private String password;
 
-    public Repository() {
+    public ProjectRepository() {
     }
 
-    public Repository(final String id, final URL url) {
-        this.id = id;
+    public ProjectRepository(final String id, final URL url) {
+        this.repositoryId = id;
         this.url = url;
     }
 
-    public Repository(final String repositoryId, final URL url, final String type, final String username, final String password) {
-        this.id = repositoryId;
+    public ProjectRepository(final String repositoryId, final URL url, final String type, final String username, final String password) {
+        this.repositoryId = repositoryId;
         this.url = url;
         this.type = type;
         this.username = username;
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public String getRepositoryId() {
+        return repositoryId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRepositoryId(String repositoryId) {
+        this.repositoryId = repositoryId;
     }
 
     public URL getUrl() {
@@ -63,5 +63,15 @@ public class Repository {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Repository toRepository() {
+        return new Repository(
+                this.repositoryId,
+                this.url,
+                this.type,
+                this.username,
+                this.password
+        );
     }
 }

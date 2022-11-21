@@ -13,6 +13,10 @@ public class FeatureNamespace {
                 this.group = parts[0];
                 this.name = parts[1];
                 this.version = parts[2];
+            } else if (parts.length == 2) {
+                this.group = parts[0];
+                this.name = parts[1];
+                this.version = "LATEST";
             } else {
                 throw new Exception("Could not parse feature full name - " + featureName + ".");
             }
