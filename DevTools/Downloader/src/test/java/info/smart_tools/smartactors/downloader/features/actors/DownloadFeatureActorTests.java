@@ -9,7 +9,7 @@ import info.smart_tools.smartactors.downloader.Repository;
 import info.smart_tools.smartactors.downloader.feature_downloader.IFeatureDownloader;
 import info.smart_tools.smartactors.downloader.features.Feature;
 import info.smart_tools.smartactors.downloader.features.FeatureNamespace;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+//import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 
 import java.io.File;

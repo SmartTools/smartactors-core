@@ -13,7 +13,7 @@ public class Args implements IArguments {
 
     @Parameter(
             names = {"command", "cmd", "c", "-command", "-cmd", "-c"},
-            description = "Command. Available values: 'launcher', 'features', 'feature', 'config', configs. Default value is 'features'."
+            description = "Command. Available values: 'launcher', 'project', 'features', 'feature', 'config', configs. Default value is 'features'."
     )
     private String command = "features";
 

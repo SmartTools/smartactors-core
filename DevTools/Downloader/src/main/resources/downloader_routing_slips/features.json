@@ -58,18 +58,10 @@
       }
     },
     {
-      "actorName": "fileOperationActor",
-      "methodName": "deleteFile",
-      "methodParameters": {
-        "argumentPaths": ["downloaded file path"],
-        "responsePath": "file was deleted"
-      }
-    },
-    {
       "actorName": "whileActor",
       "methodName": "whileReturnByShift",
       "methodParameters": {
-        "argumentPaths": ["download features while condition", "#constant#int:-7", "#slip"],
+        "argumentPaths": ["download features while condition", "#constant#int:-6", "#slip"],
         "responsePath": null
       }
     }
