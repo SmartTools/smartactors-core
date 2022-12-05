@@ -18,5 +18,18 @@ java -jar uploader.jar -fp /path/to/feature -u username -p password
 
 ### Overriding remote repository info
 In most cases, features already have info about remote repository in their `config.json` (`"repository"` object).
-In some cases, if there's a need to override this behavior, user can provide their own URL and ID for the remote repository.
+
+Example `config.json` with `"repository"` object:
+```json
+{
+  "featureName":"info.smart_tools.smartactors:class-loader:0.7.0",
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  }
+}
+```
+
+In some cases, if there's a need to override this behavior, user can provide their own URL and ID for the remote repository. It can be done with `-rId` and `-rUrl` parameters.
+
 Then uploader will ignore info about remote repository in feature and will use URL and ID provided by the user.
