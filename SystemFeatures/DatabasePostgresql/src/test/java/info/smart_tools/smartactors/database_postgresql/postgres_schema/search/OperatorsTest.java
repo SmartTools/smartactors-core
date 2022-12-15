@@ -60,8 +60,8 @@ public class OperatorsTest {
                         "((document#>'{eq}')=to_json(?)::jsonb)", "((document#>'{ne}')!=to_json(?)::jsonb)",
                         "((document#>'{lt}')<to_json(?)::jsonb)", "((document#>'{gt}')>to_json(?)::jsonb)",
                         "((document#>'{lte}')<=to_json(?)::jsonb)", "((document#>'{gte}')>=to_json(?)::jsonb)",
-                        "(parse_timestamp_immutable(document#>'{date-from}')>=(?)::timestamp)",
-                        "(parse_timestamp_immutable(document#>'{date-to}')<=(?)::timestamp)",
+                        "(parse_timestamp_immutable(document#>'{date-from}')>=(?)::timestampz)",
+                        "(parse_timestamp_immutable(document#>'{date-to}')<=(?)::timestampz)",
                         "((document#>'{hasTag}')??(?))",
                         "fulltext_english@@(to_tsquery(?,?))"));
 
