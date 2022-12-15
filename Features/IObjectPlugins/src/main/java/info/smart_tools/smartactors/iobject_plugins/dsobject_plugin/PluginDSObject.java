@@ -17,6 +17,7 @@ import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -73,6 +74,12 @@ public class PluginDSObject implements IPlugin {
                                         } else if (args.length == 1 && args[0] instanceof String) {
                                             try {
                                                 return new DSObject((String) args[0]);
+                                            } catch (InvalidArgumentException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        } else if (args.length == 1 && args[0] instanceof InputStream) {
+                                            try {
+                                                return new DSObject((InputStream) args[0]);
                                             } catch (InvalidArgumentException e) {
                                                 throw new RuntimeException(e);
                                             }

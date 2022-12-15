@@ -49,7 +49,7 @@ class ChainVersionStrategies {
                         break;
                     }
                 } catch (Throwable e) {
-                    System.out.println("[WARNING] Chain '"+ mapName.toString() +"' version resolution strategy thrown exception: "+ e.getMessage());
+                    System.out.println("[\033[1;33mWARNING\033[0m] Chain '"+ mapName.toString() +"' version resolution strategy thrown exception: "+ e.getMessage());
                     e.printStackTrace();
                 }
             }

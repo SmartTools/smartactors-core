@@ -3,6 +3,7 @@ package info.smart_tools.smartactors.feature_management.feature;
 import info.smart_tools.smartactors.base.interfaces.ipath.IPath;
 import info.smart_tools.smartactors.feature_management.interfaces.ifeature.IFeature;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,11 +17,79 @@ public class Feature implements IFeature {
     private IPath directory;
     private String groupId;
     private Set<String> dependencies;
+    private Set<String> plugins;
     private boolean failed;
     private Object id;
     private String packageType;
 
     private final static String FEATURE_NAME_DELIMITER = ":";
+
+    /**
+     * Creates instance of {@link IFeature} by specific arguments
+     * @param name the feature name
+     * @param groupId the feature group id
+     * @param version the feature version
+     * @param dependencies the feature dependencies
+     * @param location the feature location
+     * @param directory the feature directory
+     * @param packageType the feature package type
+     */
+    public Feature(
+        final String groupId,
+        final String name,
+        final String version,
+        final Set<String> dependencies,
+        final Set<String> plugins,
+        final IPath location,
+        final IPath directory,
+        final String packageType
+    ) {
+        this.name = name;
+        this.groupId = groupId;
+        this.version = version;
+        this.dependencies = dependencies;
+        this.plugins = plugins;
+        this.location = location;
+        this.directory = directory;
+        this.packageType = packageType;
+        this.id = java.util.UUID.randomUUID();
+        this.failed = false;
+    }
+
+    /**
+     * Creates instance of {@link IFeature} by specific arguments
+     * @param id the feature id
+     * @param name the feature name
+     * @param groupId the feature group id
+     * @param version the feature version
+     * @param dependencies the feature dependencies
+     * @param plugins the feature plugins
+     * @param location the feature location
+     * @param directory the feature directory
+     * @param packageType the feature package type
+     */
+    public Feature(
+        final Object id,
+        final String groupId,
+        final String name,
+        final String version,
+        final Set<String> dependencies,
+        final Set<String> plugins,
+        final IPath location,
+        final IPath directory,
+        final String packageType
+    ) {
+        this.name = name;
+        this.groupId = groupId;
+        this.version = version;
+        this.dependencies = dependencies;
+        this.plugins = plugins;
+        this.location = location;
+        this.directory = directory;
+        this.packageType = packageType;
+        this.id = id;
+        this.failed = false;
+    }
 
     /**
      * Creates instance of {@link IFeature} by specific arguments
@@ -45,6 +114,7 @@ public class Feature implements IFeature {
         this.groupId = groupId;
         this.version = version;
         this.dependencies = dependencies;
+        this.plugins = new HashSet<>();
         this.location = location;
         this.directory = directory;
         this.packageType = packageType;
@@ -77,6 +147,7 @@ public class Feature implements IFeature {
         this.groupId = groupId;
         this.version = version;
         this.dependencies = dependencies;
+        this.plugins = new HashSet<>();
         this.location = location;
         this.directory = directory;
         this.packageType = packageType;
@@ -99,6 +170,11 @@ public class Feature implements IFeature {
 
     @Override
     public Set<String> getDependencies() { return this.dependencies; }
+
+    @Override
+    public Set<String> getPlugins() {
+        return this.plugins;
+    }
 
     @Override
     public IPath getLocation() { return this.location; }
@@ -138,6 +214,11 @@ public class Feature implements IFeature {
     }
 
     @Override
+    public void setPlugins(final Set<String> plugins) {
+        this.plugins = plugins;
+    }
+
+    @Override
     public void setLocation(final IPath location) {
         this.location = location;
     }
@@ -162,7 +243,8 @@ public class Feature implements IFeature {
                 this.groupId,
                 this.name,
                 this.version,
-                this.dependencies, // changeable object
+                this.dependencies,  // changeable object
+                this.plugins,       // changeable object
                 this.location,
                 this.directory,
                 this.packageType
@@ -185,6 +267,7 @@ public class Feature implements IFeature {
         this.name = clone.name;
         this.version = clone.version;
         this.dependencies = clone.dependencies; // changeable object
+        this.plugins = clone.plugins; // changeable object
         this.location = clone.location;
         this.directory = clone.directory;
         this.packageType = clone.packageType;

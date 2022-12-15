@@ -70,7 +70,7 @@ public class VersionedRouterDecorator implements IRouter {
         for(IModule module : versions.keySet()) {
             if (!currentModule.getName().equals(module.getName())) {
                 System.out.println(
-                        "[WARNING] Receiver with Id '"+targetId.toString()+
+                        "[\033[1;33mWARNING\033[0m] Receiver with Id '"+targetId.toString()+
                         "' already registered in module '"+module.getName()+":"+module.getVersion()+
                         "', but registering in module '"+currentModule.getName()+":"+currentModule.getVersion()+"'."
                 );

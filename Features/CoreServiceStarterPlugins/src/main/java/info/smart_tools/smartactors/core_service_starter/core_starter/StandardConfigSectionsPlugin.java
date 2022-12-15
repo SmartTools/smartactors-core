@@ -84,7 +84,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                                     IOC.resolve(Keys.getKeyByName(IConfigurationManager.class.getCanonicalName()));
                             configurationManager.removeSectionStrategy(sectionNameFieldName);
                         } catch (InvalidArgumentException e) {
-                            System.out.println("[WARNING] Deregistration of \"ObjectsSectionProcessingStrategy\" has failed while reverting \"config_section:objects\" plugin.");
+                            System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"ObjectsSectionProcessingStrategy\" has failed while reverting \"config_section:objects\" plugin.");
                         } catch (ResolutionException e) {
                             // ToDo: !!! Unhandled exception
                         }
@@ -263,22 +263,22 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             try {
                                 strategy.unregister("exceptional");
                             } catch (StrategyRegistrationException e) {
-                                System.out.println("[WARNING] Deregistration of \"exceptional\" strategy has failed while reverting \"config_section:maps\" plugin.");
+                                System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"exceptional\" strategy has failed while reverting \"config_section:maps\" plugin.");
                             }
                             try {
                                 strategy.unregister("out_");
                             } catch (StrategyRegistrationException e) {
-                                System.out.println("[WARNING] Deregistration of \"out_\" strategy has failed while reverting \"config_section:maps\" plugin.");
+                                System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"out_\" strategy has failed while reverting \"config_section:maps\" plugin.");
                             }
                             try {
                                 strategy.unregister("in_");
                             } catch (StrategyRegistrationException e) {
-                                System.out.println("[WARNING] Deregistration of \"in_\" strategy has failed while reverting \"config_section:maps\" plugin.");
+                                System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"in_\" strategy has failed while reverting \"config_section:maps\" plugin.");
                             }
                             try {
                                 strategy.unregister("maps");
                             } catch (StrategyRegistrationException e) {
-                                System.out.println("[WARNING] Deregistration of \"maps\" strategy has failed while reverting \"config_section:maps\" plugin.");
+                                System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"maps\" strategy has failed while reverting \"config_section:maps\" plugin.");
                             }
                         } catch (ResolutionException e) { }
                         try {
@@ -287,7 +287,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             ISectionStrategy sectionStrategy = new MapsSectionProcessingStrategy();
                             configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
                         } catch (InvalidArgumentException e) {
-                            System.out.println("[WARNING] Deregistration of \"MapsSectionProcessingStrategy\" has failed while reverting \"config_section:maps\" plugin.");
+                            System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"MapsSectionProcessingStrategy\" has failed while reverting \"config_section:maps\" plugin.");
                         } catch (ResolutionException e) { }
                     });
 
@@ -320,7 +320,7 @@ public class StandardConfigSectionsPlugin implements IPlugin {
                             ISectionStrategy sectionStrategy = new ExecutorSectionProcessingStrategy();
                             configurationManager.removeSectionStrategy(sectionStrategy.getSectionName());
                         } catch (InvalidArgumentException e) {
-                            System.out.println("[WARNING] Deregistration of \"ExecutorSectionProcessingStrategy\" has failed while reverting \"config_section:executor\" plugin.");
+                            System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of \"ExecutorSectionProcessingStrategy\" has failed while reverting \"config_section:executor\" plugin.");
                         } catch (ResolutionException e) { }
                     });
 

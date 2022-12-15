@@ -37,7 +37,7 @@ public class LoggerTest {
         logger.info("This is a message, that contains {0} and {1}", "cookies", "birds");
         os.flush();
         String logMessage = os.toString();
-        assertEquals("[INFO] This is a message, that contains cookies and birds\n", logMessage);
+        assertEquals("[\033[1;34mINFO\033[0m] This is a message, that contains cookies and birds\n", logMessage);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class LoggerTest {
         logger.warning("This is a warning");
         os.flush();
         String logMessage = os.toString();
-        assertEquals("[WARNING] This is a warning\n", logMessage);
+        assertEquals("[\033[1;33mWARNING\033[0m] This is a warning\n", logMessage);
     }
 
     @Test
@@ -57,6 +57,6 @@ public class LoggerTest {
         logger.error("This error is all about {0} and {1}", "rainbows", "cookies");
         os.flush();
         String logMessage = os.toString();
-        assertEquals("[ERROR] This error is all about rainbows and cookies\n", logMessage);
+        assertEquals("[\033[1;31mERROR\033[0m] This error is all about rainbows and cookies\n", logMessage);
     }
 }

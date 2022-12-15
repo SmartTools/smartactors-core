@@ -76,12 +76,12 @@ public class LoadFeatureActor {
             throw new LoadFeatureException("Feature should not be null.");
         }
         if (feature.isFailed() || null == ModuleManager.getModuleById(feature.getId())) {
-            System.out.println("[INFO] --------- Feature '" + feature.getDisplayName() + "' loading is skipped.");
+            System.out.println("[\033[1;34mINFO\033[0m] --------- Feature '" + feature.getDisplayName() + "' loading is skipped.");
             return;
         }
         IModule currentModule = ModuleManager.getCurrentModule();
         try {
-            System.out.println("[INFO] Start loading feature '" + feature.getDisplayName() + "'.");
+            System.out.println("[\033[1;34mINFO\033[0m] Start loading feature '" + feature.getDisplayName() + "'.");
 
             File file = Paths.get((feature.getLocation()).getPath()).toFile();
             Collection<IPath> jars = new ArrayList<>();
@@ -134,10 +134,10 @@ public class LoadFeatureActor {
                 String configString = new Scanner(configFile).useDelimiter(END_OF_INPUT_DELIMITER).next();
                 configurationManager.applyConfig(IOC.resolve(Keys.getKeyByName(CONFIGURATION_OBJECT_KEY), configString));
             }
-            System.out.println("[OK] -------------- Feature '" + feature.getDisplayName() + "' loaded successfully.");
+            System.out.println("[\033[1;32mOK\033[0m] -------------- Feature '" + feature.getDisplayName() + "' loaded successfully.");
         } catch (Throwable e) {
             feature.setFailed(true);
-            System.out.println("[FAILED] ---------- Feature '" + feature.getDisplayName() + "' loading failed with exception:");
+            System.out.println("[\033[1;31mERROR\033[0m] ---------- Feature '" + feature.getDisplayName() + "' loading failed with exception:");
             e.printStackTrace(System.out);
         }
         ModuleManager.setCurrentModule(currentModule);

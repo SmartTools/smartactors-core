@@ -68,7 +68,7 @@ public class VersionedMapRouter implements IRouter {
         for(IModule module : versions.keySet()) {
             if (!currentModule.getName().equals(module.getName())) {
                 System.out.println(
-                        "[WARNING] Receiver with Id '"+targetId.toString()+
+                        "[\033[1;33mWARNING\033[0m] Receiver with Id '"+targetId.toString()+
                         "' already registered in module '"+module.getName()+":"+module.getVersion()+
                         "', but registering in module '"+currentModule.getName()+":"+currentModule.getVersion()+"'."
                 );
@@ -78,7 +78,7 @@ public class VersionedMapRouter implements IRouter {
         IMessageReceiver oldReceiver = ModuleManager.putToMap(versions, receiver);
 
         if (null != oldReceiver) {
-            System.out.println(MessageFormat.format("[WARNING] Replacing receiver ({0}) registered as ''{1}'' by {2}",
+            System.out.println(MessageFormat.format("[\033[1;33mWARNING\033[0m] Replacing receiver ({0}) registered as ''{1}'' by {2}",
                     oldReceiver.toString(), targetId.toString(), receiver.toString()));
         }
     }
@@ -98,7 +98,7 @@ public class VersionedMapRouter implements IRouter {
         if (null != receiver) {
             receiver.dispose();
         } else {
-            System.out.println(MessageFormat.format("[WARNING] '{0}' has no receivers, nothing to delete",
+            System.out.println(MessageFormat.format("[\033[1;33mWARNING\033[0m] '{0}' has no receivers, nothing to delete",
                     targetId.toString()));
         }
     }

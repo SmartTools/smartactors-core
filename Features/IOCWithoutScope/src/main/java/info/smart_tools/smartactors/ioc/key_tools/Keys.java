@@ -36,9 +36,9 @@ public final class Keys {
             try {
                 IOC.unregister(Keys.getKeyByName(keyName));
             } catch (DeletionException e) {
-                System.out.println("[WARNING] Unregistering of key '" + keyName+ "' failed.");
+                System.out.println("[\033[1;33mWARNING\033[0m] Unregistering of key '" + keyName+ "' failed.");
             } catch (ResolutionException e) {
-                System.out.println("[WARNING] Resolution of key '" + keyName+ "' failed.");
+                System.out.println("[\033[1;33mWARNING\033[0m] Resolution of key '" + keyName+ "' failed.");
             }
         }
     }

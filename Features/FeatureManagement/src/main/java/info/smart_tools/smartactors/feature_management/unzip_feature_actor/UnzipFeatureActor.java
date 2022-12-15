@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.feature_management.unzip_feature_actor;
 
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.interfaces.iaction.IFunctionTwoArgs;
 import info.smart_tools.smartactors.base.path.Path;
 import info.smart_tools.smartactors.feature_management.interfaces.ifeature.IFeature;
@@ -28,6 +29,7 @@ public class UnzipFeatureActor {
 
     private final IFieldName featureNameFN;
     private final IFieldName dependenciesFieldName;
+    private final IFieldName pluginsFieldName;
 
     private final static String CONFIG_FILE_NAME = "config.json";
     private final static String EXTENSION_SEPARATOR = ".";
@@ -48,6 +50,7 @@ public class UnzipFeatureActor {
     public UnzipFeatureActor()
             throws ResolutionException {
         this.dependenciesFieldName = IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "afterFeatures");
+        this.pluginsFieldName =      IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "plugins");
         this.featureNameFN =         IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "featureName");
 
         //TODO: need refactoring. This actions would be took out to the plugin.
@@ -84,18 +87,18 @@ public class UnzipFeatureActor {
         }
         try {
             if (null == feature.getDependencies()) {
-                System.out.println("[INFO] Start unzipping/copying feature '" + feature.getDisplayName() + "'.");
+                System.out.println("[\033[1;34mINFO\033[0m] Start unzipping/copying feature '" + feature.getDisplayName() + "'.");
                 File f = new File(feature.getLocation().toString());
                 IFunctionTwoArgs<File, IFeature, File> function = this.unzipFunctions.get(getExtension(f));
                 if (null != function) {
                     File configFile = function.execute(f, feature);
                     updateFeature(configFile, feature);
-                    System.out.println("[OK] -------------- Feature '" + feature.getDisplayName() + "' unzipped/copied successfully.");
+                    System.out.println("[\033[1;32mOK\033[0m] -------------- Feature '" + feature.getDisplayName() + "' unzipped/copied successfully.");
                 }
             }
         } catch (Throwable e) {
             feature.setFailed(true);
-            System.out.println("[FAILED] ---------- Feature '" + feature.getDisplayName() + "' unzipping/copying failed:");
+            System.out.println("[\033[1;31mERROR\033[0m] ---------- Feature '" + feature.getDisplayName() + "' unzipping/copying failed:");
             System.out.println(e);
         }
     }
@@ -165,7 +168,7 @@ public class UnzipFeatureActor {
             if (destinationDir.exists() && destinationDir.isDirectory()) {
                 File checkFile = Paths.get(destinationDir.getPath(), NAME_OF_CHECK_FILE).toFile();
                 if (checkFile.exists() && zippedFeature.lastModified() < checkFile.lastModified()) {
-                    System.out.println("[INFO] Unzipping/copying feature '" + feature.getDisplayName() + "' already done.");
+                    System.out.println("[\033[1;34mINFO\033[0m] Unzipping/copying feature '" + feature.getDisplayName() + "' already done.");
                     return false;
                 }
             }
@@ -194,16 +197,31 @@ public class UnzipFeatureActor {
             throws Exception {
         String content = new Scanner(f).useDelimiter(END_OF_INPUT_DELIMITER).next();
         IObject config = IOC.resolve(Keys.getKeyByName(IOBJECT_FACTORY_STRATEGY_NAME), content);
+
         List<String> dependencies = (List<String>) config.getValue(this.dependenciesFieldName);
+        List<String> plugins = getPlugins(config);
+
         String fullFeatureName = (String) config.getValue(this.featureNameFN);
         String[] featureNames = parseFullName(fullFeatureName);
         Set<String> dependenciesSet = new HashSet<>(dependencies);
+        Set<String> pluginsSet = new HashSet<>(plugins);
+
         feature.setDependencies(dependenciesSet);
+        feature.setPlugins(pluginsSet);
         feature.setLocation(new Path(f.getParent()));
         feature.setGroupId(featureNames[0]);
         feature.setName(featureNames[1]);
         if (!featureNames[2].equals("")) {
             feature.setVersion(featureNames[2]);
+        }
+    }
+
+    private List<String> getPlugins(final IObject config) {
+        try {
+            List<String> plugins = (List<String>) config.getValue(this.pluginsFieldName);
+            return plugins == null ? new ArrayList<>() : plugins;
+        } catch (ReadValueException | InvalidArgumentException e) {
+            return new ArrayList<>();
         }
     }
 

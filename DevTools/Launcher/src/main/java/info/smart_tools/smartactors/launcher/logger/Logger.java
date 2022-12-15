@@ -29,7 +29,7 @@ public class Logger implements ILogger {
             final Object... args
     ) {
         String formattedMessage = formatMessage(message, args);
-        System.out.println("[INFO] " + formattedMessage);
+        System.out.println("[\033[1;34mINFO\033[0m] " + formattedMessage);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Logger implements ILogger {
             final Object... args
     ) {
         String formattedMessage = formatMessage(message, args);
-        System.out.println("[WARNING] " + formattedMessage);
+        System.out.println("[\033[1;33mWARNING\033[0m] " + formattedMessage);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Logger implements ILogger {
             final Object... args
     ) {
         String formattedMessage = formatMessage(message, args);
-        System.out.println("[ERROR] " + formattedMessage);
+        System.out.println("[\033[1;31mERROR\033[0m] " + formattedMessage);
     }
 
     private String formatMessage(

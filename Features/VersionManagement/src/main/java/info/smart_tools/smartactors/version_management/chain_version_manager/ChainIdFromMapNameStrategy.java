@@ -80,7 +80,7 @@ public class ChainIdFromMapNameStrategy {
         Object previous = versions.put(version, chainId);
         if (previous != null) {
             System.out.println(
-                    "[WARNING] Replacing chain '" + chainId + "' by chain from feature " +
+                    "[\033[1;33mWARNING\033[0m] Replacing chain '" + chainId + "' by chain from feature " +
                     ModuleManager.getCurrentModule().getName() + ":" + version.toString()
             );
         } else {

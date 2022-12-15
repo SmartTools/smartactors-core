@@ -50,7 +50,7 @@ public class PluginIOCKeys implements IPlugin {
                         try {
                             IOC.unregister(IOC.getKeyForKeyByNameStrategy());
                         } catch(DeletionException e) {
-                            System.out.println("[WARNING] Deregistration of IOC key for key by name strategy failed.");
+                            System.out.println("[\033[1;33mWARNING\033[0m] Deregistration of IOC key for key by name strategy failed.");
                         }
                     });
 

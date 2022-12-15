@@ -27,6 +27,11 @@ import info.smart_tools.smartactors.task.interfaces.iqueue.IQueue;
 import info.smart_tools.smartactors.task.interfaces.itask.ITask;
 import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -50,8 +55,10 @@ public class FeatureManagerActor {
     private Map<Object, IFeature> loadedFeatures;
     private Map<Object, IFeature> failedFeatures;
     private Map<Object, IFeature> featuresInProgress;
+    private Map<String, Set<String>> featurePluginsCache;
 
     private final IFieldName featureFN;
+    private final IFieldName pluginsFN;
     private final IFieldName afterFeaturesCallbackQueueFN;
     private final IFieldName startTimeOfLoadingFeatureGroupFN;
 
@@ -79,6 +86,7 @@ public class FeatureManagerActor {
         this.loadedFeatures = new ConcurrentHashMap<>();
         this.failedFeatures = new ConcurrentHashMap<>();
         this.featuresInProgress = new ConcurrentHashMap<>();
+        this.featurePluginsCache = new ConcurrentHashMap<>();
 
         this.featureFN = IOC.resolve(
                 Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "feature"
@@ -88,6 +96,9 @@ public class FeatureManagerActor {
         );
         this.startTimeOfLoadingFeatureGroupFN = IOC.resolve(
                 Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "startTimeOfLoadingFeatureGroup"
+        );
+        this.pluginsFN = IOC.resolve(
+            Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "plugins"
         );
 
         Map<Object, IModule> modules = ModuleManager.getModules();
@@ -99,7 +110,11 @@ public class FeatureManagerActor {
     ) {
         modules.forEach((id, module) -> {
             try {
-                Set<String> dependencies = module.getDependencies().stream().map(IModule::getName).collect(Collectors.toSet());
+                Set<String> plugins = readPlugins(module);
+                Set<String> dependencies = module.getDependencies()
+                    .stream()
+                    .map(IModule::getName)
+                    .collect(Collectors.toSet());
                 String[] featureName = parseFullName(module.getName());
                 Feature feature = new Feature(
                         id,
@@ -107,17 +122,50 @@ public class FeatureManagerActor {
                         featureName[1],
                         featureName[2],
                         dependencies,
+                        plugins,
                         null,
                         null,
                         null
                 );
 
                 loadedFeatures.put(id, feature);
+                if (!plugins.isEmpty()) {
+                    featurePluginsCache.put(feature.getDisplayName(), plugins);
+                }
             } catch (FeatureManagementException e) {
                 // TODO: add better handling for an exception
                 throw new RuntimeException("Failed to add feature");
             }
         });
+    }
+
+    private Set<String> readPlugins(final IModule module) {
+        Optional<URL> optionalURL = Arrays.stream(module.getClassLoader().getURLsFromDependencies())
+            .filter(url -> url.getFile().contains(module.getName().split(":")[1]))
+            .findFirst()
+            .map(url -> {
+                try {
+                    return new URL("jar:" + url.getFile() + "config.json");
+                } catch (MalformedURLException e) {
+                    return null;
+                }
+            });
+
+        if (!optionalURL.isPresent()) {
+            return new HashSet<>();
+        }
+
+        List<String> plugins;
+        try (InputStream is = optionalURL.get().openStream()) {
+            IObject config = IOC.resolve(Keys.getKeyByName(IOBJECT_FACTORY_STRATEGY_NAME), is);
+            plugins = (List<String>) config.getValue(this.pluginsFN);
+        } catch (IOException | ResolutionException e) {
+            throw new RuntimeException("Unable to read " + optionalURL.get().getFile(), e);
+        } catch (InvalidArgumentException | ReadValueException e) {
+            throw new RuntimeException("Unable to read 'plugins' section from config", e);
+        }
+
+        return plugins == null ? new HashSet<>() : new HashSet<>(plugins);
     }
 
     /**
@@ -236,12 +284,12 @@ public class FeatureManagerActor {
 
                     System.out.println("\n\n");
                     System.out.println(
-                            "[INFO] Feature group has been loaded: " +
+                            "[\033[1;34mINFO\033[0m] Feature group has been loaded: " +
                                     this.requestProcessesForInfo.get(mp).stream().map(
-                                            a -> "\n" + a.getDisplayName() + " - " + (!a.isFailed() ? "(OK)" : "(Failed)")
+                                            a -> "\n\t" + (!a.isFailed() ? "(\033[0;32mOK\033[0m) " : "(\033[0;30mFailed\033[0m) ") + a.getDisplayName()
                                     ).collect(Collectors.toList())
                     );
-                    System.out.println("[INFO] elapsed time - " + elapsedTimeToLocalTime.format(df) + ".");
+                    System.out.println("[\033[1;34mINFO\033[0m] elapsed time - " + elapsedTimeToLocalTime.format(df) + ".");
                     System.out.println("\n\n");
                     this.requestProcessesForInfo.remove(mp);
                 } catch (
@@ -281,8 +329,27 @@ public class FeatureManagerActor {
                 throw new FeatureManagementException("Cannot update feature " + feature.getDisplayName() + " from its clone.");
             }
 
-            checkAndRunConnectedFeatures();
             Set<String> featureDependencies = feature.getDependencies();
+            Set<String> plugins = feature.getPlugins();
+
+            if (plugins != null && !plugins.isEmpty()) {
+                featurePluginsCache.put(feature.getDisplayName(), plugins);
+            }
+
+            for (Map.Entry<String, Set<String>> cache : this.featurePluginsCache.entrySet()) {
+                if (featureDependencies != null &&
+                    featureDependencies.contains(cache.getKey()) &&
+                    !cache.getValue().contains(feature.getDisplayName())
+                ) {
+                    featureDependencies.remove(cache.getKey());
+                    featureDependencies.addAll(cache.getValue());
+                }
+            }
+
+            replaceDependencies(featuresPaused, plugins, feature);
+            replaceDependencies(featuresInProgress, plugins, feature);
+
+            checkAndRunConnectedFeatures();
 
             if (null != featureDependencies) {
                 boolean hasDuplicate = false;
@@ -404,7 +471,7 @@ public class FeatureManagerActor {
                     }
                     if (order == 1) {
                         System.out.println(
-                                "[WARNING] Version of base feature '" + baseFeature.getDisplayName() +
+                                "[\033[1;33mWARNING\033[0m] Version of base feature '" + baseFeature.getDisplayName() +
                                         "' is greater than in feature '" + feature.getDisplayName() + "' dependencies."
                         );
                     }
@@ -453,9 +520,49 @@ public class FeatureManagerActor {
                 }
             }*/
 
-            System.out.println("[INFO] The server waits for the following features to continue: " +
+            System.out.println("[\033[1;34mINFO\033[0m] The server waits for the following features to continue: " +
                     unresolved.stream().map(a -> "\n\t\t" + a).collect(Collectors.toList())
             );
+        }
+    }
+
+    /**
+     * Replace feature dependencies with plugins
+     * @param features map of features where replacement needs to be performed
+     * @param plugins set of plugins from current feature
+     * @param feature current feature
+     */
+    private void replaceDependencies(
+        final Map<?, IFeature> features,
+        final Set<String> plugins,
+        final IFeature feature
+    ) {
+        for (Map.Entry<?, IFeature> entry : features.entrySet()) {
+            // if there are no plugins, then there is no need to update features
+            if (plugins == null) {
+                continue;
+            }
+
+            // if plugins cache contains feature from entry set, then skip cycle
+            // otherwise, it may create cycled dependency
+            if (this.featurePluginsCache.containsKey(entry.getValue().getDisplayName())) {
+                continue;
+            }
+            // if feature from entry set contains current feature as a plugin, then skip cycle
+            if (entry.getValue().getPlugins() != null && entry.getValue().getPlugins().contains(feature.getDisplayName())) {
+                continue;
+            }
+            // if feature plugins contain feature from entry set as a plugin, then skip cycle
+            if (plugins.contains(entry.getValue().getDisplayName())) {
+                continue;
+            }
+
+            Set<String> dependencies = entry.getValue().getDependencies();
+            if (dependencies != null && dependencies.contains(feature.getDisplayName()) && !plugins.isEmpty()
+            ) {
+                dependencies.remove(feature.getDisplayName());
+                dependencies.addAll(plugins);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.feature_management.all_in_direcory_feature_tracker;
 
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.path.Path;
 import info.smart_tools.smartactors.feature_management.all_in_direcory_feature_tracker.exception.FeatureTrackerException;
 import info.smart_tools.smartactors.feature_management.all_in_direcory_feature_tracker.wrapper.FeatureTrackerWrapper;
@@ -7,6 +8,7 @@ import info.smart_tools.smartactors.feature_management.feature.Feature;
 import info.smart_tools.smartactors.feature_management.interfaces.ifeature.IFeature;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
@@ -27,6 +29,7 @@ public class AllInDirectoryFeatureTracker {
     private final IFieldName featureNameFN;
     private final IFieldName featureVersionFN;
     private final IFieldName afterFeaturesFN;
+    private final IFieldName pluginsFN;
     private final IFieldName repositoriesFN;
     private final IFieldName featuresFN;
     private final IFieldName nameFN;
@@ -37,9 +40,8 @@ public class AllInDirectoryFeatureTracker {
     private final static String END_OF_INPUT_DELIMITER = "\\Z";
     private final static String CONFIG_FILE_NAME = "config.json";
     private final static String EXTENSION_SEPARATOR = ".";
-    private final static String IOBJECT_FACTORY_STRATEGY_NAME = "info.smart_tools.smartactors.iobject.iobject.IObject";
-    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME =
-            "info.smart_tools.smartactors.iobject.ifield_name.IFieldName";
+    private final static String IOBJECT_FACTORY_STRATEGY_NAME = IObject.class.getCanonicalName();
+    private final static String FIELD_NAME_FACTORY_STARTEGY_NAME = IFieldName.class.getCanonicalName();
     private final static String IOC_FEATURE_REPOSITORY_STORAGE_NAME = "feature-repositories";
 
     //TODO: this parameters would be took out into the config.json as actor arguments
@@ -60,6 +62,7 @@ public class AllInDirectoryFeatureTracker {
         this.featureNameFN =    IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "featureName");
         this.featureVersionFN = IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "featureVersion");
         this.afterFeaturesFN =  IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "afterFeatures");
+        this.pluginsFN =        IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "plugins");
         this.repositoriesFN =   IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "repositories");
         this.featuresFN =       IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "features");
         this.nameFN =           IOC.resolve(Keys.getKeyByName(FIELD_NAME_FACTORY_STARTEGY_NAME), "name");
@@ -123,17 +126,27 @@ public class AllInDirectoryFeatureTracker {
         String name = featureNames[1];
         String version = featureNames.length > 2 ? featureNames[2] : null;
 
-        Set<String> dependencies = new HashSet<String>((List) jsonConfig.getValue(this.afterFeaturesFN));
+        Set<String> dependencies = new HashSet<>((List) jsonConfig.getValue(this.afterFeaturesFN));
+        Set<String> plugins = getPlugins(jsonConfig);
 
         return new Feature(
-                featureNames[0],
-                featureNames[1],
-                featureNames[2],
-                dependencies,
-                new Path(f.getPath()),
-                null,
-                null
+            groupId,
+            name,
+            version,
+            dependencies,
+            plugins,
+            new Path(f.getPath()),
+            null,
+            null
         );
+    }
+
+    private Set<String> getPlugins(final IObject jsonConfig) {
+        try {
+            return new HashSet<>((List) jsonConfig.getValue(this.pluginsFN));
+        } catch (ReadValueException | InvalidArgumentException e) {
+            return new HashSet<>();
+        }
     }
 
     private IFeature createZippedFeature(final File f)

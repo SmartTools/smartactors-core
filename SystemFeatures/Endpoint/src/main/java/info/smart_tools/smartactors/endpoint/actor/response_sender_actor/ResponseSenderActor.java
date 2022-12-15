@@ -24,7 +24,7 @@ public class ResponseSenderActor {
      * Constructor for actor
      */
     public ResponseSenderActor() {
-        System.out.println("[WARNING] \"ResponseSenderActor\" is deprecated. Use \"response sender receiver\" instead.");
+        System.out.println("[\033[1;33mWARNING\033[0m] \"ResponseSenderActor\" is deprecated. Use \"response sender receiver\" instead.");
     }
 
     /**

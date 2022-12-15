@@ -22,6 +22,12 @@ public interface IFeature {
     Set<String> getDependencies();
 
     /**
+     * Gets set of the feature plugins
+     * @return the set of feature plugins
+     */
+    Set<String> getPlugins();
+
+    /**
      * Gets true if feature loading has been failed
      * @return {@code true} if feature loading has been failed, {@code false} otherwise
      */
@@ -80,6 +86,12 @@ public interface IFeature {
      * @param dependencies the feature dependencies
      */
     void setDependencies(Set<String> dependencies);
+
+    /**
+     * Sets feature plugins
+     * @param plugins the feature plugins
+     */
+    void setPlugins(Set<String> plugins);
 
     /**
      * Sets true if feature loading has been failed

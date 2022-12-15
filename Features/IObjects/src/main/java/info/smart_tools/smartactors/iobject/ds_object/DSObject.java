@@ -22,6 +22,7 @@ import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException
 import info.smart_tools.smartactors.iobject.iobject.exception.SerializeException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -68,6 +69,20 @@ public class DSObject implements IObject {
         }
         this.body = new HashMap<IFieldName, Object>(0);
         this.body.putAll((HashMap<IFieldName, Object>) objectEntries);
+    }
+
+    /**
+     * Serialize incoming input stream and create new instance of {@link DSObject}
+     * @param body incoming string data
+     * @throws InvalidArgumentException if any errors occurred on object creation
+     */
+    public DSObject(final InputStream body)
+        throws InvalidArgumentException {
+        try {
+            this.body = OBJECT_MAPPER.readerFor(new TypeReference<Map<FieldName, Object>>() { }).readValue(body);
+        } catch (Throwable e) {
+            throw new InvalidArgumentException(e);
+        }
     }
 
     /**

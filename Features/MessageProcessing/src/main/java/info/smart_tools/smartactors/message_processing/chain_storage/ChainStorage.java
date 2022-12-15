@@ -84,7 +84,7 @@ public class ChainStorage implements IChainStorage {
             }
 
             if (null != oldState) {
-                System.out.println(MessageFormat.format("[WARNING] Replacing chain ({0}) registered as ''{1}'' by {2}",
+                System.out.println(MessageFormat.format("[\033[1;33mWARNING\033[0m] Replacing chain ({0}) registered as ''{1}'' by {2}",
                         oldState.getCurrent().toString(), chainId.toString(), newChain.toString()));
             }
         } catch (ResolutionException | ScopeProviderException e) {
@@ -101,7 +101,7 @@ public class ChainStorage implements IChainStorage {
         }
 
         if (null == oldState) {
-            System.out.println(MessageFormat.format("[WARNING] ''{1}'' has no chains, nothing to delete",
+            System.out.println(MessageFormat.format("[\033[1;33mWARNING\033[0m] ''{1}'' has no chains, nothing to delete",
                     chainId.toString()));
         }
     }
