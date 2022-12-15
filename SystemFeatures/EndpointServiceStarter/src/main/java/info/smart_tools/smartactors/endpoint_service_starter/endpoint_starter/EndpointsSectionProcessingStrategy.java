@@ -71,7 +71,9 @@ import java.util.List;
  *                     "domain": "example.com",
  *                     "secure": true,
  *                     "httpOnly": true
- *                 }
+ *                 },
+ *                 "externalConfigurationReader": "endpoint external configuration file reader",
+ *                 "pathToExternalConfiguration": "path/to/config.properties"
  *             }
  *         ]
  *     }

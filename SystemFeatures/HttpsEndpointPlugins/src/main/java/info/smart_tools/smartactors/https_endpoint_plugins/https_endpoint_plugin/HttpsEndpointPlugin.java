@@ -6,6 +6,8 @@ import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
+import info.smart_tools.smartactors.endpoint.interfaces.iendpoint_external_configuration_reader.IEndpointExternalConfigurationReader;
+import info.smart_tools.smartactors.endpoint.interfaces.iendpoint_external_configuration_reader.exception.EndpointExternalConfigurationReaderException;
 import info.smart_tools.smartactors.endpoint.interfaces.ienvironment_handler.IEnvironmentHandler;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
 import info.smart_tools.smartactors.feature_loading_system.interfaces.ibootstrap.IBootstrap;
@@ -20,6 +22,7 @@ import info.smart_tools.smartactors.https_endpoint.interfaces.issl_engine_provid
 import info.smart_tools.smartactors.https_endpoint.ssl_engine_provider.SslEngineProvider;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.exception.RegistrationException;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
@@ -47,6 +50,7 @@ public class HttpsEndpointPlugin implements IPlugin {
     private IFieldName queueFieldName;
     private IFieldName templatesFieldName;
     private IFieldName scopeSwitchingFieldName;
+    private IFieldName externalConfigurationReaderFieldName;
 
     private final IBootstrap<IBootstrapItem<String>> bootstrap;
 
@@ -89,6 +93,7 @@ public class HttpsEndpointPlugin implements IPlugin {
                             new ApplyFunctionToArgumentsStrategy(
                                     (args) -> {
                                         IObject configuration = (IObject) args[0];
+                                        applyExternalConfiguration(configuration);
                                         IQueue queue;
                                         Integer stackDepth;
                                         Boolean scopeSwitching;
@@ -196,6 +201,12 @@ public class HttpsEndpointPlugin implements IPlugin {
                         IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
                         "scopeSwitching"
                 );
+
+        externalConfigurationReaderFieldName =
+            IOC.resolve(
+                IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
+                "externalConfigurationReader"
+            );
     }
 
 
@@ -205,6 +216,7 @@ public class HttpsEndpointPlugin implements IPlugin {
                 new ApplyFunctionToArgumentsStrategy(
                         (args) -> {
                             IObject configuration = (IObject) args[0];
+                            applyExternalConfiguration(configuration);
 
                             try {
                                 String endpointName = (String) configuration.getValue(endpointNameFieldName);
@@ -255,5 +267,68 @@ public class HttpsEndpointPlugin implements IPlugin {
                         }
                 )
         );
+    }
+
+    private void applyExternalConfiguration(IObject defaultConfiguration) {
+        try {
+            String readerName = (String) defaultConfiguration.getValue(externalConfigurationReaderFieldName);
+            if (readerName == null) {
+                return;
+            }
+
+            IEndpointExternalConfigurationReader externalConfigurationReader = IOC.resolve(
+                Keys.getKeyByName(readerName),
+                defaultConfiguration
+            );
+
+            defaultConfiguration.setValue(
+                portFieldName,
+                Integer.parseInt(externalConfigurationReader.readOrDefault(
+                    portFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(portFieldName))
+                ))
+            );
+            defaultConfiguration.setValue(
+                startChainNameFieldName,
+                externalConfigurationReader.readOrDefault(
+                    startChainNameFieldName.toString(),
+                    defaultConfiguration.getValue(startChainNameFieldName)
+                )
+            );
+            defaultConfiguration.setValue(
+                stackDepthFieldName,
+                Integer.parseInt(externalConfigurationReader.readOrDefault(
+                    stackDepthFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(stackDepthFieldName))
+                ))
+            );
+            defaultConfiguration.setValue(
+                maxContentLengthFieldName,
+                Integer.parseInt(externalConfigurationReader.readOrDefault(
+                    maxContentLengthFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(maxContentLengthFieldName)))
+                )
+            );
+            defaultConfiguration.setValue(
+                endpointNameFieldName,
+                externalConfigurationReader.readOrDefault(
+                    endpointNameFieldName.toString(),
+                    defaultConfiguration.getValue(endpointNameFieldName)
+                )
+            );
+            defaultConfiguration.setValue(
+                scopeSwitchingFieldName,
+                Boolean.parseBoolean(externalConfigurationReader.readOrDefault(
+                    scopeSwitchingFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(scopeSwitchingFieldName))
+                ))
+            );
+        } catch (EndpointExternalConfigurationReaderException
+                 | ReadValueException
+                 | ChangeValueException
+                 | ResolutionException
+                 | InvalidArgumentException e) {
+            throw new RuntimeException("Failed to apply external endpoint configuration", e);
+        }
     }
 }

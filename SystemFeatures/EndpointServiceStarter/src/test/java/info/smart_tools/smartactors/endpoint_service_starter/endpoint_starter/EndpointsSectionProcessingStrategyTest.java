@@ -29,7 +29,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Ignore("Need to rewrite because current tests depend on 'http_endpoint' feature but the general feature doesn't depend on.")
 public class EndpointsSectionProcessingStrategyTest extends IOCInitializer {
 
     private IQueue<ITask> taskQueue;
@@ -111,6 +110,7 @@ public class EndpointsSectionProcessingStrategyTest extends IOCInitializer {
     }
 
     @Test
+    @Ignore("Need to rewrite because current tests depend on 'http_endpoint' feature but the general feature doesn't depend on.")
     public void testLoadingConfig() throws Exception {
         when(chainStorage.resolve(mapId)).thenReturn(receiverChain);
         DSObject config = new DSObject("\n" +

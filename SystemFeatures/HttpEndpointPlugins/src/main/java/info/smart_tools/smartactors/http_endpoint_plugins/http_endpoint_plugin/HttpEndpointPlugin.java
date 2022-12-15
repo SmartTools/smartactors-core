@@ -10,6 +10,8 @@ import info.smart_tools.smartactors.base.iup_counter.IUpCounter;
 import info.smart_tools.smartactors.base.strategy.apply_function_to_arguments.ApplyFunctionToArgumentsStrategy;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.class_management.module_manager.ModuleManager;
+import info.smart_tools.smartactors.endpoint.interfaces.iendpoint_external_configuration_reader.IEndpointExternalConfigurationReader;
+import info.smart_tools.smartactors.endpoint.interfaces.iendpoint_external_configuration_reader.exception.EndpointExternalConfigurationReaderException;
 import info.smart_tools.smartactors.endpoint.interfaces.ienvironment_handler.IEnvironmentHandler;
 import info.smart_tools.smartactors.endpoint.interfaces.imessage_mapper.IMessageMapper;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
@@ -34,6 +36,7 @@ import info.smart_tools.smartactors.http_endpoint.message_to_bytes_mapper.Messag
 import info.smart_tools.smartactors.http_endpoint.respons_status_extractor.ResponseStatusExtractor;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.exception.RegistrationException;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
@@ -63,6 +66,7 @@ public class HttpEndpointPlugin implements IPlugin {
     private IFieldName queueFieldName;
     private IFieldName templatesFieldName;
     private IFieldName scopeSwitchingFieldName;
+    private IFieldName externalConfigurationReaderFieldName;
 
     /**
      * Constructor
@@ -100,6 +104,7 @@ public class HttpEndpointPlugin implements IPlugin {
                                     new ApplyFunctionToArgumentsStrategy(
                                             (args) -> {
                                                 IObject configuration = (IObject) args[0];
+                                                applyExternalConfiguration(configuration);
                                                 IQueue queue;
                                                 Integer stackDepth;
                                                 Boolean scopeSwitching;
@@ -123,6 +128,7 @@ public class HttpEndpointPlugin implements IPlugin {
                                     new ApplyFunctionToArgumentsStrategy(
                                             (args) -> {
                                                 IObject configuration = (IObject) args[0];
+                                                applyExternalConfiguration(configuration);
 
                                                 try {
                                                     String endpointName = (String) configuration.getValue(endpointNameFieldName);
@@ -289,6 +295,12 @@ public class HttpEndpointPlugin implements IPlugin {
                         IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
                         "scopeSwitching"
                 );
+
+        externalConfigurationReaderFieldName =
+            IOC.resolve(
+                IOC.resolve(IOC.getKeyForKeyByNameStrategy(), "info.smart_tools.smartactors.iobject.ifield_name.IFieldName"),
+                "externalConfigurationReader"
+            );
     }
 
     private void registerResponseSenders() throws ResolutionException, InvalidArgumentException, RegistrationException,
@@ -466,5 +478,68 @@ public class HttpEndpointPlugin implements IPlugin {
                 Keys.getKeyByName("HttpShuttingDownException"),
                 new SingletonStrategy(er503)
         );
+    }
+
+    private void applyExternalConfiguration(IObject defaultConfiguration) {
+        try {
+            String readerName = (String) defaultConfiguration.getValue(externalConfigurationReaderFieldName);
+            if (readerName == null) {
+                return;
+            }
+
+            IEndpointExternalConfigurationReader externalConfigurationReader = IOC.resolve(
+                Keys.getKeyByName(readerName),
+                defaultConfiguration
+            );
+
+            defaultConfiguration.setValue(
+                portFieldName,
+                Integer.parseInt(externalConfigurationReader.readOrDefault(
+                    portFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(portFieldName))
+                ))
+            );
+            defaultConfiguration.setValue(
+                startChainNameFieldName,
+                externalConfigurationReader.readOrDefault(
+                    startChainNameFieldName.toString(),
+                    defaultConfiguration.getValue(startChainNameFieldName)
+                )
+            );
+            defaultConfiguration.setValue(
+                stackDepthFieldName,
+                Integer.parseInt(externalConfigurationReader.readOrDefault(
+                    stackDepthFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(stackDepthFieldName))
+                ))
+            );
+            defaultConfiguration.setValue(
+                maxContentLengthFieldName,
+                Integer.parseInt(externalConfigurationReader.readOrDefault(
+                    maxContentLengthFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(maxContentLengthFieldName)))
+                )
+            );
+            defaultConfiguration.setValue(
+                endpointNameFieldName,
+                externalConfigurationReader.readOrDefault(
+                    endpointNameFieldName.toString(),
+                    defaultConfiguration.getValue(endpointNameFieldName)
+                )
+            );
+            defaultConfiguration.setValue(
+                scopeSwitchingFieldName,
+                Boolean.parseBoolean(externalConfigurationReader.readOrDefault(
+                    scopeSwitchingFieldName.toString(),
+                    String.valueOf(defaultConfiguration.getValue(scopeSwitchingFieldName))
+                ))
+            );
+        } catch (EndpointExternalConfigurationReaderException
+                 | ReadValueException
+                 | ChangeValueException
+                 | ResolutionException
+                 | InvalidArgumentException e) {
+            throw new RuntimeException("Failed to apply external endpoint configuration", e);
+        }
     }
 }
