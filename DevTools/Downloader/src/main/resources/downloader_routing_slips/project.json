@@ -1,36 +1,28 @@
 {
-  "name": "download feature",
+  "name": "download project features",
   "steps": [
     {
-      "actorName": "ArgsToMessageActor",
-      "methodName": "moveArgsToMessage",
+      "actorName": "insertRoutingSlipActor",
+      "methodName": "insertRoutingSlip",
       "methodParameters": {
-        "argumentPaths": ["arguments"],
+        "argumentPaths": ["#slip", "#constant#string:configs", "#slip_storage"],
         "responsePath": "#split response"
       }
     },
     {
-      "actorName": "readFeatureConfigActor",
-      "methodName": "readFeatureConfig",
-      "methodParameters": {
-        "argumentPaths": ["source file"],
-        "responsePath": "feature config data"
-      }
-    },
-    {
-      "actorName": "featuresAndRepositoriesStoragesActor",
+      "actorName": "downloadFeaturesActor",
       "methodName": "configure",
       "methodParameters": {
-        "argumentPaths": [],
-        "responsePath": "#split response"
+        "argumentPaths": ["features"],
+        "responsePath": "download features while condition"
       }
     },
     {
-      "actorName": "featuresAndRepositoriesStoragesActor",
-      "methodName": "updateStorages",
+      "actorName": "downloadFeaturesActor",
+      "methodName": "nextFeature",
       "methodParameters": {
-        "argumentPaths": ["feature config data", "features", "repositories"],
-        "responsePath": null
+        "argumentPaths": [],
+        "responsePath": "feature config data"
       }
     },
     {
@@ -63,6 +55,14 @@
       "methodParameters": {
         "argumentPaths": ["downloaded file path", "check and delete if exists file path"],
         "responsePath": "check and delete if exists file path"
+      }
+    },
+    {
+      "actorName": "whileActor",
+      "methodName": "whileReturnByShift",
+      "methodParameters": {
+        "argumentPaths": ["download features while condition", "#constant#int:-6", "#slip"],
+        "responsePath": null
       }
     }
   ]

@@ -22,7 +22,9 @@ public class CollectDependencyDataActor extends StatelessActor {
     ) {
         this.loadingList = new ArrayList<>();
         this.featureNames = new HashSet<>();
-        this.featureNames.add(feature.getFeatureName());
+        if (null != feature.getFeatureName()) {
+            this.featureNames.add(feature.getFeatureName());
+        }
         if (null != feature.getAfterFeatures() && !feature.getAfterFeatures().isEmpty()) {
             this.loadingList.addAll(feature.getAfterFeatures().stream().map(Feature::new).collect(Collectors.toList()));
         }
