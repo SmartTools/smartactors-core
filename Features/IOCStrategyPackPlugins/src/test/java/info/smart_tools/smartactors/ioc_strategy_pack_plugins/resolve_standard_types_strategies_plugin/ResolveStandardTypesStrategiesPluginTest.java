@@ -71,6 +71,12 @@ public class ResolveStandardTypesStrategiesPluginTest extends IOCInitializer {
         IKey listKey = Keys.getKeyByName(List.class.getCanonicalName() + "convert");
         IKey expandableStrategyListKey = Keys.getKeyByName("expandable_strategy#" + List.class.getCanonicalName());
 
+        IKey lngKey = Keys.getKeyByName(long.class.getCanonicalName() + "convert");
+        IKey expandableStrategyLngKey = Keys.getKeyByName("expandable_strategy#" + long.class.getCanonicalName());
+
+        IKey longKey = Keys.getKeyByName(Long.class.getCanonicalName() + "convert");
+        IKey expandableStrategyLongKey = Keys.getKeyByName("expandable_strategy#" + Long.class.getCanonicalName());
+
         Object a1 = IOC.resolve(stringKey, 1);
         Object aExp1 = IOC.resolve(expandableStrategyStringKey);
 
@@ -95,6 +101,12 @@ public class ResolveStandardTypesStrategiesPluginTest extends IOCInitializer {
         Object a8 = IOC.resolve(listKey, new boolean[] {true, false});
         Object aExp8 = IOC.resolve(expandableStrategyListKey);
 
+        Object a9 = IOC.resolve(lngKey, 1);
+        Object aExp9 = IOC.resolve(expandableStrategyLngKey);
+
+        Object a10 = IOC.resolve(longKey, 1);
+        Object aExp10 = IOC.resolve(expandableStrategyLongKey);
+
         assertNotNull(a1);
         assertNotNull(aExp1);
         assertNotNull(a2);
@@ -111,6 +123,11 @@ public class ResolveStandardTypesStrategiesPluginTest extends IOCInitializer {
         assertNotNull(aExp7);
         assertNotNull(a8);
         assertNotNull(aExp8);
+        assertNotNull(a9);
+        assertNotNull(aExp9);
+        assertNotNull(a10);
+        assertNotNull(aExp10);
+
         bootstrap.revert();
         try {
             Object a11 = IOC.resolve(stringKey, 1);
@@ -174,6 +191,22 @@ public class ResolveStandardTypesStrategiesPluginTest extends IOCInitializer {
         } catch (ResolutionException e) {/**/}
         try {
             Object aExp81 = IOC.resolve(expandableStrategyListKey);
+            fail();
+        } catch (ResolutionException e) {/**/}
+        try {
+            Object a91 = IOC.resolve(lngKey, new boolean[] {true, false});
+            fail();
+        } catch (ResolutionException e) {/**/}
+        try {
+            Object aExp91 = IOC.resolve(expandableStrategyListKey);
+            fail();
+        } catch (ResolutionException e) {/**/}
+        try {
+            Object a101 = IOC.resolve(longKey, new boolean[] {true, false});
+            fail();
+        } catch (ResolutionException e) {/**/}
+        try {
+            Object aExp101 = IOC.resolve(expandableStrategyListKey);
             fail();
         } catch (ResolutionException e) {/**/}
     }

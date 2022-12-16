@@ -1,4 +1,4 @@
-package info.smart_tools.smartactors.database_postgresql.postgres_search_task;
+package info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task;
 
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
 import info.smart_tools.smartactors.database.database_storage.utils.CollectionName;
@@ -75,7 +75,7 @@ import java.util.List;
  *     </ul>
  *
  */
-public class PostgresSearchTask implements IDatabaseTask {
+public class PostgresSearchByPageSizeAndNumberTask implements IDatabaseTask {
 
     /**
      * Connection to the database.
@@ -102,20 +102,20 @@ public class PostgresSearchTask implements IDatabaseTask {
      * Creates the task
      * @param connection the database connection where to perform search
      */
-    public PostgresSearchTask(final IStorageConnection connection) {
+    public PostgresSearchByPageSizeAndNumberTask(final IStorageConnection connection) {
         this.connection = connection;
     }
 
     @Override
     public void prepare(final IObject query) throws TaskPrepareException {
         try {
-            SearchMessage message = IOC.resolve(Keys.getKeyByName(SearchMessage.class.getCanonicalName()), query);
+            SearchByPageSizeAndNumberMessage message = IOC.resolve(Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()), query);
             collection = message.getCollectionName();
             criteria = message.getCriteria();
             callback = message.getCallback();
 
             preparedQuery = new QueryStatement();
-            PostgresSchema.search(preparedQuery, collection, criteria);
+            PostgresSchema.searchByPageSizeAndNumber(preparedQuery, collection, criteria);
         } catch (Exception e) {
             throw new TaskPrepareException(e);
         }

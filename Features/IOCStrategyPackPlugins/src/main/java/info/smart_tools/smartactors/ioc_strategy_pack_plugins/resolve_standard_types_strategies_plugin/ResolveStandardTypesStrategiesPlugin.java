@@ -37,6 +37,8 @@ import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_str
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.LongArrayToListStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.ObjectArrayToListStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_list_strategies.ShortArrayToListStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_long.IntegerToLongStrategy;
+import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_long.StringToLongStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_self.ClassToClassStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.BooleanToStringStrategy;
 import info.smart_tools.smartactors.ioc_strategy_pack.resolve_standard_types_strategies.to_string_strategies.ByteToStringStrategy;
@@ -188,6 +190,25 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
                             IOC.register(integerKey, integerStrategy);
                             IOC.register(expandableStrategyIntegerKey, new SingletonStrategy(integerStrategy));
 
+                            //to long strategies
+                                IKey longClassKey = Keys.getKeyByName(Long.class.getCanonicalName() + "convert");
+                            IKey expandableStrategyLongClassKey = Keys.getKeyByName("expandable_strategy#" + Long.class.getCanonicalName());
+                            IStrategy longClassStrategy = new StrategyStorageWithCacheStrategy(argToKey, findValueByArgument);
+                            ((IStrategyRegistration) longClassStrategy).register(
+                                Long.class,
+                                new ClassToClassStrategy()
+                            );
+                            ((IStrategyRegistration) longClassStrategy).register(
+                                String.class,
+                                new StringToLongStrategy()
+                            );
+                            ((IStrategyRegistration) longClassStrategy).register(
+                                Integer.class,
+                                new IntegerToLongStrategy()
+                            );
+                            IOC.register(longClassKey, longClassStrategy);
+                            IOC.register(expandableStrategyLongClassKey, new SingletonStrategy(longClassStrategy));
+
                             // to BigDecimal strategies
                             IKey bigDecimalKey = Keys.getKeyByName(BigDecimal.class.getCanonicalName() + "convert");
                             IKey expandableStrategyBigDecimalKey = Keys.getKeyByName("expandable_strategy#" + BigDecimal.class.getCanonicalName());
@@ -260,6 +281,21 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
                             );
                             IOC.register(intKey, intStrategy);
                             IOC.register(expandableStrategyIntKey, new SingletonStrategy(intStrategy));
+
+                            //to long strategies
+                            IKey longKey = Keys.getKeyByName(long.class.getCanonicalName() + "convert");
+                            IKey expandableStrategyLongKey = Keys.getKeyByName("expandable_strategy#" + long.class.getCanonicalName());
+                            IStrategy longStrategy = new StrategyStorageWithCacheStrategy(argToKey, findValueByArgument);
+                            ((IStrategyRegistration) longStrategy).register(
+                                String.class,
+                                new StringToLongStrategy()
+                            );
+                            ((IStrategyRegistration) longStrategy).register(
+                                Integer.class,
+                                new IntegerToLongStrategy()
+                            );
+                            IOC.register(longKey, longStrategy);
+                            IOC.register(expandableStrategyLongKey, new SingletonStrategy(longStrategy));
                         } catch (ResolutionException e) {
                             throw new ActionExecutionException("ResolveStandardTypesStrategies plugin can't load: can't get ResolveStandardTypesStrategies key", e);
                         } catch (RegistrationException | StrategyRegistrationException | InvalidArgumentException e) {
@@ -278,6 +314,10 @@ public class ResolveStandardTypesStrategiesPlugin implements IPlugin {
                                 BigDecimal.class.getCanonicalName() + "convert",
                                 "expandable_strategy#" + Integer.class.getCanonicalName(),
                                 Integer.class.getCanonicalName() + "convert",
+                                "expandable_strategy#" + long.class.getCanonicalName(),
+                                String.class.getCanonicalName() + "convert",
+                                "expandable_strategy#" + Long.class.getCanonicalName(),
+                                String.class.getCanonicalName() + "convert",
                                 "expandable_strategy#" + boolean.class.getCanonicalName(),
                                 boolean.class.getCanonicalName() + "convert",
                                 "expandable_strategy#" + Character.class.getCanonicalName(),

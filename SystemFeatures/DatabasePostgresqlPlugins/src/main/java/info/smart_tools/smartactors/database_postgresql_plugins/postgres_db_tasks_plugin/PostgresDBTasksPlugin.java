@@ -22,8 +22,10 @@ import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.Ge
 import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.PostgresGetByIdTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.InsertMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.PostgresSearchByLimitAndOffsetTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task.SearchByLimitAndOffsetMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.PostgresSearchByPageSizeAndNumberTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.SearchByPageSizeAndNumberMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.UpsertMessage;
 import info.smart_tools.smartactors.feature_loading_system.bootstrap_item.BootstrapItem;
@@ -49,6 +51,7 @@ public class PostgresDBTasksPlugin implements IPlugin {
 
     /**
      * Constructor
+     *
      * @param bootstrap bootstrap element
      */
     public PostgresDBTasksPlugin(final IBootstrap<IBootstrapItem<String>> bootstrap) {
@@ -73,7 +76,7 @@ public class PostgresDBTasksPlugin implements IPlugin {
                         registerUpsertTask();
                         registerInsertTask();
                         registerGetByIdTask();
-                        registerSearchTask();
+                        registerSearchByPageSizeAndNumberTask();
                         registerDeleteTask();
                         registerCountTask();
                     } catch (ResolutionException e) {
@@ -92,600 +95,710 @@ public class PostgresDBTasksPlugin implements IPlugin {
 
     private void registerCreateTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField optionsField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "options");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "options");
 
         IOC.register(
-                Keys.getKeyByName(CreateCollectionMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new CreateCollectionMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getOptions() throws ReadValueException {
-                                    try {
-                                        return (IObject) optionsField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.create"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(CreateCollectionMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new CreateCollectionMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject options = null;
-                                if (args.length > 2) {
-                                     options = (IObject) args[2];
-                                }
-                                IDatabaseTask task = new PostgresCreateTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                optionsField.out(query, options);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve create db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getOptions() throws ReadValueException {
+                            try {
+                                return (IObject) optionsField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.create"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject options = null;
+                        if (args.length > 2) {
+                            options = (IObject) args[2];
+                        }
+                        IDatabaseTask task = new PostgresCreateTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        optionsField.out(query, options);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve create db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerAddIndexesTasks() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField optionsField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "options");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "options");
 
         IOC.register(
-                Keys.getKeyByName(AddIndexesMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new AddIndexesMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getOptions() throws ReadValueException {
-                                    try {
-                                        return (IObject) optionsField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.addindexes"),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(AddIndexesMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new AddIndexesMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject options = null;
-                                if (args.length > 2) {
-                                    options = (IObject) args[2];
-                                }
-                                IDatabaseTask task = new PostgresAddIndexesTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                optionsField.out(query, options);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve create db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.addindexessafe"),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+
+                        @Override
+                        public IObject getOptions() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject options = null;
-                                if (args.length > 2) {
-                                    options = (IObject) args[2];
-                                }
-                                IDatabaseTask task = new PostgresAddIndexesSafeTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                optionsField.out(query, options);
-
-                                task.prepare(query);
-                                return task;
+                                return (IObject) optionsField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve create db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.addindexes"),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject options = null;
+                        if (args.length > 2) {
+                            options = (IObject) args[2];
+                        }
+                        IDatabaseTask task = new PostgresAddIndexesTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        optionsField.out(query, options);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve create db task.", e);
+                    }
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.addindexessafe"),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject options = null;
+                        if (args.length > 2) {
+                            options = (IObject) args[2];
+                        }
+                        IDatabaseTask task = new PostgresAddIndexesSafeTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        optionsField.out(query, options);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve create db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerDropIndexesTasks() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField optionsField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "options");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "options");
 
         IOC.register(
-                Keys.getKeyByName(DropIndexesMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new DropIndexesMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getOptions() throws ReadValueException {
-                                    try {
-                                        return (IObject) optionsField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.dropindexes"),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(DropIndexesMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new DropIndexesMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject options = null;
-                                if (args.length > 2) {
-                                    options = (IObject) args[2];
-                                }
-                                IDatabaseTask task = new PostgresDropIndexesTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                optionsField.out(query, options);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve create db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getOptions() throws ReadValueException {
+                            try {
+                                return (IObject) optionsField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.dropindexes"),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject options = null;
+                        if (args.length > 2) {
+                            options = (IObject) args[2];
+                        }
+                        IDatabaseTask task = new PostgresDropIndexesTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        optionsField.out(query, options);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve create db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerNextIdStrategy() throws RegistrationException, ResolutionException {
         IOC.register(
-                Keys.getKeyByName("db.collection.nextid"),
-                new UuidNextIdStrategy()
+            Keys.getKeyByName("db.collection.nextid"),
+            new UuidNextIdStrategy()
         );
     }
 
     private void registerUpsertTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField documentField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "document");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "document");
 
         registerNextIdStrategy();
         IOC.register(
-                Keys.getKeyByName(UpsertMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new UpsertMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getDocument() throws ReadValueException {
-                                    try {
-                                        return (IObject) documentField.in(message);
-                                    } catch (InvalidArgumentException e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.upsert"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(UpsertMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new UpsertMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject document = (IObject) args[2];
-                                IDatabaseTask task = new PostgresUpsertTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                documentField.out(query, document);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve upsert db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getDocument() throws ReadValueException {
+                            try {
+                                return (IObject) documentField.in(message);
+                            } catch (InvalidArgumentException e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.upsert"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject document = (IObject) args[2];
+                        IDatabaseTask task = new PostgresUpsertTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        documentField.out(query, document);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve upsert db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerGetByIdTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField idField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "id");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "id");
         IField callbackField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
 
         IOC.register(
-                Keys.getKeyByName(GetByIdMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new GetByIdMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public Object getId() throws ReadValueException {
-                                    try {
-                                        return idField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IAction<IObject> getCallback() throws ReadValueException {
-                                    try {
-                                        return (IAction<IObject>) callbackField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.getbyid"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(GetByIdMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new GetByIdMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                Object id = args[2];
-                                IAction<IObject> callback = (IAction<IObject>) args[3];
-                                IDatabaseTask task = new PostgresGetByIdTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                idField.out(query, id);
-                                callbackField.out(query, callback);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve getbyid db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public Object getId() throws ReadValueException {
+                            try {
+                                return idField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+
+                        @Override
+                        public IAction<IObject> getCallback() throws ReadValueException {
+                            try {
+                                return (IAction<IObject>) callbackField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.getbyid"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        Object id = args[2];
+                        IAction<IObject> callback = (IAction<IObject>) args[3];
+                        IDatabaseTask task = new PostgresGetByIdTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        idField.out(query, id);
+                        callbackField.out(query, callback);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve getbyid db task.", e);
+                    }
+                }
+            )
         );
     }
 
-    private void registerSearchTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
+    private void registerSearchByPageSizeAndNumberTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField criteriaField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
         IField callbackField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
 
         IOC.register(
-                Keys.getKeyByName(SearchMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new SearchMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getCriteria() throws ReadValueException {
-                                    try {
-                                        return criteriaField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IAction<IObject[]> getCallback() throws ReadValueException {
-                                    try {
-                                        return (IAction<IObject[]>) callbackField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.search"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new SearchByPageSizeAndNumberMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject criteria = (IObject) args[2];
-                                IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
-                                IDatabaseTask task = new PostgresSearchTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                criteriaField.out(query, criteria);
-                                callbackField.out(query, callback);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve search db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getCriteria() throws ReadValueException {
+                            try {
+                                return criteriaField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+
+                        @Override
+                        public IAction<IObject[]> getCallback() throws ReadValueException {
+                            try {
+                                return (IAction<IObject[]>) callbackField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.search"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject criteria = (IObject) args[2];
+                        IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
+                        IDatabaseTask task = new PostgresSearchByPageSizeAndNumberTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        criteriaField.out(query, criteria);
+                        callbackField.out(query, callback);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve search db task.", e);
+                    }
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.search.page-size-and-number"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject criteria = (IObject) args[2];
+                        IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
+                        IDatabaseTask task = new PostgresSearchByPageSizeAndNumberTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        criteriaField.out(query, criteria);
+                        callbackField.out(query, callback);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve search db task.", e);
+                    }
+                }
+            )
+        );
+    }
+
+    private void registerSearchByLimitAndOffsetTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
+        IField collectionNameField = IOC.resolve(
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+        IField criteriaField = IOC.resolve(
+            Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
+        IField callbackField = IOC.resolve(
+            Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
+
+        IOC.register(
+            Keys.getKeyByName(SearchByLimitAndOffsetMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new SearchByLimitAndOffsetMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
+                            try {
+                                return (CollectionName) collectionNameField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+
+                        @Override
+                        public IObject getCriteria() throws ReadValueException {
+                            try {
+                                return criteriaField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+
+                        @Override
+                        public IAction<IObject[]> getCallback() throws ReadValueException {
+                            try {
+                                return (IAction<IObject[]>) callbackField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.search.limit-and-offset"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject criteria = (IObject) args[2];
+                        IAction<IObject[]> callback = (IAction<IObject[]>) args[3];
+                        IDatabaseTask task = new PostgresSearchByLimitAndOffsetTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        criteriaField.out(query, criteria);
+                        callbackField.out(query, callback);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve search db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerDeleteTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField documentField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "document");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "document");
 
         IOC.register(
-                Keys.getKeyByName(DeleteMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new DeleteMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getDocument() throws ReadValueException {
-                                    try {
-                                        return documentField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.delete"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(DeleteMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new DeleteMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject document = (IObject) args[2];
-                                IDatabaseTask task = new PostgresDeleteTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                documentField.out(query, document);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve delete db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getDocument() throws ReadValueException {
+                            try {
+                                return documentField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.delete"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject document = (IObject) args[2];
+                        IDatabaseTask task = new PostgresDeleteTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        documentField.out(query, document);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve delete db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerInsertTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField documentField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "document");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "document");
 
         IOC.register(
-                Keys.getKeyByName(InsertMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new InsertMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getDocument() throws ReadValueException {
-                                    try {
-                                        return (IObject) documentField.in(message);
-                                    } catch (InvalidArgumentException e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.insert"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(InsertMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new InsertMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject document = (IObject) args[2];
-                                IDatabaseTask task = new PostgresInsertTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                documentField.out(query, document);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve insert db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getDocument() throws ReadValueException {
+                            try {
+                                return (IObject) documentField.in(message);
+                            } catch (InvalidArgumentException e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.insert"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject document = (IObject) args[2];
+                        IDatabaseTask task = new PostgresInsertTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        documentField.out(query, document);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve insert db task.", e);
+                    }
+                }
+            )
         );
     }
 
     private void registerCountTask() throws RegistrationException, ResolutionException, InvalidArgumentException {
         IField collectionNameField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "collectionName");
         IField criteriaField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "criteria");
         IField callbackField = IOC.resolve(
-                Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
+            Keys.getKeyByName(IField.class.getCanonicalName()), "callback");
 
         IOC.register(
-                Keys.getKeyByName(CountMessage.class.getCanonicalName()),
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
-                            IObject message = (IObject) args[0];
-                            return new CountMessage() {
-                                @Override
-                                public CollectionName getCollectionName() throws ReadValueException {
-                                    try {
-                                        return (CollectionName) collectionNameField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IObject getCriteria() throws ReadValueException {
-                                    try {
-                                        return criteriaField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                                @Override
-                                public IAction<Long> getCallback() throws ReadValueException {
-                                    try {
-                                        return (IAction<Long>) callbackField.in(message);
-                                    } catch (Exception e) {
-                                        throw new ReadValueException(e);
-                                    }
-                                }
-                            };
-                        }
-                )
-        );
-        IOC.register(
-                Keys.getKeyByName("db.collection.count"),
-                //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
-                new ApplyFunctionToArgumentsStrategy(
-                        (args) -> {
+            Keys.getKeyByName(CountMessage.class.getCanonicalName()),
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    IObject message = (IObject) args[0];
+                    return new CountMessage() {
+                        @Override
+                        public CollectionName getCollectionName() throws ReadValueException {
                             try {
-                                IStorageConnection connection = (IStorageConnection) args[0];
-                                CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
-                                IObject criteria = (IObject) args[2];
-                                IAction<Long> callback = (IAction<Long>) args[3];
-                                IDatabaseTask task = new PostgresCountTask(connection);
-
-                                IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
-
-                                collectionNameField.out(query, collectionName);
-                                criteriaField.out(query, criteria);
-                                callbackField.out(query, callback);
-
-                                task.prepare(query);
-                                return task;
+                                return (CollectionName) collectionNameField.in(message);
                             } catch (Exception e) {
-                                throw new RuntimeException("Can't resolve count db task.", e);
+                                throw new ReadValueException(e);
                             }
                         }
-                )
+
+                        @Override
+                        public IObject getCriteria() throws ReadValueException {
+                            try {
+                                return criteriaField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+
+                        @Override
+                        public IAction<Long> getCallback() throws ReadValueException {
+                            try {
+                                return (IAction<Long>) callbackField.in(message);
+                            } catch (Exception e) {
+                                throw new ReadValueException(e);
+                            }
+                        }
+                    };
+                }
+            )
+        );
+        IOC.register(
+            Keys.getKeyByName("db.collection.count"),
+            //TODO:: use smth like ResolveByNameStrategy, but this caching strategy should call prepare always
+            new ApplyFunctionToArgumentsStrategy(
+                (args) -> {
+                    try {
+                        IStorageConnection connection = (IStorageConnection) args[0];
+                        CollectionName collectionName = CollectionName.fromString(String.valueOf(args[1]));
+                        IObject criteria = (IObject) args[2];
+                        IAction<Long> callback = (IAction<Long>) args[3];
+                        IDatabaseTask task = new PostgresCountTask(connection);
+
+                        IObject query = IOC.resolve(Keys.getKeyByName("info.smart_tools.smartactors.iobject.iobject.IObject"));
+
+                        collectionNameField.out(query, collectionName);
+                        criteriaField.out(query, criteria);
+                        callbackField.out(query, callback);
+
+                        task.prepare(query);
+                        return task;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Can't resolve count db task.", e);
+                    }
+                }
+            )
         );
     }
 

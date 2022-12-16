@@ -1,22 +1,18 @@
-package info.smart_tools.smartactors.database_postgresql.postgres_search_task;
+package info.smart_tools.smartactors.database_postgresql.postgres_search_by_limit_and_offset_task;
 
-import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.base.interfaces.iaction.IAction;
-import info.smart_tools.smartactors.base.interfaces.iaction.exception.ActionExecutionException;
 import info.smart_tools.smartactors.base.strategy.singleton_strategy.SingletonStrategy;
 import info.smart_tools.smartactors.database.database_storage.utils.CollectionName;
 import info.smart_tools.smartactors.database.interfaces.idatabase_task.IDatabaseTask;
 import info.smart_tools.smartactors.database.interfaces.idatabase_task.exception.TaskPrepareException;
-import info.smart_tools.smartactors.database.interfaces.idatabase_task.exception.TaskSetConnectionException;
 import info.smart_tools.smartactors.database.interfaces.istorage_connection.IStorageConnection;
-import info.smart_tools.smartactors.database.interfaces.istorage_connection.exception.StorageException;
 import info.smart_tools.smartactors.database_postgresql.postgres_connection.JDBCCompiledQuery;
 import info.smart_tools.smartactors.database_postgresql.postgres_connection.QueryStatement;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.PostgresSearchByPageSizeAndNumberTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.SearchByPageSizeAndNumberMessage;
 import info.smart_tools.smartactors.helpers.IOCInitializer.IOCInitializer;
 import info.smart_tools.smartactors.iobject.ds_object.DSObject;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
-import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
-import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.ioc.ioc.IOC;
 import info.smart_tools.smartactors.ioc.key_tools.Keys;
 import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutionException;
@@ -32,13 +28,10 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Tests for PostgresSearchTask.
- */
-public class PostgresSearchTaskTest extends IOCInitializer {
+public class PostgresSearchByLimitAndOffsetTaskTest extends IOCInitializer {
 
     private IDatabaseTask task;
-    private SearchMessage message;
+    private SearchByPageSizeAndNumberMessage message;
     private IStorageConnection connection;
     private JDBCCompiledQuery compiledQuery;
     private PreparedStatement sqlStatement;
@@ -62,20 +55,20 @@ public class PostgresSearchTaskTest extends IOCInitializer {
         connection = mock(IStorageConnection.class);
         when(connection.compileQuery(any())).thenReturn(compiledQuery);
 
-        task = new PostgresSearchTask(connection);
+        task = new PostgresSearchByPageSizeAndNumberTask(connection);
 
-        message = mock(SearchMessage.class);
+        message = mock(SearchByPageSizeAndNumberMessage.class);
         when(message.getCollectionName()).thenReturn(CollectionName.fromString("test"));
         when(message.getCriteria()).thenReturn(new DSObject("{ \"filter\": { } }"));
 
         IOC.register(
-                Keys.getKeyByName(SearchMessage.class.getCanonicalName()),
-                new SingletonStrategy(message)
+            Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()),
+            new SingletonStrategy(message)
         );
     }
 
     @Test
-    public void testSearch() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException, ActionExecutionException {
+    public void testSearch() throws Exception {
         IAction<IObject[]> callback = mock(IAction.class);
         when(message.getCallback()).thenReturn(callback);
         when(resultSet.next()).thenReturn(true, true, false);
@@ -96,7 +89,7 @@ public class PostgresSearchTaskTest extends IOCInitializer {
     }
 
     @Test
-    public void testSearchFailure() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException {
+    public void testSearchFailure() throws Exception {
         IAction<IObject[]> callback = mock(IAction.class);
         when(message.getCallback()).thenReturn(callback);
         when(sqlStatement.execute()).thenThrow(SQLException.class);
@@ -117,7 +110,7 @@ public class PostgresSearchTaskTest extends IOCInitializer {
     }
 
     @Test
-    public void testSearchNotFound() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException, ActionExecutionException {
+    public void testSearchNotFound() throws Exception {
         IAction<IObject[]> callback = mock(IAction.class);
         when(message.getCallback()).thenReturn(callback);
         when(resultSet.next()).thenReturn(false);
@@ -138,7 +131,7 @@ public class PostgresSearchTaskTest extends IOCInitializer {
     }
 
     @Test
-    public void testSearchInvalidCriteria() throws InvalidArgumentException, ReadValueException, TaskPrepareException, TaskSetConnectionException, TaskExecutionException, ChangeValueException, StorageException, SQLException {
+    public void testSearchInvalidCriteria() throws Exception {
         IAction<IObject[]> callback = mock(IAction.class);
         when(message.getCallback()).thenReturn(callback);
         when(message.getCriteria()).thenReturn(new DSObject("{ \"filter\": 123 }"));
@@ -153,5 +146,4 @@ public class PostgresSearchTaskTest extends IOCInitializer {
         verifyZeroInteractions(connection);
         verifyZeroInteractions(sqlStatement);
     }
-
 }

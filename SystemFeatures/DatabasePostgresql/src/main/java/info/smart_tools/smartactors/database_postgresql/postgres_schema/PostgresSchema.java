@@ -220,8 +220,9 @@ public final class PostgresSchema {
     }
 
     /**
-     * Fills the statement body and it's list of parameter setters with the collection name and WHERE clause
-     * for the SELECT statement to search the document by it's fields.
+     * Fills the statement body, and it's list of parameter setters with the collection name and WHERE clause
+     * for the SELECT statement to search the document by it's fields. Search criteria use paging by
+     * page size and number parameters.
      * <p>
      *     The example of search criteria.
      * {@code
@@ -248,7 +249,7 @@ public final class PostgresSchema {
      * @param criteria complex JSON describing the search criteria
      * @throws QueryBuildException when something goes wrong
      */
-    public static void search(final QueryStatement statement, final CollectionName collection, final IObject criteria)
+    public static void searchByPageSizeAndNumber(final QueryStatement statement, final CollectionName collection, final IObject criteria)
             throws QueryBuildException {
         try {
             Writer body = statement.getBodyWriter();
@@ -264,7 +265,60 @@ public final class PostgresSchema {
             }
             SearchClauses.writeSearchWhere(statement, criteria);
             SearchClauses.writeSearchOrder(statement, criteria);
-            SearchClauses.writeSearchPaging(statement, criteria);
+            SearchClauses.writeSearchPagingByPageSizeAndNumber(statement, criteria);
+        } catch (Exception e) {
+            throw new QueryBuildException("Failed to build search query", e);
+        }
+    }
+
+    /**
+     * Fills the statement body and it's list of parameter setters with the collection name and WHERE clause
+     * for the SELECT statement to search the document by it's fields. Search criteria use paging by
+     * limit and offset parameters.
+     * <p>
+     *     The example of search criteria.
+     *     <pre>
+     *  {
+     *      "filter": {
+     *          "$or": [
+     *              "a": { "$eq": "b" },
+     *              "b": { "$gt": 42 }
+     *          ]
+     *      },
+     *      "page": {
+     *          "limit": 10,
+     *          "offset": 100
+     *      },
+     *      "sort": [
+     *          { "a": "asc" },
+     *          { "b": "desc" }
+     *      ]
+     *  }
+     *     </pre>
+     * </p>
+     * Limit has an integer value and  offset has a long one.
+     * @param statement statement to fill the body and add parameter setters
+     * @param collection collection name to use as the table name
+     * @param criteria complex JSON describing the search criteria
+     * @throws QueryBuildException when something goes wrong
+     */
+    public static void searchByLimitAndOffset(final QueryStatement statement, final CollectionName collection, final IObject criteria)
+        throws QueryBuildException {
+        try {
+            Writer body = statement.getBodyWriter();
+
+            body.write("SELECT ");
+            body.write(DOCUMENT_COLUMN);
+            body.write(" FROM ");
+            body.write(collection.toString());
+
+            if (criteria == null) {
+                SearchClauses.writeDefaultPaging(statement);
+                return;
+            }
+            SearchClauses.writeSearchWhere(statement, criteria);
+            SearchClauses.writeSearchOrder(statement, criteria);
+            SearchClauses.writeSearchPagingByLimitAndOffset(statement, criteria);
         } catch (Exception e) {
             throw new QueryBuildException("Failed to build search query", e);
         }

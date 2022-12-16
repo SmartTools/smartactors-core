@@ -4,7 +4,7 @@
     "info.smart_tools.smartactors:core-service-starter:0.7.0",
     "info.smart_tools.smartactors:feature-loading-system:0.7.0",
     "info.smart_tools.smartactors:base-pool:0.7.0",
-    "info.smart_tools.smartactors:database-postgresql:0.7.0"
+    "info.smart_tools.smartactors:database-postgresql:0.7.1"
   ],
   "repository":{
     "id": "smartactors_core_and_core_features_dev",

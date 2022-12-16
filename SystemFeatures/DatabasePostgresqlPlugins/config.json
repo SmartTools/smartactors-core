@@ -1,10 +1,10 @@
 {
-  "featureName": "info.smart_tools.smartactors:database-postgresql-plugins:0.7.0",
+  "featureName": "info.smart_tools.smartactors:database-postgresql-plugins:0.7.1",
   "afterFeatures": [
     "info.smart_tools.smartactors:core-service-starter:0.7.0",
     "info.smart_tools.smartactors:feature-loading-system:0.7.0",
-    "info.smart_tools.smartactors:ioc-strategy-pack:0.7.0",
-    "info.smart_tools.smartactors:database-postgresql:0.7.0",
+    "info.smart_tools.smartactors:ioc-strategy-pack:0.7.1",
+    "info.smart_tools.smartactors:database-postgresql:0.7.1",
     "info.smart_tools.smartactors:database:0.7.0"
   ],
   "repository":{

@@ -19,8 +19,8 @@ import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.Ge
 import info.smart_tools.smartactors.database_postgresql.postgres_getbyid_task.PostgresGetByIdTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.InsertMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_insert_task.PostgresInsertTask;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.PostgresSearchTask;
-import info.smart_tools.smartactors.database_postgresql.postgres_search_task.SearchMessage;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.PostgresSearchByPageSizeAndNumberTask;
+import info.smart_tools.smartactors.database_postgresql.postgres_search_by_page_size_and_number_task.SearchByPageSizeAndNumberMessage;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.PostgresUpsertTask;
 import info.smart_tools.smartactors.database_postgresql.postgres_upsert_task.UpsertMessage;
 import info.smart_tools.smartactors.database_postgresql_plugins.postgres_connection_pool_plugin.PostgresConnectionPoolPlugin;
@@ -150,12 +150,12 @@ public class PostgresDBTasksPluginTest extends IOCInitializer {
 
     @Test
     public void testSearchTaskInitialized() throws ResolutionException {
-        assertTrue(IOC.resolve(Keys.getKeyByName(SearchMessage.class.getCanonicalName()), message)
-                instanceof SearchMessage);
+        assertTrue(IOC.resolve(Keys.getKeyByName(SearchByPageSizeAndNumberMessage.class.getCanonicalName()), message)
+                instanceof SearchByPageSizeAndNumberMessage);
         IObject criteria = mock(IObject.class);
         IAction callback = mock(IAction.class);
         assertTrue(IOC.resolve(Keys.getKeyByName("db.collection.search"), connection, collection, criteria, callback)
-                instanceof PostgresSearchTask);
+                instanceof PostgresSearchByPageSizeAndNumberTask);
     }
 
     @Test

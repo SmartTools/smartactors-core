@@ -1,5 +1,5 @@
 {
-  "featureName":"info.smart_tools.smartactors:ioc-strategy-pack:0.7.0",
+  "featureName":"info.smart_tools.smartactors:ioc-strategy-pack:0.7.1",
   "afterFeatures":[
     "info.smart_tools.smartactors:ioc:0.7.0",
     "info.smart_tools.smartactors:iobject-interfaces:0.7.0"
@@ -10,6 +10,6 @@
   },
   "dependencyRepositories": [],
   "plugins": [
-    "info.smart_tools.smartactors:ioc-strategy-pack-plugins:0.7.0"
+    "info.smart_tools.smartactors:ioc-strategy-pack-plugins:0.7.1"
   ]
 }

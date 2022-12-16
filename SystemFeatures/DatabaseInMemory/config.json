@@ -1,8 +1,8 @@
 {
-  "featureName":"info.smart_tools.smartactors:database-in-memory:0.7.0",
+  "featureName":"info.smart_tools.smartactors:database-in-memory:0.7.1",
   "afterFeatures":[
     "info.smart_tools.smartactors:core-service-starter:0.7.0",
-    "info.smart_tools.smartactors:ioc-strategy-pack:0.7.0",
+    "info.smart_tools.smartactors:ioc-strategy-pack:0.7.1",
     "info.smart_tools.smartactors:database-interfaces:0.7.0"
   ],
   "repository":{
@@ -11,6 +11,6 @@
   },
   "dependencyRepositories": [],
   "plugins": [
-    "info.smart_tools.smartactors:database-in-memory-plugins:0.7.0"
+    "info.smart_tools.smartactors:database-in-memory-plugins:0.7.1"
   ]
 }

@@ -40,7 +40,7 @@ public class PagingWriterTest {
 
     @Test
     public void should_WritesPAGINGClauseIntoQueryStatement() throws QueryBuildException, SQLException {
-        pagingWriter.write(query, 3, 8);
+        pagingWriter.writeByPageSizeAndNumber(query, 3, 8);
         assertEquals("LIMIT(?)OFFSET(?)", body.toString());
         verify(query, times(1)).pushParameterSetter(any());
         for (SQLQueryParameterSetter setter : setters) {
@@ -52,4 +52,31 @@ public class PagingWriterTest {
         }
     }
 
+    @Test
+    public void should_WritesPAGINGClauseIntoQueryStatementByLimitAndOffset() throws QueryBuildException, SQLException {
+        pagingWriter.writeByLimitAndOffset(query, 3, 10L);
+        assertEquals("LIMIT(?)OFFSET(?)", body.toString());
+        verify(query, times(1)).pushParameterSetter(any());
+        for (SQLQueryParameterSetter setter : setters) {
+            PreparedStatement statement = mock(PreparedStatement.class);
+            int finalIndex = setter.setParameters(statement, 1);
+            assertEquals(3, finalIndex);
+            verify(statement).setInt(eq(1), eq(3));
+            verify(statement).setLong(eq(2), eq(10L));
+        }
+    }
+
+    @Test
+    public void should_WritesPAGINGClauseIntoQueryStatementByLimitAndDefaultOffset() throws QueryBuildException, SQLException {
+        pagingWriter.writeByLimitAndOffset(query, 3, null);
+        assertEquals("LIMIT(?)OFFSET(?)", body.toString());
+        verify(query, times(1)).pushParameterSetter(any());
+        for (SQLQueryParameterSetter setter : setters) {
+            PreparedStatement statement = mock(PreparedStatement.class);
+            int finalIndex = setter.setParameters(statement, 1);
+            assertEquals(3, finalIndex);
+            verify(statement).setInt(eq(1), eq(3));
+            verify(statement).setLong(eq(2), eq(0L));
+        }
+    }
 }
