@@ -1,5 +1,6 @@
 package info.smart_tools.smartactors.database_postgresql.postgres_upsert_task;
 
+import info.smart_tools.smartactors.base.exception.invalid_argument_exception.InvalidArgumentException;
 import info.smart_tools.smartactors.database.database_storage.exceptions.QueryBuildException;
 import info.smart_tools.smartactors.database.database_storage.utils.CollectionName;
 import info.smart_tools.smartactors.database.interfaces.idatabase_task.IDatabaseTask;
@@ -10,6 +11,7 @@ import info.smart_tools.smartactors.database_postgresql.postgres_connection.Quer
 import info.smart_tools.smartactors.database_postgresql.postgres_schema.PostgresSchema;
 import info.smart_tools.smartactors.iobject.ifield_name.IFieldName;
 import info.smart_tools.smartactors.iobject.iobject.IObject;
+import info.smart_tools.smartactors.iobject.iobject.exception.ChangeValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.ReadValueException;
 import info.smart_tools.smartactors.iobject.iobject.exception.SerializeException;
 import info.smart_tools.smartactors.ioc.exception.ResolutionException;
@@ -19,6 +21,10 @@ import info.smart_tools.smartactors.task.interfaces.itask.exception.TaskExecutio
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The database task which is able to upsert documents into Postgres database.
@@ -42,6 +48,12 @@ public class PostgresUpsertTask implements IDatabaseTask {
      */
     private IFieldName idField;
     /**
+     * Name of the {@code createdAt} field in the document.
+     */
+    private IFieldName createdAtField;
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    /**
      * Query, prepared during prepare(), to be compiled during execute().
      */
     private QueryStatement preparedQuery;
@@ -61,8 +73,14 @@ public class PostgresUpsertTask implements IDatabaseTask {
      * Creates the task
      * @param connection the database connection where to perform upserts
      */
-    public PostgresUpsertTask(final IStorageConnection connection) {
+    public PostgresUpsertTask(final IStorageConnection connection) throws TaskPrepareException {
         this.connection = connection;
+
+        try {
+            this.createdAtField = IOC.resolve(Keys.getKeyByName(IFieldName.class.getCanonicalName()), "createdAt");
+        } catch (ResolutionException e) {
+            throw new TaskPrepareException("Unable to resolve fields for database task", e);
+        }
     }
 
     @Override
@@ -148,6 +166,7 @@ public class PostgresUpsertTask implements IDatabaseTask {
         try {
             Object id = nextId();
             document.setValue(idField, id);
+            insertTimestampIntoDocForInsert();
 
             JDBCCompiledQuery compiledQuery = (JDBCCompiledQuery) connection.compileQuery(preparedQuery);
             PreparedStatement statement = compiledQuery.getPreparedStatement();
@@ -156,12 +175,18 @@ public class PostgresUpsertTask implements IDatabaseTask {
         } catch (Exception e) {
             try {
                 document.deleteField(idField);
+                document.deleteField(createdAtField);
                 connection.rollback();
             } catch (Exception re) {
                 // ignoring rollback failure
             }
             throw new TaskExecutionException("Insert to " + collection + " failed", e);
         }
+    }
+
+    private void insertTimestampIntoDocForInsert() throws ChangeValueException, InvalidArgumentException {
+        String nowTimeInUTC = ZonedDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).format(this.formatter);
+        this.document.setValue(this.createdAtField, nowTimeInUTC);
     }
 
     private void executeUpdate() throws TaskExecutionException {
