@@ -46,10 +46,8 @@ import java.util.List;
  *      "callback": IAction callback to receive found documents
  *  }
  *     </pre>
- * </p>
  * <p>
  * Limit value is integer, offset value is long.
- * </p>
  * <p>
  * The criteria is the IObject which contains a set of conditions and operators.
  * Conditions joins operators together.
@@ -57,26 +55,25 @@ import java.util.List;
  * </p>
  * <p>
  * Available conditions:
- *     <ul>
- *         <li><code>$and</code> — ANDs operators and nested conditions</li>
- *         <li><code>$or</code> — ORs operators and nested conditions</li>
- *         <li><code>$not</code> — negate all nested operators and conditions, is equivalent to NOT(conditionA AND conditionB)</li>
- *     </ul>
- *     Available operators:
- *     <ul>
- *         <li><code>$eq</code> — test for equality of the document field and the specified value</li>
- *         <li><code>$neq</code> — test for not equality</li>
- *         <li><code>$lt</code> — "less than", the document field is less than the specified value</li>
- *         <li><code>$gt</code> — "greater than", the document field is larger than the specified value</li>
- *         <li><code>$lte</code> — less or equal</li>
- *         <li><code>$gte</code> — greater or equal</li>
- *         <li><code>$isNull</code> — checks for null if the specified value is "true" or checks for not null if "false"</li>
- *         <li><code>$date-from</code> — greater or equal for datetime fields</li>
- *         <li><code>$date-to</code> — less or equal for datetime fields</li>
- *         <li><code>$in</code> — checks for equality to any of the specified values in the array</li>
- *         <li><code>$hasTag</code> — check the document field is JSON document contains the specified value as field name or value</li>
- *     </ul>
- * </p>
+ * <ul>
+ *     <li><code>$and</code> — ANDs operators and nested conditions</li>
+ *     <li><code>$or</code> — ORs operators and nested conditions</li>
+ *     <li><code>$not</code> — negate all nested operators and conditions, is equivalent to NOT(conditionA AND conditionB)</li>
+ * </ul>
+ * Available operators:
+ * <ul>
+ *     <li><code>$eq</code> — test for equality of the document field and the specified value</li>
+ *     <li><code>$neq</code> — test for not equality</li>
+ *     <li><code>$lt</code> — "less than", the document field is less than the specified value</li>
+ *     <li><code>$gt</code> — "greater than", the document field is larger than the specified value</li>
+ *     <li><code>$lte</code> — less or equal</li>
+ *     <li><code>$gte</code> — greater or equal</li>
+ *     <li><code>$isNull</code> — checks for null if the specified value is "true" or checks for not null if "false"</li>
+ *     <li><code>$date-from</code> — greater or equal for datetime fields</li>
+ *     <li><code>$date-to</code> — less or equal for datetime fields</li>
+ *     <li><code>$in</code> — checks for equality to any of the specified values in the array</li>
+ *     <li><code>$hasTag</code> — check the document field is JSON document contains the specified value as field name or value</li>
+ * </ul>
  */
 public class PostgresSearchByLimitAndOffsetTask implements IDatabaseTask {
 

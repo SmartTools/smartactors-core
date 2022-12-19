@@ -295,7 +295,6 @@ public final class PostgresSchema {
      *      ]
      *  }
      *     </pre>
-     * </p>
      * Limit has an integer value and  offset has a long one.
      * @param statement statement to fill the body and add parameter setters
      * @param collection collection name to use as the table name
