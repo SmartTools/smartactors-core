@@ -6,7 +6,7 @@
 
     <artifactId>builder</artifactId>
     <groupId>info.smart_tools.smartactors</groupId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
     <!--<licenses>-->
     <!--<license>-->
     <!--<name></name>-->
@@ -56,6 +56,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <version>${jackson}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${jackson}</version>
         </dependency>
 
