@@ -57,6 +57,7 @@ final class Operators {
 
         // Fulltext search
         resolver.addQueryWriter("$fulltext", formattedCheckWriterForFulltext("%s@@(to_tsquery(?,?))"));
+        resolver.addQueryWriter("$like", formattedCheckWriter("(lower((%s)::text)  like lower(?))"));
     }
 
     /**

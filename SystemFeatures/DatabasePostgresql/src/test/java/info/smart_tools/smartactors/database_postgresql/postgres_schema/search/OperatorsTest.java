@@ -33,7 +33,7 @@ public class OperatorsTest {
         PostgresQueryWriterResolver resolverMock = mock(PostgresQueryWriterResolver.class);
         Operators.addAll(resolverMock);
 
-        verify(resolverMock, times(12)).addQueryWriter(anyString(), anyObject());
+        verify(resolverMock, times(13)).addQueryWriter(anyString(), anyObject());
     }
 
     @Test
