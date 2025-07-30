@@ -1,4 +1,0 @@
-        <repository>
-            <id>${repository.id}</id>
-            <url>${repository.url}</url>
-        </repository>

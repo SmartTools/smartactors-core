@@ -1,4 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:http-endpoint",
-  "afterFeatures":["info.smart_tools.smartactors:endpoint","info.smart_tools.smartactors:message-bus"]
-}

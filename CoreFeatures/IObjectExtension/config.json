@@ -1,4 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:iobject-extension",
-  "afterFeatures":["info.smart_tools.smartactors:base","info.smart_tools.smartactors:iobject","info.smart_tools.smartactors:ioc"]
-}

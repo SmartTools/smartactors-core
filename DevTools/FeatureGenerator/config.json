@@ -1,0 +1,12 @@
+{
+  "featureName":"com.example:sample:0.1.0",
+  "afterFeatures":[
+  ],
+  "repository":{
+    "id": "",
+    "url": ""
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+  ]
+}

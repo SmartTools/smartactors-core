@@ -1,4 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:message-bus",
-  "afterFeatures":["info.smart_tools.smartactors:message-bus-service-starter"]
-}

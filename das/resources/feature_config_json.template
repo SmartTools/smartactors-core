@@ -1,4 +1,0 @@
-{
-  "featureName": "${feat.group.id}:${feat.name}",
-  "afterFeatures": []
-}

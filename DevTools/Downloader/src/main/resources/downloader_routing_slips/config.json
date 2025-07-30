@@ -1,0 +1,14 @@
+{
+  "name": "download config",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "moveArgsToMessage",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    }
+  ]
+}
+

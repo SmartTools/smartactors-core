@@ -1,0 +1,22 @@
+stages:
+  - build
+
+.maven:
+  image: maven:3.8.3-openjdk-8
+  variables:
+    MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+    MAVEN_OPTS: "-Djava.awt.headless=true -Dorg.slf4j.simpleLogger.defaultLogLevel=error -Dsurefire.printSummary=false"
+  before_script:
+#    - mkdir -p /cache/.m2/repository
+#    - ln -sf /cache/.m2/repository /root/.m2/repository
+#    - echo -e "$CI_MAVEN_SETTINGS" > /root/.m2/settings.xml
+
+build:
+  stage: build
+  extends: .maven
+  only:
+    - tags
+  before_script:
+    - chmod +x ./ci/script.sh
+  script:
+    - sh ./ci/script.sh $CI_COMMIT_TAG

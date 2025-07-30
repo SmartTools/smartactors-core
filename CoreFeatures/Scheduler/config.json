@@ -1,4 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:scheduler",
-  "afterFeatures":["info.smart_tools.smartactors:timer"]
-}

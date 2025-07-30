@@ -1,0 +1,14 @@
+{
+  "name": "download launcher",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "moveArgsToMessage",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    }
+  ]
+}
+

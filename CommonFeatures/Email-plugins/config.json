@@ -1,5 +1,0 @@
-{
-  "featureName":"info.smart_tools.smartactors:email-plugins",
-  "afterFeatures":["info.smart_tools.smartactors:email"],
-  "objects":[{"server":"smtp://aspmx.l.google.com:25","password":"<>","senderAddress":"<>","dependency":"info.smart_tools.smartactors.email.email_actor.MailingActor","kind":"actor","name":"sendMailActor","authenticationMode":"Login","username":"<>"}]
-}

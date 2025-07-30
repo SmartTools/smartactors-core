@@ -1,0 +1,118 @@
+{
+  "name": "download configs",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "moveArgsToMessage",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "createDirectory",
+      "methodParameters": {
+        "argumentPaths": ["target feature directory path"],
+        "responsePath": "directory was created"
+      }
+    },
+    {
+      "actorName": "readFeatureConfigActor",
+      "methodName": "readFeatureConfig",
+      "methodParameters": {
+        "argumentPaths": ["source file"],
+        "responsePath": "feature config data"
+      }
+    },
+    {
+      "actorName": "featuresAndRepositoriesStoragesActor",
+      "methodName": "configure",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "featuresAndRepositoriesStoragesActor",
+      "methodName": "updateStorages",
+      "methodParameters": {
+        "argumentPaths": ["feature config data", "features", "repositories"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "collectDependencyDataActor",
+      "methodName": "configure",
+      "methodParameters": {
+        "argumentPaths": ["feature config data"],
+        "responsePath": "collecting while condition"
+      }
+    },
+    {
+      "actorName": "collectDependencyDataActor",
+      "methodName": "processNextFeature",
+      "methodParameters": {
+        "argumentPaths": [],
+        "responsePath": "current collecting feature"
+      }
+    },
+    {
+      "actorName": "downloadFeatureActor",
+      "methodName": "downloadFeature",
+      "methodParameters": {
+        "argumentPaths": ["current collecting feature", "repositories", "#constant#string:json", "target feature directory"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "deleteFile",
+      "methodParameters": {
+        "argumentPaths": ["check and delete if exists file path"],
+        "responsePath": "file was deleted"
+      }
+    },
+    {
+      "actorName": "fileOperationActor",
+      "methodName": "copyFile",
+      "methodParameters": {
+        "argumentPaths": ["downloaded file path", "check and delete if exists file path"],
+        "responsePath": "check and delete if exists file path"
+      }
+    },
+    {
+      "actorName": "readFeatureConfigActor",
+      "methodName": "readFeatureConfig",
+      "methodParameters": {
+        "argumentPaths": ["check and delete if exists file path"],
+        "responsePath": "feature config data"
+      }
+    },
+    {
+      "actorName": "featuresAndRepositoriesStoragesActor",
+      "methodName": "updateStorages",
+      "methodParameters": {
+        "argumentPaths": ["feature config data", "features", "repositories"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "collectDependencyDataActor",
+      "methodName": "addNewFeatures",
+      "methodParameters": {
+        "argumentPaths": ["feature config data"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "whileActor",
+      "methodName": "whileReturnByShift",
+      "methodParameters": {
+        "argumentPaths": ["collecting while condition", "#constant#int:-8", "#slip"],
+        "responsePath": null
+      }
+    }
+  ]
+}
+

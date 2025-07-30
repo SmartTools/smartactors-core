@@ -1,0 +1,15 @@
+{
+  "featureName":"info.smart_tools.smartactors:https-endpoint:0.7.1",
+  "afterFeatures":[
+    "info.smart_tools.smartactors:core-service-starter:0.7.0",
+    "info.smart_tools.smartactors:http-endpoint:0.7.1"
+  ],
+  "repository":{
+    "id": "smartactors_core_and_core_features_dev",
+    "url": "https://repository.smart-tools.info/artifactory"
+  },
+  "dependencyRepositories": [],
+  "plugins": [
+    "info.smart_tools.smartactors:https-endpoint-plugins:0.7.1"
+  ]
+}

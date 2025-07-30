@@ -1,0 +1,45 @@
+{
+  "name": "build feature",
+  "steps": [
+    {
+      "actorName": "ArgsToMessageActor",
+      "methodName": "moveArgsToMessage",
+      "methodParameters": {
+        "argumentPaths": ["arguments"],
+        "responsePath": "#split response"
+      }
+    },
+    {
+      "actorName": "ValidatorActor",
+      "methodName": "validate",
+      "methodParameters": {
+        "argumentPaths": ["path to feature"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "ConfigHandlerActor",
+      "methodName": "parseConfig",
+      "methodParameters": {
+        "argumentPaths": ["path to feature"],
+        "responsePath": "path to config"
+      }
+    },
+    {
+      "actorName": "BuilderActor",
+      "methodName": "buildFeature",
+      "methodParameters": {
+        "argumentPaths": ["path to feature"],
+        "responsePath": null
+      }
+    },
+    {
+      "actorName": "ConfigHandlerActor",
+      "methodName": "restoreConfig",
+      "methodParameters": {
+        "argumentPaths": ["path to feature", "path to config"],
+        "responsePath": null
+      }
+    }
+  ]
+}
